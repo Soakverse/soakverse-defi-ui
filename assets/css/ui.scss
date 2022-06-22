@@ -1,0 +1,97 @@
+@import "colors.scss";
+$headerHeight: 64px;
+
+a {
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $dark-grey;
+}
+
+#main-sidebar {
+  display: block;
+  width: 72px;
+  transition: 0.4s all;
+  background-color: $dark-grey;
+  &.toggled {
+    width: 250px;
+    .sidebar-header {
+      padding: 12px 24px;
+    }
+  }
+  a {
+    display: block;
+  }
+  .sidebar-header {
+    height: $headerHeight;
+    background-color: $medium-grey;
+    padding: 18px;
+    display: flex;
+    position: relative;
+    img {
+      max-width: 100%;
+      margin: auto;
+    }
+    .toggle-menu {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      top: 0;
+      bottom: 0;
+      right: -16px;
+      margin: auto;
+      border-radius: 50%;
+      background-color: $white;
+      box-shadow: 0px 4px 8px #00000029;
+      text-align: center;
+      transition: 0.4s all;
+      i {
+        color: $gold;
+        font-size: 24px;
+        line-height: 32px;
+      }
+    }
+  }
+  ul.sidebar-menu {
+    padding: 16px;
+    li {
+      a {
+        color: $text-grey;
+        padding: 8px;
+        i {
+          color: $icon-grey;
+          width: 24px;
+        }
+      }
+    }
+  }
+}
+
+#header {
+  height: $headerHeight;
+  background-color: $white;
+  padding: 12px 12px 12px 28px;
+  display: flex;
+}
+
+.card {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 8px 16px #00000029;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.btn-primary {
+  background-color: $gold;
+  border-color: $gold;
+  &:hover {
+    background-color: $dark-gold;
+    border-color: $dark-gold;
+  }
+}

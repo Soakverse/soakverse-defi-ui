@@ -1,0 +1,13 @@
+#main-sidebar {
+  display: block;
+  width: 50px;
+  transition: 0.4s all;
+}
+
+#main-sidebar.toggled {
+  width: 250px;
+}
+
+#main-sidebar a {
+  display: block;
+}
