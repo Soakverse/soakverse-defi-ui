@@ -2,6 +2,12 @@ import { defineNuxtConfig } from "nuxt";
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
+  devtools: true,
+  runtimeConfig: {
+    public: {
+      infuraProjectId: process.env.INFURA_PROJECT_ID,
+    },
+  },
   css: ["@/assets/css/main.scss"],
   meta: {
     meta: [
@@ -51,5 +57,11 @@ export default defineNuxtConfig({
   },
   typescript: {
     strict: true,
+  },
+  vue: {
+    config: {
+      productionTip: false,
+      devtools: true,
+    },
   },
 });
