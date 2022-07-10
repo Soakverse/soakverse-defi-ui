@@ -5,11 +5,11 @@
         <div class="card text-center">
           <h4>WELCOME TO <b>SOAKMONT</b></h4>
           <p>Let's get started</p>
-          <nuxt-link to="/about" class="btn btn-primary mb-2">
-            About Soakmont
-          </nuxt-link>
+          <a href="#" class="btn btn-primary mb-2">
+            Complete KYC Registration
+          </a>
           <p>or</p>
-          <nuxt-link to="/staking" class="btn btn-primary"> Staking </nuxt-link>
+          <a href="#" class="btn btn-primary"> Learn about Soakmont </a>
         </div>
       </div>
     </div>
@@ -18,6 +18,6 @@
 
 <script setup>
 definePageMeta({
-  title: "Home - Soakmont DeFI",
+  title: "KYC - Soakmont DeFI",
 });
 </script>

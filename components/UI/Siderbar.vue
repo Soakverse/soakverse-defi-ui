@@ -18,12 +18,31 @@
     </div>
     <ul class="sidebar-menu">
       <li>
-        <a href="#" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-user"></i
-          ><span v-if="isSidebarOpen"> Account</span></a
-        >
+        <nuxt-link to="/" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-dashboard"></i
+          ><span v-if="isSidebarOpen"> Home</span>
+        </nuxt-link>
       </li>
       <li>
+        <nuxt-link to="/staking" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-coins"></i
+          ><span v-if="isSidebarOpen"> Staking</span>
+        </nuxt-link>
+      </li>
+      <li>
+        <nuxt-link to="/about" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-info-circle"></i
+          ><span v-if="isSidebarOpen"> About</span>
+        </nuxt-link>
+      </li>
+      <!--
+        <li>
+          <nuxt-link to="/account" :class="{ 'text-center': !isSidebarOpen }"
+            ><i class="fa-solid fa-user"></i
+            ><span v-if="isSidebarOpen"> Account</span>
+          </nuxt-link>
+        </li>
+        <li>
         <a href="#" :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-wallet"></i
           ><span v-if="isSidebarOpen"> Assets</span></a
@@ -40,7 +59,7 @@
           ><i class="fa-solid fa-piggy-bank"></i
           ><span v-if="isSidebarOpen"> Banking</span></a
         >
-      </li>
+      </li>-->
     </ul>
   </div>
 </template>

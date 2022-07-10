@@ -68,6 +68,14 @@ h6 {
           color: $icon-grey;
           width: 24px;
         }
+        &.router-link-exact-active {
+          border-radius: 8px;
+          background-color: $medium-grey;
+          color: white;
+          i {
+            color: white;
+          }
+        }
       }
     }
   }
@@ -93,5 +101,112 @@ h6 {
   &:hover {
     background-color: $dark-gold;
     border-color: $dark-gold;
+  }
+}
+
+.row.full {
+  width: 85%;
+}
+
+.breadcrumb-holder {
+  background-color: $text-grey;
+  padding: 4px;
+}
+
+@media all and (max-width: 767px) {
+  .row.full {
+    width: 98%;
+  }
+}
+
+#timer {
+  div {
+    position: relative;
+    display: inline-block;
+    border-radius: 20px;
+    width: 24%;
+    height: auto;
+    color: $dark-grey;
+    font: {
+      size: 48px;
+      weight: 500;
+    }
+    span {
+      display: block;
+      margin-top: -4px;
+      color: $dark-gold;
+      font-size: 15px;
+    }
+    &:not(:last-child):after {
+      content: ":";
+      width: 6px;
+      font-size: 32px;
+      font-weight: 900;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #bfbfbf;
+      position: absolute;
+      right: 0;
+      top: 25%;
+    }
+  }
+  @media all and (max-width: 767px) {
+    div {
+      font: {
+        size: 28px;
+        weight: 500;
+      }
+      span {
+        display: block;
+        margin-top: 0px;
+        font-size: 12px;
+      }
+      &:not(:last-child):after {
+        content: ":";
+        width: 6px;
+        font-size: 20px;
+        font-weight: 900;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #bfbfbf;
+        position: absolute;
+        right: 0;
+        top: 15%;
+      }
+    }
+  }
+  @media all and (max-width: 500px) {
+    div {
+      font: {
+        size: 22px;
+        weight: 500;
+      }
+      span {
+        display: block;
+        margin-top: 4px;
+        font-size: 9px;
+      }
+      &:not(:last-child):after {
+        content: ":";
+        width: 6px;
+        font-size: 14px;
+        font-weight: 900;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #bfbfbf;
+        position: absolute;
+        right: 0;
+        top: 10%;
+      }
+    }
   }
 }

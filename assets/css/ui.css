@@ -78,6 +78,16 @@ h6 {
   width: 24px;
 }
 
+#main-sidebar ul.sidebar-menu li a.router-link-exact-active {
+  border-radius: 8px;
+  background-color: #133138;
+  color: white;
+}
+
+#main-sidebar ul.sidebar-menu li a.router-link-exact-active i {
+  color: white;
+}
+
 #header {
   height: 64px;
   background-color: #ffffff;
@@ -100,4 +110,107 @@ h6 {
 .btn-primary:hover {
   background-color: #e9a546;
   border-color: #e9a546;
+}
+
+.row.full {
+  width: 85%;
+}
+
+.breadcrumb-holder {
+  background-color: #aab5b7;
+  padding: 4px;
+}
+
+@media all and (max-width: 767px) {
+  .row.full {
+    width: 98%;
+  }
+}
+
+#timer div {
+  position: relative;
+  display: inline-block;
+  border-radius: 20px;
+  width: 24%;
+  height: auto;
+  color: #06262d;
+  font-size: 48px;
+  font-weight: 500;
+}
+
+#timer div span {
+  display: block;
+  margin-top: -4px;
+  color: #e9a546;
+  font-size: 15px;
+}
+
+#timer div:not(:last-child):after {
+  content: ":";
+  width: 6px;
+  font-size: 32px;
+  font-weight: 900;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #bfbfbf;
+  position: absolute;
+  right: 0;
+  top: 25%;
+}
+
+@media all and (max-width: 767px) {
+  #timer div {
+    font-size: 28px;
+    font-weight: 500;
+  }
+  #timer div span {
+    display: block;
+    margin-top: 0px;
+    font-size: 12px;
+  }
+  #timer div:not(:last-child):after {
+    content: ":";
+    width: 6px;
+    font-size: 20px;
+    font-weight: 900;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #bfbfbf;
+    position: absolute;
+    right: 0;
+    top: 15%;
+  }
+}
+
+@media all and (max-width: 500px) {
+  #timer div {
+    font-size: 22px;
+    font-weight: 500;
+  }
+  #timer div span {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+  }
+  #timer div:not(:last-child):after {
+    content: ":";
+    width: 6px;
+    font-size: 14px;
+    font-weight: 900;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #bfbfbf;
+    position: absolute;
+    right: 0;
+    top: 10%;
+  }
 }

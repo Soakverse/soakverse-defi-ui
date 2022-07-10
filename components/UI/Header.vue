@@ -2,10 +2,7 @@
   <div id="header">
     <div class="container-fluid">
       <div class="row h-100">
-        <div class="col-6 my-auto">
-          <h5 class="my-auto py-0">WELCOME</h5>
-        </div>
-        <div class="col-6 my-auto d-flex">
+        <div class="col-12 my-auto d-flex">
           <div id="wallet-holder">
             <Web3Wallet />
           </div>
@@ -16,6 +13,7 @@
 </template>
 
 <script setup>
+import Breadcrumb from "./Breadcrumb.vue";
 const { isSidebarOpen } = useUiState();
 </script>
 
