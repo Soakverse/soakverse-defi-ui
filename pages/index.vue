@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-definePageMeta({
-  title: "Home - Soakmont DeFI",
+useHead({
+  title: "Home - Soakmont DeFI Platform",
 });
 </script>

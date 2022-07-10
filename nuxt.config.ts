@@ -6,12 +6,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       infuraProjectId: process.env.INFURA_PROJECT_ID,
+      appName: "Soakmont DeFI Platform",
     },
   },
   css: ["@/assets/css/main.scss"],
   meta: {
+    title: "Soakmont DeFI Platform",
+    charset: "utf-8",
     meta: [
-      { name: "title", content: "Soakmont Platform" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "msapplication-TileColor", content: "#00a300" },
       { name: "theme-color", content: "#00a300" },

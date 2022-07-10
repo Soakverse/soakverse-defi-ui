@@ -14,7 +14,7 @@
 
 <script setup>
 import Countdown from "~~/components/UI/Countdown.vue";
-definePageMeta({
-  title: "Home - Soakmont DeFI",
+useHead({
+  title: "Home - Soakmont DeFI Platform",
 });
 </script>

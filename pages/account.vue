@@ -24,7 +24,7 @@
 </style>
 
 <script setup>
-definePageMeta({
-  title: "Account - Soakmont DeFI",
+useHead({
+  title: "Account - Soakmont DeFI Platform",
 });
 </script>

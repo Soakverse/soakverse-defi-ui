@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-definePageMeta({
-  title: "KYC - Soakmont DeFI",
+useHead({
+  title: "KYC - Soakmont DeFI Platform",
 });
 </script>
