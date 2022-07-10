@@ -47,34 +47,40 @@
 <script setup>
 const socials = [
   {
-    name: "Facebook",
-    color: "#3E5C9A",
-    link: "https://facebook.com",
-    icon: "fab fa-facebook",
-  },
-  {
     name: "Twitter",
     color: "#29A9E1",
-    link: "https://facebook.com",
+    link: "https://twitter.com/SoakmontGroup",
     icon: "fab fa-twitter",
   },
   {
     name: "Discord",
     color: "#5865F2",
-    link: "https://facebook.com",
+    link: "https://discord.gg/Soakmont",
     icon: "fab fa-discord",
   },
   {
     name: "Telegram",
     color: "#42BDE9",
-    link: "https://facebook.com",
+    link: "https://t.me/soakmont",
     icon: "fab fa-telegram",
   },
   {
     name: "Medium",
     color: "#000000",
-    link: "https://facebook.com",
+    link: "https://soakmont-token.medium.com/",
     icon: "fab fa-medium",
+  },
+  {
+    name: "LinkedIn",
+    color: "#006192",
+    link: "https://www.linkedin.com/company/soakmont",
+    icon: "fab fa-linkedin-in",
+  },
+  {
+    name: "Instagram",
+    color: "#C13584",
+    link: "https://instagram.com/soakmontgroup/",
+    icon: "fab fa-instagram",
   },
 ];
 </script>
