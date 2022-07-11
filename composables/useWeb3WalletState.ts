@@ -32,9 +32,11 @@ const useWeb3WalletState = () => {
   const setWeb3Provider = (web3Provider: any) => {
     state.web3Provider = web3Provider;
     state.web3 = new Web3(web3Provider);
-    state.connectedWallet = web3Provider.selectedAddress;
+    state.connectedWallet = web3Provider.accounts[0];
     state.chainId = web3Provider.chainId;
     state.chainInformation = chainDefinition[web3Provider.chainId];
+
+    console.log(web3Provider);
 
     web3Provider.on("accountsChanged", (accounts: string[]) => {
       state.connectedWallet = web3Provider.selectedAddress;
@@ -77,7 +79,17 @@ const chainDefinition: any = {
   "0x38": {
     name: "Binance Smart Chain",
     shortName: "BSC",
+    chainId: 56,
+  },
+  "1": {
+    name: "Ethereum",
+    shortName: "ETH",
     chainId: 1,
+  },
+  "56": {
+    name: "Binance Smart Chain",
+    shortName: "BSC",
+    chainId: 56,
   },
 };
 

@@ -17,7 +17,7 @@ export default defineNuxtPlugin(() => {
         supportedChainIds: [1, 56, 137, 250, 43114],
         qrcode: true,
         bridge: "https://bridge.walletconnect.org",
-        infuraId: config.infuraProjectId,
+        infuraId: "35f1db62a54d4b1b9feff0a60e5d0612",
       },
     },
   };
