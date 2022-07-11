@@ -32,9 +32,10 @@ const useWeb3WalletState = () => {
   const setWeb3Provider = (web3Provider: any) => {
     state.web3Provider = web3Provider;
     state.web3 = new Web3(web3Provider);
-    state.connectedWallet = web3Provider.isWalletConnect
-      ? web3Provider.accounts[0]
-      : web3Provider.selectedAddress;
+    state.connectedWallet =
+      web3Provider.isWalletConnect && !web3Provider.selectedAddress
+        ? web3Provider.accounts[0]
+        : web3Provider.selectedAddress;
     state.chainId = web3Provider.chainId;
     state.chainInformation = chainDefinition[web3Provider.chainId];
 
