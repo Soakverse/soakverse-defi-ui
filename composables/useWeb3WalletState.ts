@@ -56,7 +56,7 @@ const useWeb3WalletState = () => {
     web3Provider.on(
       "disconnect",
       (error: { code: number; message: string }) => {
-        console.log(error);
+        resetWeb3State();
       }
     );
   };
@@ -71,6 +71,17 @@ const useWeb3WalletState = () => {
     connectedWallet,
   };
 };
+
+function resetWeb3State() {
+  state.web3Provider = null;
+  state.connectedWallet = null;
+  state.chainId = null;
+  state.chainInformation = {
+    name: null,
+    shortName: null,
+    chainId: null,
+  };
+}
 
 const chainDefinition: any = {
   "0x1": {
