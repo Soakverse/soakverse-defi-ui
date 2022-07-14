@@ -56,6 +56,7 @@ async function initializeWallet() {
   try {
     const provider = await $web3Modal.connect();
     setWeb3Provider(provider);
+    console.log(provider);
   } catch (e) {
     console.log(e);
   }
