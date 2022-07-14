@@ -9,7 +9,7 @@ export default defineNuxtPlugin(() => {
       package: WalletConnectProvider,
       options: {
         rpc: {
-          1: "https://cloudflare-eth.com",
+          1: "http://cloudflare-eth.com/v1/mainnet",
           56: "https://bsc-dataseed1.binance.org",
           137: "https://polygon-rpc.com/",
           250: "https://rpc.ftm.tools",
