@@ -54,6 +54,7 @@ async function initializeWallet() {
     setWeb3Provider(provider);
   } catch (e) {
     console.log(e);
+    alert(e);
   }
 }
 
@@ -65,8 +66,4 @@ async function disconnectWallet() {
   setWeb3Provider(null);
   setWeb3(null);
 }
-</script>
-
-<script>
-var vConsole = new VConsole();
 </script>

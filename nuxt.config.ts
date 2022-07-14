@@ -27,9 +27,6 @@ export default defineNuxtConfig({
         src: "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js",
       },
       {
-        src: "https://unpkg.com/vconsole@latest/dist/vconsole.min.js",
-      },
-      {
         src: "https://kit.fontawesome.com/b28a2f1a04.js",
         crossorigin: "anonymous",
       },
