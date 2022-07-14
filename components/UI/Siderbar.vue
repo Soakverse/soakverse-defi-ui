@@ -50,7 +50,7 @@
           class="sidebar-link"
           :class="{ 'text-center': !isSidebarOpen }"
           @click="disconnectWallet"
-          ><i class="fa-solid fa-info-circle"></i
+          ><i class="fa-solid fa-unlink"></i
           ><span v-if="isSidebarOpen"> Disconnect</span>
         </a>
       </li>

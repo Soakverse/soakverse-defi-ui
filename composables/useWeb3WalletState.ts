@@ -35,7 +35,7 @@ const useWeb3WalletState = () => {
     state.web3 = await new Web3(web3Provider);
     console.log("state.web3");
     console.log(state.web3);
-    const accounts = await state.web3.eth.accounts;
+    const accounts = await state.web3.eth.getAccounts();
     console.log("accounts");
     console.log(accounts);
     if (accounts.length > 0) {
@@ -60,7 +60,7 @@ const useWeb3WalletState = () => {
     web3Provider.on(
       "disconnect",
       (error: { code: number; message: string }) => {
-        resetWeb3State(true);
+        resetWeb3State();
       }
     );
   };
@@ -107,8 +107,7 @@ const useWeb3WalletState = () => {
     }
   };
 
-  const resetWeb3State = async (alreadydisconnected = false) => {
-    if (!alreadydisconnected) await state.web3Provider.disconnect();
+  const resetWeb3State = async () => {
     state.web3Provider = null;
     state.connectedWallet = null;
     state.chainId = null;
