@@ -34,11 +34,14 @@ const useWeb3WalletState = () => {
     console.log(state.web3);
     state.chainInformation = chainDefinition[web3Provider.chainId];
 
+    console.log("eth");
+    console.log(state.web3.eth);
+
+    console.log("accounts");
     const accounts = await state.web3.eth.getAccounts();
     if (accounts.length > 0) {
       state.connectedWallet = accounts[0];
     }
-    console.log("accounts");
     console.log(accounts);
 
     web3Provider.on("accountsChanged", (accounts: string[]) => {
@@ -105,7 +108,7 @@ const useWeb3WalletState = () => {
 
   const resetWeb3State = async () => {
     state.web3Provider = null;
-    state.connectedWallet = null;
+    state.connectedWallet = "";
     state.chainInformation = {
       name: null,
       shortName: null,
