@@ -38,15 +38,19 @@ const useWeb3WalletState = () => {
     console.log(state.web3.eth);
 
     console.log("accounts");
-    const accounts: any = await state.web3.eth.getAccounts();
-    if (accounts.length > 0) {
-      state.connectedWallet = accounts[0];
+    if (state.web3Provider.isMetaMask) {
+      state.connectedWallet = state.web3Provider.selectedAddress;
+    } else {
+      state.connectedWallet = state.web3Provider.accounts[0];
     }
-    console.log(accounts);
+
+    console.log(state.connectedWallet);
 
     web3Provider.on("accountsChanged", (accounts: string[]) => {
-      if (accounts.length > 0) {
-        state.connectedWallet = accounts[0];
+      if (state.web3Provider.isMetaMask) {
+        state.connectedWallet = state.web3Provider.selectedAddress;
+      } else {
+        state.connectedWallet = state.web3Provider.accounts[0];
       }
       console.log("accounts changed");
       console.log(state);
