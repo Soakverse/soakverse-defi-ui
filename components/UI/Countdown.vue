@@ -19,7 +19,7 @@ export default {
       hours: "",
       minutes: "",
       seconds: "",
-      endTime: new Date("July 15, 2022 16:00:00 EST"),
+      endTime: new Date("July 15, 2022 16:00:00 EDT"),
     };
   },
   mounted() {
