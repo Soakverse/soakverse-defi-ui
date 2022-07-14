@@ -3,8 +3,7 @@ import { chainDefinition } from "../utils/blockchain";
 
 const web3: any = new Web3();
 const web3Provider: any = null;
-const connectedWallet: string | null = null;
-const chainId: any = null;
+const connectedWallet: string = "";
 const chainInformation = {
   name: null,
   shortName: null,
@@ -15,7 +14,6 @@ const state = reactive({
   web3,
   web3Provider,
   connectedWallet,
-  chainId,
   chainInformation,
 });
 
@@ -26,7 +24,6 @@ const useWeb3WalletState = () => {
   };
 
   const connectedWallet = computed(() => state.connectedWallet);
-  const chainId = computed(() => state.chainId);
   const chainInformation = computed(() => state.chainInformation);
 
   const web3Provider = computed(() => state.web3Provider);
@@ -37,36 +34,23 @@ const useWeb3WalletState = () => {
     console.log(state.web3);
     state.chainInformation = chainDefinition[web3Provider.chainId];
 
-    state.web3.eth.getAccounts().then(function (result: any) {
-      if (result.length > 0) {
-        state.connectedWallet = result[0];
-      }
-    });
+    const accounts = await state.web3.eth.getAccounts();
+    if (accounts.length > 0) {
+      state.connectedWallet = accounts[0];
+    }
     console.log("accounts");
-    console.log(state);
+    console.log(accounts);
 
     web3Provider.on("accountsChanged", (accounts: string[]) => {
-      state.web3.eth.getAccounts().then(function (result: any) {
-        if (result.length > 0) {
-          state.connectedWallet = result[0];
-        }
-      });
+      if (accounts.length > 0) {
+        state.connectedWallet = accounts[0];
+      }
       console.log("accounts changed");
       console.log(state);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
       state.chainInformation = chainDefinition[chainId];
-    });
-
-    web3Provider.on("connect", (info: { chainId: number }) => {
-      state.web3.eth.getAccounts().then(function (result: any) {
-        if (result.length > 0) {
-          state.connectedWallet = result[0];
-        }
-      });
-      console.log("accounts connect");
-      console.log(state);
     });
 
     web3Provider.on(
