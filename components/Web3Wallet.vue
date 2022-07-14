@@ -1,16 +1,16 @@
 <template>
   <div class="d-inline-flex align-items-center">
-    <div class="d-inline-flex align-items-center">
+    <div class="d-inline-flex align-items-center mx-2">
       <select
         v-if="multichain"
-        @change="onNetworkChanged($event)"
-        v-model="networkId"
+        @change="changeNetwork(chainInformation.chainId)"
+        v-model="chainInformation.chainId"
       >
         <option v-for="id in networkIds" :value="id" :key="id">
-          {{ chainInfo[id].networkName }}
+          {{ chainDefinition[id].shortName }}
         </option>
       </select>
-      <div v-if="chainInformation.shortName">
+      <div v-else-if="chainInformation.shortName">
         <a class="btn btn-primary btn-sm mx-2">{{
           chainInformation.shortName
         }}</a>
@@ -31,6 +31,9 @@
 </template>
 <script setup>
 import { formatWalletAddress } from "../utils/helpers";
+import { chainDefinition } from "../utils/blockchain";
+
+const networkIds = [1, 56];
 
 const {
   chainInformation,
@@ -39,9 +42,10 @@ const {
   web3Provider,
   setWeb3,
   setWeb3Provider,
+  setNetwork,
 } = useWeb3WalletState();
 const { $web3Modal } = useNuxtApp();
-const multichain = false;
+const multichain = true;
 const cachedProvider = process.client
   ? localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
   : null;
@@ -65,5 +69,9 @@ async function disconnectWallet() {
   await $web3Modal.clearCachedProvider();
   setWeb3Provider(null);
   setWeb3(null);
+}
+
+async function changeNetwork(networkId) {
+  setNetwork(networkId);
 }
 </script>

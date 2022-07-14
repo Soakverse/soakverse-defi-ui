@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import { chainDefinition } from "../utils/blockchain";
 
 const web3: any = new Web3();
 const web3Provider: any = null;
@@ -61,9 +62,52 @@ const useWeb3WalletState = () => {
     );
   };
 
+  const setNetwork = async (networkId: number) => {
+    const currentChainId = await state.web3.eth.net.getId();
+    if (currentChainId !== networkId) {
+      try {
+        await state.web3Provider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: Web3.utils.toHex(networkId) }],
+        });
+      } catch (switchError: any) {
+        if (switchError.code === 4902) {
+          await addNetwork(networkId);
+        }
+        if (switchError.code === -32002) {
+          alert("You already have a pending request in your MetaMask");
+        }
+      }
+    }
+  };
+
+  const addNetwork = async (networkId: number) => {
+    try {
+      await state.web3Provider.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            nativeCurrency: {
+              name: chainDefinition[networkId].currencySymbol,
+              symbol: chainDefinition[networkId].currencySymbol,
+              decimals: 18,
+            },
+            blockExplorerUrls: [chainDefinition[networkId].blockExplorerUrl],
+            chainId: Web3.utils.toHex(networkId),
+            chainName: chainDefinition[networkId].networkFullName,
+            rpcUrls: [chainDefinition[networkId].rpcUrl],
+          },
+        ],
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return {
     web3Provider,
     setWeb3Provider,
+    setNetwork,
     web3,
     setWeb3,
     chainId,
@@ -82,28 +126,5 @@ function resetWeb3State() {
     chainId: null,
   };
 }
-
-const chainDefinition: any = {
-  "0x1": {
-    name: "Ethereum",
-    shortName: "ETH",
-    chainId: 1,
-  },
-  "0x38": {
-    name: "Binance Smart Chain",
-    shortName: "BSC",
-    chainId: 56,
-  },
-  "1": {
-    name: "Ethereum",
-    shortName: "ETH",
-    chainId: 1,
-  },
-  "56": {
-    name: "Binance Smart Chain",
-    shortName: "BSC",
-    chainId: 56,
-  },
-};
 
 export default useWeb3WalletState;
