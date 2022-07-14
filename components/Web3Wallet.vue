@@ -38,7 +38,6 @@ const networkIds = [1, 56];
 const {
   chainInformation,
   connectedWallet,
-  chainId,
   web3Provider,
   setWeb3,
   setWeb3Provider,

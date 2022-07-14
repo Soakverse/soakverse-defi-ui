@@ -35,26 +35,38 @@ const useWeb3WalletState = () => {
     state.web3 = await new Web3(web3Provider);
     console.log("state.web3");
     console.log(state.web3);
-    const accounts = await state.web3.eth.getAccounts();
-    console.log("accounts");
-    console.log(accounts);
-    if (accounts.length > 0) {
-      state.connectedWallet = accounts[0];
-    }
-    state.chainId = web3Provider.chainId;
     state.chainInformation = chainDefinition[web3Provider.chainId];
 
+    state.web3.eth.getAccounts().then(function (result: any) {
+      if (result.length > 0) {
+        state.connectedWallet = result[0];
+      }
+    });
+    console.log("accounts");
+    console.log(state);
+
     web3Provider.on("accountsChanged", (accounts: string[]) => {
-      state.connectedWallet = web3Provider.selectedAddress;
+      state.web3.eth.getAccounts().then(function (result: any) {
+        if (result.length > 0) {
+          state.connectedWallet = result[0];
+        }
+      });
+      console.log("accounts changed");
+      console.log(state);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
-      state.chainId = chainId;
       state.chainInformation = chainDefinition[chainId];
     });
 
     web3Provider.on("connect", (info: { chainId: number }) => {
-      state.connectedWallet = web3Provider.selectedAddress;
+      state.web3.eth.getAccounts().then(function (result: any) {
+        if (result.length > 0) {
+          state.connectedWallet = result[0];
+        }
+      });
+      console.log("accounts connect");
+      console.log(state);
     });
 
     web3Provider.on(
@@ -110,7 +122,6 @@ const useWeb3WalletState = () => {
   const resetWeb3State = async () => {
     state.web3Provider = null;
     state.connectedWallet = null;
-    state.chainId = null;
     state.chainInformation = {
       name: null,
       shortName: null,
@@ -125,7 +136,6 @@ const useWeb3WalletState = () => {
     setWeb3,
     web3Provider,
     web3,
-    chainId,
     chainInformation,
     connectedWallet,
   };
