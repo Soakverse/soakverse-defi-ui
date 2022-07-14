@@ -56,7 +56,7 @@ const useWeb3WalletState = () => {
     web3Provider.on(
       "disconnect",
       (error: { code: number; message: string }) => {
-        resetWeb3State();
+        resetWeb3State(true);
       }
     );
   };
@@ -103,7 +103,8 @@ const useWeb3WalletState = () => {
     }
   };
 
-  const resetWeb3State = () => {
+  const resetWeb3State = async (alreadydisconnected = false) => {
+    if (!alreadydisconnected) await state.web3Provider.disconnect();
     state.web3Provider = null;
     state.connectedWallet = null;
     state.chainId = null;
