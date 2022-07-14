@@ -38,8 +38,9 @@ const useWeb3WalletState = () => {
     console.log(state.web3.eth);
 
     console.log("accounts");
-    const accounts = (await state.web3Provider.send("eth_requestAccounts", []))
-      .result;
+    const accounts = await state.web3Provider.request({
+      method: "eth_requestAccounts",
+    });
     if (accounts.length > 0) {
       state.connectedWallet = accounts[0];
     }
