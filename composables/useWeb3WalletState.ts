@@ -33,7 +33,10 @@ const useWeb3WalletState = () => {
   const setWeb3Provider = async (web3Provider: any) => {
     state.web3Provider = web3Provider;
     state.web3 = new Web3(web3Provider);
-    state.connectedWallet = (await state.web3.eth.getAccounts())[0];
+    const accounts = await state.web3.eth.getAccounts();
+    if (accounts.length > 0) {
+      state.connectedWallet = accounts[0];
+    }
     state.chainId = web3Provider.chainId;
     state.chainInformation = chainDefinition[web3Provider.chainId];
 
