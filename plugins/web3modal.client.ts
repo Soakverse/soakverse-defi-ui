@@ -9,6 +9,7 @@ export default defineNuxtPlugin(() => {
       package: WalletConnectProvider,
       options: {
         rpc: {
+          1: "https://main-light.eth.linkpool.io",
           56: "https://bsc-dataseed1.binance.org",
           137: "https://polygon-rpc.com/",
           250: "https://rpc.ftm.tools",
@@ -17,7 +18,6 @@ export default defineNuxtPlugin(() => {
         supportedChainIds: [1, 56, 137, 250, 43114],
         qrcode: true,
         bridge: "https://bridge.walletconnect.org",
-        infuraId: "35f1db62a54d4b1b9feff0a60e5d0612",
       },
     },
   };
