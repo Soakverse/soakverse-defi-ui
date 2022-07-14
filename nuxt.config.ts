@@ -15,8 +15,8 @@ export default defineNuxtConfig({
     charset: "utf-8",
     meta: [
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "msapplication-TileColor", content: "#00a300" },
-      { name: "theme-color", content: "#00a300" },
+      { name: "msapplication-TileColor", content: "#06262d" },
+      { name: "theme-color", content: "#06262d" },
       {
         name: "og:image",
         content: "https://app.soakmont.com/soakmont-banner-facebook.jpg",
