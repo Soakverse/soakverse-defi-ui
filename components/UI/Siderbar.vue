@@ -87,12 +87,14 @@
 import icon from "@/assets/img/icon-gold.png";
 import logo from "@/assets/img/logo-hor-white.png";
 const { isSidebarOpen, toggleSidebar, closeSidebar } = useUiState();
+const { $web3Modal } = useNuxtApp();
 const { resetWeb3State } = useWeb3WalletState();
 
 async function disconnectWallet() {
   if (process.client) {
     localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
   }
+  await $web3Modal.clearCachedProvider();
   resetWeb3State();
 }
 </script>

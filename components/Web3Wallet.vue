@@ -58,7 +58,6 @@ async function initializeWallet() {
     setWeb3Provider(provider);
   } catch (e) {
     console.log(e);
-    alert(e);
   }
 }
 

@@ -36,10 +36,13 @@ const useWeb3WalletState = () => {
     state.connectedWallet = web3Provider.accounts
       ? web3Provider.accounts[0]
       : web3Provider.selectedAddress;
+    alert(
+      web3Provider.accounts
+        ? web3Provider.accounts[0]
+        : web3Provider.selectedAddress
+    );
     state.chainId = web3Provider.chainId;
     state.chainInformation = chainDefinition[web3Provider.chainId];
-
-    console.log(web3Provider);
 
     web3Provider.on("accountsChanged", (accounts: string[]) => {
       state.connectedWallet = web3Provider.selectedAddress;
