@@ -104,27 +104,28 @@ const useWeb3WalletState = () => {
     }
   };
 
+  const resetWeb3State = () => {
+    state.web3Provider = null;
+    state.connectedWallet = null;
+    state.chainId = null;
+    state.chainInformation = {
+      name: null,
+      shortName: null,
+      chainId: null,
+    };
+  };
+
   return {
-    web3Provider,
     setWeb3Provider,
     setNetwork,
-    web3,
+    resetWeb3State,
     setWeb3,
+    web3Provider,
+    web3,
     chainId,
     chainInformation,
     connectedWallet,
   };
 };
-
-function resetWeb3State() {
-  state.web3Provider = null;
-  state.connectedWallet = null;
-  state.chainId = null;
-  state.chainInformation = {
-    name: null,
-    shortName: null,
-    chainId: null,
-  };
-}
 
 export default useWeb3WalletState;

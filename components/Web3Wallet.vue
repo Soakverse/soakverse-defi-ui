@@ -2,7 +2,7 @@
   <div class="d-inline-flex align-items-center">
     <div class="d-inline-flex align-items-center mx-2">
       <select
-        v-if="multichain"
+        v-if="multichain && chainInformation.chainId"
         @change="changeNetwork(chainInformation.chainId)"
         v-model="chainInformation.chainId"
       >
@@ -23,7 +23,7 @@
         class="btn btn-primary btn-sm"
         >Connect</a
       >
-      <a v-else @click="disconnectWallet" class="btn btn-primary btn-sm">{{
+      <a v-else class="btn btn-primary btn-sm">{{
         formatWalletAddress(connectedWallet)
       }}</a>
     </div>
@@ -60,15 +60,6 @@ async function initializeWallet() {
     console.log(e);
     alert(e);
   }
-}
-
-async function disconnectWallet() {
-  if (process.client) {
-    localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
-  }
-  await $web3Modal.clearCachedProvider();
-  setWeb3Provider(null);
-  setWeb3(null);
 }
 
 async function changeNetwork(networkId) {
