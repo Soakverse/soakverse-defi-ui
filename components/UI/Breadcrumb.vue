@@ -2,7 +2,7 @@
   <ol class="my-auto py-0" vocab="http://schema.org/" typeof="BreadcrumbList">
     <li property="itemListElement" typeof="ListItem">
       <nuxt-link property="item" typeof="WebPage" to="/">
-        <span property="name">Soakmont App</span>
+        <span property="name">Home</span>
       </nuxt-link>
       <meta property="position" content="1" />
     </li>
@@ -33,7 +33,7 @@ export default {
   computed: {
     crumbs() {
       const route = useRoute();
-      const fullPath = route.fullPath;
+      const fullPath = route.fullPath.slice(0, route.fullPath.indexOf("?"));
       const params = fullPath.startsWith("/")
         ? fullPath.substring(1).split("/")
         : fullPath.split("/");

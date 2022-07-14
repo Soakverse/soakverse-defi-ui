@@ -15,12 +15,27 @@ h6 {
 }
 
 #main-sidebar {
-  display: block;
-  width: 72px;
   transition: 0.4s all;
+  display: block;
   background-color: $dark-grey;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: 72px;
+  @media all and (max-width: 576px) {
+    left: -72px;
+  }
   &.toggled {
+    transition: 0.4s all;
     width: 250px;
+    @media all and (max-width: 576px) {
+      left: 0px;
+
+      .toggle-menu {
+        right: -16px !important;
+      }
+    }
     .sidebar-header {
       padding: 12px 24px;
     }
@@ -56,14 +71,25 @@ h6 {
         font-size: 24px;
         line-height: 32px;
       }
+      @media all and (max-width: 576px) {
+        right: -40px;
+        background-color: $gold;
+        i {
+          color: $white;
+        }
+      }
     }
   }
   ul.sidebar-menu {
     padding: 16px;
+    @media all and (max-width: 767px) {
+      padding: 6px;
+    }
     li {
       a {
         color: $text-grey;
         padding: 8px;
+        transition: 0.4s all;
         i {
           color: $icon-grey;
           width: 24px;

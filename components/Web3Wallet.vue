@@ -31,6 +31,7 @@
 </template>
 <script setup>
 import { formatWalletAddress } from "../utils/helpers";
+
 const {
   chainInformation,
   connectedWallet,
@@ -64,4 +65,8 @@ async function disconnectWallet() {
   setWeb3Provider(null);
   setWeb3(null);
 }
+</script>
+
+<script>
+var vConsole = new VConsole();
 </script>

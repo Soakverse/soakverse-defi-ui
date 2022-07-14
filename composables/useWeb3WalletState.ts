@@ -50,7 +50,7 @@ const useWeb3WalletState = () => {
     });
 
     web3Provider.on("connect", (info: { chainId: number }) => {
-      console.log(info);
+      state.connectedWallet = web3Provider.selectedAddress;
     });
 
     web3Provider.on(

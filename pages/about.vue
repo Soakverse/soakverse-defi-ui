@@ -14,7 +14,7 @@
 
 <script setup>
 import SocialCards from "../components/About/SocialCards.vue";
-definePageMeta({
-  title: "Home - Soakmont DeFI",
+useHead({
+  title: "Home - Soakmont DeFI Platform",
 });
 </script>

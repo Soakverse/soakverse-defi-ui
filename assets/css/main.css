@@ -12,13 +12,24 @@ h6 {
 }
 
 #main-sidebar {
-  display: block;
-  width: 72px;
   transition: 0.4s all;
+  display: block;
   background-color: #06262d;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: 72px;
+}
+
+@media all and (max-width: 576px) {
+  #main-sidebar {
+    left: -60px;
+  }
 }
 
 #main-sidebar.toggled {
+  transition: 0.4s all;
   width: 250px;
 }
 
@@ -68,9 +79,16 @@ h6 {
   padding: 16px;
 }
 
+@media all and (max-width: 767px) {
+  #main-sidebar ul.sidebar-menu {
+    padding: 6px;
+  }
+}
+
 #main-sidebar ul.sidebar-menu li a {
   color: #aab5b7;
   padding: 8px;
+  transition: 0.4s all;
 }
 
 #main-sidebar ul.sidebar-menu li a i {
@@ -99,7 +117,7 @@ h6 {
   background: #ffffff 0% 0% no-repeat padding-box;
   box-shadow: 0px 8px 16px #00000029;
   border-radius: 16px;
-  padding: 24px;
+  padding: 16px;
 }
 
 .btn-primary {
@@ -228,6 +246,13 @@ body,
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  margin-left: 72px;
+}
+
+@media all and (max-width: 767px) {
+  #main {
+    margin-left: 0px;
+  }
 }
 
 #main-content {
