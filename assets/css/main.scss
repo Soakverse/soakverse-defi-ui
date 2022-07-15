@@ -15,7 +15,7 @@ body,
   display: flex;
   flex-direction: column;
   margin-left: 72px;
-  @media all and (max-width: 767px) {
+  @media all and (max-width: 576px) {
     margin-left: 0px;
   }
 }

@@ -24,13 +24,22 @@ h6 {
 
 @media all and (max-width: 576px) {
   #main-sidebar {
-    left: -60px;
+    left: -72px;
   }
 }
 
 #main-sidebar.toggled {
   transition: 0.4s all;
   width: 250px;
+}
+
+@media all and (max-width: 576px) {
+  #main-sidebar.toggled {
+    left: 0px;
+  }
+  #main-sidebar.toggled .toggle-menu {
+    right: -16px !important;
+  }
 }
 
 #main-sidebar.toggled .sidebar-header {
@@ -75,11 +84,21 @@ h6 {
   line-height: 32px;
 }
 
+@media all and (max-width: 576px) {
+  #main-sidebar .sidebar-header .toggle-menu {
+    right: -40px;
+    background-color: #e1b77e;
+  }
+  #main-sidebar .sidebar-header .toggle-menu i {
+    color: #ffffff;
+  }
+}
+
 #main-sidebar ul.sidebar-menu {
   padding: 16px;
 }
 
-@media all and (max-width: 767px) {
+@media all and (max-width: 576px) {
   #main-sidebar ul.sidebar-menu {
     padding: 6px;
   }
@@ -249,7 +268,7 @@ body,
   margin-left: 72px;
 }
 
-@media all and (max-width: 767px) {
+@media all and (max-width: 576px) {
   #main {
     margin-left: 0px;
   }

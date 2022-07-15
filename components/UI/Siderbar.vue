@@ -93,6 +93,7 @@ const { resetWeb3State } = useWeb3WalletState();
 async function disconnectWallet() {
   if (process.client) {
     localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
+    localStorage.removeItem("walletconnect");
   }
   await $web3Modal.clearCachedProvider();
   resetWeb3State();

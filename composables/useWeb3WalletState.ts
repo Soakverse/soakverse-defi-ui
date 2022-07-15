@@ -1,7 +1,7 @@
 import Web3 from "web3";
 import { chainDefinition } from "../utils/blockchain";
+import { inject } from "vue";
 
-const web3: any = new Web3();
 const web3Provider: any = null;
 const connectedWallet: string = "";
 const chainInformation = {
@@ -11,40 +11,28 @@ const chainInformation = {
 };
 
 const state = reactive({
-  web3,
   web3Provider,
   connectedWallet,
   chainInformation,
 });
 
 const useWeb3WalletState = () => {
-  const web3 = computed(() => state.web3);
-  const setWeb3 = (web3: Web3) => {
-    state.web3 = web3;
-  };
-
+  const web3: any = inject("web3");
   const connectedWallet = computed(() => state.connectedWallet);
   const chainInformation = computed(() => state.chainInformation);
 
   const web3Provider = computed(() => state.web3Provider);
   const setWeb3Provider = async (web3Provider: any) => {
     state.web3Provider = web3Provider;
-    state.web3 = await new Web3(web3Provider);
-    console.log("state.web3");
-    console.log(state.web3);
-    state.chainInformation = chainDefinition[web3Provider.chainId];
+    web3.setProvider(web3Provider);
 
-    console.log("eth");
-    console.log(state.web3.eth);
+    state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    console.log("accounts");
     if (state.web3Provider.isMetaMask) {
       state.connectedWallet = state.web3Provider.selectedAddress;
     } else {
       state.connectedWallet = state.web3Provider.accounts[0];
     }
-
-    console.log(state.connectedWallet);
 
     web3Provider.on("accountsChanged", (accounts: string[]) => {
       if (state.web3Provider.isMetaMask) {
@@ -52,12 +40,11 @@ const useWeb3WalletState = () => {
       } else {
         state.connectedWallet = state.web3Provider.accounts[0];
       }
-      console.log("accounts changed");
-      console.log(state);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
-      state.chainInformation = chainDefinition[chainId];
+      const stringChainId = parseInt(chainId);
+      state.chainInformation = chainDefinition[stringChainId];
     });
 
     web3Provider.on(
@@ -69,7 +56,7 @@ const useWeb3WalletState = () => {
   };
 
   const setNetwork = async (networkId: number) => {
-    const currentChainId = await state.web3.eth.net.getId();
+    const currentChainId = await web3.eth.net.getId();
     if (currentChainId !== networkId) {
       try {
         await state.web3Provider.request({
@@ -124,9 +111,7 @@ const useWeb3WalletState = () => {
     setWeb3Provider,
     setNetwork,
     resetWeb3State,
-    setWeb3,
     web3Provider,
-    web3,
     chainInformation,
     connectedWallet,
   };

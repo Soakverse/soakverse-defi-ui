@@ -82,7 +82,7 @@ h6 {
   }
   ul.sidebar-menu {
     padding: 16px;
-    @media all and (max-width: 767px) {
+    @media all and (max-width: 576px) {
       padding: 6px;
     }
     li {
@@ -119,14 +119,24 @@ h6 {
   box-shadow: 0px 8px 16px #00000029;
   border-radius: 16px;
   padding: 16px;
+  &.grey {
+    background: $light-grey 0% 0% no-repeat padding-box;
+  }
+  &.no-shadow {
+    box-shadow: none;
+    border: 1px solid #00000029;
+  }
 }
 
 .btn-primary {
   background-color: $gold;
   border-color: $gold;
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background-color: $dark-gold;
     border-color: $dark-gold;
+    box-shadow: 0 0 0 2px rgba(233, 165, 70, 0.5);
   }
 }
 

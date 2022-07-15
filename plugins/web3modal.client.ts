@@ -1,7 +1,8 @@
 import Web3Modal from "web3modal";
+import Web3 from "web3";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const providerOptions = {
@@ -28,9 +29,15 @@ export default defineNuxtPlugin(() => {
     providerOptions,
   });
 
+  const web3 = new Web3();
+
+  nuxtApp.vueApp.provide("web3", web3);
+  nuxtApp.provide("web3", web3);
+
   return {
     provide: {
       web3Modal,
+      web3,
     },
   };
 });

@@ -37,7 +37,6 @@ export default {
       if (fullPath.indexOf("?") !== -1) {
         fullPath = fullPath.slice(0, route.fullPath.indexOf("?"));
       }
-      console.log(fullPath);
       const params = fullPath.startsWith("/")
         ? fullPath.substring(1).split("/")
         : fullPath.split("/");

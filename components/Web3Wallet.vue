@@ -34,17 +34,11 @@ import { formatWalletAddress } from "../utils/helpers";
 import { chainDefinition } from "../utils/blockchain";
 
 const networkIds = [1, 56];
-
-const {
-  chainInformation,
-  connectedWallet,
-  web3Provider,
-  setWeb3,
-  setWeb3Provider,
-  setNetwork,
-} = useWeb3WalletState();
-const { $web3Modal } = useNuxtApp();
 const multichain = true;
+
+const { chainInformation, connectedWallet, setWeb3Provider, setNetwork } =
+  useWeb3WalletState();
+const { $web3Modal } = useNuxtApp();
 const cachedProvider = process.client
   ? localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
   : null;
@@ -55,14 +49,14 @@ async function initializeWallet() {
   try {
     const provider = await $web3Modal.connect();
     setWeb3Provider(provider);
-    console.log("provider");
-    console.log(provider);
   } catch (e) {
     console.log(e);
   }
 }
 
 async function changeNetwork(networkId) {
-  setNetwork(networkId);
+  if (networkId !== chainInformation.chainId) {
+    await setNetwork(networkId);
+  }
 }
 </script>
