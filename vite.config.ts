@@ -26,4 +26,9 @@ export default {
       transformMixedEsModules: true,
     },
   },
+  resolve: {
+    alias: {
+      web3: "web3/dist/web3.min.js",
+    },
+  },
 };

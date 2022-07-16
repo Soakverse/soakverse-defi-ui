@@ -248,7 +248,7 @@ import soakmontStakingContractAbi from "~~/utils/abi/soakmontStakingContract";
 import { showLoader, hideLoader } from "~~/utils/helpers";
 const { $web3, $swal } = useNuxtApp();
 
-const { connectedWallet, web3Provider, web3 } = useWeb3WalletState();
+const { connectedWallet } = useWeb3WalletState();
 const props = defineProps({
   farm: {
     required: true,
@@ -276,16 +276,6 @@ const tokenContractAddress = "0x1B2fdB1626285B94782af2Fda8e270E95cEbC3b4";
 const stakingContractAddress = "0xF5Da615989DadbD552E3479d79e8e7f34EcA9832";
 const decimals = 18;
 
-const tokenContract = await new $web3.eth.Contract(
-  soakmontAbi.abi,
-  tokenContractAddress
-);
-
-const stakingContract = await new $web3.eth.Contract(
-  soakmontStakingContractAbi.abi,
-  stakingContractAddress
-);
-
 const state = reactive({
   currentStakedCount: 0,
   currentStakedTVL: 0,
@@ -304,6 +294,16 @@ const {
   error,
 } = await useLazyFetch(
   `https://api.coingecko.com/api/v3/simple/price?ids=soakmont&vs_currencies=usd`
+);
+
+const tokenContract = await new $web3.eth.Contract(
+  soakmontAbi.abi,
+  tokenContractAddress
+);
+
+const stakingContract = await new $web3.eth.Contract(
+  soakmontStakingContractAbi.abi,
+  stakingContractAddress
 );
 
 onMounted(async () => {

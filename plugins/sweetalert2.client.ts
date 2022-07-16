@@ -10,8 +10,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const swal = Swal.mixin(options);
 
-  nuxtApp.vueApp.provide("swal", swal);
-
   return {
     provide: {
       swal,

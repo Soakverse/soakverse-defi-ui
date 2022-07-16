@@ -17,8 +17,9 @@ const state = reactive({
 });
 
 const useWeb3WalletState = () => {
-  const web3: any = inject("web3");
-  const swal: any = inject("swal");
+  const { $web3, $swal } = useNuxtApp();
+  const web3: any = $web3;
+  const swal: any = $swal;
   const connectedWallet = computed(() => state.connectedWallet);
   const chainInformation = computed(() => state.chainInformation);
   const web3Provider = computed(() => state.web3Provider);

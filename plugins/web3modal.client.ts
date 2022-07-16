@@ -33,8 +33,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const web3 = new Web3();
 
-  nuxtApp.vueApp.provide("web3", web3);
-
   return {
     provide: {
       web3Modal,
