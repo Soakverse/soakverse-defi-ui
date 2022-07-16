@@ -27,7 +27,7 @@ useHead({
 export default {
   data() {
     return {
-      stakingActivated: false,
+      stakingActivated: true,
     };
   },
 };

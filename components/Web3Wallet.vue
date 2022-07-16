@@ -38,7 +38,7 @@ const multichain = true;
 
 const { chainInformation, connectedWallet, setWeb3Provider, setNetwork } =
   useWeb3WalletState();
-const { $web3Modal } = useNuxtApp();
+const { $web3Modal, $swal } = useNuxtApp();
 const cachedProvider = process.client
   ? localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
   : null;
@@ -49,8 +49,16 @@ async function initializeWallet() {
   try {
     const provider = await $web3Modal.connect();
     setWeb3Provider(provider);
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    $swal.fire({
+      title: "Error",
+      text: error,
+      icon: "error",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-danger btn-fill",
+      },
+    });
   }
 }
 

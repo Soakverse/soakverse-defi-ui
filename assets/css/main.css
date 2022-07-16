@@ -139,14 +139,24 @@ h6 {
   padding: 16px;
 }
 
+.card.grey {
+  background: #f5f6f6 0% 0% no-repeat padding-box;
+}
+
+.card.no-shadow {
+  box-shadow: none;
+  border: 1px solid #00000029;
+}
+
 .btn-primary {
   background-color: #e1b77e;
   border-color: #e1b77e;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
   background-color: #e9a546;
   border-color: #e9a546;
+  box-shadow: 0 0 0 2px rgba(233, 165, 70, 0.5);
 }
 
 .row.full {
@@ -259,6 +269,7 @@ body,
   height: 100% !important;
   width: 100% !important;
   font-family: "Poppins";
+  position: relative;
 }
 
 #main {

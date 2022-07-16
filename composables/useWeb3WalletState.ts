@@ -18,20 +18,21 @@ const state = reactive({
 
 const useWeb3WalletState = () => {
   const web3: any = inject("web3");
+  const swal: any = inject("swal");
   const connectedWallet = computed(() => state.connectedWallet);
   const chainInformation = computed(() => state.chainInformation);
-
   const web3Provider = computed(() => state.web3Provider);
+
   const setWeb3Provider = async (web3Provider: any) => {
     state.web3Provider = web3Provider;
     web3.setProvider(web3Provider);
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    state.connectedWallet = await getConnectedWallet(web3.currentProvider);
+    state.connectedWallet = getConnectedWallet(web3.currentProvider);
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      state.connectedWallet = await getConnectedWallet(web3.currentProvider);
+      state.connectedWallet = getConnectedWallet(web3.currentProvider);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
@@ -60,7 +61,15 @@ const useWeb3WalletState = () => {
           await addNetwork(networkId);
         }
         if (switchError.code === -32002) {
-          alert("You already have a pending request in your MetaMask");
+          swal.fire({
+            title: "Error",
+            text: "You already have a pending request in your MetaMask",
+            icon: "error",
+            buttonsStyling: false,
+            customClass: {
+              confirmButton: "btn btn-danger btn-fill",
+            },
+          });
         }
       }
     }
@@ -85,7 +94,15 @@ const useWeb3WalletState = () => {
         ],
       });
     } catch (error) {
-      alert(error);
+      swal.fire({
+        title: "Error",
+        text: error,
+        icon: "error",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: "btn btn-danger btn-fill",
+        },
+      });
     }
   };
 
@@ -99,7 +116,7 @@ const useWeb3WalletState = () => {
     };
   };
 
-  const getConnectedWallet = async (provider: any) => {
+  const getConnectedWallet = (provider: any) => {
     if (!provider) return null;
 
     if (provider.isTrust) {

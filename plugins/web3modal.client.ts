@@ -18,6 +18,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         },
         supportedChainIds: [1, 56, 137, 250, 43114],
         qrcode: true,
+        network: "binance",
+        chainId: 56,
         bridge: "https://bridge.walletconnect.org",
         infuraId: "35f1db62a54d4b1b9feff0a60e5d0612",
       },
@@ -32,7 +34,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   const web3 = new Web3();
 
   nuxtApp.vueApp.provide("web3", web3);
-  nuxtApp.provide("web3", web3);
 
   return {
     provide: {

@@ -246,3 +246,31 @@ h6 {
     }
   }
 }
+
+#global-loader {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(4, 32, 33, 0.8);
+  z-index: 99999;
+  text-align: center;
+  &.show {
+    display: flex;
+  }
+  img {
+    max-width: 320px;
+    display: block;
+    margin: 0 auto;
+  }
+  .loader-holder {
+    margin: auto;
+  }
+  @media all and (max-width: 540px) {
+    img {
+      max-width: 220px;
+    }
+  }
+}
