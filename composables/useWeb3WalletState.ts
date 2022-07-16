@@ -28,13 +28,16 @@ const useWeb3WalletState = () => {
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    console.log("wallet address ");
-    console.log(await getConnectedWallet(web3.currentProvider));
+    console.log(
+      "wallet address:" + (await getConnectedWallet(web3.currentProvider))
+    );
     state.connectedWallet = await getConnectedWallet(web3.currentProvider);
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      console.log("changed wallet address ");
-      console.log(await getConnectedWallet(web3.currentProvider));
+      console.log(
+        "wallet address changed:" +
+          (await getConnectedWallet(web3.currentProvider))
+      );
       state.connectedWallet = await getConnectedWallet(web3.currentProvider);
     });
 
@@ -104,8 +107,6 @@ const useWeb3WalletState = () => {
   };
 
   const getConnectedWallet = async (provider: any) => {
-    console.log(provider);
-    console.log(provider.accounts);
     if (!provider) return null;
 
     if (provider.isTrust) {
