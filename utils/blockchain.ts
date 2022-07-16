@@ -1,3 +1,5 @@
+import { privateEncrypt } from "crypto";
+
 export const chainDefinition: any = {
   "1": {
     name: "Ethereum",

@@ -26,22 +26,18 @@ const useWeb3WalletState = () => {
     state.web3Provider = web3Provider;
     web3.setProvider(web3Provider);
     console.log("Web3 provider");
-    console.log(web3Provider);
+
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
     console.log("Chain info");
     console.log(chainDefinition[parseInt(web3Provider.chainId)]);
 
-    const accounts = await web3.eth.getAccounts();
-    console.log("accounts");
-    console.log(accounts);
-    if (accounts.length > 0) {
-      state.connectedWallet = accounts[0];
-    }
+    state.connectedWallet = await getConnectedWallet(web3);
 
-    web3Provider.on("accountsChanged", (accounts: string[]) => {
-      if (accounts.length > 0) {
-        state.connectedWallet = accounts[0];
-      }
+    console.log("accounts");
+    console.log(await getConnectedWallet(web3));
+
+    web3Provider.on("accountsChanged", async (accounts: string[]) => {
+      state.connectedWallet = await getConnectedWallet(web3);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
@@ -118,5 +114,19 @@ const useWeb3WalletState = () => {
     connectedWallet,
   };
 };
+
+async function getConnectedWallet(web3: any): Promise<string> {
+  const provider = web3.currentProvider;
+  if (!provider) return "";
+
+  if (provider.isTrust) {
+    return provider.address;
+  } else if (provider.isMetamask) {
+    return provider.selectedAddress;
+  } else {
+    const accounts = await web3.eth.getAccounts();
+    return accounts[0];
+  }
+}
 
 export default useWeb3WalletState;
