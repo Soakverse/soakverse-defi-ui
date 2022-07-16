@@ -28,16 +28,9 @@ const useWeb3WalletState = () => {
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    console.log(
-      "wallet address:" + (await getConnectedWallet(web3.currentProvider))
-    );
     state.connectedWallet = await getConnectedWallet(web3.currentProvider);
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      console.log(
-        "wallet address changed:" +
-          (await getConnectedWallet(web3.currentProvider))
-      );
       state.connectedWallet = await getConnectedWallet(web3.currentProvider);
     });
 
@@ -110,16 +103,11 @@ const useWeb3WalletState = () => {
     if (!provider) return null;
 
     if (provider.isTrust) {
-      console.log("is trust");
       return provider.address;
     } else if (provider.isMetaMask) {
-      console.log("is meta");
       return provider.selectedAddress;
     } else {
-      console.log("is walletconnect");
-      console.log(provider.accounts[0]);
-      const accounts = provider.accounts[0];
-      return accounts[0];
+      return provider.accounts[0];
     }
   };
 
