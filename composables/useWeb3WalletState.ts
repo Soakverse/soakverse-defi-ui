@@ -28,10 +28,14 @@ const useWeb3WalletState = () => {
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    state.connectedWallet = getConnectedWallet(web3.currentProvider);
+    console.log("wallet address ");
+    console.log(await getConnectedWallet(web3.currentProvider));
+    state.connectedWallet = await getConnectedWallet(web3.currentProvider);
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      state.connectedWallet = getConnectedWallet(web3.currentProvider);
+      console.log("changed wallet address ");
+      console.log(await getConnectedWallet(web3.currentProvider));
+      state.connectedWallet = await getConnectedWallet(web3.currentProvider);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
@@ -99,33 +103,34 @@ const useWeb3WalletState = () => {
     };
   };
 
+  const getConnectedWallet = async (provider: any) => {
+    console.log(provider);
+    console.log(provider.accounts);
+    if (!provider) return null;
+
+    if (provider.isTrust) {
+      console.log("is trust");
+      return provider.address;
+    } else if (provider.isMetaMask) {
+      console.log("is meta");
+      return provider.selectedAddress;
+    } else {
+      console.log("is walletconnect");
+      console.log(provider.accounts[0]);
+      const accounts = provider.accounts[0];
+      return accounts[0];
+    }
+  };
+
   return {
     setWeb3Provider,
     setNetwork,
     resetWeb3State,
+    getConnectedWallet,
     web3Provider,
     chainInformation,
     connectedWallet,
   };
 };
-
-function getConnectedWallet(provider: any): string | null {
-  console.log(provider);
-  console.log(provider.accounts);
-  if (!provider) return null;
-
-  if (provider.isTrust) {
-    console.log("is trust");
-    return provider.address;
-  } else if (provider.isMetamask) {
-    console.log("is meta");
-    return provider.selectedAddress;
-  } else {
-    console.log("is walletconnect");
-    console.log(provider.accounts[0]);
-    const accounts = provider.accounts[0];
-    return accounts[0];
-  }
-}
 
 export default useWeb3WalletState;
