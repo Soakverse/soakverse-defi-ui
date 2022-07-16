@@ -124,6 +124,7 @@ function getConnectedWallet(provider: any): string | null {
     return provider.selectedAddress;
   } else {
     console.log("is walletconnect");
+    console.log(provider.accounts[0]);
     const accounts = provider.accounts[0];
     return accounts[0];
   }
