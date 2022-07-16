@@ -172,6 +172,10 @@ h6 {
   .row.full {
     width: 98%;
   }
+  .btn {
+    font-size: 10px;
+    padding: 0.175rem 0.375rem;
+  }
 }
 
 #timer div {
