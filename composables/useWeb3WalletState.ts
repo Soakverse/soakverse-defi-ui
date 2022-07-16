@@ -23,14 +23,23 @@ const useWeb3WalletState = () => {
 
   const web3Provider = computed(() => state.web3Provider);
   const setWeb3Provider = async (web3Provider: any) => {
+    console.log("web3 provider");
+    console.log(web3Provider);
     state.web3Provider = web3Provider;
     web3.setProvider(web3Provider);
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
+    console.log("chain information");
+    console.log(parseInt(web3Provider.chainId));
+
     if (state.web3Provider.isMetaMask) {
+      console.log("metamask connected wallet");
+      console.log(state.web3Provider.selectedAddress);
       state.connectedWallet = state.web3Provider.selectedAddress;
     } else {
+      console.log("other connected wallet");
+      console.log(state.web3Provider.accounts[0]);
       state.connectedWallet = state.web3Provider.accounts[0];
     }
 

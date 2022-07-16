@@ -12,7 +12,7 @@
             :name="`${farm.id}_${farm.ticker}_price`"
             readonly
             disabled
-            :value="`$${tokenPrice.soakmont.usd} USD`"
+            :value="`$${state.currentTokenPrice} USD`"
           />
         </div>
         <div class="col-12 col-sm-6 mb-2">
@@ -47,8 +47,6 @@
         </div>
       </div>
       <hr class="mb-4 mt-3" />
-
-      <h6>Your Stake</h6>
       <div class="row" v-if="connectedWallet">
         <div class="col-12 col-md-6 mb-4">
           <div class="my-auto card grey no-shadow">
@@ -132,9 +130,94 @@
           </div>
         </div>
         <div class="col-12 col-md-6 mb-4">
-          <div class="my-auto text-center card grey no-shadow">
+          <div
+            v-if="state.stakingUserInfo.amount == 0"
+            class="my-auto text-center card grey no-shadow"
+          >
             <h3>Staked {{ farm.ticker }}</h3>
             <h4>Not staked</h4>
+          </div>
+          <div class="my-auto card grey no-shadow">
+            <h6 class="fw-bold">Unstake {{ farm.ticker }}</h6>
+            <p>
+              Your Stake: {{ convertWeiToEther(state.stakingUserInfo.amount) }}
+            </p>
+            <label for="stake-input" class="mb-2 fw-bold"
+              >Amount to be unstaked</label
+            >
+            <div class="btn-group mb-2" role="group" aria-label="Stake button">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(25)"
+              >
+                25%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(50)"
+              >
+                50%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(75)"
+              >
+                75%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(100)"
+              >
+                100%
+              </button>
+            </div>
+            <input
+              id="stake-input"
+              v-model="state.toBeUnstaked"
+              class="form-control"
+            />
+            <button
+              class="btn btn-warning mt-2"
+              disabled="disabled"
+              v-if="
+                state.toBeUnstaked > state.stakingUserInfo.amount ||
+                state.toBeUnstaked == 0
+              "
+            >
+              {{
+                state.toBeUnstaked > state.stakingUserInfo.amount
+                  ? "Balance too low"
+                  : "Enter an amount"
+              }}
+            </button>
+            <button
+              v-else-if="state.toBeStaked <= state.approvalLimit"
+              type="button"
+              class="btn btn-success mt-2"
+              @click="unstakeTokens()"
+            >
+              Unstake
+            </button>
+            <div v-else class="mb-2 d-flex flex-row">
+              <button
+                @click="approveContract()"
+                type="button"
+                class="btn btn-success mt-2 flex-fill me-1"
+              >
+                Approve
+              </button>
+              <button
+                type="button"
+                class="btn btn-success mt-2 flex-fill ms-1"
+                @click="approveContract(true)"
+              >
+                Approve max
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -191,17 +274,20 @@ const stakingContract = await new $web3.eth.Contract(
 const state = reactive({
   currentStakedCount: 0,
   currentStakedTVL: 0,
+  currentTokenPrice: 0,
   tokenBalance: 0,
   toBeStaked: 0,
+  toBeUnstaked: 0,
   approvalLimit: 0,
+  stakingUserInfo: {},
 });
 
 const {
   data: tokenPrice,
-  pending,
+  tokenPricePending,
   refresh,
   error,
-} = await useFetch(
+} = await useLazyFetch(
   `https://api.coingecko.com/api/v3/simple/price?ids=soakmont&vs_currencies=usd`
 );
 
@@ -212,6 +298,18 @@ onMounted(async () => {
 watch(connectedWallet, () => {
   getTokenBalance();
 });
+
+watch(tokenPrice, (newValue) => {
+  if (newValue.soakmont) {
+    state.currentTokenPrice = newValue.soakmont.usd;
+    calculateStakedInfos();
+  }
+});
+
+function calculateStakedInfos() {
+  state.currentStakedTVL =
+    Math.round(state.currentStakedCount * state.currentTokenPrice * 100) / 100;
+}
 
 async function getTokenBalance() {
   if (process.client) {
@@ -235,12 +333,33 @@ async function getTokenBalance() {
       8
     );
 
-    console.log(state.approvalLimit);
+    state.stakingUserInfo = await stakingContract.methods
+      .userInfo(accounts[0])
+      .call();
+
+    console.log(state.stakingUserInfo);
+
+    const weiTotalStakedAmount = await tokenContract.methods
+      .balanceOf(stakingContractAddress)
+      .call();
+
+    state.currentStakedCount = parseFloat(
+      await $web3.utils.fromWei(weiTotalStakedAmount, "ether"),
+      8
+    );
+
+    calculateStakedInfos();
   }
 }
 
 function setToBeStakedAmount(percentage) {
   state.toBeStaked = parseFloat((state.tokenBalance * percentage) / 100);
+}
+
+function setToBeUnstakedAmount(percentage) {
+  state.toBeUnstaked = parseFloat(
+    (convertWeiToEther(state.stakingUserInfo.amount) * percentage) / 100
+  );
 }
 
 async function approveContract(max = false) {
@@ -296,5 +415,36 @@ async function stakeTokens() {
   } catch (e) {
     console.log(e);
   }
+}
+
+async function unstakeTokens() {
+  if (!state.toBeUnstaked > 0) {
+    alert("Please enter a number");
+    return;
+  }
+  try {
+    const accounts = await $web3.eth.getAccounts();
+    if (accounts.length > 0) {
+      const account = accounts[0];
+      const ethUtils = $web3.utils;
+      const amountToUnstake = await $web3.utils.toWei(
+        new ethUtils.BN(state.toBeUnstaked + 1),
+        "ether"
+      );
+      const stakingTransaction = await stakingContract.methods
+        .withdraw(new ethUtils.BN(amountToUnstake))
+        .send({ from: account });
+      if (stakingTransaction.status) {
+        state.toBeUnstaked = 0;
+        await getTokenBalance();
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function convertWeiToEther(amount) {
+  return $web3.utils.fromWei(new $web3.utils.BN(amount), "ether");
 }
 </script>

@@ -19,7 +19,7 @@
 import Countdown from "~~/components/UI/Countdown.vue";
 import FarmList from "~~/components/Staking/FarmList.vue";
 useHead({
-  title: "Home - Soakmont DeFI Platform",
+  title: "Staking - Soakmont DeFI Platform",
 });
 </script>
 
