@@ -3,7 +3,7 @@ import { chainDefinition } from "../utils/blockchain";
 import { inject } from "vue";
 
 const web3Provider: any = null;
-const connectedWallet: any = null;
+const connectedWallet: any = "";
 const chainInformation = {
   name: null,
   shortName: null,
@@ -28,12 +28,10 @@ const useWeb3WalletState = () => {
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    state.connectedWallet = await getConnectedWallet(web3.currentProvider);
-
-    console.log(state.connectedWallet);
+    state.connectedWallet = getConnectedWallet(web3.currentProvider);
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      state.connectedWallet = await getConnectedWallet(web3.currentProvider);
+      state.connectedWallet = getConnectedWallet(web3.currentProvider);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
