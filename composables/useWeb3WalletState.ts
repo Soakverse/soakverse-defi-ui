@@ -25,16 +25,10 @@ const useWeb3WalletState = () => {
   const setWeb3Provider = async (web3Provider: any) => {
     state.web3Provider = web3Provider;
     web3.setProvider(web3Provider);
-    console.log("Web3 provider");
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
-    console.log("Chain info");
-    console.log(chainDefinition[parseInt(web3Provider.chainId)]);
 
     state.connectedWallet = await getConnectedWallet(web3);
-
-    console.log("accounts");
-    console.log(await getConnectedWallet(web3));
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
       state.connectedWallet = await getConnectedWallet(web3);
