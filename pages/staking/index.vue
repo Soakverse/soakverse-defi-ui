@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid d-flex">
     <div class="row m-auto full">
       <div class="col">
         <div class="card">
@@ -11,10 +11,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="row">
-      <pre id="log"></pre>
     </div>
   </div>
 </template>
@@ -33,26 +29,6 @@ export default {
     return {
       stakingActivated: false,
     };
-  },
-  mounted() {
-    if (process.client) {
-      (function () {
-        var old = console.log;
-        var logger = document.getElementById("log");
-        console.log = function () {
-          for (var i = 0; i < arguments.length; i++) {
-            if (typeof arguments[i] == "object") {
-              logger.innerHTML +=
-                (JSON && JSON.stringify
-                  ? JSON.stringify(arguments[i], undefined, 2)
-                  : arguments[i]) + "<br />";
-            } else {
-              logger.innerHTML += arguments[i] + "<br />";
-            }
-          }
-        };
-      })();
-    }
   },
 };
 </script>
