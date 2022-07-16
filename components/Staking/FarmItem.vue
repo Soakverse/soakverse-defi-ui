@@ -435,7 +435,7 @@ async function stakeTokens() {
       const account = accounts[0];
       const ethUtils = $web3.utils;
       const amountToStake = await $web3.utils.toWei(
-        new ethUtils.BN(state.toBeStaked + 1),
+        new ethUtils.BN(state.toBeStaked),
         "ether"
       );
       const stakingTransaction = await stakingContract.methods
