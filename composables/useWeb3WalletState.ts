@@ -30,6 +30,8 @@ const useWeb3WalletState = () => {
 
     state.connectedWallet = await getConnectedWallet(web3.currentProvider);
 
+    console.log(state.connectedWallet);
+
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
       state.connectedWallet = await getConnectedWallet(web3.currentProvider);
     });
@@ -115,10 +117,13 @@ function getConnectedWallet(provider: any): string | null {
   if (!provider) return null;
 
   if (provider.isTrust) {
+    console.log("is trust");
     return provider.address;
   } else if (provider.isMetamask) {
+    console.log("is meta");
     return provider.selectedAddress;
   } else {
+    console.log("is walletconnect");
     const accounts = provider.accounts[0];
     return accounts[0];
   }
