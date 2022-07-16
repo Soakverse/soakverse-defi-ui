@@ -1,5 +1,5 @@
 <template>
-  <div class="row text-left px-4 mt-4">
+  <div class="row text-left px-1 mt-4">
     <div class="col-12">
       <h5>{{ farm.farmName }}</h5>
       <hr />

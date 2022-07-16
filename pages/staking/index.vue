@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid d-flex">
     <div class="row m-auto full">
-      <div class="col">
+      <div class="col px-0">
         <div class="card">
           <h2 class="mb-2 mt-4 text-center mb-2">Staking Platform</h2>
           <FarmList v-if="stakingActivated" class="pb-4" />
