@@ -3,7 +3,7 @@ import { chainDefinition } from "../utils/blockchain";
 import { inject } from "vue";
 
 const web3Provider: any = null;
-const connectedWallet: string = "";
+const connectedWallet: any = null;
 const chainInformation = {
   name: null,
   shortName: null,
@@ -28,10 +28,10 @@ const useWeb3WalletState = () => {
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    state.connectedWallet = await getConnectedWallet(web3);
+    state.connectedWallet = await getConnectedWallet(web3.currentProvider);
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      state.connectedWallet = await getConnectedWallet(web3);
+      state.connectedWallet = await getConnectedWallet(web3.currentProvider);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
@@ -109,20 +109,18 @@ const useWeb3WalletState = () => {
   };
 };
 
-function getConnectedWallet(web3: any): string {
-  const provider = web3.currentProvider;
+function getConnectedWallet(provider: any): string | null {
   console.log(provider);
-  if (!provider) return "";
+  console.log(provider.accounts);
+  if (!provider) return null;
 
   if (provider.isTrust) {
     return provider.address;
   } else if (provider.isMetamask) {
     return provider.selectedAddress;
-  } else if (provider.accounts.length > 0) {
+  } else {
     const accounts = provider.accounts[0];
     return accounts[0];
-  } else {
-    return "";
   }
 }
 
