@@ -109,17 +109,20 @@ const useWeb3WalletState = () => {
   };
 };
 
-async function getConnectedWallet(web3: any): Promise<string> {
+function getConnectedWallet(web3: any): string {
   const provider = web3.currentProvider;
+  console.log(provider);
   if (!provider) return "";
 
   if (provider.isTrust) {
     return provider.address;
   } else if (provider.isMetamask) {
     return provider.selectedAddress;
-  } else {
-    const accounts = await web3.eth.getAccounts();
+  } else if (provider.accounts.length > 0) {
+    const accounts = provider.accounts[0];
     return accounts[0];
+  } else {
+    return "";
   }
 }
 
