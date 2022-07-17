@@ -28,7 +28,7 @@ export default {
   },
   resolve: {
     alias: {
-      web3: "web3/dist/web3.min.js",
+      web3: production ? "web3/dist/web3.min.js" : "web3",
     },
   },
 };

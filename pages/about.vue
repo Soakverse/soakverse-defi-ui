@@ -2,7 +2,7 @@
   <div class="container-fluid d-flex">
     <div class="row m-auto full">
       <div class="col">
-        <div class="card text-center">
+        <div class="card text-center mb-4">
           <h4>Socials</h4>
           <SocialCards />
         </div>

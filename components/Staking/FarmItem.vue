@@ -308,6 +308,7 @@ const stakingContract = await new $web3.eth.Contract(
 
 onMounted(async () => {
   getTokenBalance();
+  refresh();
 });
 
 watch(connectedWallet, () => {
@@ -392,9 +393,24 @@ async function approveContract(max = false) {
           : new ethUtils.BN(state.toBeStaked + 1),
         "ether"
       );
+
+      const gasPrice = await $web3.eth.getGasPrice();
+
+      const gasLimit = await tokenContract.methods
+        .approve(stakingContractAddress, new ethUtils.BN(amountToApprove))
+        .estimateGas({
+          from: account,
+          gasPrice: gasPrice,
+        });
+
       const weiApprovalLimit = await tokenContract.methods
         .approve(stakingContractAddress, new ethUtils.BN(amountToApprove))
-        .send({ from: account });
+        .send({
+          from: account,
+          gasPrice: gasPrice,
+          gasLimit: gasLimit,
+        });
+
       if (weiApprovalLimit.status) {
         state.approvalLimit = amountToApprove;
         hideLoader();
@@ -438,9 +454,20 @@ async function stakeTokens() {
         new ethUtils.BN(state.toBeStaked),
         "ether"
       );
+
+      const gasPrice = await $web3.eth.getGasPrice();
+
+      const gasLimit = await stakingContract.methods
+        .stake(new ethUtils.BN(amountToStake))
+        .estimateGas({
+          from: account,
+          gasPrice: gasPrice,
+        });
+
       const stakingTransaction = await stakingContract.methods
         .stake(new ethUtils.BN(amountToStake))
-        .send({ from: account });
+        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+
       if (stakingTransaction.status) {
         state.toBeStaked = 0;
         await getTokenBalance();
@@ -485,9 +512,20 @@ async function unstakeTokens() {
         new ethUtils.BN(state.toBeUnstaked),
         "ether"
       );
+
+      const gasPrice = await $web3.eth.getGasPrice();
+
+      const gasLimit = await stakingContract.methods
+        .unstake(new ethUtils.BN(amountToUnstake))
+        .estimateGas({
+          from: account,
+          gasPrice: gasPrice,
+        });
+
       const stakingTransaction = await stakingContract.methods
         .unstake(new ethUtils.BN(amountToUnstake))
-        .send({ from: account });
+        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+
       if (stakingTransaction.status) {
         state.toBeUnstaked = 0;
         await getTokenBalance();

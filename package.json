@@ -3,8 +3,8 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview"
+    "generate": "NODE_ENV=production nuxt generate",
+    "preview": "NODE_ENV=production nuxt preview"
   },
   "devDependencies": {
     "nuxt": "3.0.0-rc.4",
