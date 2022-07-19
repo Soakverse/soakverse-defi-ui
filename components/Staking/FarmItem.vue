@@ -127,6 +127,10 @@
                 Approve max
               </button>
             </div>
+            <p class="mt-2" style="color: red">
+              Unstaking tokens in the first 30 days of staking will tax the
+              withdrawal for 10%.
+            </p>
           </div>
         </div>
         <div class="col-12 col-md-6 mb-4">
@@ -231,7 +235,17 @@
             v-if="!(state.stakingUserInfo.amount == 0)"
             class="d-flex h-100 text-center card grey no-shadow"
           >
-            <p>Your pending rewards: 0 $SKMT</p>
+            <p class="mb-0">
+              Your pending rewards: {{ state.pendingRewards }} $SKMT
+            </p>
+            <button
+              v-if="state.pendingRewards > 0"
+              type="button"
+              class="btn btn-success mt-2"
+              @click="claimRewards()"
+            >
+              Claim Rewards
+            </button>
           </div>
         </div>
       </div>
@@ -285,6 +299,8 @@ const state = reactive({
   toBeUnstaked: 0,
   approvalLimit: 0,
   stakingUserInfo: {},
+  stakingUserUnlockTime: 0,
+  pendingRewards: 0,
 });
 
 const {
@@ -352,6 +368,15 @@ async function getTokenBalance() {
     state.stakingUserInfo = await stakingContract.methods
       .userInfo(accounts[0])
       .call();
+
+    const weiCurrentPendingRewards = await stakingContract.methods
+      .pendingRewards(accounts[0])
+      .call();
+
+    state.pendingRewards = parseFloat(
+      await $web3.utils.fromWei(weiCurrentPendingRewards, "ether"),
+      8
+    );
 
     const weiTotalStakedAmount = await tokenContract.methods
       .balanceOf(stakingContractAddress)
@@ -533,6 +558,60 @@ async function unstakeTokens() {
         $swal.fire({
           title: "Success",
           text: "Unstaking successful",
+          icon: "success",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: "btn btn-success btn-fill",
+          },
+        });
+      }
+    }
+  } catch (error) {
+    hideLoader();
+    $swal.fire({
+      title: "Error",
+      text: error.message,
+      icon: "error",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-danger btn-fill",
+      },
+    });
+  }
+}
+
+async function claimRewards() {
+  if (!state.pendingRewards > 0) {
+    alert("Pending Rewards must be higher than 0.");
+    return;
+  }
+  try {
+    const accounts = await $web3.eth.getAccounts();
+    if (accounts.length > 0) {
+      showLoader();
+      const account = accounts[0];
+
+      const gasPrice = await $web3.eth.getGasPrice();
+
+      const gasLimit = await stakingContract.methods
+        .claimRewards()
+        .estimateGas({
+          from: account,
+          gasPrice: gasPrice,
+        });
+
+      const claimRewardsTransaction = await stakingContract.methods
+        .claimRewards()
+        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+
+      if (claimRewardsTransaction.status) {
+        const claimedRewards = state.pendingRewards;
+        state.pendingRewards = 0;
+        await getTokenBalance();
+        hideLoader();
+        $swal.fire({
+          title: "Success",
+          text: `Claimed ${claimedRewards} $SKMT successfully`,
           icon: "success",
           buttonsStyling: false,
           customClass: {
