@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       infuraProjectId: process.env.INFURA_PROJECT_ID,
+      alchemyApiKey: process.env.ALCHEMY_PROJECT_API_KEY,
       appName: "Soakmont DeFI Platform",
     },
   },

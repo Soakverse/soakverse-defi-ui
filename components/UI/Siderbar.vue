@@ -37,6 +37,15 @@
       </li>
       <li>
         <nuxt-link
+          to="/loyalty"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-award"></i
+          ><span v-if="isSidebarOpen"> Loyalty</span>
+        </nuxt-link>
+      </li>
+      <li>
+        <nuxt-link
           to="/about"
           class="sidebar-link"
           :class="{ 'text-center': !isSidebarOpen }"
