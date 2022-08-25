@@ -332,6 +332,7 @@ ul.checked-list li {
     opacity: 0.7;
     .icon {
       max-height: 40px;
+      max-width: 100%;
     }
     p {
       margin: 0;
