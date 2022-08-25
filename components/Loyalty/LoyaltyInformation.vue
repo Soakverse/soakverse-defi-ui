@@ -94,18 +94,11 @@
 </template>
 
 <script setup>
-import { Alchemy, Network } from "alchemy-sdk";
 import soakmontAbi from "~~/utils/abi/soakmontToken";
 import soakmontStakingContractAbi from "~~/utils/abi/soakmontStakingContract";
 import ProgressBar from "~~/components/Loyalty/ProgressBar.vue";
 import { showLoader, hideLoader } from "~~/utils/helpers";
 const config = useRuntimeConfig();
-
-const alchemyConfig = {
-  apiKey: config.alchemyApiKey,
-  network: Network.ETH_MAINNET,
-};
-const alchemy = new Alchemy(config);
 
 const { $web3 } = useNuxtApp();
 
@@ -211,7 +204,8 @@ watch(connectedWallet, () => {
 });
 
 async function getEcosystemBalance() {
-  if (process.client && connectedWallet) {
+  const currentChainId = await $web3.eth.net.getId();
+  if (process.client && connectedWallet && currentChainId == "56") {
     showLoader();
     state.ownedStaches = [];
     state.stakingUserInfo = {};
