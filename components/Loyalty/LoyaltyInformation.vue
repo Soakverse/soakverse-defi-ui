@@ -211,8 +211,8 @@ watch(connectedWallet, () => {
 });
 
 async function getEcosystemBalance() {
-  showLoader();
-  if (process.client) {
+  if (process.client && connectedWallet) {
+    showLoader();
     state.ownedStaches = [];
     state.stakingUserInfo = {};
     state.highestOwnedStache = null;
@@ -223,15 +223,22 @@ async function getEcosystemBalance() {
       .userInfo(accounts[0])
       .call();
 
-    const nfts = await alchemy.nft.getNftsForOwner(accounts[0], {
-      contractAddresses: [stachesContractAddress],
-    });
+    const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.alchemyApiKey}`;
+    const url = `${baseURL}/getNFTs/?owner=${accounts[0]}&contractAddresses[]=${stachesContractAddress}`;
+
+    var requestOptions = {
+      method: "get",
+      redirect: "follow",
+    };
+
+    const nfts = await $fetch(url);
 
     const nftList = nfts["ownedNfts"];
 
     let highestOwnedStache = null;
     for (let nft of nftList) {
-      const nftLevel = nftLevels[nft.tokenId - 1];
+      const tokenId = parseInt(nft.id.tokenId, 16);
+      const nftLevel = nftLevels[tokenId - 1];
       state.ownedStaches.push({
         id: nft.tokenId,
         level: nftLevel,
@@ -242,8 +249,8 @@ async function getEcosystemBalance() {
 
     state.highestOwnedStache = highestOwnedStache;
     calculateCurrentLoyaltyLevel();
+    hideLoader();
   }
-  hideLoader();
 }
 
 async function calculateCurrentLoyaltyLevel() {

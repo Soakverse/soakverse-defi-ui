@@ -28,7 +28,12 @@ export default {
   },
   resolve: {
     alias: {
-      web3: production ? "web3/dist/web3.min.js" : "web3",
+      process: "process/browser",
+      stream: "stream-browserify",
+      zlib: "browserify-zlib",
+      util: "util/",
+      http: "http-browserify",
+      https: "https-browserify",
     },
   },
 };

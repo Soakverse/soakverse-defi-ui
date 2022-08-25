@@ -3,19 +3,23 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "NODE_ENV=production nuxt generate",
-    "preview": "NODE_ENV=production nuxt preview"
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
   },
   "devDependencies": {
-    "nuxt": "3.0.0-rc.4",
+    "nuxt": "3.0.0-rc.8",
     "rollup-plugin-polyfill-node": "^0.9.0",
     "sass": "^1.52.3"
   },
   "dependencies": {
     "@walletconnect/web3-provider": "^1.7.8",
     "alchemy-sdk": "^2.0.3",
+    "http-browserify": "^1.7.0",
+    "https-browserify": "^1.0.0",
+    "stream-browserify": "^3.0.0",
     "sweetalert2": "^11.4.23",
-    "web3": "^1.7.4",
+    "util": "^0.12.4",
+    "web3": "1.7.4",
     "web3modal": "^1.9.8"
   }
 }
