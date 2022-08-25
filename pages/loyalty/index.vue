@@ -2,7 +2,7 @@
   <div class="container-fluid d-flex">
     <div class="row m-auto full">
       <div class="col-12">
-        <div class="card text-center">
+        <div class="card text-center mb-4">
           <LoyaltyInformation />
         </div>
       </div>
