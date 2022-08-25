@@ -306,6 +306,7 @@ function convertWeiToEther(amount) {
 ul.checked-list {
   max-width: 500px;
   margin: 0 auto;
+  padding: 0px;
 }
 
 ul.checked-list li {
@@ -313,6 +314,13 @@ ul.checked-list li {
   text-transform: uppercase;
   font-weight: 500;
   font-size: 16px;
+}
+
+@media all and (max-width: 767px) {
+  ul.checked-list li {
+    text-align: left;
+    font-size: 14px;
+  }
 }
 
 .social-card {
