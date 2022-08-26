@@ -146,12 +146,12 @@ const state = reactive({
     },
     {
       id: 4,
-      label: "Owns more than 5 Soakverse OGs: +1 level",
+      label: "Owns 5 or more Soakverse OGs: +1 level",
       checked: false,
     },
     {
       id: 5,
-      label: "Owns more than 10 Soakverse OGs: +1 level",
+      label: "Owns 10 or more Soakverse OGs: +1 level",
       checked: false,
     },
     {
@@ -173,7 +173,7 @@ const state = reactive({
 });
 
 const levelFunnyLabel = [
-  "Congrats! On nothing.. but at least your here.",
+  "Congrats! On nothing.. but at least you are here.",
   "That’s a good start.. but there’s like 9 more to go.",
   "Lots of great things happen with the number 2… Not in this case.",
   "Three is a crowd, you should try to just go to 4.",
