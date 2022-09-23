@@ -275,7 +275,7 @@ async function calculateCurrentLoyaltyLevel() {
     level = level + 2;
     state.checkedSteps[3].checked = true;
     state.checkedSteps[4].checked = true;
-  } else if (highestLevel >= 5) {
+  } else if (nftCount >= 5) {
     level = level + 1;
     state.checkedSteps[3].checked = true;
   }
