@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import { chainDefinition } from "../utils/blockchain";
+import { chainDefinition, assetsDefinition } from "../utils/blockchain";
 import { inject } from "vue";
 
 const web3Provider: any = null;
@@ -94,10 +94,40 @@ const useWeb3WalletState = () => {
           },
         ],
       });
-    } catch (error) {
+    } catch (error: any) {
       swal.fire({
         title: "Error",
-        text: error,
+        text: error.message ? error.message: error,
+        icon: "error",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: "btn btn-danger btn-fill",
+        },
+      });
+    }
+  };
+
+  const addAsset = async (networkId: number, assetName: string) => {
+    console.log(networkId)
+    console.log(assetsDefinition[networkId])
+    const asset = assetsDefinition[networkId][assetName]
+    try {
+      await state.web3Provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: asset.address,
+            symbol: asset.symbol,
+            decimals: asset.decimals,
+            image: asset.image,
+          },
+        },
+      });
+    } catch (error: any) {
+      swal.fire({
+        title: "Error",
+        text: error.message ? error.message: error,
         icon: "error",
         buttonsStyling: false,
         customClass: {
@@ -132,6 +162,8 @@ const useWeb3WalletState = () => {
   return {
     setWeb3Provider,
     setNetwork,
+    addNetwork,
+    addAsset,
     resetWeb3State,
     getConnectedWallet,
     web3Provider,

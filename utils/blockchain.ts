@@ -1,12 +1,11 @@
-import { privateEncrypt } from "crypto";
-
+// https://chainlist.org/
 export const chainDefinition: any = {
   "1": {
     name: "Ethereum",
     shortName: "ETH",
     chainId: 1,
     networkFullName: "Ethereum Mainnet",
-    rpcUrl: "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+    rpcUrl: "https://cloudflare-eth.com/v1/mainnet",
     blockExplorerUrl: "https://etherscan.io",
     currencySymbol: "ETH",
   },
@@ -18,5 +17,58 @@ export const chainDefinition: any = {
     rpcUrl: "https://bsc-dataseed1.binance.org",
     blockExplorerUrl: "https://bscscan.com",
     currencySymbol: "BNB",
+  },
+  "43114": {
+    name: "Avalanche Network",
+    shortName: "AVAX",
+    chainId: 43114,
+    networkFullName: "Avalanche C-Chain",
+    rpcUrl: "https://api.avax.network/ext/bc/C/rpc",
+    blockExplorerUrl: "https://snowtrace.io/",
+    currencySymbol: "AVAX",
+  },
+};
+
+export const assetsDefinition: any = {
+  "1": {
+    "WETH": {
+      address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      symbol: "WETH",
+      name: "Wrapped Ethereum",
+      decimals: 18,
+      image: null,
+    }
+  },
+  "56": {
+    "WBNB": {
+      address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      symbol: "WBNB",
+      name: "Wrapped BNB",
+      decimals: 18,
+      image: null,
+    },
+    "SKMT": {
+      address: "0x1B2fdB1626285B94782af2Fda8e270E95cEbC3b4",
+      symbol: "SKMT",
+      name: "Soakmont V2",
+      decimals: 18,
+      image: "https://bscscan.com/token/images/soakmontv2_32.png",
+    }
+  },
+  "43114": {
+    "WAVAX": {
+      address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+      symbol: "WAVAX",
+      name: "Wrapped Avax",
+      decimals: 18,
+      image: null,
+    },
+    "FAE": {
+      address: "0xCD1bb91f4eCa93217421316480cA7D7C315827E5",
+      symbol: "FAE",
+      name: "Lucky Fairy",
+      decimals: 9,
+      image: null,
+    }
   },
 };

@@ -1,66 +1,41 @@
 <template>
   <div id="main-sidebar" class="sidebar" :class="{ toggled: isSidebarOpen }">
     <div class="sidebar-header">
-      <img
-        class="brand-logo"
-        :src="isSidebarOpen ? logo : icon"
-        alt="Logo Soakmont"
-      />
-      <a href="javascript:void(0)" class="toggle-menu" @click="toggleSidebar()"
-        ><i
-          class="fa-solid"
-          :class="{
-            'fa-chevron-right': !isSidebarOpen,
-            'fa-chevron-left': isSidebarOpen,
-          }"
-        ></i
-      ></a>
+      <img class="brand-logo" :src="isSidebarOpen ? logo : icon" alt="Logo Soakmont" />
+      <a href="javascript:void(0)" class="toggle-menu" @click="toggleSidebar()"><i class="fa-solid" :class="{
+        'fa-chevron-right': !isSidebarOpen,
+        'fa-chevron-left': isSidebarOpen,
+      }"></i></a>
     </div>
     <ul class="sidebar-menu">
       <li>
-        <nuxt-link
-          to="/"
-          class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-dashboard"></i
-          ><span v-if="isSidebarOpen"> Home</span>
+        <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"><i
+            class="fa-solid fa-dashboard"></i><span v-if="isSidebarOpen"> Home</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link
-          to="/staking"
-          class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-coins"></i
-          ><span v-if="isSidebarOpen"> Staking</span>
+        <nuxt-link to="/staking" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"><i
+            class="fa-solid fa-coins"></i><span v-if="isSidebarOpen"> Staking</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link
-          to="/loyalty"
-          class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-award"></i
-          ><span v-if="isSidebarOpen"> Loyalty</span>
+        <nuxt-link to="/loyalty" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"><i
+            class="fa-solid fa-award"></i><span v-if="isSidebarOpen"> Loyalty</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link
-          to="/about"
-          class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-info-circle"></i
-          ><span v-if="isSidebarOpen"> About</span>
+        <nuxt-link to="/about" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"><i
+            class="fa-solid fa-info-circle"></i><span v-if="isSidebarOpen"> About</span>
         </nuxt-link>
       </li>
       <li>
-        <a
-          href="javascript:void(0)"
-          class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
-          @click="disconnectWallet"
-          ><i class="fa-solid fa-unlink"></i
-          ><span v-if="isSidebarOpen"> Disconnect</span>
+        <nuxt-link to="/blockchain-tools" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"><i
+            class="fa-solid fa-screwdriver-wrench"></i><span v-if="isSidebarOpen"> Tools</span>
+        </nuxt-link>
+      </li>
+      <li>
+        <a href="javascript:void(0)" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+          @click="disconnectWallet"><i class="fa-solid fa-unlink"></i><span v-if="isSidebarOpen"> Disconnect</span>
         </a>
       </li>
       <!--
