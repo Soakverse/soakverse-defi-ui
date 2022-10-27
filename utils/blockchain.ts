@@ -37,6 +37,13 @@ export const assetsDefinition: any = {
       name: "Wrapped Ethereum",
       decimals: 18,
       image: null,
+    },
+    "USDC": {
+      address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      symbol: "USDC",
+      name: "USD Coin",
+      decimals: 6,
+      image: null,
     }
   },
   "56": {
@@ -53,6 +60,20 @@ export const assetsDefinition: any = {
       name: "Soakmont V2",
       decimals: 18,
       image: "https://bscscan.com/token/images/soakmontv2_32.png",
+    },
+    "BUSD": {
+      address: "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+      symbol: "BUSD",
+      name: "BUSD",
+      decimals: 18,
+      image: null,
+    },
+    "XUSD": {
+      address: "0x324E8E649A6A3dF817F97CdDBED2b746b62553dD",
+      symbol: "XUSD",
+      name: "XUSD",
+      decimals: 18,
+      image: null,
     }
   },
   "43114": {
