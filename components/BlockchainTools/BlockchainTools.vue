@@ -57,6 +57,10 @@ button:active,
   background-color: #e7f1ff;
   box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
 }
+
+.accordion-body {
+  word-break: break-all;
+}
 </style>
 
 <script setup>
