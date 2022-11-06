@@ -18,7 +18,7 @@
     "stream-browserify": "^3.0.0",
     "sweetalert2": "^11.4.23",
     "util": "^0.12.4",
-    "web3": "1.7.4",
+    "web3": "1.8.0",
     "web3modal": "^1.9.8"
   }
 }
