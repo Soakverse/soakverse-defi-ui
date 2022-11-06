@@ -26,9 +26,19 @@ h6 {
   @media all and (max-width: 576px) {
     left: -72px;
   }
+  .label {
+    display:none;
+    opacity: 0;
+    transition: 1s all;
+  }
   &.toggled {
     transition: 0.4s all;
     width: 250px;
+    .label {
+      display: inline-block;
+      opacity: 1;
+      transition: 1s all;
+    }
     @media all and (max-width: 576px) {
       left: 0px;
 
@@ -40,7 +50,7 @@ h6 {
       padding: 12px 24px;
     }
   }
-  a {
+  a {transition: 1s all;
     display: block;
   }
   .sidebar-header {
