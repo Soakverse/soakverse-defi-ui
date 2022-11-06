@@ -5,11 +5,11 @@
         <div class="card text-center">
           <h4>WELCOME TO <b>SOAKMONT</b></h4>
           <p>Let's get started</p>
-          <nuxt-link to="/about" class="btn btn-primary mb-2">
-            About Soakmont
-          </nuxt-link>
+          <nuxt-link to="/about" class="btn btn-primary mb-2"> About Soakmont </nuxt-link>
           <p>or</p>
-          <nuxt-link to="/staking" class="btn btn-primary"> Staking </nuxt-link>
+          <nuxt-link to="/skmt/staking" class="btn btn-primary">SKMT Staking </nuxt-link>
+          <p>or</p>
+          <nuxt-link to="/soakverse/eggz/staking" class="btn btn-primary">Eggz Staking </nuxt-link>
         </div>
       </div>
     </div>

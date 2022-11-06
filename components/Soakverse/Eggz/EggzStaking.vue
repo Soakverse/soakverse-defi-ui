@@ -29,7 +29,7 @@
               <h6>{{ eggz.name }}</h6>
               <img :src="eggz.webImage" class="img-responsive w-100" />
               <div v-if="state.canStake">
-                <div v-if="eggz.staked">
+                <div v-if="state.stakedEggz.includes(eggz.tokenId)">
                   <a @click="unstakeNft(eggz.tokenId)" class="btn btn-danger btn-sm">Unstake</a>
                   <p class="green-text mt-1">Staking for: 0 days</p>
                 </div>
@@ -90,10 +90,14 @@ const state = reactive({
 });
 
 onMounted(async () => {
-  const currentChainId = await $web3.eth.net.getId();
-  if (process.client && connectedWallet && currentChainId == "1") {
-    eggzContract = await new $web3.eth.Contract(eggzABI.abi, eggzContractAddress);
-    getEcosystemBalance();
+  try {
+    const currentChainId = await $web3.eth.net.getId();
+    if (process.client && connectedWallet && currentChainId == "1") {
+      eggzContract = await new $web3.eth.Contract(eggzABI.abi, eggzContractAddress);
+      getEcosystemBalance();
+    }
+  } catch (e) {
+    console.log(e.message);
   }
 });
 
@@ -201,6 +205,8 @@ async function stakeNft(tokenId) {
         .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
 
       if (stakingTransaction.status) {
+        state.stakedEggz.push(tokenId);
+        state.unstakedEggz = state.unstakedEggz.filter((item) => item !== tokenId);
         hideLoader();
         $swal.fire({
           title: "Success",
@@ -262,6 +268,8 @@ async function unstakeNft(tokenId) {
         .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
 
       if (stakingTransaction.status) {
+        state.unstakedEggz.push(tokenId);
+        state.stakedEggz = state.stakedEggz.filter((item) => item !== tokenId);
         hideLoader();
         $swal.fire({
           title: "Success",
