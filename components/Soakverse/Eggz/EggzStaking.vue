@@ -5,6 +5,7 @@
         <i class="fa-solid fa-award"></i> Eggz Staking
         <i class="fa-solid fa-award"></i>
       </h5>
+      <h5>Total Staked: {{ state.stakedAmount }}</h5>
       <div v-if="state.canStake">
         <a v-if="state.unstakedEggz.length > 0" @click="stakeAllNfts()" class="btn btn-success btn-sm mx-1"
           >Stake All</a
@@ -31,7 +32,7 @@
               <div v-if="state.canStake">
                 <div v-if="state.stakedEggz.includes(eggz.tokenId)">
                   <a @click="unstakeNft(eggz.tokenId)" class="btn btn-danger btn-sm">Unstake</a>
-                  <p class="green-text mt-1">Staking for: 0 days</p>
+                  <p class="green-text mt-1">Staking for {{ Math.trunc(formatDaysSinceDate(eggz.stakedAt)) }} day(s)</p>
                 </div>
                 <a v-else @click="stakeNft(eggz.tokenId)" class="btn btn-success btn-sm">Stake</a>
               </div>
@@ -51,7 +52,7 @@
 </template>
 
 <script setup>
-import { showLoader, hideLoader, filterArrayOfObjects } from "~~/utils/helpers";
+import { showLoader, hideLoader, filterArrayOfObjects, formatDaysSinceDate } from "~~/utils/helpers";
 import eggzABI from "@/assets/abi/EggzABI";
 
 const { setNetwork, addNetwork, addAsset, chainInformation, connectedWallet } = useWeb3WalletState();
@@ -87,6 +88,7 @@ const state = reactive({
   unstakedEggz: [],
   highestOwnedStache: null,
   canStake: false,
+  stakedAmount: 0,
 });
 
 onMounted(async () => {
@@ -117,6 +119,7 @@ async function getEcosystemBalance() {
     state.ownedStaches = [];
     state.ownedEggz = [];
     state.highestOwnedStache = null;
+    state.stakedAmount = (await $fetch(`${config.apiUrl}/nft/stats/eggz`)).staked;
 
     const accounts = await $web3.eth.getAccounts();
 

@@ -1,3 +1,5 @@
+import { DateTime, Interval } from "luxon";
+
 export function formatWalletAddress(address: string): string {
   return address.slice(0, 6) + "..." + address.slice(-4);
 }
@@ -27,4 +29,12 @@ export function filterArrayOfObjects(array: any[], value: any) {
   });
 
   return result ? result[0] : null; // or undefined
+}
+
+export function formatDaysSinceDate(date: string) {
+  const luxonPastDate = DateTime.fromISO(date);
+  const luxonNowDate = DateTime.now();
+  const diff = Interval.fromDateTimes(luxonPastDate, luxonNowDate);
+  const diffDays = diff.length("days");
+  return diffDays;
 }
