@@ -38,3 +38,8 @@ export function formatDaysSinceDate(date: string) {
   const diffDays = diff.length("days");
   return diffDays;
 }
+
+export function formatDateInTimezone(date: string) {
+  const luxonDate = DateTime.fromISO(date);
+  return luxonDate.toFormat("yyyy-MM-dd hh:mm");
+}
