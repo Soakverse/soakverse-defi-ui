@@ -7,7 +7,7 @@
       </h3>
       <h6>Raffle end date: {{ formatDateInTimezone(state.raffle.raffleDate) }} (Your timezone)</h6>
       <span v-if="state.raffle.winnersPicked" class="badge bg-success mx-auto"> Winners Picked! </span>
-      <span v-else-if="state.raffle.ended" class="badge bg-warningv"> Ended. Waiting winners. </span>
+      <span v-else-if="state.raffle.ended" class="badge bg-warning"> Ended. Waiting winners. </span>
       <span v-else class="badge bg-primary mx-auto"> Raffle is ongoing! </span>
       <div class="row px-4 py-2">
         <h3 class="mt-3 mb-0">Prizes</h3>
