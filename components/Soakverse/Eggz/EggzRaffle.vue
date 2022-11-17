@@ -14,7 +14,7 @@
         <div v-if="state.prizes.length == 0">
           <h4 class="mt-4">Prizes not defined yet!</h4>
         </div>
-        <div v-for="prize in state.prizes" :key="prize.id" class="col-12 col-sm-6 col-md-3 py-3">
+        <div v-for="prize in state.prizes" :key="prize.id" class="col-12 col-sm-6 col-md-4 col-lg-3 py-3">
           <div class="card prize-card">
             <h5>{{ prize.prizeTitle }}</h5>
             <img :src="prize.webImageUrl" class="img-responsive w-100" />
