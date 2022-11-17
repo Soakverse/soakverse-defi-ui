@@ -7,7 +7,7 @@
       </h5>
       <hr />
       <div class="row">
-        <div v-for="raffle in state.raffles" :key="raffle.id" class="col-12 card">
+        <div v-for="raffle in state.raffles" :key="raffle.id" class="col-12 card mb-3">
           <h3>{{ raffle.raffleTitle }}</h3>
           <h6><b>Raffle end date:</b> {{ formatDateInTimezone(raffle.raffleDate) }} (Your timezone)</h6>
           <h6>
