@@ -11,6 +11,9 @@
       <span v-else class="badge bg-primary mx-auto"> Raffle is ongoing! </span>
       <div class="row px-4 py-2">
         <h3 class="mt-3 mb-0">Prizes</h3>
+        <div v-if="state.prizes.length == 0">
+          <h4 class="mt-4">Prizes not defined yet!</h4>
+        </div>
         <div v-for="prize in state.prizes" :key="prize.id" class="col-12 col-sm-6 col-md-3 py-3">
           <div class="card prize-card">
             <h5>{{ prize.prizeTitle }}</h5>
