@@ -19,7 +19,7 @@
             <h5>{{ prize.prizeTitle }}</h5>
             <img :src="prize.webImageUrl" class="img-responsive w-100" />
             <h6 class="mt-2 mb-0 p-0">{{ prize.prizeDescription }}</h6>
-            <p class="m-0 p-0" v-if="prize.winner">{{ winner }}</p>
+            <p class="m-0 p-0" v-if="prize.winner">{{ formatWalletAddress(prize.winner) }}</p>
             <p class="m-0 p-0" v-else>No winner yet</p>
           </div>
         </div>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { showLoader, hideLoader, formatDateInTimezone } from "~~/utils/helpers";
+import { formatWalletAddress, showLoader, hideLoader, formatDateInTimezone } from "~~/utils/helpers";
 
 const props = defineProps({
   raffleId: {
