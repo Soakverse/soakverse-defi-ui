@@ -15,7 +15,7 @@
           <h4 class="mt-4">Prizes not defined yet!</h4>
         </div>
         <div v-for="prize in state.prizes" :key="prize.id" class="col-12 col-sm-6 col-lg-4 col-xl-3 py-3">
-          <div class="card prize-card">
+          <div class="card prize-card" :class="{ winner: prize.winner ? verifyAddress(prize.winner) : null }">
             <h5>{{ prize.prizeTitle }}</h5>
             <img :src="prize.webImageUrl" class="img-responsive w-100" />
             <h6 class="mt-2 mb-0 p-0">{{ prize.prizeDescription }}</h6>
@@ -72,6 +72,7 @@ const { $web3 } = useNuxtApp();
 const state = reactive({
   raffle: {},
   prizes: [],
+  connectedWallet,
 });
 
 onMounted(async () => {
@@ -89,11 +90,20 @@ async function fetchAllData() {
     hideLoader();
   }
 }
+
+function verifyAddress(address) {
+  console.log(state.connectedWallet);
+  const addressIsTheSame = state.connectedWallet.toLowerCase() === address.toLowerCase() ? true : false;
+  return addressIsTheSame;
+}
 </script>
 
 <style lang="scss">
 .prize-card {
   border: 4px solid #e1b77e;
+  &.winner {
+    border: 4px solid green;
+  }
 }
 
 .social-card {

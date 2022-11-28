@@ -41,12 +41,9 @@ const useWeb3WalletState = () => {
       state.chainInformation = chainDefinition[stringChainId];
     });
 
-    web3Provider.on(
-      "disconnect",
-      (error: { code: number; message: string }) => {
-        resetWeb3State();
-      }
-    );
+    web3Provider.on("disconnect", (error: { code: number; message: string }) => {
+      resetWeb3State();
+    });
   };
 
   const setNetwork = async (networkId: number) => {
@@ -97,7 +94,7 @@ const useWeb3WalletState = () => {
     } catch (error: any) {
       swal.fire({
         title: "Error",
-        text: error.message ? error.message: error,
+        text: error.message ? error.message : error,
         icon: "error",
         buttonsStyling: false,
         customClass: {
@@ -108,14 +105,14 @@ const useWeb3WalletState = () => {
   };
 
   const addAsset = async (networkId: number, assetName: string) => {
-    console.log(networkId)
-    console.log(assetsDefinition[networkId])
-    const asset = assetsDefinition[networkId][assetName]
+    console.log(networkId);
+    console.log(assetsDefinition[networkId]);
+    const asset = assetsDefinition[networkId][assetName];
     try {
       await state.web3Provider.request({
-        method: 'wallet_watchAsset',
+        method: "wallet_watchAsset",
         params: {
-          type: 'ERC20',
+          type: "ERC20",
           options: {
             address: asset.address,
             symbol: asset.symbol,
@@ -127,7 +124,7 @@ const useWeb3WalletState = () => {
     } catch (error: any) {
       swal.fire({
         title: "Error",
-        text: error.message ? error.message: error,
+        text: error.message ? error.message : error,
         icon: "error",
         buttonsStyling: false,
         customClass: {
