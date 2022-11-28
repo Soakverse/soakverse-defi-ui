@@ -1,7 +1,7 @@
 <template>
   <div id="main-sidebar" class="sidebar" :class="{ toggled: isSidebarOpen }">
     <div class="sidebar-header">
-      <img class="brand-logo" :src="isSidebarOpen ? logo : icon" alt="Logo Soakmont" />
+      <img class="brand-logo" :src="isSidebarOpen ? logo : icon" alt="Logo Soakverse" />
       <a href="javascript:void(0)" class="toggle-menu" @click="toggleSidebar()"
         ><i
           class="fa-solid"
@@ -82,8 +82,8 @@
 </template>
 
 <script setup>
-import icon from "@/assets/img/icon-gold.png";
-import logo from "@/assets/img/logo-hor-white.png";
+import icon from "@/assets/img/soakverse-icon-square.png";
+import logo from "@/assets/img/soakverse-logo.png";
 const { isSidebarOpen, toggleSidebar, closeSidebar } = useUiState();
 const { $web3Modal } = useNuxtApp();
 const { resetWeb3State } = useWeb3WalletState();

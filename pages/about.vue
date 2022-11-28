@@ -15,6 +15,6 @@
 <script setup>
 import SocialCards from "../components/About/SocialCards.vue";
 useHead({
-  title: "Home - Soakmont DeFI Platform",
+  title: "Home - Soakverse DeFI Platform",
 });
 </script>

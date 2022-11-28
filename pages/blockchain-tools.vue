@@ -15,6 +15,6 @@
 <script setup>
 import BlockchainTools from "../components/BlockchainTools/BlockchainTools.vue";
 useHead({
-  title: "Blockchain Tools - Soakmont DeFI Platform",
+  title: "Blockchain Tools - Soakverse DeFI Platform",
 });
 </script>

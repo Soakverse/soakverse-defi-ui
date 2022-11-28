@@ -14,6 +14,6 @@
 <script setup>
 import EggzStaking from "~~/components/Soakverse/Eggz/EggzStaking.vue";
 useHead({
-  title: "Soakverse Eggz Staking - Soakmont DeFI Platform",
+  title: "Soakverse Eggz Staking - Soakverse DeFI Platform",
 });
 </script>

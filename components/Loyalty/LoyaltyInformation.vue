@@ -2,41 +2,25 @@
   <div class="row text-left px-1 mt-4">
     <div class="col-12">
       <h5>
-        <i class="fa-solid fa-award"></i> Soakmont Loyalty Program
+        <i class="fa-solid fa-award"></i> Soakverse Loyalty Program
         <i class="fa-solid fa-award"></i>
       </h5>
       <hr />
-      <div
-        class="row"
-        v-if="connectedWallet && chainInformation.chainId == '56'"
-      >
+      <div class="row" v-if="connectedWallet && chainInformation.chainId == '56'">
         <div class="col-12">
           <p class="my-0">
             <b>Staked $SKMT:</b>
             {{ convertWeiToEther(state.stakingUserInfo.amount) }}
           </p>
-          <p class="my-0">
-            <b>Soakverse OGs count:</b> {{ state.ownedStaches.length }}
-          </p>
-          <p class="mb-4">
-            <b>Soakverse OGs Highest level:</b> {{ state.highestOwnedStache }}
-          </p>
+          <p class="my-0"><b>Soakverse OGs count:</b> {{ state.ownedStaches.length }}</p>
+          <p class="mb-4"><b>Soakverse OGs Highest level:</b> {{ state.highestOwnedStache }}</p>
 
           <h5>{{ levelFunnyLabel[state.currentLoyaltyLevel] }}</h5>
-          <ProgressBar
-            :value="state.currentLoyaltyLevel"
-            :maxValue="10"
-            label="Level"
-          />
+          <ProgressBar :value="state.currentLoyaltyLevel" :maxValue="10" label="Level" />
           <ul class="mt-4 checked-list">
             <li class="mb-2" v-for="step in state.checkedSteps" :key="step.id">
               <span :style="{ color: step.checked == true ? 'green' : 'red' }">
-                <i
-                  class="fas"
-                  :class="
-                    step.checked == true ? 'fa-check-circle' : 'fa-circle-xmark'
-                  "
-                ></i>
+                <i class="fas" :class="step.checked == true ? 'fa-check-circle' : 'fa-circle-xmark'"></i>
                 {{ step.label }}
               </span>
             </li>
@@ -54,11 +38,7 @@
             style="background-color: #06262d"
           >
             <div class="m-auto">
-              <img
-                class="icon"
-                src="@/assets/img/pancakeswap.png"
-                alt="Pancake Swap Logo White"
-              />
+              <img class="icon" src="@/assets/img/pancakeswap.png" alt="Pancake Swap Logo White" />
               <p>Get $SKMT on PancakeSwap</p>
             </div>
           </a>
@@ -71,11 +51,7 @@
             style="background-color: #06262d"
           >
             <div class="m-auto">
-              <img
-                class="icon"
-                src="@/assets/img/opensea-white.png"
-                alt="Open Sea Logo"
-              />
+              <img class="icon" src="@/assets/img/opensea-white.png" alt="Open Sea Logo" />
               <p>Get Soakverse OGs on Open Sea</p>
             </div>
           </a>
@@ -109,21 +85,16 @@ const stakingContractAddress = "0xF5Da615989DadbD552E3479d79e8e7f34EcA9832";
 const stachesContractAddress = "0x2019f1aa40528e632b4add3b8bcbc435dbf86404";
 
 const nftLevels = [
-  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1,
-  1, 1, 3, 2, 3, 5, 1, 3, 1, 2, 3, 1, 1, 1, 4, 3, 3, 4, 1, 1, 1, 4, 1, 3, 1, 1,
-  1, 2, 2, 4, 4, 2, 1, 5, 2, 1, 4, 1, 2, 5, 2, 3, 2, 1, 2, 5, 1, 4, 4, 1, 2, 3,
-  2, 3, 2, 2, 2, 3, 1, 1, 5, 4, 3, 2, 2, 2, 2, 1, 1, 1, 3, 1, 2, 3, 2, 1, 1, 3,
-  3, 4, 1, 1, 1, 5, 3, 3, 1, 1, 1, 2, 2, 3, 2, 2, 1, 2, 1, 3, 1, 1, 4, 2, 3, 2,
-  2, 3, 5, 3, 2, 1, 1, 1, 4, 1, 3, 2, 3, 5, 1, 3, 1, 4, 3, 3, 2, 1, 3, 3, 1, 1,
-  1, 1, 1, 2, 3, 3, 1, 1, 1, 1, 2, 3, 2, 5, 1, 1, 2, 3, 1, 1, 1, 1, 2, 5, 2, 1,
-  5, 1, 1, 1, 5, 3, 2, 3, 2, 2, 3, 2, 3, 2, 2, 3, 1, 2, 1, 1, 4, 1, 1, 1, 3, 4,
-  4, 3, 2, 1, 1, 1, 3, 1, 4, 1, 3, 4, 1, 4, 1, 1, 3, 1, 2, 1, 5, 1, 1, 4, 2, 2,
-  3, 2, 5, 3, 2, 5, 5, 1, 2, 2, 1, 1, 2, 2, 3, 3, 2, 2, 2, 4, 3, 3, 1, 2, 1, 1,
-  2, 2, 1, 3, 4, 3, 1, 2, 2, 2, 2, 2, 1, 1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 2, 3, 4,
-  4, 3, 1, 2, 3, 1, 1, 3, 1, 1, 4, 1, 3, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1,
-  1, 1, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 5, 2, 1, 1, 5, 1, 2, 2, 2, 5, 1, 3, 3, 2,
-  1, 2, 3, 3, 2, 2, 3, 3, 1, 3, 2, 1, 4, 3, 2, 4, 2, 1, 2, 3, 2, 1, 3, 3, 4, 3,
-  1,
+  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1, 1, 1, 3, 2, 3, 5, 1, 3, 1, 2, 3, 1, 1,
+  1, 4, 3, 3, 4, 1, 1, 1, 4, 1, 3, 1, 1, 1, 2, 2, 4, 4, 2, 1, 5, 2, 1, 4, 1, 2, 5, 2, 3, 2, 1, 2, 5, 1, 4, 4, 1, 2, 3,
+  2, 3, 2, 2, 2, 3, 1, 1, 5, 4, 3, 2, 2, 2, 2, 1, 1, 1, 3, 1, 2, 3, 2, 1, 1, 3, 3, 4, 1, 1, 1, 5, 3, 3, 1, 1, 1, 2, 2,
+  3, 2, 2, 1, 2, 1, 3, 1, 1, 4, 2, 3, 2, 2, 3, 5, 3, 2, 1, 1, 1, 4, 1, 3, 2, 3, 5, 1, 3, 1, 4, 3, 3, 2, 1, 3, 3, 1, 1,
+  1, 1, 1, 2, 3, 3, 1, 1, 1, 1, 2, 3, 2, 5, 1, 1, 2, 3, 1, 1, 1, 1, 2, 5, 2, 1, 5, 1, 1, 1, 5, 3, 2, 3, 2, 2, 3, 2, 3,
+  2, 2, 3, 1, 2, 1, 1, 4, 1, 1, 1, 3, 4, 4, 3, 2, 1, 1, 1, 3, 1, 4, 1, 3, 4, 1, 4, 1, 1, 3, 1, 2, 1, 5, 1, 1, 4, 2, 2,
+  3, 2, 5, 3, 2, 5, 5, 1, 2, 2, 1, 1, 2, 2, 3, 3, 2, 2, 2, 4, 3, 3, 1, 2, 1, 1, 2, 2, 1, 3, 4, 3, 1, 2, 2, 2, 2, 2, 1,
+  1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 2, 3, 4, 4, 3, 1, 2, 3, 1, 1, 3, 1, 1, 4, 1, 3, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1,
+  1, 1, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 5, 2, 1, 1, 5, 1, 2, 2, 2, 5, 1, 3, 3, 2, 1, 2, 3, 3, 2, 2, 3, 3, 1, 3, 2, 1, 4,
+  3, 2, 4, 2, 1, 2, 3, 2, 1, 3, 3, 4, 3, 1,
 ];
 
 const decimals = 18;
@@ -194,15 +165,9 @@ const levelFunnyLabel = [
 ];
 
 onMounted(async () => {
-  tokenContract = await new $web3.eth.Contract(
-    soakmontAbi.abi,
-    tokenContractAddress
-  );
+  tokenContract = await new $web3.eth.Contract(soakmontAbi.abi, tokenContractAddress);
 
-  stakingContract = await new $web3.eth.Contract(
-    soakmontStakingContractAbi.abi,
-    stakingContractAddress
-  );
+  stakingContract = await new $web3.eth.Contract(soakmontStakingContractAbi.abi, stakingContractAddress);
   getEcosystemBalance();
 });
 
@@ -220,9 +185,7 @@ async function getEcosystemBalance() {
 
     const accounts = await $web3.eth.getAccounts();
 
-    state.stakingUserInfo = await stakingContract.methods
-      .userInfo(accounts[0])
-      .call();
+    state.stakingUserInfo = await stakingContract.methods.userInfo(accounts[0]).call();
 
     const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.alchemyApiKey}`;
     const url = `${baseURL}/getNFTs/?owner=${accounts[0]}&contractAddresses[]=${stachesContractAddress}`;

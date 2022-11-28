@@ -1,16 +1,7 @@
 <template>
   <div class="row">
-    <div
-      v-for="social in socials"
-      :key="social.name"
-      class="col-12 col-sm-4 col-xl-3 social-card"
-    >
-      <a
-        target="_new"
-        :href="social.link"
-        class="social-holder w-100"
-        :style="`background-color:${social.color}`"
-      >
+    <div v-for="social in socials" :key="social.name" class="col-12 col-sm-4 col-xl-3 social-card">
+      <a target="_new" :href="social.link" class="social-holder w-100" :style="`background-color:${social.color}`">
         <div class="m-auto">
           <i class="fa-4x" :class="social.icon" />
           <p>{{ social.name }}</p>
@@ -49,22 +40,22 @@ const socials = [
   {
     name: "Twitter",
     color: "#29A9E1",
-    link: "https://twitter.com/SoakmontGroup",
+    link: "https://twitter.com/soakverse",
     icon: "fab fa-twitter",
   },
   {
     name: "Discord",
     color: "#5865F2",
-    link: "https://discord.gg/Soakmont",
+    link: "https://discord.gg/soakverse",
     icon: "fab fa-discord",
   },
   {
     name: "Telegram",
     color: "#42BDE9",
-    link: "https://t.me/soakmont",
+    link: "https://t.me/soakverse",
     icon: "fab fa-telegram",
   },
-  {
+  /**{
     name: "Medium",
     color: "#000000",
     link: "https://soakmont-token.medium.com/",
@@ -75,11 +66,11 @@ const socials = [
     color: "#006192",
     link: "https://www.linkedin.com/company/soakmont",
     icon: "fab fa-linkedin-in",
-  },
+  },*/
   {
     name: "Instagram",
     color: "#C13584",
-    link: "https://instagram.com/soakmontgroup/",
+    link: "https://instagram.com/soakverse/",
     icon: "fab fa-instagram",
   },
 ];

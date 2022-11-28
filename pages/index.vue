@@ -3,9 +3,9 @@
     <div class="row m-auto">
       <div class="col">
         <div class="card text-center">
-          <h4>WELCOME TO <b>SOAKMONT</b></h4>
+          <h4>WELCOME TO <b>SOAKVERSE</b></h4>
           <p>Let's get started</p>
-          <nuxt-link to="/about" class="btn btn-primary mb-2"> About Soakmont </nuxt-link>
+          <nuxt-link to="/about" class="btn btn-primary mb-2"> About SOAKVERSE </nuxt-link>
           <p>or</p>
           <nuxt-link to="/skmt/staking" class="btn btn-primary">SKMT Staking </nuxt-link>
           <p>or</p>
@@ -18,6 +18,6 @@
 
 <script setup>
 useHead({
-  title: "Home - Soakmont DeFI Platform",
+  title: "Home - Soakverse DeFI Platform",
 });
 </script>

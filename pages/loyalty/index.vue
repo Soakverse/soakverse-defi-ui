@@ -13,6 +13,6 @@
 <script setup>
 import LoyaltyInformation from "~~/components/Loyalty/LoyaltyInformation.vue";
 useHead({
-  title: "Loyalty Program - Soakmont DeFI Platform",
+  title: "Loyalty Program - Soakverse DeFI Platform",
 });
 </script>

@@ -14,6 +14,6 @@
 <script setup>
 import EggzRaffle from "~~/components/Soakverse/Eggz/EggzRaffle.vue";
 useHead({
-  title: "Soakverse Eggz Raffle - Soakmont DeFI Platform",
+  title: "Soakverse Eggz Raffle - Soakverse DeFI Platform",
 });
 </script>

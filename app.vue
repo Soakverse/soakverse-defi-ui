@@ -4,12 +4,8 @@
   </NuxtLayout>
   <div id="global-loader">
     <div class="loader-holder">
-      <img class="icon" src="/icon.png" alt="Soakmont Gold Icon" />
-      <img
-        class="icon"
-        src="@/assets/img/processing.gif"
-        alt="Soakmont Gold Icon"
-      />
+      <img class="icon" src="/soakverse-icon.png" alt="Soakverse Icon" />
+      <img class="icon" src="@/assets/img/processing.gif" alt="Soakverse Loader progress bar" />
     </div>
   </div>
 </template>
