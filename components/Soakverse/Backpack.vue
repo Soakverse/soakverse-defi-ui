@@ -78,6 +78,7 @@ async function fetchAllData() {
 <style lang="scss">
 .prize-card {
   border: 4px solid #e1b77e;
+  height: 100%;
   &.winner {
     border: 4px solid green;
   }
