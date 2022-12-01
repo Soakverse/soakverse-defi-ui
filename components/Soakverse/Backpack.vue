@@ -91,7 +91,6 @@ async function fetchAllData() {
       background-color: #071d28;
       border-radius: 50%;
       height: 30px;
-      width: 30px;
       font-size: 22px;
       font-weight: bold;
       color: white;

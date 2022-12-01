@@ -8,7 +8,7 @@
     >
       <div class="m-auto">
         <img class="icon" src="@/assets/img/opensea-white.png" alt="Open Sea Logo" />
-        <p>Get Soakverse OGs on Open Sea</p>
+        <p>Get Soakverse OGs on OpenSea</p>
       </div>
     </a>
   </div>
@@ -21,7 +21,7 @@
     >
       <div class="m-auto">
         <img class="icon" src="@/assets/img/opensea-white.png" alt="Open Sea Logo" />
-        <p>Get Soakverse Eggz on Open Sea</p>
+        <p>Get Soakverse Eggz on OpenSea</p>
       </div>
     </a>
   </div>
