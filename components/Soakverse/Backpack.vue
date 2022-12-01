@@ -92,7 +92,7 @@ async function fetchAllData() {
       border-radius: 50%;
       height: 32px;
       min-width: 30px;
-      padding: 2px 6px;
+      padding: 1px 6px;
       font-size: 22px;
       font-weight: bold;
       color: white;
