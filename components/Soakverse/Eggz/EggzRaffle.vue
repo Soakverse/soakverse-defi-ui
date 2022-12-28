@@ -37,6 +37,10 @@ const props = defineProps({
   raffleId: {
     type: String,
   },
+  privateRaffle: {
+    type: String,
+    default: "false",
+  },
 });
 
 const { connectedWallet } = useWeb3WalletState();
@@ -58,11 +62,24 @@ onMounted(async () => {
 async function fetchAllData() {
   if (process.client) {
     showLoader();
-    const raffleUrl = `${config.apiUrl}/raffle/${props.raffleId}`;
-    state.raffle = await $fetch(raffleUrl);
+    const raffleUrl =
+      props.privateRaffle == "true"
+        ? `${config.apiUrl}/raffle/${props.raffleId}/private`
+        : `${config.apiUrl}/raffle/${props.raffleId}`;
+    try {
+      state.raffle = await $fetch(raffleUrl);
+    } catch (e) {
+      console.log(e);
+    }
 
-    const prizesUrl = `${config.apiUrl}/prizes/${props.raffleId}`;
-    state.prizes = await $fetch(prizesUrl);
+    if (state.raffle) {
+      const prizesUrl = `${config.apiUrl}/prizes/${props.raffleId}`;
+      try {
+        state.prizes = await $fetch(prizesUrl);
+      } catch (e) {
+        console.log(e);
+      }
+    }
     hideLoader();
   }
 }

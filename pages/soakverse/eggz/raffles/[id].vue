@@ -4,7 +4,7 @@
       <div class="col-12">
         <nuxt-link to="/soakverse/eggz/raffles" class="btn btn-primary mb-2"> Back </nuxt-link>
         <div class="text-center mb-4">
-          <EggzRaffle :raffleId="$route.params.id" />
+          <EggzRaffle :raffleId="$route.params.id" :privateRaffle="route.query.privateRaffle" />
         </div>
       </div>
     </div>
@@ -13,6 +13,7 @@
 
 <script setup>
 import EggzRaffle from "~~/components/Soakverse/Eggz/EggzRaffle.vue";
+const route = useRoute();
 useHead({
   title: "Soakverse Eggz Raffle - Soakverse DeFI Platform",
 });

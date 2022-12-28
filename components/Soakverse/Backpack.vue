@@ -89,7 +89,7 @@ async function fetchAllData() {
       bottom: 0;
       right: 0;
       background-color: #071d28;
-      border-radius: 50%;
+      border-radius: 16px;
       height: 32px;
       min-width: 30px;
       padding: 1px 6px;
