@@ -1,5 +1,22 @@
 <template>
-  <div class="row text-left px-1 mt-4">
+  <div class="row px-1 mt-4">
+    <div class="col-12 card">
+      <h5>To participate in raffles, you must stake Eggz By Soakverse or Own a Soakverse OG</h5>
+      <p class="pb-0 mb-0">Get one of our multi-utilities NFT on OpenSea:</p>
+      <div class="d-block">
+        <a
+          target="_new"
+          class="btn btn-success d-inline-block m-2"
+          href="https://opensea.io/collection/eggz-by-soakverse"
+          >Eggz by Soakverse</a
+        >
+        <a target="_new" class="btn btn-success d-inline-block m-2" href="https://opensea.io/collection/soakverse-ogs"
+          >Soakverse OGs</a
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row text-left px-1 mt-2">
     <div v-if="state.raffle.id" class="col-12 card">
       <h3>
         <i class="fa-solid fa-award"></i> {{ state.raffle.raffleTitle }}
