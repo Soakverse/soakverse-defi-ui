@@ -7,7 +7,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const providerOptions = {
-    walletlink: {
+    coinbasewallet: {
       package: CoinbaseWalletSDK,
       options: {
         appName: "Soakverse App",

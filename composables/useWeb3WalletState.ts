@@ -1,6 +1,5 @@
 import Web3 from "web3";
 import { chainDefinition, assetsDefinition } from "../utils/blockchain";
-import { inject } from "vue";
 
 const web3Provider: any = null;
 const connectedWallet: any = "";
@@ -146,6 +145,8 @@ const useWeb3WalletState = () => {
 
   const getConnectedWallet = (provider: any) => {
     if (!provider) return null;
+
+    console.log(provider);
 
     if (provider.isTrust) {
       return provider.address;
