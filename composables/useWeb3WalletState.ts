@@ -29,10 +29,10 @@ const useWeb3WalletState = () => {
 
     state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)];
 
-    state.connectedWallet = getConnectedWallet(web3.currentProvider);
+    state.connectedWallet = await getConnectedWallet(web3.currentProvider);
 
     web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      state.connectedWallet = getConnectedWallet(web3.currentProvider);
+      state.connectedWallet = await getConnectedWallet(web3.currentProvider);
     });
 
     web3Provider.on("chainChanged", (chainId: string) => {
@@ -143,18 +143,12 @@ const useWeb3WalletState = () => {
     };
   };
 
-  const getConnectedWallet = (provider: any) => {
+  const getConnectedWallet = async (provider: any) => {
     if (!provider) return null;
-
-    console.log(provider);
-
-    if (provider.isTrust) {
-      return provider.address;
-    } else if (provider.isMetaMask) {
-      return provider.selectedAddress;
-    } else {
-      return provider.accounts[0];
-    }
+    const { $web3 } = useNuxtApp();
+    const accounts = await $web3.eth.getAccounts();
+    if (accounts) return accounts[0];
+    else return null;
   };
 
   return {
