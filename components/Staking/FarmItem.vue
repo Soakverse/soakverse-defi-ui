@@ -17,13 +17,7 @@
         </div>
         <div class="col-12 col-sm-6 mb-2">
           <label>Current APR</label>
-          <input
-            class="form-control"
-            :name="`${farm.id}_${farm.ticker}_apr`"
-            readonly
-            disabled
-            value="TBD"
-          />
+          <input class="form-control" :name="`${farm.id}_${farm.ticker}_apr`" readonly disabled value="TBD" />
         </div>
         <div class="col-12 col-sm-6 mb-2">
           <label>{{ farm.ticker }} Staked</label>
@@ -32,7 +26,7 @@
             :name="`${farm.id}_${farm.ticker}_stake_count`"
             readonly
             disabled
-            :value="`${state.currentStakedCount} ${farm.ticker}`"
+            :value="`${state.currentStakedCount.toFixed(4)} ${farm.ticker}`"
           />
         </div>
         <div class="col-12 col-sm-6 mb-2">
@@ -42,7 +36,7 @@
             :name="`${farm.id}_${farm.ticker}_tvl`"
             readonly
             disabled
-            :value="`$${state.currentStakedTVL} USD`"
+            :value="`${moneyFormatter.format(state.currentStakedTVL)} USD`"
           />
         </div>
       </div>
@@ -51,57 +45,21 @@
         <div class="col-12 col-md-6 mb-4">
           <div class="h-100 my-auto card grey no-shadow">
             <h6 class="fw-bold">Stake {{ farm.ticker }}</h6>
-            <p>Balance: {{ state.tokenBalance }}</p>
-            <label for="stake-input" class="mb-2 fw-bold"
-              >Amount to be staked</label
-            >
+            <p>Balance: {{ state.tokenBalance.toFixed(4) }} ({{ moneyFormatter.format(state.tokenBalanceUSD) }})</p>
+            <label for="stake-input" class="mb-2 fw-bold">Amount to be staked</label>
             <div class="btn-group mb-2" role="group" aria-label="Stake button">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeStakedAmount(25)"
-              >
-                25%
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeStakedAmount(50)"
-              >
-                50%
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeStakedAmount(75)"
-              >
-                75%
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeStakedAmount(100)"
-              >
-                100%
-              </button>
+              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(25)">25%</button>
+              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(50)">50%</button>
+              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(75)">75%</button>
+              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(100)">100%</button>
             </div>
-            <input
-              id="stake-input"
-              v-model="state.toBeStaked"
-              class="form-control"
-            />
+            <input id="stake-input" v-model="state.toBeStaked" class="form-control" />
             <button
               class="btn btn-warning mt-2"
               disabled="disabled"
-              v-if="
-                state.toBeStaked > state.tokenBalance || state.toBeStaked == 0
-              "
+              v-if="state.toBeStaked > state.tokenBalance || state.toBeStaked == 0"
             >
-              {{
-                state.toBeStaked > state.tokenBalance
-                  ? "Balance too low"
-                  : "Enter an amount"
-              }}
+              {{ state.toBeStaked > state.tokenBalance ? "Balance too low" : "Enter an amount" }}
             </button>
             <button
               v-else-if="state.toBeStaked <= state.approvalLimit"
@@ -112,32 +70,20 @@
               Stake
             </button>
             <div v-else class="mb-2 d-flex flex-row">
-              <button
-                @click="approveContract()"
-                type="button"
-                class="btn btn-success mt-2 flex-fill me-1"
-              >
+              <button @click="approveContract()" type="button" class="btn btn-success mt-2 flex-fill me-1">
                 Approve
               </button>
-              <button
-                type="button"
-                class="btn btn-success mt-2 flex-fill ms-1"
-                @click="approveContract(true)"
-              >
+              <button type="button" class="btn btn-success mt-2 flex-fill ms-1" @click="approveContract(true)">
                 Approve max
               </button>
             </div>
             <p class="mt-2" style="color: red">
-              Unstaking tokens in the first 30 days of staking will tax the
-              withdrawal for 10%.
+              Unstaking tokens in the first 30 days of staking will tax the withdrawal for 10%.
             </p>
           </div>
         </div>
         <div class="col-12 col-md-6 mb-4">
-          <div
-            v-if="state.stakingUserInfo.amount == 0"
-            class="d-flex h-100 text-center card grey no-shadow"
-          >
+          <div v-if="state.stakingUserInfo.amount == 0" class="d-flex h-100 text-center card grey no-shadow">
             <div class="my-auto">
               <h3>Staked {{ farm.ticker }}</h3>
               <h4>Not staked</h4>
@@ -146,59 +92,24 @@
           <div v-else class="my-auto h-100 card grey no-shadow">
             <h6 class="fw-bold">Unstake {{ farm.ticker }}</h6>
             <p>
-              Your Stake: {{ convertWeiToEther(state.stakingUserInfo.amount) }}
+              Your Stake: {{ parseFloat(convertWeiToEther(state.stakingUserInfo.amount)).toFixed(4) }} ({{
+                moneyFormatter.format(state.stakingUserInfo.amountUSD)
+              }})
             </p>
-            <label for="stake-input" class="mb-2 fw-bold"
-              >Amount to be unstaked</label
-            >
+            <label for="stake-input" class="mb-2 fw-bold">Amount to be unstaked</label>
             <div class="btn-group mb-2" role="group" aria-label="Stake button">
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeUnstakedAmount(25)"
-              >
-                25%
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeUnstakedAmount(50)"
-              >
-                50%
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeUnstakedAmount(75)"
-              >
-                75%
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="setToBeUnstakedAmount(100)"
-              >
-                100%
-              </button>
+              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(25)">25%</button>
+              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(50)">50%</button>
+              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(75)">75%</button>
+              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(100)">100%</button>
             </div>
-            <input
-              id="stake-input"
-              v-model="state.toBeUnstaked"
-              class="form-control"
-            />
+            <input id="stake-input" v-model="state.toBeUnstaked" class="form-control" />
             <button
               class="btn btn-warning mt-2"
               disabled="disabled"
-              v-if="
-                state.toBeUnstaked > state.stakingUserInfo.amount ||
-                state.toBeUnstaked == 0
-              "
+              v-if="state.toBeUnstaked > state.stakingUserInfo.amount || state.toBeUnstaked == 0"
             >
-              {{
-                state.toBeUnstaked > state.stakingUserInfo.amount
-                  ? "Balance too low"
-                  : "Enter an amount"
-              }}
+              {{ state.toBeUnstaked > state.stakingUserInfo.amount ? "Balance too low" : "Enter an amount" }}
             </button>
             <button
               v-else-if="state.toBeStaked <= state.approvalLimit"
@@ -209,41 +120,22 @@
               Unstake
             </button>
             <div v-else class="mb-2 d-flex flex-row">
-              <button
-                @click="approveContract()"
-                type="button"
-                class="btn btn-success mt-2 flex-fill me-1"
-              >
+              <button @click="approveContract()" type="button" class="btn btn-success mt-2 flex-fill me-1">
                 Approve
               </button>
-              <button
-                type="button"
-                class="btn btn-success mt-2 flex-fill ms-1"
-                @click="approveContract(true)"
-              >
+              <button type="button" class="btn btn-success mt-2 flex-fill ms-1" @click="approveContract(true)">
                 Approve max
               </button>
             </div>
             <p class="mt-2" style="color: red">
-              Unstaking tokens in the first 30 days of staking will tax the
-              withdrawal for 10%.
+              Unstaking tokens in the first 30 days of staking will tax the withdrawal for 10%.
             </p>
           </div>
         </div>
         <div class="col-12 col-md-12 mb-4">
-          <div
-            v-if="!(state.stakingUserInfo.amount == 0)"
-            class="d-flex h-100 text-center card grey no-shadow"
-          >
-            <p class="mb-0">
-              Your pending rewards: {{ state.pendingRewards }} $SKMT
-            </p>
-            <button
-              v-if="state.pendingRewards > 0"
-              type="button"
-              class="btn btn-success mt-2"
-              @click="claimRewards()"
-            >
+          <div v-if="!(state.stakingUserInfo.amount == 0)" class="d-flex h-100 text-center card grey no-shadow">
+            <p class="mb-0">Your pending rewards: {{ state.pendingRewards.toFixed(4) }} $SKMT</p>
+            <button v-if="state.pendingRewards > 0" type="button" class="btn btn-success mt-2" @click="claimRewards()">
               Claim Rewards
             </button>
           </div>
@@ -259,7 +151,7 @@
 <script setup>
 import soakmontAbi from "~~/utils/abi/soakmontToken";
 import soakmontStakingContractAbi from "~~/utils/abi/soakmontStakingContract";
-import { showLoader, hideLoader } from "~~/utils/helpers";
+import { showLoader, hideLoader, moneyFormatter } from "~~/utils/helpers";
 const { $web3, $swal } = useNuxtApp();
 
 const { connectedWallet } = useWeb3WalletState();
@@ -295,6 +187,7 @@ const state = reactive({
   currentStakedTVL: 0,
   currentTokenPrice: 0,
   tokenBalance: 0,
+  tokenBalanceUSD: 0,
   toBeStaked: 0,
   toBeUnstaked: 0,
   approvalLimit: 0,
@@ -308,19 +201,11 @@ const {
   tokenPricePending,
   refresh,
   error,
-} = await useLazyFetch(
-  `https://api.coingecko.com/api/v3/simple/price?ids=soakmont&vs_currencies=usd`
-);
+} = await useLazyFetch(`https://api.coingecko.com/api/v3/simple/price?ids=soakmont&vs_currencies=usd`);
 
-const tokenContract = await new $web3.eth.Contract(
-  soakmontAbi.abi,
-  tokenContractAddress
-);
+const tokenContract = await new $web3.eth.Contract(soakmontAbi.abi, tokenContractAddress);
 
-const stakingContract = await new $web3.eth.Contract(
-  soakmontStakingContractAbi.abi,
-  stakingContractAddress
-);
+const stakingContract = await new $web3.eth.Contract(soakmontStakingContractAbi.abi, stakingContractAddress);
 
 onMounted(async () => {
   getTokenBalance();
@@ -339,53 +224,30 @@ watch(tokenPrice, (newValue) => {
 });
 
 function calculateStakedInfos() {
-  state.currentStakedTVL =
-    Math.round(state.currentStakedCount * state.currentTokenPrice * 100) / 100;
+  state.currentStakedTVL = Math.round(state.currentStakedCount * state.currentTokenPrice * 100) / 100;
 }
 
 async function getTokenBalance() {
   if (process.client) {
     const accounts = await $web3.eth.getAccounts();
 
-    const weiTokenBalance = await tokenContract.methods
-      .balanceOf(accounts[0])
-      .call();
+    const weiTokenBalance = await tokenContract.methods.balanceOf(accounts[0]).call();
+    state.tokenBalance = parseFloat(await $web3.utils.fromWei(weiTokenBalance, "ether"), 18);
+    state.tokenBalanceUSD = Math.round(state.tokenBalance * state.currentTokenPrice * 100) / 100;
 
-    state.tokenBalance = parseFloat(
-      await $web3.utils.fromWei(weiTokenBalance, "ether"),
-      8
-    );
+    const weiApprovalLimit = await tokenContract.methods.allowance(accounts[0], stakingContractAddress).call();
+    state.approvalLimit = parseFloat(await $web3.utils.fromWei(weiApprovalLimit, "ether"), 18);
 
-    const weiApprovalLimit = await tokenContract.methods
-      .allowance(accounts[0], stakingContractAddress)
-      .call();
+    state.stakingUserInfo = await stakingContract.methods.userInfo(accounts[0]).call();
+    state.stakingUserInfo.amountUSD =
+      Math.round((await $web3.utils.fromWei(state.stakingUserInfo.amount, "ether")) * state.currentTokenPrice * 100) /
+      100;
 
-    state.approvalLimit = parseFloat(
-      await $web3.utils.fromWei(weiApprovalLimit, "ether"),
-      8
-    );
+    const weiCurrentPendingRewards = await stakingContract.methods.pendingRewards(accounts[0]).call();
+    state.pendingRewards = parseFloat(await $web3.utils.fromWei(weiCurrentPendingRewards, "ether"), 18);
 
-    state.stakingUserInfo = await stakingContract.methods
-      .userInfo(accounts[0])
-      .call();
-
-    const weiCurrentPendingRewards = await stakingContract.methods
-      .pendingRewards(accounts[0])
-      .call();
-
-    state.pendingRewards = parseFloat(
-      await $web3.utils.fromWei(weiCurrentPendingRewards, "ether"),
-      8
-    );
-
-    const weiTotalStakedAmount = await tokenContract.methods
-      .balanceOf(stakingContractAddress)
-      .call();
-
-    state.currentStakedCount = parseFloat(
-      await $web3.utils.fromWei(weiTotalStakedAmount, "ether"),
-      8
-    );
+    const weiTotalStakedAmount = await tokenContract.methods.balanceOf(stakingContractAddress).call();
+    state.currentStakedCount = parseFloat(await $web3.utils.fromWei(weiTotalStakedAmount, "ether"), 18);
 
     calculateStakedInfos();
   }
@@ -396,9 +258,7 @@ function setToBeStakedAmount(percentage) {
 }
 
 function setToBeUnstakedAmount(percentage) {
-  state.toBeUnstaked = parseFloat(
-    (convertWeiToEther(state.stakingUserInfo.amount) * percentage) / 100
-  );
+  state.toBeUnstaked = parseFloat((convertWeiToEther(state.stakingUserInfo.amount) * percentage) / 100);
 }
 
 async function approveContract(max = false) {
@@ -413,9 +273,7 @@ async function approveContract(max = false) {
       const account = accounts[0];
       const ethUtils = $web3.utils;
       const amountToApprove = await $web3.utils.toWei(
-        max
-          ? new ethUtils.BN("100000000000")
-          : new ethUtils.BN(state.toBeStaked + 1),
+        max ? new ethUtils.BN("100000000000") : new ethUtils.BN(state.toBeStaked + 1),
         "ether"
       );
 
@@ -475,19 +333,14 @@ async function stakeTokens() {
       showLoader();
       const account = accounts[0];
       const ethUtils = $web3.utils;
-      const amountToStake = await $web3.utils.toWei(
-        new ethUtils.BN(state.toBeStaked),
-        "ether"
-      );
+      const amountToStake = await $web3.utils.toWei(new ethUtils.BN(state.toBeStaked), "ether");
 
       const gasPrice = await $web3.eth.getGasPrice();
 
-      const gasLimit = await stakingContract.methods
-        .stake(new ethUtils.BN(amountToStake))
-        .estimateGas({
-          from: account,
-          gasPrice: gasPrice,
-        });
+      const gasLimit = await stakingContract.methods.stake(new ethUtils.BN(amountToStake)).estimateGas({
+        from: account,
+        gasPrice: gasPrice,
+      });
 
       const stakingTransaction = await stakingContract.methods
         .stake(new ethUtils.BN(amountToStake))
@@ -533,19 +386,14 @@ async function unstakeTokens() {
       showLoader();
       const account = accounts[0];
       const ethUtils = $web3.utils;
-      const amountToUnstake = await $web3.utils.toWei(
-        new ethUtils.BN(state.toBeUnstaked),
-        "ether"
-      );
+      const amountToUnstake = await $web3.utils.toWei(new ethUtils.BN(state.toBeUnstaked), "ether");
 
       const gasPrice = await $web3.eth.getGasPrice();
 
-      const gasLimit = await stakingContract.methods
-        .unstake(new ethUtils.BN(amountToUnstake))
-        .estimateGas({
-          from: account,
-          gasPrice: gasPrice,
-        });
+      const gasLimit = await stakingContract.methods.unstake(new ethUtils.BN(amountToUnstake)).estimateGas({
+        from: account,
+        gasPrice: gasPrice,
+      });
 
       const stakingTransaction = await stakingContract.methods
         .unstake(new ethUtils.BN(amountToUnstake))
@@ -593,12 +441,10 @@ async function claimRewards() {
 
       const gasPrice = await $web3.eth.getGasPrice();
 
-      const gasLimit = await stakingContract.methods
-        .claimRewards()
-        .estimateGas({
-          from: account,
-          gasPrice: gasPrice,
-        });
+      const gasLimit = await stakingContract.methods.claimRewards().estimateGas({
+        from: account,
+        gasPrice: gasPrice,
+      });
 
       const claimRewardsTransaction = await stakingContract.methods
         .claimRewards()

@@ -4,6 +4,11 @@ export function formatWalletAddress(address: string): string {
   return address.slice(0, 6) + "..." + address.slice(-4);
 }
 
+export const moneyFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 export function showLoader() {
   if (process.client) {
     const loader: any = document.getElementById("global-loader");
