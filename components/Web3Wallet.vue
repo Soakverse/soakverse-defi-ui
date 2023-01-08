@@ -38,9 +38,10 @@ async function initializeWallet() {
     const provider = await $web3Modal.connect();
     setWeb3Provider(provider);
   } catch (error) {
+    const errorMessage = error.message ? error.message : error;
     $swal.fire({
       title: "Error",
-      text: error,
+      text: errorMessage,
       icon: "error",
       buttonsStyling: false,
       customClass: {

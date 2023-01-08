@@ -1,11 +1,19 @@
 import Web3Modal from "web3modal";
 import Web3 from "web3";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const providerOptions = {
+    walletlink: {
+      package: CoinbaseWalletSDK,
+      options: {
+        appName: "Soakverse App",
+        infuraId: "35f1db62a54d4b1b9feff0a60e5d0612",
+      },
+    },
     walletconnect: {
       package: WalletConnectProvider,
       options: {
