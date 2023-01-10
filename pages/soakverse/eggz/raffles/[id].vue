@@ -15,6 +15,6 @@
 import EggzRaffle from "~~/components/Soakverse/Eggz/EggzRaffle.vue";
 const route = useRoute();
 useHead({
-  title: "Soakverse Eggz Raffle - Soakverse DeFI Platform",
+  title: "Soakverse Eggz Giveaway - Soakverse DeFI Platform",
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="row px-1 mt-4">
     <div class="col-12 card">
-      <h5>To participate in raffles, you must stake Eggz By Soakverse or Own a Soakverse OG</h5>
+      <h5>To participate in giveaways, you must stake Eggz By Soakverse or Own a Soakverse OG</h5>
       <p class="pb-0 mb-0">Get one of our multi-utilities NFT on OpenSea:</p>
       <div class="d-block">
         <a
@@ -22,10 +22,10 @@
         <i class="fa-solid fa-award"></i> {{ state.raffle.raffleTitle }}
         <i class="fa-solid fa-award"></i>
       </h3>
-      <h6>Raffle end date: {{ formatDateInTimezone(state.raffle.raffleDate) }} (Your timezone)</h6>
+      <h6>Giveaway end date: {{ formatDateInTimezone(state.raffle.raffleDate) }} (Your timezone)</h6>
       <span v-if="state.raffle.winnersPicked" class="badge bg-success mx-auto"> Winners Picked! </span>
       <span v-else-if="state.raffle.ended" class="badge bg-warning mx-auto"> Ended. Waiting winners. </span>
-      <span v-else class="badge bg-primary mx-auto"> Raffle is ongoing! </span>
+      <span v-else class="badge bg-primary mx-auto"> Giveaway is ongoing! </span>
       <div class="row px-4 py-2">
         <h3 class="mt-3 mb-0">Prizes</h3>
         <div v-if="state.prizes.length == 0">
