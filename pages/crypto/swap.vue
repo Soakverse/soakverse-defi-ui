@@ -7,7 +7,6 @@
           <iframe
             id="simpleswap-frame"
             name="SimpleSwap Widget"
-            width="528px"
             height="450px"
             src="https://simpleswap.io/widget/2b0f0648-c73a-4896-8db8-14e355b15a4a"
             frameborder="0"
@@ -25,3 +24,10 @@ useHead({
   title: "Home - Soakverse DeFI Platform",
 });
 </script>
+
+<style>
+#simpleswap-frame {
+  width: 100%;
+  max-width: 600px;
+}
+</style>
