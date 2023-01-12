@@ -21,6 +21,12 @@ body,
   }
 }
 
+#p2e-home {
+  background-image: url("../img/temple.png");
+  background-size: cover;
+  background-position: center center;
+}
+
 #main-content {
   width: 100%;
   background-color: $light-grey;
