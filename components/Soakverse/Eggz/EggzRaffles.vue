@@ -16,7 +16,7 @@
             <span v-else-if="raffle.ended" class="badge bg-warning"> Ended. Waiting winners. </span>
             <span v-else class="badge bg-primary"> Giveaway is ongoing! </span>
           </h6>
-          <nuxt-link :to="'/soakverse/eggz/raffles/' + raffle.id" class="mx-auto btn btn-primary mb-2 d-inline-block">
+          <nuxt-link :to="'/soakverse/giveaways/' + raffle.id" class="mx-auto btn btn-primary mb-2 d-inline-block">
             View Giveaway
           </nuxt-link>
         </div>
