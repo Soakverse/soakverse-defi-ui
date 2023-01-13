@@ -1,18 +1,12 @@
 <template>
   <div class="container-fluid d-flex">
-    <div class="row mx-auto full">
-      <div class="col-12">
-        <nuxt-link to="/soakverse/eggz/staking" class="btn btn-primary mb-2"> Eggz Staking </nuxt-link>
-        <div class="text-center mb-4">
-          <EggzRaffles />
-        </div>
-      </div>
-    </div>
+    <div class="row mx-auto full"></div>
   </div>
 </template>
 
 <script setup>
-import EggzRaffles from "~~/components/Soakverse/Eggz/EggzRaffles.vue";
+const router = useRouter();
+router.push({ path: "/soakverse/giveaways" });
 useHead({
   title: "Soakverse Eggz Giveaways - Soakverse DeFI Platform",
 });

@@ -12,8 +12,9 @@
 </template>
 
 <script setup>
-import EggzRaffle from "~~/components/Soakverse/Eggz/EggzRaffle.vue";
+const router = useRouter();
 const route = useRoute();
+router.push({ path: `/soakverse/giveaways/${route.params.id}` });
 useHead({
   title: "Soakverse Eggz Giveaway - Soakverse DeFI Platform",
 });
