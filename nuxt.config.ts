@@ -6,6 +6,8 @@ export default defineNuxtConfig({
       alchemyApiKey: process.env.ALCHEMY_PROJECT_API_KEY,
       apiUrl: process.env.API_URL,
       appName: "Soakverse DeFI Platform",
+      googleTagManager: process.env.NUXT_GOOGLE_TAG_MANAGER,
+      gtmDebug: process.env.NUXT_GTM_DEBUG,
     },
   },
   css: ["@/assets/css/main.scss"],
