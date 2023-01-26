@@ -211,7 +211,7 @@ async function mint(mintStep) {
     if (accounts.length > 0) {
       showLoader();
       const account = accounts[0];
-      const mintTransaction = await this.onchainMintTransaction(mintStep, account, mintQuantity);
+      const mintTransaction = await onchainMintTransaction(mintStep, account, mintQuantity);
 
       if (mintTransaction.status) {
         hideLoader();
