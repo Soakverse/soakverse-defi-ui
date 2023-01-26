@@ -34,7 +34,7 @@
               <h4>Premium WL Mint</h4>
               <div v-if="state.premiumWhitelistCount > 0">
                 <p style="color: green; font-weight: bold">
-                  You can mint: {{ state.premiumWhitelistCount }} at 12:00 EST
+                  You can mint: {{ state.premiumWhitelistCount }} at 15:00 EST
                 </p>
               </div>
               <div v-else><p style="color: red; font-weight: bold">You are not included in this whitelist</p></div>
@@ -43,7 +43,7 @@
               <h4>Standard WL Mint</h4>
               <div v-if="state.standardWhitelistCount > 0">
                 <p style="color: green; font-weight: bold">
-                  You can mint: {{ state.standardWhitelistCount }} at 12:00 EST
+                  You can mint: {{ state.standardWhitelistCount }} at 16:00 EST
                 </p>
               </div>
               <div v-else><p style="color: red; font-weight: bold">You are not included in this whitelist</p></div>
@@ -51,7 +51,7 @@
             <div class="col-12 col-md-6 col-lg-4 py-3">
               <h4>Waitlist Mint</h4>
               <div v-if="state.waitlistCount > 0">
-                <p style="color: green; font-weight: bold">You can mint: {{ state.waitlistCount }} at 12:00 EST</p>
+                <p style="color: green; font-weight: bold">You can mint: {{ state.waitlistCount }} at 17:00 EST</p>
               </div>
               <div v-else><p style="color: red; font-weight: bold">Waitlist not released yet</p></div>
             </div>
