@@ -73,7 +73,7 @@
 
             <div class="col-12 col-md-6 offset-md-3 offset-lg-4 col-lg-4 py-3">
               <h4 class="mb-0">Public Mint</h4>
-              <p class="mb-2">Minting Soon</p>
+              <p class="mb-2">Minting NOW!</p>
               <div>
                 <p style="color: green; font-weight: bold">You can mint: 1 Wizh</p>
                 <a v-if="state.publicActivated" class="btn btn-primary" @click="mintPublic()">Mint</a>
