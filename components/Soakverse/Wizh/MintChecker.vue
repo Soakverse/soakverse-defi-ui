@@ -111,7 +111,7 @@ const state = reactive({
   standardWhitelistCount: 0,
   waitlistCount: 0,
   connectedWallet,
-  ogMintTime: new Date("January 26, 2023 17:00:00 UTC"),
+  ogMintTime: new Date("January 25, 2023 17:00:00 UTC"),
   eggz3MintTime: new Date("January 26, 2023 18:00:00 UTC"),
   eggz1MintTime: new Date("January 26, 2023 19:00:00 UTC"),
   premiumMintTime: new Date("January 26, 2023 20:00:00 UTC"),
@@ -193,7 +193,7 @@ function compileWhitelists() {
 }
 
 async function mint(mintStep) {
-  const mintQuantity = await this.getMintQuantity(mintStep);
+  const mintQuantity = await getMintQuantity(mintStep);
   if (!mintQuantity > 0) {
     $swal.fire({
       title: "Error",
