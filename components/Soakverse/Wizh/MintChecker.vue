@@ -313,9 +313,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
         from: account,
         gasPrice: adjustedGasPrice,
       });
-      return await wizhContract.methods
-        .ogWhitelistMint(quantity, hexProof)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+      return await wizhContract.methods.ogWhitelistMint(quantity, hexProof).send({ from: account, gasLimit: gasLimit });
     case 2:
       leaves = Object.entries(eggzWhitelist()[0]).map((node) => hashNode(...node));
       merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
@@ -327,7 +325,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
       });
       return await wizhContract.methods
         .eggz3WhitelistMint(quantity, hexProof)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+        .send({ from: account, gasLimit: gasLimit });
     case 3:
       leaves = Object.entries(eggzFCFS()[0]).map((node) => hashNode(...node));
       merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
@@ -339,7 +337,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
       });
       return await wizhContract.methods
         .eggz1WhitelistMint(quantity, hexProof)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+        .send({ from: account, gasLimit: gasLimit });
     case 4:
       leaves = Object.entries(premiumWhitelist()[0]).map((node) => hashNode(...node));
       merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
@@ -351,7 +349,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
       });
       return await wizhContract.methods
         .premiumWhitelistMint(quantity, hexProof)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+        .send({ from: account, gasLimit: gasLimit });
     case 5:
       leaves = Object.entries(standardWhitelist()[0]).map((node) => hashNode(...node));
       merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
@@ -363,7 +361,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
       });
       return await wizhContract.methods
         .standardWhitelistMint(quantity, hexProof)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+        .send({ from: account, gasLimit: gasLimit });
     case 6:
       leaves = Object.entries(waitlistWhitelist()[0]).map((node) => hashNode(...node));
       merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true });
@@ -375,7 +373,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
       });
       return await wizhContract.methods
         .waitlistWhitelistMint(quantity, hexProof)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+        .send({ from: account, gasLimit: gasLimit });
   }
 }
 
