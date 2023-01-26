@@ -192,6 +192,55 @@ function compileWhitelists() {
   }
 }
 
+async function mintPublic(mintStep) {
+  const mintQuantity = await getMintQuantity(mintStep);
+  if (!mintQuantity > 0) {
+    $swal.fire({
+      title: "Error",
+      text: "You cannot mint at this step",
+      icon: "error",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-danger btn-fill",
+      },
+    });
+    return;
+  }
+  try {
+    const accounts = await $web3.eth.getAccounts();
+    if (accounts.length > 0) {
+      showLoader();
+      const account = accounts[0];
+      const mintTransaction = await onchainMintTransaction(mintStep, account, mintQuantity);
+
+      if (mintTransaction.status) {
+        hideLoader();
+        $swal.fire({
+          title: "Success",
+          text: "Minting successful",
+          icon: "success",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: "btn btn-success btn-fill",
+          },
+        });
+      }
+    }
+  } catch (error) {
+    var strippedError = error.message.split("{");
+    hideLoader();
+    $swal.fire({
+      title: "Error",
+      text: strippedError[0],
+      icon: "error",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: "btn btn-danger btn-fill",
+      },
+    });
+  }
+}
+
 async function mint(mintStep) {
   const mintQuantity = await getMintQuantity(mintStep);
   if (!mintQuantity > 0) {
@@ -246,7 +295,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
 
   const gasPrice = await $web3.eth.getGasPrice();
 
-  const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(6000000000)).toString();
+  const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(15000000000)).toString();
 
   let leaves = null;
   let merkleTree = null;
