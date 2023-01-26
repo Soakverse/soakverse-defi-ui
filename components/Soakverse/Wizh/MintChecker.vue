@@ -69,6 +69,17 @@
               </div>
               <div v-else><p style="color: red; font-weight: bold">You are not included in this Waitlist</p></div>
             </div>
+            <hr />
+
+            <div class="col-12 col-md-6 offset-md-3 offset-lg-4 col-lg-4 py-3">
+              <h4 class="mb-0">Public Mint</h4>
+              <p class="mb-2">Minting Soon</p>
+              <div>
+                <p style="color: green; font-weight: bold">You can mint: 1 Wizh</p>
+                <a v-if="state.publicActivated" class="btn btn-primary" @click="mintPublic()">Mint</a>
+                <a v-else class="btn btn-disabled" disabled>Not Minting Yet</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -110,6 +121,7 @@ const state = reactive({
   premiumWhitelistCount: 0,
   standardWhitelistCount: 0,
   waitlistCount: 0,
+  publicActivated: false,
   connectedWallet,
   ogMintTime: new Date("January 25, 2023 17:00:00 UTC"),
   eggz3MintTime: new Date("January 26, 2023 18:00:00 UTC"),
@@ -192,26 +204,24 @@ function compileWhitelists() {
   }
 }
 
-async function mintPublic(mintStep) {
-  const mintQuantity = await getMintQuantity(mintStep);
-  if (!mintQuantity > 0) {
-    $swal.fire({
-      title: "Error",
-      text: "You cannot mint at this step",
-      icon: "error",
-      buttonsStyling: false,
-      customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
-    });
-    return;
-  }
+async function mintPublic() {
   try {
     const accounts = await $web3.eth.getAccounts();
     if (accounts.length > 0) {
       showLoader();
       const account = accounts[0];
-      const mintTransaction = await onchainMintTransaction(mintStep, account, mintQuantity);
+      const ethUtils = $web3.utils;
+
+      const gasPrice = await $web3.eth.getGasPrice();
+
+      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(15000000000)).toString();
+      gasLimit = await wizhContract.methods.mint().estimateGas({
+        from: account,
+        gasPrice: adjustedGasPrice,
+      });
+      const mintTransaction = await wizhContract.methods
+        .eggz1WhitelistMint(quantity, hexProof)
+        .send({ from: account, gasLimit: gasLimit });
 
       if (mintTransaction.status) {
         hideLoader();
