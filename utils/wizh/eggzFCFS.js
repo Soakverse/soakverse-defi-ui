@@ -536,6 +536,7 @@ export default function () {
       "0xFe6f001EDcECf20febd0d5BA1E2a59AecCEC0336": 1,
       "0xfF095dc67945Ba4D7bc1ecdDA9b1Dd578d271b19": 1,
       "0xff3ee1592d77F50C57BAbBFe236513c0fa3cDB02": 1,
+      "0x2d75e425789aF735081F6db184f0148349ABAC0B": 1,
     },
   ];
 }
