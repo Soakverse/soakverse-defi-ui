@@ -112,8 +112,15 @@ watch(connectedWallet, async () => {
   }
 });
 
+watch(chainInformation, async () => {
+  const currentChainId = await $web3.eth.net.getId();
+  if (process.client && connectedWallet && currentChainId == "1") {
+    compileWhitelists();
+  }
+});
+
 function compileWhitelists() {
-  if (state.connectedWallet) {
+  if (connectedWallet) {
     ogWhitelist()[0].hasOwnProperty(state.connectedWallet)
       ? (state.ogWLcount = ogWhitelist()[0][state.connectedWallet])
       : (state.ogWLcount = 0);
