@@ -246,7 +246,7 @@ async function onchainMintTransaction(mintStep, account, quantity) {
 
   const gasPrice = await $web3.eth.getGasPrice();
 
-  const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(3000000000)).toString();
+  const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(6000000000)).toString();
 
   let leaves = null;
   let merkleTree = null;
