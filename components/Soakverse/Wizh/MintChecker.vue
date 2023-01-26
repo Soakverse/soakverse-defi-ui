@@ -121,7 +121,7 @@ const state = reactive({
   premiumWhitelistCount: 0,
   standardWhitelistCount: 0,
   waitlistCount: 0,
-  publicActivated: false,
+  publicActivated: true,
   connectedWallet,
   ogMintTime: new Date("January 25, 2023 17:00:00 UTC"),
   eggz3MintTime: new Date("January 26, 2023 18:00:00 UTC"),
@@ -214,14 +214,12 @@ async function mintPublic() {
 
       const gasPrice = await $web3.eth.getGasPrice();
 
-      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(15000000000)).toString();
-      gasLimit = await wizhContract.methods.mint().estimateGas({
+      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(12000000000)).toString();
+      const gasLimit = await wizhContract.methods.mint().estimateGas({
         from: account,
         gasPrice: adjustedGasPrice,
       });
-      const mintTransaction = await wizhContract.methods
-        .eggz1WhitelistMint(quantity, hexProof)
-        .send({ from: account, gasLimit: gasLimit });
+      const mintTransaction = await wizhContract.methods.mint().send({ from: account, gasLimit: gasLimit });
 
       if (mintTransaction.status) {
         hideLoader();
