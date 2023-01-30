@@ -10,6 +10,19 @@
       <div class="row" v-if="mintFinished">
         <div class="col-12">
           <h1>Mint finished</h1>
+          <div class="col-12 offset-lg-3 col-lg-6 social-card">
+            <a
+              target="_blank"
+              href="https://opensea.io/collection/wizh-by-soakverse"
+              class="social-holder w-100"
+              style="background-color: #06262d"
+            >
+              <div class="m-auto">
+                <img class="w-100 icon" src="@/assets/img/opensea-white.png" alt="Open Sea Logo" />
+                <p>Get Wizh By Soakverse on OpenSea</p>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
       <div class="row" v-else-if="connectedWallet && chainInformation.chainId == currentViewRequiredChainId">
