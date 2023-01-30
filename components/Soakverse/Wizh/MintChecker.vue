@@ -6,7 +6,13 @@
       <p>Make sure to mint at the specified time to benefit from your rarity advantage.</p>
       <p style="font-weight: bold">Minting button will appear on this page when it is ready.</p>
       <hr />
-      <div class="row" v-if="connectedWallet && chainInformation.chainId == currentViewRequiredChainId">
+
+      <div class="row" v-if="mintFinished">
+        <div class="col-12">
+          <h1>Mint finished</h1>
+        </div>
+      </div>
+      <div class="row" v-else-if="connectedWallet && chainInformation.chainId == currentViewRequiredChainId">
         <div class="col-12">
           <div class="row">
             <div class="col-12 col-md-6 col-lg-4 py-3">
@@ -73,7 +79,7 @@
 
             <div class="col-12 col-md-6 offset-md-3 offset-lg-4 col-lg-4 py-3">
               <h4 class="mb-0">Public Mint</h4>
-              <p class="mb-2">Minting NOW!</p>
+              <p class="mb-2">Mint finished!</p>
               <div>
                 <p style="color: green; font-weight: bold">You can mint: 1 Wizh</p>
                 <a v-if="state.publicActivated" class="btn btn-primary" @click="mintPublic()">Mint</a>
@@ -113,6 +119,8 @@ import waitlistWhitelist from "~/utils/wizh/waitlistWhitelist";
 const { chainInformation, connectedWallet } = useWeb3WalletState();
 
 const { $web3, $swal } = useNuxtApp();
+
+const mintFinished = true;
 
 const state = reactive({
   ogWhitelistCount: 0,
