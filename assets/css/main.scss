@@ -21,12 +21,6 @@ body,
   }
 }
 
-#p2e-home {
-  background-image: url("../img/temple.png");
-  background-size: cover;
-  background-position: center center;
-}
-
 #main-content {
   width: 100%;
   background-color: $light-grey;
@@ -38,4 +32,43 @@ body,
   padding-top: 20px;
   padding-bottom: 20px;
   overflow-y: auto;
+}
+
+.game-layout {
+  min-height: 100%;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: white;
+    border-bottom: 1px solid white;
+    padding-bottom: 4px;
+  }
+
+  p {
+    color: white;
+    font-size: 14px;
+  }
+  .card {
+    background-color: rgba(6, 38, 45, 0.8);
+    &.location-card {
+      padding: 8px;
+      background-color: rgba(6, 38, 45, 1);
+      border-radius: 8px;
+      &:hover {
+        background-color: black;
+        border: 1px solid white;
+      }
+      img {
+        border: 3px solid white;
+        border-radius: 8px;
+      }
+      p {
+        margin-top: 2px;
+        margin-bottom: 0;
+      }
+    }
+  }
 }

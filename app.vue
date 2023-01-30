@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="base">
+  <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
   <div id="global-loader">
