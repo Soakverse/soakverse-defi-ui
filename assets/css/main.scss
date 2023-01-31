@@ -34,6 +34,18 @@ body,
   overflow-y: auto;
 }
 
+#main-content-p2e {
+  width: 100%;
+  background-color: $light-grey;
+  background-image: url("../img/soakverse-icon.png");
+  background-repeat: no-repeat;
+  background-position: 90% 90%;
+  flex-grow: 1;
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 .game-layout {
   min-height: 100%;
   h1,

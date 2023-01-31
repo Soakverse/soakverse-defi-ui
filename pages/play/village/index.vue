@@ -5,9 +5,10 @@
         <div class="card text-left h-100">
           <h4>Village</h4>
           <p>
-            The village is peaceful and where the people can shop, rest, train & communicate. This is also a place where
-            a lot of tales & legends are shared.
+            <b>The Village</b> is a peaceful place where you will shop, rest, train & communicate. It is here that you
+            start your journey & return to recover.
           </p>
+          <p>Explore and welcome home.</p>
         </div>
       </div>
       <div class="col-12 mb-2">
@@ -29,7 +30,7 @@
         </div>
       </div>
       <div class="col-12">
-        <nuxt-link class="btn btn-primary" to="/play/village/gate">Back to gate</nuxt-link>
+        <nuxt-link class="btn btn-primary" to="/play/crossroads">Go to the Crossroads</nuxt-link>
       </div>
     </div>
   </div>
@@ -48,22 +49,27 @@ const locations = [
   {
     title: "Public Square",
     link: "/play/village/public-square",
-    image: "/images/p2e/public-square.png",
+    image: "/images/p2e/thumbnails/public-square.webp",
   },
   {
     title: "Home",
     link: "/play/village/home",
-    image: "/images/p2e/house.png",
+    image: "/images/p2e/thumbnails/house.webp",
+  },
+  {
+    title: "Shop",
+    link: "/play/village/shop",
+    image: "/images/p2e/thumbnails/shop.webp",
   },
   {
     title: "Athenaeum",
     link: "/play/village/athenaeum",
-    image: "/images/p2e/athenaeum.png",
+    image: "/images/p2e/thumbnails/athenaeum.webp",
   },
   {
     title: "Museum",
     link: "/play/village/museum",
-    image: "/images/p2e/museum.png",
+    image: "/images/p2e/thumbnails/museum.webp",
   },
 ];
 </script>
