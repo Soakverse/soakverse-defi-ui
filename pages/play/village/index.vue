@@ -76,7 +76,7 @@ const locations = [
 
 <style lang="scss">
 #village-layout {
-  background-image: url("/images/p2e/the-village.png");
+  background-image: url("/images/p2e/the-village.webp");
   background-size: cover;
   background-position: center center;
 }
