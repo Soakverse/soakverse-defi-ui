@@ -197,15 +197,13 @@ async function stakeNft(tokenId) {
 
       const gasPrice = await $web3.eth.getGasPrice();
 
-      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(3000000000)).toString();
+      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(190000000000)).toString();
       const gasLimit = await eggzContract.methods.stake(tokenId).estimateGas({
         from: account,
         gasPrice: adjustedGasPrice,
       });
 
-      const stakingTransaction = await eggzContract.methods
-        .stake(tokenId)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+      const stakingTransaction = await eggzContract.methods.stake(tokenId).send({ from: account, gasLimit: gasLimit });
 
       if (stakingTransaction.status) {
         state.stakedEggz.push(tokenId);
@@ -260,7 +258,7 @@ async function unstakeNft(tokenId) {
 
       const gasPrice = await $web3.eth.getGasPrice();
 
-      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(3000000000)).toString();
+      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(10000000000)).toString();
       const gasLimit = await eggzContract.methods.unstake(tokenId).estimateGas({
         from: account,
         gasPrice: adjustedGasPrice,
@@ -268,7 +266,7 @@ async function unstakeNft(tokenId) {
 
       const stakingTransaction = await eggzContract.methods
         .unstake(tokenId)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+        .send({ from: account, gasLimit: gasLimit });
 
       if (stakingTransaction.status) {
         state.unstakedEggz.push(tokenId);
@@ -323,7 +321,7 @@ async function stakeAllNfts() {
 
       const gasPrice = await $web3.eth.getGasPrice();
 
-      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(3000000000)).toString();
+      const adjustedGasPrice = new ethUtils.BN(gasPrice).add(new ethUtils.BN(10000000000)).toString();
       const gasLimit = await eggzContract.methods.setTokensStakeStatus(state.unstakedEggz, true).estimateGas({
         from: account,
         gasPrice: adjustedGasPrice,
@@ -331,7 +329,7 @@ async function stakeAllNfts() {
 
       const stakingTransaction = await eggzContract.methods
         .setTokensStakeStatus(state.unstakedEggz, true)
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+        .send({ from: account, gasLimit: gasLimit });
 
       if (stakingTransaction.status) {
         state.stakedEggz = state.stakedEggz.concat(currentlyUnstakedEggz);

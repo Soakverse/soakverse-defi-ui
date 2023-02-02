@@ -10,6 +10,9 @@
           {{ chainDefinition[id].shortName }}
         </option>
       </select>
+      <div v-else-if="chainInformation == -1">
+        <a class="btn btn-primary btn-sm mx-2">Chain not supported</a>
+      </div>
       <div v-else-if="chainInformation.shortName">
         <a class="btn btn-primary btn-sm mx-2">{{ chainInformation.shortName }}</a>
       </div>
@@ -52,7 +55,7 @@ async function initializeWallet() {
 }
 
 async function changeNetwork(networkId) {
-  if (networkId !== chainInformation.chainId) {
+  if (chainInformation !== -1 && networkId !== chainInformation.chainId) {
     await setNetwork(networkId);
   }
 }
