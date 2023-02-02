@@ -19,6 +19,11 @@
         </nuxt-link>
       </li>
       <li>
+        <nuxt-link to="/play" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-gamepad"></i><span class="label">Play</span>
+        </nuxt-link>
+      </li>
+      <li>
         <nuxt-link to="/skmt/staking" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-coins"></i><span class="label">SKMT Staking</span>
         </nuxt-link>

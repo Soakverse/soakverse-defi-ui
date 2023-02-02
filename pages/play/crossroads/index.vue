@@ -1,30 +1,32 @@
 <template>
-  <div class="container-fluid d-flex p-2 game-layout" id="crossroads-layout">
-    <div class="row w-100 mt-auto g-0">
-      <div class="col-12 mb-2">
-        <div class="card text-left h-100">
-          <h4>The Crossroads</h4>
-          <p>Life takes a few turns at <b>The Crossroads!</b></p>
-          <p>
-            <b>Spirituality, Training,</b> or even put your Eggz out to <b>Pasture!</b> (Where they’ll keep training!)
-          </p>
+  <div class="container-fluid d-flex p-0 game-layout pt-200" id="crossroads-layout">
+    <div class="container-fluid d-flex p-2 game-sublayout">
+      <div class="row w-100 mt-auto g-0">
+        <div class="col-12 mb-2">
+          <div class="card text-left h-100">
+            <h4>The Crossroads</h4>
+            <p>Life takes a few turns at <b>The Crossroads!</b></p>
+            <p>
+              <b>Spirituality, Training,</b> or even put your Eggz out to <b>Pasture!</b> (Where they’ll keep training!)
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="col-12 mb-2">
-        <div class="card text-left h-100">
-          <h4>Locations</h4>
-          <div class="row">
-            <nuxt-link
-              v-for="location in locations"
-              :key="location.name"
-              class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 px-1 mb-2"
-              :to="location.link"
-            >
-              <div class="card location-card h-100">
-                <img class="w-100" :src="location.image" />
-                <p>{{ location.title }}</p>
-              </div>
-            </nuxt-link>
+        <div class="col-12 mb-2">
+          <div class="card text-left h-100">
+            <h4>Locations</h4>
+            <div class="row">
+              <nuxt-link
+                v-for="location in locations"
+                :key="location.name"
+                class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 px-1 mb-2"
+                :to="location.link"
+              >
+                <div class="card location-card h-100">
+                  <img class="w-100" :src="location.image" />
+                  <p>{{ location.title }}</p>
+                </div>
+              </nuxt-link>
+            </div>
           </div>
         </div>
       </div>
