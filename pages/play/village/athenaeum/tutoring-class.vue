@@ -27,7 +27,7 @@
             <h4>Actions</h4>
             <div class="row">
               <div class="col-12">
-                <p>The Tutoring Class is not accessible yet. Come back later!</p>
+                <p>The Tutoring Classes are not accessible yet. Come back later!</p>
               </div>
             </div>
           </div>
