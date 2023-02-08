@@ -5,7 +5,7 @@
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
             <h4>
-              The Sacred Grove
+              Sacred Grove
               <a
                 href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-crossroads/the-sacred-temple/the-sacred-grove"
                 target="_blank"

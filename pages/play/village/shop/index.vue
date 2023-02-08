@@ -5,7 +5,7 @@
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
             <h4>
-              The Shop
+              Shop
               <a
                 href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-village/the-shop"
                 target="_blank"
@@ -58,7 +58,7 @@ definePageMeta({
 });
 const locations = [
   {
-    title: "The Common Shop",
+    title: "Common Shop",
     link: "/play/village/shop/common-shop",
     image: "/images/p2e/thumbnails/common-shop.webp",
   },

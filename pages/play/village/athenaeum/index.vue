@@ -5,7 +5,7 @@
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
             <h4>
-              The Athenaeum
+              Athenaeum
               <a
                 href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-village/the-athenaeum"
                 target="_blank"

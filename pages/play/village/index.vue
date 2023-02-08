@@ -62,8 +62,8 @@ const locations = [
     image: "/images/p2e/thumbnails/public-square.webp",
   },
   {
-    title: "House",
-    link: "/play/village/house",
+    title: "Home",
+    link: "/play/village/home",
     image: "/images/p2e/thumbnails/house.webp",
   },
   {

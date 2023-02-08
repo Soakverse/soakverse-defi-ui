@@ -5,7 +5,7 @@
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
             <h4>
-              The Crossroads
+              Crossroads
               <a
                 href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-crossroads"
                 target="_blank"
@@ -53,7 +53,7 @@ useHead({
 
 const locations = [
   {
-    title: "The Village",
+    title: "Village",
     link: "/play/village",
     image: "/images/p2e/thumbnails/the-village.webp",
   },
@@ -73,7 +73,7 @@ const locations = [
     image: "/images/p2e/thumbnails/temple.webp",
   },
   {
-    title: "The Countryside",
+    title: "Countryside",
     link: "/play/countryside",
     image: "/images/p2e/thumbnails/world-map.webp",
   },

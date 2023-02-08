@@ -5,7 +5,7 @@
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
             <h4>
-              The Common Shop
+              Common Shop
               <a
                 href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-village/the-shop/the-common-shop"
                 target="_blank"
@@ -16,7 +16,9 @@
                 ><i class="fa-solid fa-circle-arrow-left"></i> Shop</nuxt-link
               >
             </h4>
-            <p>The Common Shop is where you stock up on all the base items you need to keep your journey going.</p>
+            <p>
+              <b>The Common Shop</b> is where you stock up on all the base items you need to keep your journey going.
+            </p>
           </div>
         </div>
         <div class="col-12 mb-2">

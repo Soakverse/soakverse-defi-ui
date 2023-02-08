@@ -5,7 +5,7 @@
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
             <h4>
-              Your House
+              Home
               <a
                 href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-village/your-house"
                 target="_blank"
@@ -16,7 +16,7 @@
                 ><i class="fa-solid fa-circle-arrow-left"></i> Village</nuxt-link
               >
             </h4>
-            <p><b>Your House</b> is where you rest & store your precious items</p>
+            <p><b>Your Home</b> is where you rest & store your precious items</p>
             <p>This is also where you change your outfits. (No peeking)</p>
           </div>
         </div>
@@ -41,7 +41,7 @@ definePageMeta({
 });
 
 useHead({
-  title: "Your House - Soakverse P2E",
+  title: "Your Home - Soakverse P2E",
 });
 
 const actions = [];

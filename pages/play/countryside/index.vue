@@ -5,7 +5,7 @@
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
             <h4>
-              The Countryside
+              Countryside
               <a
                 href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-countryside"
                 target="_blank"
@@ -59,22 +59,22 @@ useHead({
 
 const locations = [
   {
-    title: "The Fields",
+    title: "Fields",
     link: "/play/countryside/fields",
     image: "/images/p2e/thumbnails/fields.webp",
   },
   {
-    title: "The Forest",
+    title: "Forest",
     link: "/play/countryside/forest",
     image: "/images/p2e/thumbnails/forest.webp",
   },
   {
-    title: "The Mountain",
+    title: "Mountain",
     link: "/play/countryside/mountain",
     image: "/images/p2e/thumbnails/mountain.webp",
   },
   {
-    title: "The Island",
+    title: "Island",
     link: "/play/countryside/island",
     image: "/images/p2e/thumbnails/island.webp",
   },
