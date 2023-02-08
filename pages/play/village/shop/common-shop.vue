@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid d-flex p-0 game-layout" id="shop-layout">
+  <div class="container-fluid d-flex p-0 game-layout" id="common-shop-layout">
     <div class="container-fluid d-flex p-2 game-sublayout">
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
@@ -49,7 +49,7 @@ const actions = [];
 </script>
 
 <style lang="scss">
-#shop-layout {
+#common-shop-layout {
   background-image: url("/images/p2e/common-shop.webp");
   background-size: cover;
   background-position: center center;

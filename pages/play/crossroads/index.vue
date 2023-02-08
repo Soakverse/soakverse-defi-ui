@@ -13,9 +13,10 @@
                 ><i class="fa fa-question-circle"></i
               ></a>
             </h4>
-            <p>Life takes a few turns at <b>The Crossroads!</b></p>
+            <p>Your life can take a few turns at <b>The Crossroads!</b></p>
             <p>
-              <b>Spirituality, Training,</b> or even put your Eggz out to <b>Pasture!</b> (Where they’ll keep training!)
+              What do you fancy? <b>Spirituality, Training,</b> or even put your Eggz out to <b>Pasture!</b> (Where
+              they’ll keep training!)
             </p>
           </div>
         </div>

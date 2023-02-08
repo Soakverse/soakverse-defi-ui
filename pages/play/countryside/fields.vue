@@ -16,8 +16,8 @@
                 ><i class="fa-solid fa-circle-arrow-left"></i> Countryside</nuxt-link
               >
             </h4>
-            <p><b>Welcome to The Fields Rookie.</b></p>
-            <p>Here you find <b>Entry Level Quests</b> that don't even require a scroll!</p>
+            <p><b>Welcome to The Fields, Rookie.</b></p>
+            <p>Here you find <b>Entry Level Expeditions</b> (that never require a scroll!)</p>
             <p>You've got this!</p>
           </div>
         </div>

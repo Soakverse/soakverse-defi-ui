@@ -36,9 +36,6 @@
             </div>
           </div>
         </div>
-        <div class="col-12">
-          <nuxt-link class="btn btn-primary" to="/play/crossroads/sacred-temple">Back to the Temple</nuxt-link>
-        </div>
       </div>
     </div>
   </div>

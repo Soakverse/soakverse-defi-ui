@@ -26,7 +26,7 @@
             </p>
             <br />
             <p>
-              The Soakverse OGs chose this place well. To bear the fruit that will <b>give us a chance to resist.</b>
+              The Soakverse OGs chose this place well. To bear the fruit that will <b>give us a chance to resizt.</b>
             </p>
           </div>
         </div>
@@ -39,9 +39,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-12">
-          <nuxt-link class="btn btn-primary" to="/play/crossroads/sacred-temple">Back to the Temple</nuxt-link>
         </div>
       </div>
     </div>

@@ -17,8 +17,11 @@
               >
             </h4>
             <p>You survived The Fields? Don’t get so cocky.</p>
-            <p>We hope you have a Level 1 Scroll handy…</p>
-            <p>But like they say… <b>moar harder moar rewarding.</b></p>
+            <p>
+              We hope you have a Level 1 Scroll handy… you'll need them to start <b>Quests</b> (But you don't need them
+              for the more difficult Expeditions here)
+            </p>
+            <p>Like they say… <b>moar harder moar rewarding.</b></p>
           </div>
         </div>
         <div class="col-12 mb-2">
@@ -26,7 +29,7 @@
             <h4>Adventure</h4>
             <div class="row">
               <div class="col-12">
-                <p>You need to reach level 5 to access the Forest! Go to the Fields instead!</p>
+                <p>You need to reach level 10 to access the Forest! Go to the Fields instead!</p>
               </div>
             </div>
           </div>

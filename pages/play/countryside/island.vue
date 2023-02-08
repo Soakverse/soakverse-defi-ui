@@ -26,7 +26,7 @@
             <h4>Adventure</h4>
             <div class="row">
               <div class="col-12">
-                <p>Your level is too low to access the Mountain! Come back later!</p>
+                <p>Your level is too low to access the Island! Come back later!</p>
               </div>
             </div>
           </div>
