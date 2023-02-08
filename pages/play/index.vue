@@ -10,7 +10,7 @@
                 <b>Do you have the courage, wisdom, and drive to protect the world from the dark forces assembling?</b>
               </p>
               <p>
-                If you are ready to answer this call, <b>enter The Village</b>, where you’ll find the start of the
+                If you are ready to answer this call, <b>Enter The Village</b>, where you’ll find the start of the
                 answers you seek.
               </p>
               <nuxt-link to="/play/village" class="btn btn-primary">Enter Now!</nuxt-link>

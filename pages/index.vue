@@ -36,9 +36,9 @@ const socials = [
     icon: "fas fa-coins",
   },
   {
-    name: "About",
+    name: "Soak Links",
     color: "#071d28",
-    link: "/about",
+    link: "/soak-links",
     icon: "fas fa-info-circle",
   },
 ];

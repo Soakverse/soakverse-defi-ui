@@ -39,8 +39,8 @@
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/about" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-info-circle"></i><span class="label"> About</span>
+        <nuxt-link to="/soak-links" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-info-circle"></i><span class="label"> Soak Links</span>
         </nuxt-link>
       </li>
       <li>
