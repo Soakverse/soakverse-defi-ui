@@ -3,7 +3,7 @@
     <Siderbar />
     <div id="main">
       <Header />
-      <div id="main-content" class="py-0">
+      <div id="main-content-p2e" class="py-0">
         <slot />
       </div>
     </div>

@@ -4,7 +4,18 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Museum</h4>
+            <h4>
+              The Museum
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-village/the-museum"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/village"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Village</nuxt-link
+              >
+            </h4>
             <p><b>The Museum</b> showcases the Soakverse’s Art & Collections.</p>
             <p>
               Not only have the OGs shaped the flow of history, but they’ve walked among many creative spirits &
@@ -22,9 +33,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-12">
-          <nuxt-link class="btn btn-primary" to="/play/village">Back to the Village</nuxt-link>
         </div>
       </div>
     </div>

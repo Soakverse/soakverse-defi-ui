@@ -34,7 +34,7 @@ useHead({
 
 <style lang="scss">
 #soakverse-layout {
-  background-image: url("/images/p2e/soakverse-world.jpg");
+  background-image: url("/images/p2e/soakverse-world.webp");
   background-size: cover;
   background-position: center center;
 }

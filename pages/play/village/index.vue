@@ -4,7 +4,18 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>Village</h4>
+            <h4>
+              Village
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-village"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/crossroads"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Crossroads</nuxt-link
+              >
+            </h4>
             <p>
               <b>The Village</b> is a peaceful place where you will shop, rest, train & communicate. It is here that you
               start your journey & return to recover.
@@ -30,9 +41,6 @@
             </div>
           </div>
         </div>
-        <div class="col-12">
-          <nuxt-link class="btn btn-primary" to="/play/crossroads">Go to the Crossroads</nuxt-link>
-        </div>
       </div>
     </div>
   </div>
@@ -54,8 +62,8 @@ const locations = [
     image: "/images/p2e/thumbnails/public-square.webp",
   },
   {
-    title: "Home",
-    link: "/play/village/home",
+    title: "House",
+    link: "/play/village/house",
     image: "/images/p2e/thumbnails/house.webp",
   },
   {

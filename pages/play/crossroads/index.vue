@@ -4,7 +4,15 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Crossroads</h4>
+            <h4>
+              The Crossroads
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-crossroads"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+            </h4>
             <p>Life takes a few turns at <b>The Crossroads!</b></p>
             <p>
               <b>Spirituality, Training,</b> or even put your Eggz out to <b>Pasture!</b> (Where they’ll keep training!)
@@ -52,7 +60,7 @@ const locations = [
   {
     title: "Training Grounds",
     link: "/play/crossroads/training-grounds",
-    image: "/images/p2e/thumbnails/training-grounds.webp",
+    image: "/images/p2e/thumbnails/training-ground.webp",
   },
   {
     title: "Pasture",

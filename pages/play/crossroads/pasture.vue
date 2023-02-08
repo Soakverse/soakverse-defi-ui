@@ -4,24 +4,24 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Pasture</h4>
+            <h4>
+              The Pasture
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-crossroads/the-pasture"
+                target="_new"
+                class="btn btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/crossroads"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Crossroads</nuxt-link
+              >
+            </h4>
             <p>
               Put your companions out to pasture… and watch them slowly gain EXP. Or heck, don't watch them and they'll
               still gain EXP!
             </p>
             <p>We wonder what happens if you give one a Wizh? Maybe an XP boost?</p>
-            <div>
-              <a
-                href="https://docs.soakverse.io/soakverse/skmt-token/the-game-world/the-crossroads/the-pasture"
-                target="_new"
-                class="btn btn-primary"
-                >Read the doc for more <i class="fa fa-question-circle"></i
-              ></a>
-            </div>
           </div>
-        </div>
-        <div class="col-12 mb-2">
-          <nuxt-link class="btn btn-primary" to="/play/crossroads">Go to the Crossroads</nuxt-link>
         </div>
         <div class="col-12 mb-2">
           <div class="card text-center h-100">

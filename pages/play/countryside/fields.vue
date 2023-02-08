@@ -4,7 +4,18 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Fields</h4>
+            <h4>
+              The Fields
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-countryside/the-fields"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/countryside"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Countryside</nuxt-link
+              >
+            </h4>
             <p><b>Welcome to The Fields Rookie.</b></p>
             <p>Here you find <b>Entry Level Quests</b> that don't even require a scroll!</p>
             <p>You've got this!</p>
@@ -19,9 +30,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-12">
-          <nuxt-link class="btn btn-primary" to="/play/countryside">Go to the Countryside</nuxt-link>
         </div>
       </div>
     </div>

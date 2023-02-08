@@ -4,7 +4,18 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Training Grounds</h4>
+            <h4>
+              The Training Grounds
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-crossroads/the-training-grounds"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/crossroads"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Crossroads</nuxt-link
+              >
+            </h4>
             <p>
               Feeling stressed and want to let off a little steam? How about having your companions fight against your
               friends’ companions? Maybe a little training them up to be stronger? Faster? More skilled?
@@ -23,9 +34,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-12">
-          <nuxt-link class="btn btn-primary" to="/play/crossroads">Go to the Crossroads</nuxt-link>
         </div>
       </div>
     </div>
@@ -46,7 +54,7 @@ const actions = [];
 
 <style lang="scss">
 #training-grounds-layout {
-  background-image: url("/images/p2e/training-grounds.webp");
+  background-image: url("/images/p2e/training-ground.webp");
   background-size: cover;
   background-position: center center;
 }

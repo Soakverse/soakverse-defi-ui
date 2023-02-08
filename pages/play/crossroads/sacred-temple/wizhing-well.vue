@@ -4,7 +4,18 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Wizhing Well</h4>
+            <h4>
+              The Wizhing Well
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-crossroads/the-sacred-temple/the-wizhing-well"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/crossroads/sacred-temple"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Sacred Temple</nuxt-link
+              >
+            </h4>
             <p><b>The Wizhing Well</b> is too simple a name, but it’s the name we use.</p>
             <p>
               To approach it is not just to dream, not just to be judged, but to step into your fate with an open heart,

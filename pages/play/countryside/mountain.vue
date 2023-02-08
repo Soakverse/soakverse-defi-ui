@@ -4,7 +4,18 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Mountain</h4>
+            <h4>
+              The Mountain
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-countryside/the-mountain"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/countryside"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Countryside</nuxt-link
+              >
+            </h4>
             <p>You’ve made it!</p>
             <p>To the base of the mountain.</p>
             <p>Now the real adventures begin as you take it to another level</p>
@@ -21,9 +32,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12">
-          <nuxt-link class="btn btn-primary" to="/play/countryside">Go to the Countryside</nuxt-link>
-        </div>
+        =
       </div>
     </div>
   </div>

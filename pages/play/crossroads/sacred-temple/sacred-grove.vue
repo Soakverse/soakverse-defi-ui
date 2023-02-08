@@ -4,7 +4,18 @@
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>The Sacred Grove</h4>
+            <h4>
+              The Sacred Grove
+              <a
+                href="https://docs.soakverse.io/soakverse/soakverse-world/the-soakverse-game-world/the-crossroads/the-sacred-temple/the-sacred-grove"
+                target="_blank"
+                class="btn btn-sm btn-primary"
+                ><i class="fa fa-question-circle"></i
+              ></a>
+              <nuxt-link class="btn btn-sm btn-primary float-end" to="/play/crossroads/sacred-temple"
+                ><i class="fa-solid fa-circle-arrow-left"></i> Sacred Temple</nuxt-link
+              >
+            </h4>
             <p><b>The Sacred Grove</b> is where <b>Treez</b> grow.</p>
             <p>This is more than it appears.</p>
             <p>And it is vital that we protect it against all threats.</p>
