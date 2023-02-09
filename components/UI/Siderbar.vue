@@ -43,7 +43,11 @@
           ><i class="fa-solid fa-trophy"></i><span class="label">Giveaways</span>
         </nuxt-link>
       </li>
-
+      <li>
+        <nuxt-link to="/soakverse/backpack" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-bag-shopping"></i><span class="label">Backpack</span>
+        </nuxt-link>
+      </li>
       <li>
         <nuxt-link to="/loyalty" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-award"></i><span class="label"> Loyalty</span>
