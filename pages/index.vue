@@ -46,3 +46,26 @@ useHead({
   title: "Home - Soakverse DeFI Platform",
 });
 </script>
+<style lang="scss">
+.social-card {
+  padding: 8px;
+  a.social-holder {
+    display: flex;
+    padding: 20px;
+    border-radius: 8px;
+    opacity: 0.7;
+    i {
+      color: white;
+    }
+    p {
+      margin: 0;
+      padding: 0;
+      margin-top: 10px;
+      color: white;
+    }
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+</style>
