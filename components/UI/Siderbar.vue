@@ -24,6 +24,11 @@
         </nuxt-link>
       </li>
       <li>
+        <nuxt-link to="/crypto/swap" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-shuffle"></i><span class="label">Crypto Swap</span>
+        </nuxt-link>
+      </li>
+      <li>
         <nuxt-link to="/skmt/staking" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-coins"></i><span class="label">SKMT Staking</span>
         </nuxt-link>
@@ -33,6 +38,12 @@
           ><i class="fa-solid fa-egg"></i><span class="label">Eggz Staking</span>
         </nuxt-link>
       </li>
+      <li>
+        <nuxt-link to="/soakverse/giveaways" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-trophy"></i><span class="label">Giveaways</span>
+        </nuxt-link>
+      </li>
+
       <li>
         <nuxt-link to="/loyalty" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-award"></i><span class="label"> Loyalty</span>

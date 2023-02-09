@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid d-flex p-0 game-layout" id="bulletin-board-layout">
+  <div class="container-fluid d-flex p-0 game-layout pt-200" id="bulletin-board-layout">
     <div class="container-fluid d-flex p-2 game-sublayout">
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">

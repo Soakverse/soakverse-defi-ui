@@ -13,6 +13,13 @@
                 If you are ready to answer this call, <b>Enter The Village</b>, where you’ll find the start of the
                 answers you seek.
               </p>
+
+              <p>
+                <b>
+                  The Game is not launched yet. It is now possible to navigate through the different revealed locations
+                  and explore the Soakverse.
+                </b>
+              </p>
               <nuxt-link to="/play/village" class="btn btn-primary">Enter Now!</nuxt-link>
             </div>
           </div>
