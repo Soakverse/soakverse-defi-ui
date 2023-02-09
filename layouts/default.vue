@@ -13,11 +13,13 @@
       <div id="main-content">
         <slot />
       </div>
+      <PlaySound />
     </div>
   </div>
 </template>
 
 <script setup>
+import PlaySound from "~~/components/UI/PlaySound.vue";
 import Siderbar from "~~/components/UI/Siderbar.vue";
 import Header from "~~/components/UI/Header.vue";
 import Breadcrumb from "~~/components/UI/Breadcrumb.vue";
