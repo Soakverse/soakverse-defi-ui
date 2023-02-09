@@ -9,6 +9,11 @@
       </a>
     </div>
   </div>
+  <div class="row mt-6">
+    <div class="col-12">
+      <a target="_new" href="https://www.soakverse.io" class="mt-4 btn btn-primary">www.soakverse.io</a>
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
@@ -38,35 +43,23 @@
 <script setup>
 const socials = [
   {
-    name: "Twitter",
-    color: "#29A9E1",
-    link: "https://twitter.com/soakverse",
-    icon: "fab fa-twitter",
-  },
-  {
     name: "Discord",
     color: "#5865F2",
     link: "https://discord.gg/soakverse",
     icon: "fab fa-discord",
   },
   {
-    name: "Telegram",
-    color: "#42BDE9",
-    link: "https://t.me/soakverse",
-    icon: "fab fa-telegram",
-  },
-  /**{
-    name: "Medium",
-    color: "#000000",
-    link: "https://soakmont-token.medium.com/",
-    icon: "fab fa-medium",
+    name: "Twitter",
+    color: "#29A9E1",
+    link: "https://twitter.com/soakverse",
+    icon: "fab fa-twitter",
   },
   {
-    name: "LinkedIn",
-    color: "#006192",
-    link: "https://www.linkedin.com/company/soakmont",
-    icon: "fab fa-linkedin-in",
-  },*/
+    name: "Medium",
+    color: "#000000",
+    link: "https://soakverse.medium.com/",
+    icon: "fab fa-medium",
+  },
   {
     name: "Instagram",
     color: "#C13584",

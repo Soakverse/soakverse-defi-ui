@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   },
   css: ["@/assets/css/main.scss"],
   app: {
+    pageTransition: { name: "page", mode: "out-in" },
     head: {
       meta: [
         { name: "title", content: "Soakverse DeFI Platform" },

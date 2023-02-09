@@ -2,10 +2,10 @@
   <div class="row text-left px-1 mt-4">
     <div class="col-12">
       <h5>
-        <i class="fa-solid fa-award"></i> Eggz Staking
+        <i class="fa-solid fa-award"></i> Eggz Pasture
         <i class="fa-solid fa-award"></i>
       </h5>
-      <h5>Total Staked: {{ state.stakedAmount }}</h5>
+      <h5>Pasturage Count: {{ state.stakedAmount }}</h5>
       <div v-if="state.canStake">
         <a v-if="state.unstakedEggz.length > 0" @click="stakeAllNfts()" class="btn btn-success btn-sm mx-1"
           >Stake All</a
@@ -20,6 +20,7 @@
           <div class="row">
             <div v-if="state.highestOwnedStache" class="col-12 col-sm-6 col-md-3 col-lg-2 py-3">
               <h6>{{ state.highestOwnedStache.nft.metadata.name }}</h6>
+              <a @click="comingSoon(1)" class="btn btn-success btn-sm mb-1">Change</a>
               <img
                 :src="state.highestOwnedStache.nft.media[0].gateway"
                 class="img-responsive w-100"
@@ -28,11 +29,14 @@
             </div>
             <div v-for="eggz in state.ownedEggz" :key="eggz.id" class="col-12 col-sm-6 col-md-3 col-lg-2 py-3">
               <h6>{{ eggz.name }}</h6>
+              <a @click="comingSoon(2)" class="btn btn-success btn-sm mb-1">Add a Wizh</a>
               <img :src="eggz.webImage" class="img-responsive w-100" />
               <div v-if="state.canStake">
                 <div v-if="state.stakedEggz.includes(eggz.tokenId)">
-                  <a @click="unstakeNft(eggz.tokenId)" class="btn btn-danger btn-sm">Unstake</a>
-                  <p class="green-text mt-1">Staking for {{ Math.trunc(formatDaysSinceDate(eggz.stakedAt)) }} day(s)</p>
+                  <a @click="unstakeNft(eggz.tokenId)" class="btn btn-danger btn-sm mt-1">Release</a>
+                  <p class="green-text mt-1">
+                    Training for {{ Math.trunc(formatDaysSinceDate(eggz.stakedAt)) }} day(s)
+                  </p>
                 </div>
                 <a v-else @click="stakeNft(eggz.tokenId)" class="btn btn-success btn-sm">Stake</a>
               </div>
@@ -359,6 +363,24 @@ async function stakeAllNfts() {
       },
     });
   }
+}
+
+function comingSoon(id) {
+  let text = "";
+  if (id === 1) {
+    text = "Assigning your hero OG is coming soon!";
+  } else if (id === 2) {
+    text = "Assigning a Wizh Stone to an Eggz is coming soon!";
+  }
+  $swal.fire({
+    title: "Coming Soon!",
+    text: text,
+    icon: "warning",
+    buttonsStyling: false,
+    customClass: {
+      confirmButton: "btn btn-danger btn-fill",
+    },
+  });
 }
 
 function convertWeiToEther(amount) {
