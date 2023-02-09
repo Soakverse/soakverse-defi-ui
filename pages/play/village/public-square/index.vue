@@ -24,11 +24,19 @@
         </div>
         <div class="col-12 mb-2">
           <div class="card text-left h-100">
-            <h4>Actions</h4>
+            <h4>Locations</h4>
             <div class="row">
-              <div class="col-12">
-                <p>The Public Square is not accessible yet. Come back later!</p>
-              </div>
+              <nuxt-link
+                v-for="location in locations"
+                :key="location.name"
+                class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 px-1 mb-2"
+                :to="location.link"
+              >
+                <div class="card location-card h-100">
+                  <img class="w-100" :src="location.image" />
+                  <p>{{ location.title }}</p>
+                </div>
+              </nuxt-link>
             </div>
           </div>
         </div>
@@ -46,7 +54,18 @@ useHead({
   title: "The Public Square - Soakverse P2E",
 });
 
-const actions = [];
+const locations = [
+  {
+    title: "Leaderboard",
+    link: "/play/village/public-square/leaderboard",
+    image: "/images/p2e/thumbnails/leaderboard.webp",
+  },
+  {
+    title: "Bulletin Board",
+    link: "/play/village/public-square/bulletin-board",
+    image: "/images/p2e/thumbnails/bulletin-board.webp",
+  },
+];
 </script>
 
 <style lang="scss">
