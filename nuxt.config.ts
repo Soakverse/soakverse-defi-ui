@@ -8,6 +8,7 @@ export default defineNuxtConfig({
       appName: "Soakverse DeFI Platform",
       googleTagManager: process.env.NUXT_GOOGLE_TAG_MANAGER,
       gtmDebug: process.env.NUXT_GTM_DEBUG,
+      walletConnectProjectId: process.env.WALLET_CONNECT_PROJECT_ID,
     },
   },
   css: ["@/assets/css/main.scss"],

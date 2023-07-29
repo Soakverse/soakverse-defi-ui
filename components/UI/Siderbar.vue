@@ -1,7 +1,11 @@
 <template>
   <div id="main-sidebar" class="sidebar" :class="{ toggled: isSidebarOpen }">
     <div class="sidebar-header">
-      <img class="brand-logo" :src="isSidebarOpen ? logo : icon" alt="Logo Soakverse" />
+      <img
+        class="brand-logo"
+        :src="isSidebarOpen ? logo : icon"
+        alt="Logo Soakverse"
+      />
       <a href="javascript:void(0)" class="toggle-menu" @click="toggleSidebar()"
         ><i
           class="fa-solid"
@@ -14,53 +18,81 @@
     </div>
     <ul class="sidebar-menu">
       <li>
-        <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+        <nuxt-link
+          to="/"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-dashboard"></i><span class="label"> Home</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/play" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+        <nuxt-link
+          to="/play"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-gamepad"></i><span class="label">Play</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/crypto/swap" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-shuffle"></i><span class="label">Crypto Swap</span>
+        <nuxt-link
+          to="/crypto/swap"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-shuffle"></i
+          ><span class="label">Crypto Swap</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/skmt/staking" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-coins"></i><span class="label">SKMT Staking</span>
+        <nuxt-link
+          to="/skmt/staking"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-coins"></i
+          ><span class="label">SKMT Staking</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/soakverse/eggz/staking" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-egg"></i><span class="label">Eggz Staking</span>
+        <nuxt-link
+          to="/soakverse/eggz/staking"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-egg"></i
+          ><span class="label">Eggz Staking</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/soakverse/giveaways" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-trophy"></i><span class="label">Giveaways</span>
+        <nuxt-link
+          to="/soakverse/giveaways"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-trophy"></i
+          ><span class="label">Giveaways</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/soakverse/backpack" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-bag-shopping"></i><span class="label">Backpack</span>
+        <nuxt-link
+          to="/soakverse/backpack"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-bag-shopping"></i
+          ><span class="label">Backpack</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/loyalty" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+        <nuxt-link
+          to="/loyalty"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
           ><i class="fa-solid fa-award"></i><span class="label"> Loyalty</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/soak-links" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-info-circle"></i><span class="label"> Soak Links</span>
-        </nuxt-link>
-      </li>
-      <li>
-        <nuxt-link to="/blockchain-tools" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
-          ><i class="fa-solid fa-screwdriver-wrench"></i><span class="label"> Tools</span>
+        <nuxt-link
+          to="/soak-links"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-info-circle"></i
+          ><span class="label"> Soak Links</span>
         </nuxt-link>
       </li>
       <li>
@@ -69,7 +101,8 @@
           class="sidebar-link"
           :class="{ 'text-center': !isSidebarOpen }"
           @click="disconnectWallet"
-          ><i class="fa-solid fa-unlink"></i><span class="label"> Disconnect</span>
+          ><i class="fa-solid fa-unlink"></i
+          ><span class="label"> Disconnect</span>
         </a>
       </li>
       <!--
@@ -105,17 +138,6 @@
 import icon from "@/assets/img/soakverse-icon-square.png";
 import logo from "@/assets/img/soakverse-logo.png";
 const { isSidebarOpen, toggleSidebar, closeSidebar } = useUiState();
-const { $web3Modal } = useNuxtApp();
-const { resetWeb3State } = useWeb3WalletState();
-
-async function disconnectWallet() {
-  if (process.client) {
-    localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
-    localStorage.removeItem("walletconnect");
-  }
-  await $web3Modal.clearCachedProvider();
-  resetWeb3State();
-}
 </script>
 
 <script>

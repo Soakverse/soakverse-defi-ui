@@ -1,168 +1,37 @@
-import Web3 from "web3";
-import { chainDefinition, assetsDefinition } from "../utils/blockchain";
-
-const web3Provider: any = null;
-const connectedWallet: any = "";
-const chainInformation = {
-  name: null,
-  shortName: null,
-  chainId: null,
-};
+const currentAccount: any = -1;
+const currentChain: any = 0;
 
 const state = reactive({
-  web3Provider,
-  connectedWallet,
-  chainInformation,
+  currentAccount,
+  currentChain,
 });
 
 const useWeb3WalletState = () => {
-  const { $web3, $swal } = useNuxtApp();
-  const web3: any = $web3;
-  const swal: any = $swal;
-  const connectedWallet = computed(() => state.connectedWallet);
-  const chainInformation = computed(() => state.chainInformation);
-  const web3Provider = computed(() => state.web3Provider);
+  const { $getAccount, $getNetwork, $watchAccount, $watchNetwork } =
+    useNuxtApp();
+  const currentAccount = computed(() => state.currentAccount);
+  const currentChain = computed(() => state.currentChain);
+  if (typeof $getAccount == "function") {
+    const initialAccount = $getAccount();
+    const initialNetwork = $getNetwork();
 
-  const setWeb3Provider = async (web3Provider: any) => {
-    state.web3Provider = web3Provider;
-    web3.setProvider(web3Provider);
+    state.currentAccount = initialAccount.address
+      ? initialAccount.address
+      : null;
+    state.currentChain = initialNetwork.chain ? initialNetwork.chain.id : null;
 
-    state.chainInformation = chainDefinition[parseInt(web3Provider.chainId)]
-      ? chainDefinition[parseInt(web3Provider.chainId)]
-      : -1;
-
-    state.connectedWallet = await getConnectedWallet(web3.currentProvider);
-
-    web3Provider.on("accountsChanged", async (accounts: string[]) => {
-      state.connectedWallet = await getConnectedWallet(web3.currentProvider);
+    const accountWatch = $watchAccount(
+      (account) =>
+        (state.currentAccount = account.address ? account.address : null)
+    );
+    const chainWatch = $watchNetwork((network) => {
+      state.currentChain = network.chain ? network.chain.id : null;
     });
-
-    web3Provider.on("chainChanged", (chainId: string) => {
-      const stringChainId = parseInt(chainId);
-      state.chainInformation = chainDefinition[stringChainId];
-    });
-
-    web3Provider.on("disconnect", (error: { code: number; message: string }) => {
-      resetWeb3State();
-    });
-  };
-
-  const setNetwork = async (networkId: number) => {
-    const currentChainId = await web3.eth.net.getId();
-    if (currentChainId !== networkId) {
-      try {
-        await state.web3Provider.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: Web3.utils.toHex(networkId) }],
-        });
-      } catch (switchError: any) {
-        if (switchError.code === 4902) {
-          await addNetwork(networkId);
-        }
-        if (switchError.code === -32002) {
-          swal.fire({
-            title: "Error",
-            text: "You already have a pending request in your MetaMask",
-            icon: "error",
-            buttonsStyling: false,
-            customClass: {
-              confirmButton: "btn btn-danger btn-fill",
-            },
-          });
-        }
-      }
-    }
-  };
-
-  const addNetwork = async (networkId: number) => {
-    try {
-      await state.web3Provider.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            nativeCurrency: {
-              name: chainDefinition[networkId].currencySymbol,
-              symbol: chainDefinition[networkId].currencySymbol,
-              decimals: 18,
-            },
-            blockExplorerUrls: [chainDefinition[networkId].blockExplorerUrl],
-            chainId: Web3.utils.toHex(networkId),
-            chainName: chainDefinition[networkId].networkFullName,
-            rpcUrls: [chainDefinition[networkId].rpcUrl],
-          },
-        ],
-      });
-    } catch (error: any) {
-      swal.fire({
-        title: "Error",
-        text: error.message ? error.message : error,
-        icon: "error",
-        buttonsStyling: false,
-        customClass: {
-          confirmButton: "btn btn-danger btn-fill",
-        },
-      });
-    }
-  };
-
-  const addAsset = async (networkId: number, assetName: string) => {
-    console.log(networkId);
-    console.log(assetsDefinition[networkId]);
-    const asset = assetsDefinition[networkId][assetName];
-    try {
-      await state.web3Provider.request({
-        method: "wallet_watchAsset",
-        params: {
-          type: "ERC20",
-          options: {
-            address: asset.address,
-            symbol: asset.symbol,
-            decimals: asset.decimals,
-            image: asset.image,
-          },
-        },
-      });
-    } catch (error: any) {
-      swal.fire({
-        title: "Error",
-        text: error.message ? error.message : error,
-        icon: "error",
-        buttonsStyling: false,
-        customClass: {
-          confirmButton: "btn btn-danger btn-fill",
-        },
-      });
-    }
-  };
-
-  const resetWeb3State = async () => {
-    state.web3Provider = null;
-    state.connectedWallet = "";
-    state.chainInformation = {
-      name: null,
-      shortName: null,
-      chainId: null,
-    };
-  };
-
-  const getConnectedWallet = async (provider: any) => {
-    if (!provider) return null;
-    const { $web3 } = useNuxtApp();
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts) return accounts[0];
-    else return null;
-  };
+  }
 
   return {
-    setWeb3Provider,
-    setNetwork,
-    addNetwork,
-    addAsset,
-    resetWeb3State,
-    getConnectedWallet,
-    web3Provider,
-    chainInformation,
-    connectedWallet,
+    currentAccount,
+    currentChain,
   };
 };
 

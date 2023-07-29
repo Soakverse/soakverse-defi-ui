@@ -1,49 +1,56 @@
-import Web3Modal from "web3modal";
-import Web3 from "web3";
-import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import {
+  EthereumClient,
+  w3mConnectors,
+  w3mProvider,
+} from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/html";
+import {
+  configureChains,
+  createConfig,
+  watchNetwork,
+  getNetwork,
+  watchAccount,
+  getAccount,
+} from "@wagmi/core";
+import { mainnet, bsc, avalanche } from "@wagmi/core/chains";
+import logo from "@/assets/img/soakverse-logo.png";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
-  const providerOptions = {
-    coinbasewallet: {
-      package: CoinbaseWalletSDK,
-      options: {
-        appName: "Soakverse App",
-        infuraId: "35f1db62a54d4b1b9feff0a60e5d0612",
-      },
-    },
-    walletconnect: {
-      package: WalletConnectProvider,
-      options: {
-        rpc: {
-          56: "https://bsc-dataseed1.binance.org",
-          137: "https://polygon-rpc.com/",
-          250: "https://rpc.ftm.tools",
-          43114: "https://api.avax.network/ext/bc/C/rpc",
-        },
-        supportedChainIds: [1, 56, 137, 250, 43114],
-        qrcode: true,
-        network: "binance",
-        chainId: 56,
-        bridge: "https://bridge.walletconnect.org",
-        infuraId: "35f1db62a54d4b1b9feff0a60e5d0612",
-      },
-    },
-  };
+  const chains = [mainnet, bsc, avalanche];
+  const projectId = config.walletConnectProjectId;
 
-  const web3Modal = new Web3Modal({
-    cacheProvider: true,
-    providerOptions,
+  const { publicClient } = configureChains(chains, [
+    w3mProvider({ projectId }),
+  ]);
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors: w3mConnectors({ projectId, chains }),
+    publicClient,
   });
-
-  const web3 = new Web3();
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
+  const web3modal = new Web3Modal(
+    {
+      projectId,
+      themeVariables: {
+        "--w3m-accent-color": "#00b8ff",
+        "--w3m-logo-image-url": logo,
+        "--w3m-background-color": "#071d28",
+      },
+    },
+    ethereumClient
+  );
 
   return {
     provide: {
-      web3Modal,
-      web3,
+      web3modal,
+      ethereumClient,
+      publicClient,
+      watchNetwork,
+      getNetwork,
+      watchAccount,
+      getAccount,
     },
   };
 });

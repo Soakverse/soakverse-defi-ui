@@ -21,10 +21,7 @@
         >
       </div>
       <hr />
-      <div
-        class="row"
-        v-if="connectedWallet && chainInformation.chainId == '1'"
-      >
+      <div class="row" v-if="currentAccount && currentChain == '1'">
         <div class="col-12">
           <div class="row">
             <div
@@ -89,23 +86,27 @@
 
 <script setup>
 import {
+  eggzSmartContract,
+  soakverseOGsSmartContract,
+} from "~~/utils/contracts";
+import {
   showLoader,
   hideLoader,
   filterArrayOfObjects,
   formatDaysSinceDate,
 } from "~~/utils/helpers";
-import eggzABI from "@/assets/abi/EggzABI";
+import {
+  prepareWriteContract,
+  writeContract,
+  waitForTransaction,
+} from "@wagmi/core";
+import { formatEther } from "viem";
 
-const { setNetwork, addNetwork, addAsset, chainInformation, connectedWallet } =
-  useWeb3WalletState();
+const { currentChain, currentAccount } = useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
-const { $web3, $swal } = useNuxtApp();
-
-//const eggzContractAddress = "0x10b366bbF2304b52806B1c9881FC259bD9018d43";
-const eggzContractAddress = "0x10b366bbf2304b52806b1c9881fc259bd9018d43";
-const stachesContractAddress = "0x2019f1aa40528e632b4add3b8bcbc435dbf86404";
+const { $swal } = useNuxtApp();
 
 const nftLevels = [
   5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1,
@@ -126,7 +127,6 @@ const nftLevels = [
 ];
 
 const decimals = 18;
-let eggzContract = null;
 
 const state = reactive({
   ownedStaches: [],
@@ -140,35 +140,20 @@ const state = reactive({
 
 onMounted(async () => {
   try {
-    const currentChainId = await $web3.eth.net.getId();
-    if (process.client && connectedWallet && currentChainId == "1") {
-      eggzContract = await new $web3.eth.Contract(
-        eggzABI.abi,
-        eggzContractAddress
-      );
-      getEcosystemBalance();
-    }
+    getEcosystemBalance();
   } catch (e) {
     console.log(e.message);
   }
 });
 
-watch(connectedWallet, async () => {
-  const currentChainId = await $web3.eth.net.getId();
-  if (process.client && connectedWallet && currentChainId == "1") {
-    eggzContract = await new $web3.eth.Contract(
-      eggzABI.abi,
-      eggzContractAddress
-    );
-    getEcosystemBalance();
-  }
+watch(currentAccount, async () => {
+  getEcosystemBalance();
 });
 
 async function getEcosystemBalance() {
-  const currentChainId = await $web3.eth.net.getId();
-  if (process.client && connectedWallet && currentChainId == "1") {
+  if (process.client && currentAccount.value && currentChain.value == "1") {
     showLoader();
-    state.canStake = await eggzContract.methods.canStake().call();
+    state.canStake = true;
     state.ownedStaches = [];
     state.ownedEggz = [];
     state.highestOwnedStache = null;
@@ -176,9 +161,7 @@ async function getEcosystemBalance() {
       await $fetch(`${config.apiUrl}/nft/stats/eggz`)
     ).staked;
 
-    const accounts = await $web3.eth.getAccounts();
-
-    const eggzUrl = `${config.apiUrl}/nft/eggz/address/${accounts[0]}`;
+    const eggzUrl = `${config.apiUrl}/nft/eggz/address/${currentAccount.value}`;
 
     const eggzList = await $fetch(eggzUrl);
 
@@ -201,7 +184,7 @@ async function getEcosystemBalance() {
     }
 
     const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.alchemyApiKey}`;
-    const url = `${baseURL}/getNFTs/?owner=${accounts[0]}&contractAddresses[]=${stachesContractAddress}`;
+    const url = `${baseURL}/getNFTs/?owner=${currentAccount.value}&contractAddresses[]=${soakverseOGsSmartContract.address}`;
 
     const staches = await $fetch(url);
     const nftList = staches["ownedNfts"];
@@ -246,27 +229,23 @@ async function stakeNft(tokenId) {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
-      const ethUtils = $web3.utils;
-
-      const gasPrice = await $web3.eth.getGasPrice();
-
-      const adjustedGasPrice = new ethUtils.BN(gasPrice)
-        .add(new ethUtils.BN(190000000000))
-        .toString();
-      const gasLimit = await eggzContract.methods.stake(tokenId).estimateGas({
-        from: account,
-        gasPrice: adjustedGasPrice,
+      const { request } = await prepareWriteContract({
+        address: eggzSmartContract.address,
+        abi: eggzSmartContract.abi,
+        functionName: "stake",
+        args: [tokenId],
       });
 
-      const stakingTransaction = await eggzContract.methods
-        .stake(tokenId)
-        .send({ from: account, gasLimit: gasLimit });
+      const { hash } = await writeContract(request);
 
-      if (stakingTransaction.status) {
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
+
+      if (data.status == "success") {
         state.stakedEggz.push(tokenId);
         state.unstakedEggz = state.unstakedEggz.filter(
           (item) => item !== tokenId
@@ -284,11 +263,10 @@ async function stakeNft(tokenId) {
       }
     }
   } catch (error) {
-    var strippedError = error.message.split("{");
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: strippedError[0],
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -313,27 +291,23 @@ async function unstakeNft(tokenId) {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
-      const ethUtils = $web3.utils;
-
-      const gasPrice = await $web3.eth.getGasPrice();
-
-      const adjustedGasPrice = new ethUtils.BN(gasPrice)
-        .add(new ethUtils.BN(10000000000))
-        .toString();
-      const gasLimit = await eggzContract.methods.unstake(tokenId).estimateGas({
-        from: account,
-        gasPrice: adjustedGasPrice,
+      const { request } = await prepareWriteContract({
+        address: eggzSmartContract.address,
+        abi: eggzSmartContract.abi,
+        functionName: "unstake",
+        args: [tokenId],
       });
 
-      const stakingTransaction = await eggzContract.methods
-        .unstake(tokenId)
-        .send({ from: account, gasLimit: gasLimit });
+      const { hash } = await writeContract(request);
 
-      if (stakingTransaction.status) {
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
+
+      if (data.status == "success") {
         state.unstakedEggz.push(tokenId);
         state.stakedEggz = state.stakedEggz.filter((item) => item !== tokenId);
         hideLoader();
@@ -349,11 +323,10 @@ async function unstakeNft(tokenId) {
       }
     }
   } catch (error) {
-    var strippedError = error.message.split("{");
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: strippedError[0],
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -378,29 +351,23 @@ async function stakeAllNfts() {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
-      const ethUtils = $web3.utils;
+      const { request } = await prepareWriteContract({
+        address: eggzSmartContract.address,
+        abi: eggzSmartContract.abi,
+        functionName: "setTokensStakeStatus",
+        args: [state.unstakedEggz, true],
+      });
 
-      const gasPrice = await $web3.eth.getGasPrice();
+      const { hash } = await writeContract(request);
 
-      const adjustedGasPrice = new ethUtils.BN(gasPrice)
-        .add(new ethUtils.BN(10000000000))
-        .toString();
-      const gasLimit = await eggzContract.methods
-        .setTokensStakeStatus(state.unstakedEggz, true)
-        .estimateGas({
-          from: account,
-          gasPrice: adjustedGasPrice,
-        });
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
 
-      const stakingTransaction = await eggzContract.methods
-        .setTokensStakeStatus(state.unstakedEggz, true)
-        .send({ from: account, gasLimit: gasLimit });
-
-      if (stakingTransaction.status) {
+      if (data.status == "success") {
         state.stakedEggz = state.stakedEggz.concat(currentlyUnstakedEggz);
         state.unstakedEggz = [];
         hideLoader();
@@ -416,11 +383,10 @@ async function stakeAllNfts() {
       }
     }
   } catch (error) {
-    var strippedError = error.message.split("{");
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: strippedError[0],
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -445,29 +411,23 @@ async function unstakeAllNfts() {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
-      const ethUtils = $web3.utils;
+      const { request } = await prepareWriteContract({
+        address: eggzSmartContract.address,
+        abi: eggzSmartContract.abi,
+        functionName: "setTokensStakeStatus",
+        args: [state.stakedEggz, false],
+      });
 
-      const gasPrice = await $web3.eth.getGasPrice();
+      const { hash } = await writeContract(request);
 
-      const adjustedGasPrice = new ethUtils.BN(gasPrice)
-        .add(new ethUtils.BN(10000000000))
-        .toString();
-      const gasLimit = await eggzContract.methods
-        .setTokensStakeStatus(state.stakedEggz, false)
-        .estimateGas({
-          from: account,
-          gasPrice: adjustedGasPrice,
-        });
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
 
-      const stakingTransaction = await eggzContract.methods
-        .setTokensStakeStatus(state.stakedEggz, false)
-        .send({ from: account, gasLimit: gasLimit });
-
-      if (stakingTransaction.status) {
+      if (data.status == "success") {
         state.unstakedEggz = state.unstakedEggz.concat(currentlyStakedEggz);
         state.stakedEggz = [];
         hideLoader();
@@ -483,11 +443,10 @@ async function unstakeAllNfts() {
       }
     }
   } catch (error) {
-    var strippedError = error.message.split("{");
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: strippedError[0],
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -516,7 +475,7 @@ function comingSoon(id) {
 }
 
 function convertWeiToEther(amount) {
-  return $web3.utils.fromWei(new $web3.utils.BN(amount), "ether");
+  return amount ? formatEther(amount) : null;
 }
 </script>
 

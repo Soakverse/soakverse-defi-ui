@@ -7,16 +7,30 @@
       </h5>
       <hr />
       <div class="row">
-        <div v-for="raffle in state.raffles" :key="raffle.id" class="col-12 card mb-3">
+        <div
+          v-for="raffle in state.raffles"
+          :key="raffle.id"
+          class="col-12 card mb-3"
+        >
           <h3>{{ raffle.raffleTitle }}</h3>
-          <h6><b>Giveaway end date:</b> {{ formatDateInTimezone(raffle.raffleDate) }} (Your timezone)</h6>
+          <h6>
+            <b>Giveaway end date:</b>
+            {{ formatDateInTimezone(raffle.raffleDate) }} (Your timezone)
+          </h6>
           <h6>
             <b>Giveaway Status: </b>
-            <span v-if="raffle.winnersPicked" class="badge bg-success"> Winners Picked! </span>
-            <span v-else-if="raffle.ended" class="badge bg-warning"> Ended. Waiting winners. </span>
+            <span v-if="raffle.winnersPicked" class="badge bg-success">
+              Winners Picked!
+            </span>
+            <span v-else-if="raffle.ended" class="badge bg-warning">
+              Ended. Waiting winners.
+            </span>
             <span v-else class="badge bg-primary"> Giveaway is ongoing! </span>
           </h6>
-          <nuxt-link :to="'/soakverse/giveaways/' + raffle.id" class="mx-auto btn btn-primary mb-2 d-inline-block">
+          <nuxt-link
+            :to="'/soakverse/giveaways/' + raffle.id"
+            class="mx-auto btn btn-primary mb-2 d-inline-block"
+          >
             View Giveaway
           </nuxt-link>
         </div>
@@ -28,11 +42,7 @@
 <script setup>
 import { showLoader, hideLoader, formatDateInTimezone } from "~~/utils/helpers";
 
-const { connectedWallet } = useWeb3WalletState();
-
 const config = useRuntimeConfig();
-
-const { $web3 } = useNuxtApp();
 
 const state = reactive({
   raffles: [],

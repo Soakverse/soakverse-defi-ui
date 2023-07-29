@@ -6,21 +6,34 @@
         <i class="fa-solid fa-award"></i>
       </h5>
       <hr />
-      <div class="row" v-if="connectedWallet && chainInformation.chainId == '56'">
+      <div class="row" v-if="currentAccount && currentChain == '56'">
         <div class="col-12">
           <p class="my-0">
             <b>Staked $SKMT:</b>
-            {{ convertWeiToEther(state.stakingUserInfo.amount) }}
+            {{ convertWeiToEther(state.stakingUserInfo) }}
           </p>
-          <p class="my-0"><b>Soakverse OGs count:</b> {{ state.ownedStaches.length }}</p>
-          <p class="mb-4"><b>Soakverse OGs Highest level:</b> {{ state.highestOwnedStache }}</p>
+          <p class="my-0">
+            <b>Soakverse OGs count:</b> {{ state.ownedStaches.length }}
+          </p>
+          <p class="mb-4">
+            <b>Soakverse OGs Highest level:</b> {{ state.highestOwnedStache }}
+          </p>
 
           <h5>{{ levelFunnyLabel[state.currentLoyaltyLevel] }}</h5>
-          <ProgressBar :value="state.currentLoyaltyLevel" :maxValue="10" label="Level" />
+          <ProgressBar
+            :value="state.currentLoyaltyLevel"
+            :maxValue="10"
+            label="Level"
+          />
           <ul class="mt-4 checked-list">
             <li class="mb-2" v-for="step in state.checkedSteps" :key="step.id">
               <span :style="{ color: step.checked == true ? 'green' : 'red' }">
-                <i class="fas" :class="step.checked == true ? 'fa-check-circle' : 'fa-circle-xmark'"></i>
+                <i
+                  class="fas"
+                  :class="
+                    step.checked == true ? 'fa-check-circle' : 'fa-circle-xmark'
+                  "
+                ></i>
                 {{ step.label }}
               </span>
             </li>
@@ -38,7 +51,11 @@
             style="background-color: #06262d"
           >
             <div class="m-auto">
-              <img class="icon" src="@/assets/img/pancakeswap.png" alt="Pancake Swap Logo White" />
+              <img
+                class="icon"
+                src="@/assets/img/pancakeswap.png"
+                alt="Pancake Swap Logo White"
+              />
               <p>Get $SKMT on PancakeSwap</p>
             </div>
           </a>
@@ -51,7 +68,11 @@
             style="background-color: #06262d"
           >
             <div class="m-auto">
-              <img class="icon" src="@/assets/img/opensea-white.png" alt="Open Sea Logo" />
+              <img
+                class="icon"
+                src="@/assets/img/opensea-white.png"
+                alt="Open Sea Logo"
+              />
               <p>Get Soakverse OGs on OpenSea</p>
             </div>
           </a>
@@ -70,39 +91,42 @@
 </template>
 
 <script setup>
-import soakmontAbi from "~~/utils/abi/soakmontToken";
-import soakmontStakingContractAbi from "~~/utils/abi/soakmontStakingContract";
+import {
+  soakmontStakingContract,
+  soakverseOGsSmartContract,
+} from "~~/utils/contracts";
 import ProgressBar from "~~/components/Loyalty/ProgressBar.vue";
 import { showLoader, hideLoader } from "~~/utils/helpers";
+import { readContract } from "@wagmi/core";
+import { formatEther } from "viem";
 const config = useRuntimeConfig();
 
-const { $web3 } = useNuxtApp();
-
-const { connectedWallet, chainInformation } = useWeb3WalletState();
-
-const tokenContractAddress = "0x1B2fdB1626285B94782af2Fda8e270E95cEbC3b4";
-const stakingContractAddress = "0xF5Da615989DadbD552E3479d79e8e7f34EcA9832";
-const stachesContractAddress = "0x2019f1aa40528e632b4add3b8bcbc435dbf86404";
+const { currentAccount, currentChain } = useWeb3WalletState();
 
 const nftLevels = [
-  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1, 1, 1, 3, 2, 3, 5, 1, 3, 1, 2, 3, 1, 1,
-  1, 4, 3, 3, 4, 1, 1, 1, 4, 1, 3, 1, 1, 1, 2, 2, 4, 4, 2, 1, 5, 2, 1, 4, 1, 2, 5, 2, 3, 2, 1, 2, 5, 1, 4, 4, 1, 2, 3,
-  2, 3, 2, 2, 2, 3, 1, 1, 5, 4, 3, 2, 2, 2, 2, 1, 1, 1, 3, 1, 2, 3, 2, 1, 1, 3, 3, 4, 1, 1, 1, 5, 3, 3, 1, 1, 1, 2, 2,
-  3, 2, 2, 1, 2, 1, 3, 1, 1, 4, 2, 3, 2, 2, 3, 5, 3, 2, 1, 1, 1, 4, 1, 3, 2, 3, 5, 1, 3, 1, 4, 3, 3, 2, 1, 3, 3, 1, 1,
-  1, 1, 1, 2, 3, 3, 1, 1, 1, 1, 2, 3, 2, 5, 1, 1, 2, 3, 1, 1, 1, 1, 2, 5, 2, 1, 5, 1, 1, 1, 5, 3, 2, 3, 2, 2, 3, 2, 3,
-  2, 2, 3, 1, 2, 1, 1, 4, 1, 1, 1, 3, 4, 4, 3, 2, 1, 1, 1, 3, 1, 4, 1, 3, 4, 1, 4, 1, 1, 3, 1, 2, 1, 5, 1, 1, 4, 2, 2,
-  3, 2, 5, 3, 2, 5, 5, 1, 2, 2, 1, 1, 2, 2, 3, 3, 2, 2, 2, 4, 3, 3, 1, 2, 1, 1, 2, 2, 1, 3, 4, 3, 1, 2, 2, 2, 2, 2, 1,
-  1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 2, 3, 4, 4, 3, 1, 2, 3, 1, 1, 3, 1, 1, 4, 1, 3, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1,
-  1, 1, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 5, 2, 1, 1, 5, 1, 2, 2, 2, 5, 1, 3, 3, 2, 1, 2, 3, 3, 2, 2, 3, 3, 1, 3, 2, 1, 4,
-  3, 2, 4, 2, 1, 2, 3, 2, 1, 3, 3, 4, 3, 1,
+  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1,
+  1, 1, 3, 2, 3, 5, 1, 3, 1, 2, 3, 1, 1, 1, 4, 3, 3, 4, 1, 1, 1, 4, 1, 3, 1, 1,
+  1, 2, 2, 4, 4, 2, 1, 5, 2, 1, 4, 1, 2, 5, 2, 3, 2, 1, 2, 5, 1, 4, 4, 1, 2, 3,
+  2, 3, 2, 2, 2, 3, 1, 1, 5, 4, 3, 2, 2, 2, 2, 1, 1, 1, 3, 1, 2, 3, 2, 1, 1, 3,
+  3, 4, 1, 1, 1, 5, 3, 3, 1, 1, 1, 2, 2, 3, 2, 2, 1, 2, 1, 3, 1, 1, 4, 2, 3, 2,
+  2, 3, 5, 3, 2, 1, 1, 1, 4, 1, 3, 2, 3, 5, 1, 3, 1, 4, 3, 3, 2, 1, 3, 3, 1, 1,
+  1, 1, 1, 2, 3, 3, 1, 1, 1, 1, 2, 3, 2, 5, 1, 1, 2, 3, 1, 1, 1, 1, 2, 5, 2, 1,
+  5, 1, 1, 1, 5, 3, 2, 3, 2, 2, 3, 2, 3, 2, 2, 3, 1, 2, 1, 1, 4, 1, 1, 1, 3, 4,
+  4, 3, 2, 1, 1, 1, 3, 1, 4, 1, 3, 4, 1, 4, 1, 1, 3, 1, 2, 1, 5, 1, 1, 4, 2, 2,
+  3, 2, 5, 3, 2, 5, 5, 1, 2, 2, 1, 1, 2, 2, 3, 3, 2, 2, 2, 4, 3, 3, 1, 2, 1, 1,
+  2, 2, 1, 3, 4, 3, 1, 2, 2, 2, 2, 2, 1, 1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 2, 3, 4,
+  4, 3, 1, 2, 3, 1, 1, 3, 1, 1, 4, 1, 3, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1,
+  1, 1, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 5, 2, 1, 1, 5, 1, 2, 2, 2, 5, 1, 3, 3, 2,
+  1, 2, 3, 3, 2, 2, 3, 3, 1, 3, 2, 1, 4, 3, 2, 4, 2, 1, 2, 3, 2, 1, 3, 3, 4, 3,
+  1,
 ];
 
 const decimals = 18;
-let tokenContract = null;
-let stakingContract = null;
 
 const state = reactive({
-  stakingUserInfo: {},
+  currentAccount: currentAccount,
+  currentChain: currentChain,
+  stakingUserInfo: null,
   ownedStaches: [],
   highestOwnedStache: null,
   currentLoyaltyLevel: 0,
@@ -165,30 +189,31 @@ const levelFunnyLabel = [
 ];
 
 onMounted(async () => {
-  tokenContract = await new $web3.eth.Contract(soakmontAbi.abi, tokenContractAddress);
-
-  stakingContract = await new $web3.eth.Contract(soakmontStakingContractAbi.abi, stakingContractAddress);
   getEcosystemBalance();
 });
 
-watch(connectedWallet, () => {
+watch(currentAccount, () => {
   getEcosystemBalance();
 });
 
 async function getEcosystemBalance() {
-  const currentChainId = await $web3.eth.net.getId();
-  if (process.client && connectedWallet && currentChainId == "56") {
+  if (process.client && currentAccount.value && currentChain.value == "56") {
     showLoader();
     state.ownedStaches = [];
-    state.stakingUserInfo = {};
+    state.stakingUserInfo = null;
     state.highestOwnedStache = null;
 
-    const accounts = await $web3.eth.getAccounts();
-
-    state.stakingUserInfo = await stakingContract.methods.userInfo(accounts[0]).call();
+    state.stakingUserInfo = (
+      await readContract({
+        address: soakmontStakingContract.address,
+        abi: soakmontStakingContract.abi,
+        functionName: "userInfo",
+        args: [state.currentAccount],
+      })
+    )[0];
 
     const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.alchemyApiKey}`;
-    const url = `${baseURL}/getNFTs/?owner=${accounts[0]}&contractAddresses[]=${stachesContractAddress}`;
+    const url = `${baseURL}/getNFTs/?owner=${state.currentAccount}&contractAddresses[]=${soakverseOGsSmartContract.address}`;
 
     var requestOptions = {
       method: "get",
@@ -220,7 +245,7 @@ async function getEcosystemBalance() {
 async function calculateCurrentLoyaltyLevel() {
   const nftCount = state.ownedStaches.length;
   const highestLevel = state.highestOwnedStache;
-  const stakedSKMT = state.stakingUserInfo.amount;
+  const stakedSKMT = state.stakingUserInfo;
   let level = 0;
 
   for (let step of state.checkedSteps) {
@@ -268,7 +293,7 @@ async function calculateCurrentLoyaltyLevel() {
 }
 
 function convertWeiToEther(amount) {
-  return $web3.utils.fromWei(new $web3.utils.BN(amount), "ether");
+  return amount ? formatEther(amount) : null;
 }
 </script>
 
