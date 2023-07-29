@@ -1,5 +1,5 @@
 <template>
-  <div class="row text-left px-1 mt-4">
+  <div class="row text-left px-1 mt-4" v-if="currentChain == '56'">
     <div class="col-12">
       <h5>{{ farm.farmName }}</h5>
       <hr />
@@ -17,7 +17,13 @@
         </div>
         <div class="col-12 col-sm-6 mb-2">
           <label>Current APR</label>
-          <input class="form-control" :name="`${farm.id}_${farm.ticker}_apr`" readonly disabled value="TBD" />
+          <input
+            class="form-control"
+            :name="`${farm.id}_${farm.ticker}_apr`"
+            readonly
+            disabled
+            value="No APR, based on ecosystem activity"
+          />
         </div>
         <div class="col-12 col-sm-6 mb-2">
           <label>{{ farm.ticker }} Staked</label>
@@ -41,25 +47,65 @@
         </div>
       </div>
       <hr class="mb-4 mt-3" />
-      <div class="row" v-if="connectedWallet">
+      <div class="row" v-if="currentAccount">
         <div class="col-12 col-md-6 mb-4">
           <div class="h-100 my-auto card grey no-shadow">
             <h6 class="fw-bold">Stake {{ farm.ticker }}</h6>
-            <p>Balance: {{ state.tokenBalance.toFixed(4) }} ({{ moneyFormatter.format(state.tokenBalanceUSD) }})</p>
-            <label for="stake-input" class="mb-2 fw-bold">Amount to be staked</label>
+            <p>
+              Balance: {{ state.tokenBalance.toFixed(4) }} ({{
+                moneyFormatter.format(state.tokenBalanceUSD)
+              }})
+            </p>
+            <label for="stake-input" class="mb-2 fw-bold"
+              >Amount to be staked</label
+            >
             <div class="btn-group mb-2" role="group" aria-label="Stake button">
-              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(25)">25%</button>
-              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(50)">50%</button>
-              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(75)">75%</button>
-              <button type="button" class="btn btn-primary" @click="setToBeStakedAmount(100)">100%</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeStakedAmount(25)"
+              >
+                25%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeStakedAmount(50)"
+              >
+                50%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeStakedAmount(75)"
+              >
+                75%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeStakedAmount(100)"
+              >
+                100%
+              </button>
             </div>
-            <input id="stake-input" v-model="state.toBeStaked" class="form-control" />
+            <input
+              id="stake-input"
+              v-model="state.toBeStaked"
+              class="form-control"
+            />
             <button
               class="btn btn-warning mt-2"
               disabled="disabled"
-              v-if="state.toBeStaked > state.tokenBalance || state.toBeStaked == 0"
+              v-if="
+                state.toBeStaked > state.tokenBalance || state.toBeStaked == 0
+              "
             >
-              {{ state.toBeStaked > state.tokenBalance ? "Balance too low" : "Enter an amount" }}
+              {{
+                state.toBeStaked > state.tokenBalance
+                  ? "Balance too low"
+                  : "Enter an amount"
+              }}
             </button>
             <button
               v-else-if="state.toBeStaked <= state.approvalLimit"
@@ -70,20 +116,32 @@
               Stake
             </button>
             <div v-else class="mb-2 d-flex flex-row">
-              <button @click="approveContract()" type="button" class="btn btn-success mt-2 flex-fill me-1">
+              <button
+                @click="approveContract()"
+                type="button"
+                class="btn btn-success mt-2 flex-fill me-1"
+              >
                 Approve
               </button>
-              <button type="button" class="btn btn-success mt-2 flex-fill ms-1" @click="approveContract(true)">
+              <button
+                type="button"
+                class="btn btn-success mt-2 flex-fill ms-1"
+                @click="approveContract(true)"
+              >
                 Approve max
               </button>
             </div>
             <p class="mt-2" style="color: red">
-              Unstaking tokens in the first 30 days of staking will tax the withdrawal for 10%.
+              Unstaking tokens in the first 30 days of staking will tax the
+              withdrawal for 10%.
             </p>
           </div>
         </div>
         <div class="col-12 col-md-6 mb-4">
-          <div v-if="state.stakingUserInfo.amount == 0" class="d-flex h-100 text-center card grey no-shadow">
+          <div
+            v-if="state.stakingUserInfo.amount == 0"
+            class="d-flex h-100 text-center card grey no-shadow"
+          >
             <div class="my-auto">
               <h3>Staked {{ farm.ticker }}</h3>
               <h4>Not staked</h4>
@@ -92,24 +150,65 @@
           <div v-else class="my-auto h-100 card grey no-shadow">
             <h6 class="fw-bold">Unstake {{ farm.ticker }}</h6>
             <p>
-              Your Stake: {{ parseFloat(convertWeiToEther(state.stakingUserInfo.amount)).toFixed(4) }} ({{
-                moneyFormatter.format(state.stakingUserInfo.amountUSD)
-              }})
+              Your Stake:
+              {{
+                parseFloat(
+                  convertWeiToEther(state.stakingUserInfo.amount)
+                ).toFixed(4)
+              }}
+              ({{ moneyFormatter.format(state.stakingUserInfo.amountUSD) }})
             </p>
-            <label for="stake-input" class="mb-2 fw-bold">Amount to be unstaked</label>
+            <label for="stake-input" class="mb-2 fw-bold"
+              >Amount to be unstaked</label
+            >
             <div class="btn-group mb-2" role="group" aria-label="Stake button">
-              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(25)">25%</button>
-              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(50)">50%</button>
-              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(75)">75%</button>
-              <button type="button" class="btn btn-primary" @click="setToBeUnstakedAmount(100)">100%</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(25)"
+              >
+                25%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(50)"
+              >
+                50%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(75)"
+              >
+                75%
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="setToBeUnstakedAmount(100)"
+              >
+                100%
+              </button>
             </div>
-            <input id="stake-input" v-model="state.toBeUnstaked" class="form-control" />
+            <input
+              id="stake-input"
+              v-model="state.toBeUnstaked"
+              class="form-control"
+            />
             <button
               class="btn btn-warning mt-2"
               disabled="disabled"
-              v-if="state.toBeUnstaked > state.stakingUserInfo.amount || state.toBeUnstaked == 0"
+              v-if="
+                state.toBeUnstaked > state.stakingUserInfo.amount ||
+                state.toBeUnstaked == 0
+              "
             >
-              {{ state.toBeUnstaked > state.stakingUserInfo.amount ? "Balance too low" : "Enter an amount" }}
+              {{
+                state.toBeUnstaked > state.stakingUserInfo.amount
+                  ? "Balance too low"
+                  : "Enter an amount"
+              }}
             </button>
             <button
               v-else-if="state.toBeStaked <= state.approvalLimit"
@@ -120,22 +219,42 @@
               Unstake
             </button>
             <div v-else class="mb-2 d-flex flex-row">
-              <button @click="approveContract()" type="button" class="btn btn-success mt-2 flex-fill me-1">
+              <button
+                @click="approveContract()"
+                type="button"
+                class="btn btn-success mt-2 flex-fill me-1"
+              >
                 Approve
               </button>
-              <button type="button" class="btn btn-success mt-2 flex-fill ms-1" @click="approveContract(true)">
+              <button
+                type="button"
+                class="btn btn-success mt-2 flex-fill ms-1"
+                @click="approveContract(true)"
+              >
                 Approve max
               </button>
             </div>
             <p class="mt-2" style="color: red">
-              Unstaking tokens in the first 30 days of staking will tax the withdrawal for 10%.
+              Unstaking tokens in the first 30 days of staking will tax the
+              withdrawal for 10%.
             </p>
           </div>
         </div>
         <div class="col-12 col-md-12 mb-4">
-          <div v-if="!(state.stakingUserInfo.amount == 0)" class="d-flex h-100 text-center card grey no-shadow">
-            <p class="mb-0">Your pending rewards: {{ state.pendingRewards.toFixed(4) }} $SKMT</p>
-            <button v-if="state.pendingRewards > 0" type="button" class="btn btn-success mt-2" @click="claimRewards()">
+          <div
+            v-if="!(state.stakingUserInfo.amount == 0)"
+            class="d-flex h-100 text-center card grey no-shadow"
+          >
+            <p class="mb-0">
+              Your pending rewards:
+              {{ state.pendingRewards.toFixed(4) }} $SKMT
+            </p>
+            <button
+              v-if="state.pendingRewards > 0"
+              type="button"
+              class="btn btn-success mt-2"
+              @click="claimRewards()"
+            >
               Claim Rewards
             </button>
           </div>
@@ -146,13 +265,29 @@
       </div>
     </div>
   </div>
+  <div class="row" v-else>
+    <div class="col-12">
+      <h4 class="text-center m-4">Please switch to BSC</h4>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import soakmontAbi from "~~/utils/abi/soakmontToken";
-import soakmontStakingContractAbi from "~~/utils/abi/soakmontStakingContract";
+import {
+  soakmontTokenContract,
+  soakmontStakingContract,
+} from "~~/utils/contracts";
 import { showLoader, hideLoader, moneyFormatter } from "~~/utils/helpers";
-const { $web3, $swal } = useNuxtApp();
+import {
+  multicall,
+  prepareWriteContract,
+  writeContract,
+  waitForTransaction,
+} from "@wagmi/core";
+import { formatEther, parseEther, formatUnits, parseUnits } from "viem";
+const { currentAccount, currentChain } = useWeb3WalletState();
+
+const { $swal } = useNuxtApp();
 
 const { connectedWallet } = useWeb3WalletState();
 const props = defineProps({
@@ -178,11 +313,8 @@ const props = defineProps({
   },
 });
 
-const tokenContractAddress = "0x1B2fdB1626285B94782af2Fda8e270E95cEbC3b4";
-const stakingContractAddress = "0xF5Da615989DadbD552E3479d79e8e7f34EcA9832";
-const decimals = 18;
-
 const state = reactive({
+  currentAccount: currentAccount.value,
   currentStakedCount: 0,
   currentStakedTVL: 0,
   currentTokenPrice: 0,
@@ -201,11 +333,9 @@ const {
   tokenPricePending,
   refresh,
   error,
-} = await useLazyFetch(`https://api.coingecko.com/api/v3/simple/price?ids=soakmont&vs_currencies=usd`);
-
-const tokenContract = await new $web3.eth.Contract(soakmontAbi.abi, tokenContractAddress);
-
-const stakingContract = await new $web3.eth.Contract(soakmontStakingContractAbi.abi, stakingContractAddress);
+} = await useLazyFetch(
+  `https://api.coingecko.com/api/v3/simple/price?ids=soakmont&vs_currencies=usd`
+);
 
 onMounted(async () => {
   getTokenBalance();
@@ -224,30 +354,70 @@ watch(tokenPrice, (newValue) => {
 });
 
 function calculateStakedInfos() {
-  state.currentStakedTVL = Math.round(state.currentStakedCount * state.currentTokenPrice * 100) / 100;
+  state.currentStakedTVL =
+    Math.round(state.currentStakedCount * state.currentTokenPrice * 100) / 100;
 }
 
 async function getTokenBalance() {
   if (process.client) {
-    const accounts = await $web3.eth.getAccounts();
+    const soakmontEcosystemDataForAccount = await multicall({
+      contracts: [
+        {
+          ...soakmontTokenContract,
+          functionName: "balanceOf",
+          args: [state.currentAccount],
+        },
+        {
+          ...soakmontTokenContract,
+          functionName: "allowance",
+          args: [state.currentAccount, soakmontStakingContract.address],
+        },
+        {
+          ...soakmontStakingContract,
+          functionName: "userInfo",
+          args: [state.currentAccount],
+        },
+        {
+          ...soakmontStakingContract,
+          functionName: "pendingRewards",
+          args: [state.currentAccount],
+        },
+        {
+          ...soakmontTokenContract,
+          functionName: "balanceOf",
+          args: [soakmontStakingContract.address],
+        },
+      ],
+    });
 
-    const weiTokenBalance = await tokenContract.methods.balanceOf(accounts[0]).call();
-    state.tokenBalance = parseFloat(await $web3.utils.fromWei(weiTokenBalance, "ether"), 18);
-    state.tokenBalanceUSD = Math.round(state.tokenBalance * state.currentTokenPrice * 100) / 100;
+    const weiTokenBalance = soakmontEcosystemDataForAccount[0].result;
+    const weiApprovalLimit = soakmontEcosystemDataForAccount[1].result;
+    const accountStakedTokens = soakmontEcosystemDataForAccount[2].result[0];
+    const weiCurrentPendingRewards = soakmontEcosystemDataForAccount[3].result;
+    const totalStakedAmount = soakmontEcosystemDataForAccount[4].result;
 
-    const weiApprovalLimit = await tokenContract.methods.allowance(accounts[0], stakingContractAddress).call();
-    state.approvalLimit = parseFloat(await $web3.utils.fromWei(weiApprovalLimit, "ether"), 18);
+    state.tokenBalance = parseFloat(convertWeiToEther(weiTokenBalance));
+    state.tokenBalanceUSD =
+      Math.round(state.tokenBalance * state.currentTokenPrice * 100) / 100;
 
-    state.stakingUserInfo = await stakingContract.methods.userInfo(accounts[0]).call();
+    state.approvalLimit = parseFloat(convertWeiToEther(weiApprovalLimit), 18);
+
+    state.stakingUserInfo.amount = accountStakedTokens;
+
     state.stakingUserInfo.amountUSD =
-      Math.round((await $web3.utils.fromWei(state.stakingUserInfo.amount, "ether")) * state.currentTokenPrice * 100) /
-      100;
+      Math.round(
+        convertWeiToEther(accountStakedTokens) * state.currentTokenPrice * 100
+      ) / 100;
 
-    const weiCurrentPendingRewards = await stakingContract.methods.pendingRewards(accounts[0]).call();
-    state.pendingRewards = parseFloat(await $web3.utils.fromWei(weiCurrentPendingRewards, "ether"), 18);
+    state.pendingRewards = parseFloat(
+      convertWeiToEther(weiCurrentPendingRewards),
+      18
+    );
 
-    const weiTotalStakedAmount = await tokenContract.methods.balanceOf(stakingContractAddress).call();
-    state.currentStakedCount = parseFloat(await $web3.utils.fromWei(weiTotalStakedAmount, "ether"), 18);
+    state.currentStakedCount = parseFloat(
+      convertWeiToEther(totalStakedAmount),
+      18
+    );
 
     calculateStakedInfos();
   }
@@ -258,7 +428,9 @@ function setToBeStakedAmount(percentage) {
 }
 
 function setToBeUnstakedAmount(percentage) {
-  state.toBeUnstaked = parseFloat((convertWeiToEther(state.stakingUserInfo.amount) * percentage) / 100);
+  state.toBeUnstaked = parseFloat(
+    (convertWeiToEther(state.stakingUserInfo.amount) * percentage) / 100
+  );
 }
 
 async function approveContract(max = false) {
@@ -267,34 +439,27 @@ async function approveContract(max = false) {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
-      const ethUtils = $web3.utils;
-      const amountToApprove = await $web3.utils.toWei(
-        max ? new ethUtils.BN("100000000000") : new ethUtils.BN(state.toBeStaked + 1),
-        "ether"
-      );
+      const amountToApprove = max
+        ? parseEther("100000000000")
+        : parseEther(state.toBeStaked + 1);
 
-      const gasPrice = await $web3.eth.getGasPrice();
+      const { request } = await prepareWriteContract({
+        address: soakmontTokenContract.address,
+        abi: soakmontTokenContract.abi,
+        functionName: "approve",
+        args: [soakmontStakingContract.address, parseEther("100000000000")],
+      });
 
-      const gasLimit = await tokenContract.methods
-        .approve(stakingContractAddress, new ethUtils.BN(amountToApprove))
-        .estimateGas({
-          from: account,
-          gasPrice: gasPrice,
-        });
+      const { hash } = await writeContract(request);
 
-      const weiApprovalLimit = await tokenContract.methods
-        .approve(stakingContractAddress, new ethUtils.BN(amountToApprove))
-        .send({
-          from: account,
-          gasPrice: gasPrice,
-          gasLimit: gasLimit,
-        });
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
 
-      if (weiApprovalLimit.status) {
+      if (data.status == "success") {
         state.approvalLimit = amountToApprove;
         hideLoader();
         $swal.fire({
@@ -312,7 +477,7 @@ async function approveContract(max = false) {
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: error.message,
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -328,25 +493,25 @@ async function stakeTokens() {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
-      const ethUtils = $web3.utils;
-      const amountToStake = await $web3.utils.toWei(new ethUtils.BN(state.toBeStaked), "ether");
+      const amountToStake = parseUnits(state.toBeStaked.toString(), 18);
 
-      const gasPrice = await $web3.eth.getGasPrice();
-
-      const gasLimit = await stakingContract.methods.stake(new ethUtils.BN(amountToStake)).estimateGas({
-        from: account,
-        gasPrice: gasPrice,
+      const { request } = await prepareWriteContract({
+        address: soakmontStakingContract.address,
+        abi: soakmontStakingContract.abi,
+        functionName: "stake",
+        args: [amountToStake],
       });
 
-      const stakingTransaction = await stakingContract.methods
-        .stake(new ethUtils.BN(amountToStake))
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+      const { hash } = await writeContract(request);
 
-      if (stakingTransaction.status) {
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
+
+      if (data.status == "success") {
         state.toBeStaked = 0;
         await getTokenBalance();
         hideLoader();
@@ -365,7 +530,7 @@ async function stakeTokens() {
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: error.message,
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -381,25 +546,25 @@ async function unstakeTokens() {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
-      const ethUtils = $web3.utils;
-      const amountToUnstake = await $web3.utils.toWei(new ethUtils.BN(state.toBeUnstaked), "ether");
+      const amountToUnstake = parseUnits(state.toBeUnstaked.toString(), 18);
 
-      const gasPrice = await $web3.eth.getGasPrice();
-
-      const gasLimit = await stakingContract.methods.unstake(new ethUtils.BN(amountToUnstake)).estimateGas({
-        from: account,
-        gasPrice: gasPrice,
+      const { request } = await prepareWriteContract({
+        address: soakmontStakingContract.address,
+        abi: soakmontStakingContract.abi,
+        functionName: "unstake",
+        args: [amountToUnstake],
       });
 
-      const stakingTransaction = await stakingContract.methods
-        .unstake(new ethUtils.BN(amountToUnstake))
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+      const { hash } = await writeContract(request);
 
-      if (stakingTransaction.status) {
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
+
+      if (data.status == "success") {
         state.toBeUnstaked = 0;
         await getTokenBalance();
         hideLoader();
@@ -418,7 +583,7 @@ async function unstakeTokens() {
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: error.message,
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -434,23 +599,23 @@ async function claimRewards() {
     return;
   }
   try {
-    const accounts = await $web3.eth.getAccounts();
-    if (accounts.length > 0) {
+    if (currentAccount) {
       showLoader();
-      const account = accounts[0];
 
-      const gasPrice = await $web3.eth.getGasPrice();
-
-      const gasLimit = await stakingContract.methods.claimRewards().estimateGas({
-        from: account,
-        gasPrice: gasPrice,
+      const { request } = await prepareWriteContract({
+        address: soakmontStakingContract.address,
+        abi: soakmontStakingContract.abi,
+        functionName: "claimRewards",
       });
 
-      const claimRewardsTransaction = await stakingContract.methods
-        .claimRewards()
-        .send({ from: account, gasPrice: gasPrice, gasLimit: gasLimit });
+      const { hash } = await writeContract(request);
 
-      if (claimRewardsTransaction.status) {
+      const data = await waitForTransaction({
+        confirmations: 1,
+        hash,
+      });
+
+      if (data.status == "success") {
         const claimedRewards = state.pendingRewards;
         state.pendingRewards = 0;
         await getTokenBalance();
@@ -470,7 +635,7 @@ async function claimRewards() {
     hideLoader();
     $swal.fire({
       title: "Error",
-      text: error.message,
+      text: error.message.split("\n")[0],
       icon: "error",
       buttonsStyling: false,
       customClass: {
@@ -481,6 +646,6 @@ async function claimRewards() {
 }
 
 function convertWeiToEther(amount) {
-  return $web3.utils.fromWei(new $web3.utils.BN(amount), "ether");
+  return amount ? formatEther(amount) : null;
 }
 </script>

@@ -28,7 +28,6 @@ export function hideLoader() {
 }
 
 export function filterArrayOfObjects(array: any[], value: any) {
-  console.log(array);
   var result = array.filter(function (o: { tokenId: any }) {
     return o.tokenId == value;
   });

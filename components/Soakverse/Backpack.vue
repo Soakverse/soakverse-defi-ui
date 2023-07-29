@@ -1,17 +1,23 @@
 <template>
   <div class="row text-left px-1 mt-4">
-    <div class="col-12 card" v-if="connectedWallet && chainInformation.chainId == '1'">
+    <div class="col-12 card" v-if="currentAccount">
       <h3>Backpack</h3>
-      <span class="badge bg-success mx-auto"> {{ state.items.length }} Item(s)! </span>
+      <span class="badge bg-success mx-auto">
+        {{ state.items.length }} Item(s)!
+      </span>
       <p class="my-2">
-        The items that you win or collect will accumulate here. Consumables will soon be activated. Those are precious.
-        Stay tuned!
+        The items that you win or collect will accumulate here. Consumables will
+        soon be activated. Those are precious. Stay tuned!
       </p>
       <div class="row px-2 py-2">
         <div v-if="state.items.length == 0">
           <h4 class="mt-4">No item yet!</h4>
         </div>
-        <div v-for="item in state.items" :key="item.id" class="col-12 col-sm-6 col-lg-4 col-xl-3 py-3">
+        <div
+          v-for="item in state.items"
+          :key="item.id"
+          class="col-12 col-sm-6 col-lg-4 col-xl-3 py-3"
+        >
           <div class="card prize-card">
             <h5>{{ item.title }}</h5>
             <div class="item-image-holder">
@@ -36,20 +42,18 @@
 import OpenSea from "~~/components/Soakverse/Utils/OpenSea.vue";
 import { showLoader, hideLoader } from "~~/utils/helpers";
 
-const { connectedWallet, chainInformation } = useWeb3WalletState();
+const { currentAccount } = useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
-const { $web3 } = useNuxtApp();
-
 const state = reactive({
   items: [],
-  connectedWallet,
+  currentAccount,
 });
 
 onMounted(async () => {
   try {
-    if (process.client && state.connectedWallet) {
+    if (process.client && state.currentAccount) {
       fetchAllData();
     }
   } catch (e) {
@@ -57,8 +61,8 @@ onMounted(async () => {
   }
 });
 
-watch(connectedWallet, async () => {
-  if (process.client && state.connectedWallet) {
+watch(currentAccount, async () => {
+  if (process.client && state.currentAccount) {
     fetchAllData();
   }
 });
@@ -67,7 +71,7 @@ async function fetchAllData() {
   if (process.client) {
     showLoader();
     try {
-      const itemsUrl = `${config.apiUrl}/game-items/${state.connectedWallet}/grouped`;
+      const itemsUrl = `${config.apiUrl}/game-items/${state.currentAccount}/grouped`;
       state.items = await $fetch(itemsUrl);
     } catch (e) {}
     hideLoader();

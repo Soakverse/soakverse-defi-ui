@@ -1,7 +1,10 @@
 <template>
   <div class="row px-1 mt-4">
     <div class="col-12 card">
-      <h5>To participate in giveaways, you must stake Eggz By Soakverse or Own a Soakverse OG</h5>
+      <h5>
+        To participate in giveaways, you must stake Eggz By Soakverse or Own a
+        Soakverse OG
+      </h5>
       <p class="pb-0 mb-0">Get one of our multi-utilities NFT on OpenSea:</p>
       <div class="d-block">
         <a
@@ -10,7 +13,10 @@
           href="https://opensea.io/collection/eggz-by-soakverse"
           >Eggz by Soakverse</a
         >
-        <a target="_new" class="btn btn-success d-inline-block m-2" href="https://opensea.io/collection/soakverse-ogs"
+        <a
+          target="_new"
+          class="btn btn-success d-inline-block m-2"
+          href="https://opensea.io/collection/soakverse-ogs"
           >Soakverse OGs</a
         >
       </div>
@@ -22,21 +28,41 @@
         <i class="fa-solid fa-award"></i> {{ state.raffle.raffleTitle }}
         <i class="fa-solid fa-award"></i>
       </h3>
-      <h6>Giveaway end date: {{ formatDateInTimezone(state.raffle.raffleDate) }} (Your timezone)</h6>
-      <span v-if="state.raffle.winnersPicked" class="badge bg-success mx-auto"> Winners Picked! </span>
-      <span v-else-if="state.raffle.ended" class="badge bg-warning mx-auto"> Ended. Waiting winners. </span>
-      <span v-else class="badge bg-primary mx-auto"> Giveaway is ongoing! </span>
+      <h6>
+        Giveaway end date:
+        {{ formatDateInTimezone(state.raffle.raffleDate) }} (Your timezone)
+      </h6>
+      <span v-if="state.raffle.winnersPicked" class="badge bg-success mx-auto">
+        Winners Picked!
+      </span>
+      <span v-else-if="state.raffle.ended" class="badge bg-warning mx-auto">
+        Ended. Waiting winners.
+      </span>
+      <span v-else class="badge bg-primary mx-auto">
+        Giveaway is ongoing!
+      </span>
       <div class="row px-4 py-2">
         <h3 class="mt-3 mb-0">Prizes</h3>
         <div v-if="state.prizes.length == 0">
           <h4 class="mt-4">Prizes not defined yet!</h4>
         </div>
-        <div v-for="prize in state.prizes" :key="prize.id" class="col-12 col-sm-6 col-lg-4 col-xl-3 py-3">
-          <div class="card prize-card" :class="{ winner: prize.winner ? verifyAddress(prize.winner) : null }">
+        <div
+          v-for="prize in state.prizes"
+          :key="prize.id"
+          class="col-12 col-sm-6 col-lg-4 col-xl-3 py-3"
+        >
+          <div
+            class="card prize-card"
+            :class="{
+              winner: prize.winner ? verifyAddress(prize.winner) : null,
+            }"
+          >
             <h5>{{ prize.prizeTitle }}</h5>
             <img :src="prize.webImageUrl" class="img-responsive w-100" />
             <h6 class="mt-2 mb-0 p-0">{{ prize.prizeDescription }}</h6>
-            <p class="m-0 p-0" v-if="prize.winner">{{ formatWalletAddress(prize.winner) }}</p>
+            <p class="m-0 p-0" v-if="prize.winner">
+              {{ formatWalletAddress(prize.winner) }}
+            </p>
             <p class="m-0 p-0" v-else>No winner yet</p>
           </div>
         </div>
@@ -48,7 +74,12 @@
 
 <script setup>
 import OpenSea from "~~/components/Soakverse/Utils/OpenSea.vue";
-import { formatWalletAddress, showLoader, hideLoader, formatDateInTimezone } from "~~/utils/helpers";
+import {
+  formatWalletAddress,
+  showLoader,
+  hideLoader,
+  formatDateInTimezone,
+} from "~~/utils/helpers";
 
 const props = defineProps({
   raffleId: {
@@ -60,7 +91,7 @@ const props = defineProps({
   },
 });
 
-const { connectedWallet } = useWeb3WalletState();
+const { currentAccount } = useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
@@ -69,7 +100,7 @@ const { $web3 } = useNuxtApp();
 const state = reactive({
   raffle: {},
   prizes: [],
-  connectedWallet,
+  currentAccount,
 });
 
 onMounted(async () => {
@@ -102,8 +133,8 @@ async function fetchAllData() {
 }
 
 function verifyAddress(address) {
-  console.log(state.connectedWallet);
-  const addressIsTheSame = state.connectedWallet.toLowerCase() === address.toLowerCase() ? true : false;
+  const addressIsTheSame =
+    state.currentAccount.toLowerCase() === address.toLowerCase() ? true : false;
   return addressIsTheSame;
 }
 </script>

@@ -13,8 +13,13 @@ export default {
         ],
       }),
   ],
-
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "es2020",
+    },
+  },
   build: {
+    target: "es2020",
     rollupOptions: {
       plugins: [
         // ↓ Needed for build
