@@ -342,7 +342,11 @@ onMounted(async () => {
   refresh();
 });
 
-watch(connectedWallet, () => {
+watch(currentAccount, () => {
+  getTokenBalance();
+});
+
+watch(currentChain, () => {
   getTokenBalance();
 });
 

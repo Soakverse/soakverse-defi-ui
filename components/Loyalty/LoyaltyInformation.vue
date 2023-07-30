@@ -193,7 +193,11 @@ onMounted(async () => {
 });
 
 watch(currentAccount, () => {
-  getEcosystemBalance();
+  getTokenBalance();
+});
+
+watch(currentChain, () => {
+  getTokenBalance();
 });
 
 async function getEcosystemBalance() {

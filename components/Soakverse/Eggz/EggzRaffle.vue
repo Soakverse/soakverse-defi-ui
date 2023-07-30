@@ -133,6 +133,9 @@ async function fetchAllData() {
 }
 
 function verifyAddress(address) {
+  if (!state.currentAccount) {
+    return false;
+  }
   const addressIsTheSame =
     state.currentAccount.toLowerCase() === address.toLowerCase() ? true : false;
   return addressIsTheSame;

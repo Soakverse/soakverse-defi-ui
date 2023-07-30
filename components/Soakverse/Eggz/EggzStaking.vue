@@ -150,6 +150,10 @@ watch(currentAccount, async () => {
   getEcosystemBalance();
 });
 
+watch(currentChain, () => {
+  getEcosystemBalance();
+});
+
 async function getEcosystemBalance() {
   if (process.client && currentAccount.value && currentChain.value == "1") {
     showLoader();
