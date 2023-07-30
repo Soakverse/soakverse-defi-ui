@@ -193,11 +193,11 @@ onMounted(async () => {
 });
 
 watch(currentAccount, () => {
-  getTokenBalance();
+  getEcosystemBalance();
 });
 
 watch(currentChain, () => {
-  getTokenBalance();
+  getEcosystemBalance();
 });
 
 async function getEcosystemBalance() {
@@ -297,7 +297,7 @@ async function calculateCurrentLoyaltyLevel() {
 }
 
 function convertWeiToEther(amount) {
-  return amount ? formatEther(amount) : null;
+  return amount ? formatEther(amount) : 0;
 }
 </script>
 

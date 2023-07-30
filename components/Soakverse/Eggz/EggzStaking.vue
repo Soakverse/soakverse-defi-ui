@@ -479,7 +479,7 @@ function comingSoon(id) {
 }
 
 function convertWeiToEther(amount) {
-  return amount ? formatEther(amount) : null;
+  return amount ? formatEther(amount) : 0;
 }
 </script>
 
