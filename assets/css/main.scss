@@ -11,6 +11,10 @@ body,
   position: relative;
 }
 
+w3m-text {
+  color: yellow !important;
+}
+
 #main {
   flex-grow: 1;
   display: flex;

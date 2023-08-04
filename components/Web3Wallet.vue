@@ -6,9 +6,12 @@
   </div>
 </template>
 
-<style>
+<style lang="scss">
 w3m-core-button {
   background-color: white !important;
   border-radius: var(--w3m-button-border-radius);
+  [color="primary"] {
+    color: black;
+  }
 }
 </style>
