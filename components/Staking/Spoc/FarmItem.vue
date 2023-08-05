@@ -107,10 +107,6 @@
                 Approve max
               </button>
             </div>
-            <p class="mt-2" style="color: red">
-              Unstaking tokens in the first 30 days of staking will tax the
-              withdrawal for 10%.
-            </p>
           </div>
         </div>
         <div class="col-12 col-md-6 mb-4">
@@ -209,10 +205,6 @@
                 Approve max
               </button>
             </div>
-            <p class="mt-2" style="color: red">
-              Unstaking tokens in the first 30 days of staking will tax the
-              withdrawal for 10%.
-            </p>
           </div>
         </div>
         <div class="col-12 col-md-12 mb-4">
