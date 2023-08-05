@@ -38,6 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     {
       projectId,
       themeVariables: {
+        "--w3m-accent-color": "#00b8ff",
         "--w3m-logo-image-url": logo,
         "--w3m-background-color": "#071d28",
       },

@@ -53,6 +53,15 @@
       </li>
       <li>
         <nuxt-link
+          to="/spoc/staking"
+          class="sidebar-link"
+          :class="{ 'text-center': !isSidebarOpen }"
+          ><i class="fa-solid fa-coins"></i
+          ><span class="label">SPOC Staking</span>
+        </nuxt-link>
+      </li>
+      <li>
+        <nuxt-link
           to="/soakverse/eggz/staking"
           class="sidebar-link"
           :class="{ 'text-center': !isSidebarOpen }"

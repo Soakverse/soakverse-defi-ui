@@ -68,4 +68,7 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
   },
+  routeRules: {
+    "/skmt/staking": { redirect: "/staking" },
+  },
 });

@@ -3,6 +3,7 @@ import soakmontStakingContractAbi from "./abi/soakmontStakingContract.json";
 import soakverseOGsNFTAbi from "./abi/soakverseOGsNFT.json";
 import eggzNFTAbi from "./abi/eggzNFT.json";
 import wizhNFTAbi from "./abi/wizhNFT.json";
+import spocAbi from "./abi/spocToken.json";
 
 export type SmartContractDefinition = {
   address: string;
@@ -37,4 +38,15 @@ export const eggzSmartContract: SmartContractDefinition = {
 export const wizhSmartContract: SmartContractDefinition = {
   address: "0x72684a8cbb13183a8bf407a468591b8306f61d99",
   abi: wizhNFTAbi.abi,
+};
+
+export const spocTokenContract: TokenSmartContractDefinition = {
+  address: "0xec8b02022035cebbc205eeb78818e88017034235",
+  abi: spocAbi.abi,
+  decimals: 18,
+};
+
+export const spocStakingContract: SmartContractDefinition = {
+  address: "0x476F1c586cc772B1c2c0232a90205E48f5B0fCEE",
+  abi: soakmontStakingContractAbi.abi,
 };
