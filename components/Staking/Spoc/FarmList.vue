@@ -16,6 +16,7 @@ export default {
           farmName: "$SPOC Staking",
           tokenName: "Soakverse Proof Of Contribution",
           ticker: "SPOC",
+          reward: "SKMT",
           cgId: "spoc",
           contracts: {
             token: "",

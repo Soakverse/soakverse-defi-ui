@@ -47,6 +47,6 @@ export const spocTokenContract: TokenSmartContractDefinition = {
 };
 
 export const spocStakingContract: SmartContractDefinition = {
-  address: "0x476F1c586cc772B1c2c0232a90205E48f5B0fCEE",
+  address: "0x2AE33aa09ADbe84De47D8b5C08df3D1dFaE17f02",
   abi: soakmontStakingContractAbi.abi,
 };

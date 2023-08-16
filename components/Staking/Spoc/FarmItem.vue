@@ -214,7 +214,7 @@
           >
             <p class="mb-0">
               Your pending rewards:
-              {{ state.pendingRewards.toFixed(0) }} ${{ farm.ticker }}
+              {{ state.pendingRewards.toFixed(0) }} ${{ farm.reward }}
             </p>
             <button
               v-if="state.pendingRewards > 0"
@@ -558,7 +558,7 @@ async function claimRewards() {
         hideLoader();
         $swal.fire({
           title: "Success",
-          text: `Claimed ${claimedRewards} ${farm.ticker} successfully`,
+          text: `Claimed reward successfully`,
           icon: "success",
           buttonsStyling: false,
           customClass: {
