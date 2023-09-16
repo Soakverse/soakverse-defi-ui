@@ -40,7 +40,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       themeMode: "dark",
       themeVariables: {
         // @ts-ignore
-        "--w3m-color-fg-1": "#000000",
         "--w3m-accent-color": "#00b8ff",
         "--w3m-logo-image-url": logo,
         "--w3m-background-color": "#071d28",

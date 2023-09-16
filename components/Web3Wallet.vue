@@ -8,7 +8,7 @@
 
 <style lang="scss">
 w3m-core-button {
-  background-color: white !important;
+  background-color: #071d28 !important;
   border-radius: var(--w3m-button-border-radius);
   [color="primary"] {
     color: black;
