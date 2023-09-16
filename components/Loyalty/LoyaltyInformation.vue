@@ -216,7 +216,7 @@ async function getEcosystemBalance() {
       })
     )[0];
 
-    const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.alchemyApiKey}`;
+    const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.public.alchemyApiKey}`;
     const url = `${baseURL}/getNFTs/?owner=${state.currentAccount}&contractAddresses[]=${soakverseOGsSmartContract.address}`;
 
     var requestOptions = {

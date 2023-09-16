@@ -55,7 +55,7 @@ onMounted(async () => {
 async function fetchAllData() {
   if (process.client) {
     showLoader();
-    const rafflesUrl = `${config.apiUrl}/raffle`;
+    const rafflesUrl = `${config.public.apiUrl}/raffle`;
     state.raffles = await $fetch(rafflesUrl);
     hideLoader();
   }

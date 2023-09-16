@@ -162,10 +162,10 @@ async function getEcosystemBalance() {
     state.ownedEggz = [];
     state.highestOwnedStache = null;
     state.stakedAmount = (
-      await $fetch(`${config.apiUrl}/nft/stats/eggz`)
+      await $fetch(`${config.public.apiUrl}/nft/stats/eggz`)
     ).staked;
 
-    const eggzUrl = `${config.apiUrl}/nft/eggz/address/${currentAccount.value}`;
+    const eggzUrl = `${config.public.apiUrl}/nft/eggz/address/${currentAccount.value}`;
 
     const eggzList = await $fetch(eggzUrl);
 
@@ -187,7 +187,7 @@ async function getEcosystemBalance() {
         : state.unstakedEggz.push(nft.tokenId);
     }
 
-    const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.alchemyApiKey}`;
+    const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.public.alchemyApiKey}`;
     const url = `${baseURL}/getNFTs/?owner=${currentAccount.value}&contractAddresses[]=${soakverseOGsSmartContract.address}`;
 
     const staches = await $fetch(url);

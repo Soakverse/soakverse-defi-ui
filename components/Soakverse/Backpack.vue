@@ -71,7 +71,7 @@ async function fetchAllData() {
   if (process.client) {
     showLoader();
     try {
-      const itemsUrl = `${config.apiUrl}/game-items/${state.currentAccount}/grouped`;
+      const itemsUrl = `${config.public.apiUrl}/game-items/${state.currentAccount}/grouped`;
       state.items = await $fetch(itemsUrl);
     } catch (e) {}
     hideLoader();

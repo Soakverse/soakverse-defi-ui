@@ -1,4 +1,8 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
+import vuetify from "vite-plugin-vuetify";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
+const production = process.env.NODE_ENV === "production";
+
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
@@ -65,7 +69,59 @@ export default defineNuxtConfig({
       ],
     },
   },
+  modules: [
+    async (options, nuxt) => {
+      nuxt.hooks.hook("vite:extendConfig", (config) =>
+        // @ts-ignore
+        config.plugins.push(vuetify())
+      );
+    },
+  ],
   typescript: {
     strict: true,
+  },
+  vite: {
+    plugins: [
+      // ↓ Needed for development mode
+      // @ts-ignore
+      !production &&
+        nodePolyfills({
+          include: [
+            // @ts-ignore
+            "node_modules/**/*.js",
+            // @ts-ignore
+            new RegExp("node_modules/.vite/.*js"),
+          ],
+        }),
+    ],
+    optimizeDeps: {
+      esbuildOptions: {
+        target: "es2020",
+      },
+    },
+    build: {
+      target: "es2020",
+      rollupOptions: {
+        plugins: [
+          // ↓ Needed for build
+          // @ts-ignore
+          nodePolyfills(),
+        ],
+      },
+      // ↓ Needed for build if using WalletConnect and other providers
+      commonjsOptions: {
+        transformMixedEsModules: true,
+      },
+    },
+    resolve: {
+      alias: {
+        process: "process/browser",
+        stream: "stream-browserify",
+        zlib: "browserify-zlib",
+        util: "util/",
+        http: "http-browserify",
+        https: "https-browserify",
+      },
+    },
   },
 });

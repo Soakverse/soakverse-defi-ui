@@ -112,8 +112,8 @@ async function fetchAllData() {
     showLoader();
     const raffleUrl =
       props.privateRaffle == "true"
-        ? `${config.apiUrl}/raffle/${props.raffleId}/private`
-        : `${config.apiUrl}/raffle/${props.raffleId}`;
+        ? `${config.public.apiUrl}/raffle/${props.raffleId}/private`
+        : `${config.public.apiUrl}/raffle/${props.raffleId}`;
     try {
       state.raffle = await $fetch(raffleUrl);
     } catch (e) {
@@ -121,7 +121,7 @@ async function fetchAllData() {
     }
 
     if (state.raffle) {
-      const prizesUrl = `${config.apiUrl}/prizes/${props.raffleId}`;
+      const prizesUrl = `${config.public.apiUrl}/prizes/${props.raffleId}`;
       try {
         state.prizes = await $fetch(prizesUrl);
       } catch (e) {
