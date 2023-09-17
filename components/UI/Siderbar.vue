@@ -21,7 +21,7 @@
         <nuxt-link
           to="/"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-dashboard"></i><span class="label"> Home</span>
         </nuxt-link>
       </li>
@@ -29,7 +29,7 @@
         <nuxt-link
           to="/play"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-gamepad"></i><span class="label">Play</span>
         </nuxt-link>
       </li>
@@ -37,7 +37,7 @@
         <nuxt-link
           to="/crypto/swap"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-shuffle"></i
           ><span class="label">Crypto Swap</span>
         </nuxt-link>
@@ -46,7 +46,7 @@
         <nuxt-link
           to="/skmt/staking"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-coins"></i
           ><span class="label">SKMT Staking</span>
         </nuxt-link>
@@ -55,7 +55,7 @@
         <nuxt-link
           to="/spoc/staking"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-coins"></i
           ><span class="label">SPOC Staking</span>
         </nuxt-link>
@@ -64,7 +64,7 @@
         <nuxt-link
           to="/soakverse/eggz/staking"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-egg"></i
           ><span class="label">Eggz Staking</span>
         </nuxt-link>
@@ -73,7 +73,7 @@
         <nuxt-link
           to="/soakverse/giveaways"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-trophy"></i
           ><span class="label">Giveaways</span>
         </nuxt-link>
@@ -82,7 +82,7 @@
         <nuxt-link
           to="/soakverse/backpack"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-bag-shopping"></i
           ><span class="label">Backpack</span>
         </nuxt-link>
@@ -91,7 +91,7 @@
         <nuxt-link
           to="/loyalty"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-award"></i><span class="label"> Loyalty</span>
         </nuxt-link>
       </li>
@@ -99,7 +99,7 @@
         <nuxt-link
           to="/soak-links"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-info-circle"></i
           ><span class="label"> Soak Links</span>
         </nuxt-link>
@@ -108,7 +108,7 @@
         <a
           href="javascript:void(0)"
           class="sidebar-link"
-          :class="{ 'text-center': !isSidebarOpen }"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
           @click="disconnectWallet"
           ><i class="fa-solid fa-unlink"></i
           ><span class="label"> Disconnect</span>
@@ -116,25 +116,25 @@
       </li>
       <!--
         <li>
-          <nuxt-link to="/account" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+          <nuxt-link to="/account" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }"
             ><i class="fa-solid fa-user"></i
             ><span v-if="isSidebarOpen"> Account</span>
           </nuxt-link>
         </li>
         <li>
-        <a href="#" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+        <a href="#" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-wallet"></i
           ><span v-if="isSidebarOpen"> Assets</span></a
         >
       </li>
       <li>
-        <a href="#" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+        <a href="#" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-file"></i
           ><span v-if="isSidebarOpen"> Active Listings</span></a
         >
       </li>
       <li>
-        <a href="#" class="sidebar-link" :class="{ 'text-center': !isSidebarOpen }"
+        <a href="#" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }"
           ><i class="fa-solid fa-piggy-bank"></i
           ><span v-if="isSidebarOpen"> Banking</span></a
         >
