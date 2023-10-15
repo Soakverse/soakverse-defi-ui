@@ -35,6 +35,14 @@
       </li>
       <li>
         <nuxt-link
+          to="/phaser/game"
+          class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
+          ><i class="fa-solid fa-gamepad"></i><span class="label">Phaser</span>
+        </nuxt-link>
+      </li>
+      <li>
+        <nuxt-link
           to="/crypto/swap"
           class="sidebar-link"
           :class="{ 'text-center w-auto': !isSidebarOpen }"

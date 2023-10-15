@@ -70,6 +70,8 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
     async (options, nuxt) => {
       nuxt.hooks.hook("vite:extendConfig", (config) =>
         // @ts-ignore
@@ -77,6 +79,7 @@ export default defineNuxtConfig({
       );
     },
   ],
+  plugins: [{ src: "node_modules/nuxtjs-phaser", mode: "client" }],
   typescript: {
     strict: true,
   },
