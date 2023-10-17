@@ -1,9 +1,10 @@
 import { Scene } from "phaser";
 import { usePlayerStore } from "@/stores/game/player";
+import SW_BaseScene from "./SW_BaseScene";
 
 const playerStore = usePlayerStore();
 
-export default class PlayScene extends Scene {
+export default class PlayScene extends SW_BaseScene {
   public name: string;
   public nameText: any = null;
   constructor() {

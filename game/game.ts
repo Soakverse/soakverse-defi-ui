@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import BootScene from "@/game/scenes/BootScene";
 import PlayScene from "@/game/scenes/PlayScene";
 
@@ -21,6 +22,11 @@ function launch(containerId: string) {
       },
     },
     scene: [BootScene, PlayScene],
+    plugins: {
+      scene: [
+          {key: 'rexUI',  plugin: UIPlugin, mapping: 'rexUI'}
+      ]
+  }
   });
 }
 
