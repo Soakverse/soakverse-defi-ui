@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import SW_BootScene from "~/game/scenes/SW_BootScene";
-import SW_PlayScene from "~/game/scenes/SW_PlayScene";
 
 function launch(containerId: string) {
   return new Phaser.Game({
@@ -21,7 +20,7 @@ function launch(containerId: string) {
         debug: false,
       },
     },
-    scene: [SW_BootScene, SW_PlayScene],
+    scene: [SW_BootScene],
     plugins: {
       scene: [
           {key: 'rexUI',  plugin: UIPlugin, mapping: 'rexUI'}

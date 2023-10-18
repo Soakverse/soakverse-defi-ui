@@ -1,6 +1,8 @@
 import { Scene } from "phaser";
+import { CST } from "~/game/CST";
+
 import { usePlayerStore } from "@/stores/game/player";
-import SW_BaseScene from "./SW_BaseScene";
+import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 
 const playerStore = usePlayerStore();
 
@@ -8,11 +10,11 @@ export default class SW_PlayScene extends SW_BaseScene {
   public name: string;
   public nameText: any = null;
   constructor() {
-    super({ key: "PlayScene" });
+    super({ key: CST.SCENES.GAME });
     this.name = playerStore.name;
   }
 
-  create() {
+  public create(): void {
     this.add.image(400, 300, "sky");
     this.nameText = this.add.text(0, 0, playerStore.name);
     const bomb = this.physics.add.image(400, 200, "bomb");
@@ -33,12 +35,12 @@ export default class SW_PlayScene extends SW_BaseScene {
       .on("pointerdown", () => this.stateUpdate());
   }
 
-  update() {
+  public update(): void {
     this.name = playerStore.name;
     this.nameText.setText(playerStore.name);
   }
 
-  stateUpdate() {
+  protected stateUpdate(): void {
     this.name = "Helllloooo";
     this.nameText.setText(this.name);
     playerStore.setName(this.name);
