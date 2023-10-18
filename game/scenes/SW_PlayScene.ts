@@ -4,7 +4,7 @@ import SW_BaseScene from "./SW_BaseScene";
 
 const playerStore = usePlayerStore();
 
-export default class PlayScene extends SW_BaseScene {
+export default class SW_PlayScene extends SW_BaseScene {
   public name: string;
   public nameText: any = null;
   constructor() {

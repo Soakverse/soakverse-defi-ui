@@ -5,7 +5,7 @@ import thudMp3 from '@/game/assets/thud.mp3'
 import thudOgg from '@/game/assets/thud.ogg'
 import SW_BaseScene from './SW_BaseScene'
 
-export default class BootScene extends SW_BaseScene {
+export default class SW_BootScene extends SW_BaseScene {
   constructor () {
     super({ key: 'BootScene' })
   }
