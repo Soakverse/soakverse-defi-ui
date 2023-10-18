@@ -23,6 +23,7 @@ export default class SW_GameScene extends SW_BaseScene {
 
   public create(): void {
     this.createUI();
+    this.createShortcuts();
 
     this.add.image(400, 300, "sky");
     this.nameText = this.add.text(0, 0, playerStore.name);
@@ -44,9 +45,20 @@ export default class SW_GameScene extends SW_BaseScene {
       .on("pointerdown", () => this.stateUpdate());
   }
 
-  private createUI(): void
-  {
+  private createUI(): void {
     this.UIscene = this.scene.get<SW_GameUIScene>(CST.SCENES.GAME_UI);
+  }
+
+  private createShortcuts(): void {
+    const keys = this.input.keyboard?.addKeys({
+      inventory: Phaser.Input.Keyboard.KeyCodes.O
+    }, false);
+
+    if (keys) {
+      keys.inventory.on("down", () => {
+        this.UIscene.toggleInventory();
+      }, this);
+    }
   }
 
   // Update
