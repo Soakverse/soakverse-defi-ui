@@ -1,20 +1,29 @@
 import { Scene } from "phaser";
 import { CST } from "~/game/CST";
+import SW_BaseScene from "~/game/scenes/SW_BaseScene";
+import SW_GameUIScene from "~/game/scenes/SW_GameUIScene";
 
 import { usePlayerStore } from "@/stores/game/player";
-import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 
 const playerStore = usePlayerStore();
 
-export default class SW_PlayScene extends SW_BaseScene {
+export default class SW_GameScene extends SW_BaseScene {
   public name: string;
   public nameText: any = null;
+
+  private UIscene: SW_GameUIScene;
+
   constructor() {
     super({ key: CST.SCENES.GAME });
     this.name = playerStore.name;
   }
 
+  // Create
+  ////////////////////////////////////////////////////////////////////////
+
   public create(): void {
+    this.createUI();
+
     this.add.image(400, 300, "sky");
     this.nameText = this.add.text(0, 0, playerStore.name);
     const bomb = this.physics.add.image(400, 200, "bomb");
@@ -34,6 +43,14 @@ export default class SW_PlayScene extends SW_BaseScene {
       .setInteractive()
       .on("pointerdown", () => this.stateUpdate());
   }
+
+  private createUI(): void
+  {
+    this.UIscene = this.scene.get<SW_GameUIScene>(CST.SCENES.GAME_UI);
+  }
+
+  // Update
+  ////////////////////////////////////////////////////////////////////////
 
   public update(): void {
     this.name = playerStore.name;
