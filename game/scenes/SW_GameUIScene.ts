@@ -1,8 +1,9 @@
 import { CST } from "~/game/CST";
 import SW_BaseScene from "~/game/scenes/SW_BaseScene";
+import { SW_InventoryWidget } from "~/game/inventory/SW_InventoryWidget";
 
 export default class SW_GameUIScene extends SW_BaseScene {
-    private inventory: Phaser.GameObjects.Image;
+    declare private inventory: SW_InventoryWidget;
 
     constructor() {
       super({ key: CST.SCENES.GAME_UI });
@@ -13,8 +14,9 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public create(): void
     {
-        this.add.text(200, 200, "Text from UI");
-        this.inventory = this.add.image(300, 300, "");
+        this.add.text(100, 200, "Press O to toggle inventory");
+        this.inventory = new SW_InventoryWidget(this, this.scale.displaySize.width * 0.5, 240);
+        this.inventory.setVisible(false);
     }
 
     // Update

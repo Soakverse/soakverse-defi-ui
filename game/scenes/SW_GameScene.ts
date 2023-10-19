@@ -11,7 +11,7 @@ export default class SW_GameScene extends SW_BaseScene {
   public name: string;
   public nameText: any = null;
 
-  private UIscene: SW_GameUIScene;
+  declare private UIscene: SW_GameUIScene;
 
   constructor() {
     super({ key: CST.SCENES.GAME });
