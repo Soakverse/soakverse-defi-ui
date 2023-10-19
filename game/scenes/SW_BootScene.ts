@@ -14,7 +14,8 @@ import inventorySliderLine from '@/game/assets/inventory/inventorySliderLine.png
 import inventorySlot from '@/game/assets/inventory/inventorySlot.png';
 import inventoryTableBackground from '@/game/assets/inventory/inventoryTableBackground.png';
 import inventoryWidgetBackground from '@/game/assets/inventory/inventoryWidgetBackground.png';
-import inventoryItems from '@/game/assets/inventory/items/inventoryItems.png';
+import inventoryItemsImage from '@/game/assets/inventory/items/inventoryItems.png';
+import inventoryItemsJson from '@/game/assets/inventory/items/inventoryItems.json';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
@@ -35,7 +36,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image("inventoryTableBackground", inventoryTableBackground);
     this.load.image("inventoryWidgetBackground", inventoryWidgetBackground);
 
-    this.load.spritesheet("inventoryItems", inventoryItems, { frameWidth: 32, frameHeight: 32 });
+    this.load.atlas("inventoryItems", inventoryItemsImage, inventoryItemsJson);
   }
 
   // Create

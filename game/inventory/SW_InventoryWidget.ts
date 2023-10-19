@@ -15,7 +15,7 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
 
         const backgroundWidget = this.scene.add.image(0, 0, "inventoryWidgetBackground");
         this.add(backgroundWidget);
-        
+
         this.createInventoryTable();
     };
 
@@ -65,8 +65,7 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
                 if (cellContainer == null)
                 {
                     const background = this.scene.add.image(0,0, "inventorySlot").setDisplaySize(cellWidth - 3, cellHeight - 3);
-                    const icon = this.scene.add.image(0, 0, inventoryItem.texture, Phaser.Math.Between(0, 15));
-                    icon.setVisible((inventoryItem.texture != "") && (inventoryItem.texture != undefined));
+                    const icon = this.scene.add.image(0, 0, "inventoryItems", inventoryItem.image);
 
                     if (icon) {
                         icon.setDisplaySize(background.displayWidth, background.displayHeight);
@@ -83,7 +82,7 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
                 cellContainer.setDepth(this.depth);
                 return cellContainer;
             },
-            items: [{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" },{ texture: "inventoryItems" }]
+            items: [{ image: "axeRed" },{ image: "axeRed" },{ image: "swordBlue" },{ image: "shieldBlue" },]
         });
     }
 }
