@@ -1,6 +1,7 @@
 import { CST } from "~/game/CST";
 import { GridTable } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 import Scrollable from "phaser3-rex-plugins/templates/ui/utils/scrollable/Scrollable";
+import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 
 declare type ConfigSlider = {
     background?: Phaser.GameObjects.GameObject,
@@ -36,6 +37,8 @@ declare type ConfigMouseWheel = {
 
 export default class SW_GridTable extends GridTable
 {
+    declare public items: SW_InventoryObject[]; 
+
     constructor(scene: Phaser.Scene, config: GridTable.IConfig)
     {
         if (config.table == undefined)
@@ -65,5 +68,9 @@ export default class SW_GridTable extends GridTable
         this.scene.add.existing(this);
 
         this.layout();
+    }
+
+    public setItems(items?: SW_InventoryObject[] | undefined): this {
+        return super.setItems(items);
     }
 }

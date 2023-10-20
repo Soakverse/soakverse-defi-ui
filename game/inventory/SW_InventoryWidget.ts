@@ -2,16 +2,23 @@ import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import SW_GridTable from "~/game/widgets/SW_GridTable";
 import Cell from "phaser3-rex-plugins/plugins/gameobjects/container/gridtable/table/Cell.js";
 import { Label } from "phaser3-rex-plugins/templates/ui/ui-components.js";
+import { SW_Inventory, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 
 export class SW_InventoryWidget extends Phaser.GameObjects.Container
 {
     declare public scene: SW_BaseScene;
 
+    /** Store the inventory of the player */
+    declare public inventory: SW_Inventory;
+
+    /** The table that show the inventory of the player */
     declare protected inventoryTable: SW_GridTable;
 
     constructor(scene: SW_BaseScene, x: number, y: number) {
         super(scene, x, y);
         scene.add.existing(this);
+
+        this.inventory = new SW_Inventory();
 
         const backgroundWidget = this.scene.add.image(0, 0, "inventoryWidgetBackground");
         this.add(backgroundWidget);
@@ -82,7 +89,18 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
                 cellContainer.setDepth(this.depth);
                 return cellContainer;
             },
-            items: [{ image: "axeRed" },{ image: "axeRed" },{ image: "swordBlue" },{ image: "shieldBlue" },]
+            items: []
         });
+    }
+
+    public updateInventory(newInventoryObjects: SW_InventoryObject[]): void
+    {
+        this.inventory.update(newInventoryObjects);
+        this.showAllObjects();
+    }
+
+    private showAllObjects(): void
+    {
+        this.inventoryTable.setItems(this.inventory.getObjects());
     }
 }

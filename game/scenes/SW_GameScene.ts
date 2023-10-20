@@ -4,6 +4,7 @@ import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import SW_GameUIScene from "~/game/scenes/SW_GameUIScene";
 
 import { usePlayerStore } from "@/stores/game/player";
+import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 
 const playerStore = usePlayerStore();
 
@@ -11,6 +12,7 @@ export default class SW_GameScene extends SW_BaseScene {
   public name: string;
   public nameText: any = null;
 
+  /** Represents the UI in game */
   declare private UIscene: SW_GameUIScene;
 
   constructor() {
@@ -24,6 +26,15 @@ export default class SW_GameScene extends SW_BaseScene {
   public create(): void {
     this.createUI();
     this.createShortcuts();
+
+    this.updateInventory([
+      {name: "Red Axe", description: "This is a sword", tooltip: "A nice sword", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
+      {name: "Blue Sword", description: "This is a sword", tooltip: "A nice sword", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
+      {name: "Blue Shield", description: "This is a sword", tooltip: "A nice sword", image: "shieldBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      {name: "Blue Ring", description: "This is a sword", tooltip: "A nice sword", image: "ringBlue", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
+      {name: "Red Shield", description: "This is a sword", tooltip: "A nice sword", image: "shieldRed", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
+      {name: "Red Sword", description: "This is a sword", tooltip: "A nice sword", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+    ]);
 
     this.add.image(400, 300, "sky");
     this.nameText = this.add.text(0, 0, playerStore.name);
@@ -67,6 +78,10 @@ export default class SW_GameScene extends SW_BaseScene {
   public update(): void {
     this.name = playerStore.name;
     this.nameText.setText(playerStore.name);
+  }
+
+  public updateInventory(newInventoryObjects: SW_InventoryObject[]) {
+    this.UIscene.updateInventory(newInventoryObjects);
   }
 
   protected stateUpdate(): void {
