@@ -7,7 +7,6 @@ export const SW_ENUM_IVENTORY_OBJECT = {
 export declare type SW_InventoryObject = {
     name: string,
     description: string,
-    tooltip: string,
     image: string,
     type: number,
 }

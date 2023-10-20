@@ -12,7 +12,11 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
     declare public inventory: SW_Inventory;
 
     /** The table that show the inventory of the player */
-    declare protected inventoryTable: SW_GridTable;
+    declare private inventoryTable: SW_GridTable;
+
+    private selectedIndex: number = -1;
+    declare private selectedNameObjectText: Phaser.GameObjects.Text;
+    declare private selectedDescriptionObjectText: Phaser.GameObjects.Text;
 
     constructor(scene: SW_BaseScene, x: number, y: number) {
         super(scene, x, y);
@@ -24,6 +28,12 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
         this.add(backgroundWidget);
 
         this.createInventoryTable();
+
+        this.selectedNameObjectText = this.scene.add.text(0, 140, "", { fontSize: "32px", color: "black "}).setOrigin(0.5);
+        this.add(this.selectedNameObjectText);
+
+        this.selectedDescriptionObjectText = this.scene.add.text(0, 160, "", { fontSize: "20px", color: "black "}).setOrigin(0.5);
+        this.add(this.selectedDescriptionObjectText);
     };
 
     public setVisible(value: boolean): this {
@@ -91,10 +101,33 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
             },
             items: []
         });
+
+        this.inventoryTable.on("cell.over", (cellContainer: Label, cellIndex: number) => {
+            const inventoryObjectData = this.inventoryTable.items[cellIndex];
+            if (inventoryObjectData) {
+                this.selectedIndex = cellIndex;
+
+                this.selectedNameObjectText.setText(inventoryObjectData.name);
+                this.selectedDescriptionObjectText.setText(inventoryObjectData.description);
+            }
+            else {
+                this.selectedIndex = -1;
+            }
+        }, this);
+
+        this.inventoryTable.on("cell.out", (cellContainer: Label, cellIndex: number) => {
+            if (cellIndex == this.selectedIndex) {
+                this.selectedIndex = -1;
+                this.selectedNameObjectText.setText("");
+                this.selectedDescriptionObjectText.setText("");
+            }
+        });
     }
 
     public updateInventory(newInventoryObjects: SW_InventoryObject[]): void
     {
+        this.selectedIndex = -1;
+
         this.inventory.update(newInventoryObjects);
         this.showAllObjects();
     }

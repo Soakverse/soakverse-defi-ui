@@ -28,12 +28,12 @@ export default class SW_GameScene extends SW_BaseScene {
     this.createShortcuts();
 
     this.updateInventory([
-      {name: "Red Axe", description: "This is a sword", tooltip: "A nice sword", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
-      {name: "Blue Sword", description: "This is a sword", tooltip: "A nice sword", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
-      {name: "Blue Shield", description: "This is a sword", tooltip: "A nice sword", image: "shieldBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
-      {name: "Blue Ring", description: "This is a sword", tooltip: "A nice sword", image: "ringBlue", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
-      {name: "Red Shield", description: "This is a sword", tooltip: "A nice sword", image: "shieldRed", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
-      {name: "Red Sword", description: "This is a sword", tooltip: "A nice sword", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      {name: "Red Axe", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
+      {name: "Blue Sword",  description: "A nice sword", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
+      {name: "Blue Shield", description: "A strong shield", image: "shieldBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      {name: "Blue Ring", description: "Fits your hand well!", image: "ringBlue", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
+      {name: "Red Shield", description: "This shield is strong like a rock", image: "shieldRed", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
+      {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
     ]);
 
     this.add.image(400, 300, "sky");
