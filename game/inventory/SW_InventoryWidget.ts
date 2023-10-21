@@ -122,6 +122,13 @@ export class SW_InventoryWidget extends Phaser.GameObjects.Container
                 this.selectedDescriptionObjectText.setText("");
             }
         });
+
+        this.inventoryTable.on("cell.click", (cellContainer: Label, cellIndex: number) => {
+            const inventoryObjectData = this.inventoryTable.items[cellIndex];
+            if (inventoryObjectData) {
+                this.emit("objectClicked", inventoryObjectData);
+            }
+        });
     }
 
     public updateInventory(newInventoryObjects: SW_InventoryObject[]): void

@@ -49,15 +49,11 @@ export default class SW_GameScene extends SW_BaseScene {
     this.physics.world.on("worldbounds", () => {
       this.sound.play("thud", { volume: 0.75 });
     });
-
-    const clickButton = this.add
-      .text(100, 100, "Click me!", { fill: "#0f0" })
-      .setInteractive()
-      .on("pointerdown", () => this.stateUpdate());
   }
 
   private createUI(): void {
     this.UIscene = this.scene.get<SW_GameUIScene>(CST.SCENES.GAME_UI);
+    this.UIscene.events.on("inventoryObjectClicked", this.inventoryObjectClicked);
   }
 
   private createShortcuts(): void {
@@ -84,9 +80,7 @@ export default class SW_GameScene extends SW_BaseScene {
     this.UIscene.updateInventory(newInventoryObjects);
   }
 
-  protected stateUpdate(): void {
-    this.name = "Helllloooo";
-    this.nameText.setText(this.name);
-    playerStore.setName(this.name);
+  protected inventoryObjectClicked(inventoryObjectData: SW_InventoryObject): void {
+    playerStore.setName(`You clicked on ${inventoryObjectData.name}`);
   }
 }
