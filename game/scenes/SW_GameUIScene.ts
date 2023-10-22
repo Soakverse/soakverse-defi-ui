@@ -1,4 +1,4 @@
-import { CST } from "~/game/CST";
+import { SW_CST } from "~/game/SW_CST";
 import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import { SW_InventoryWidget } from "~/game/inventory/SW_InventoryWidget";
 import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";
@@ -7,7 +7,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
     declare private inventoryWidget: SW_InventoryWidget;
 
     constructor() {
-      super({ key: CST.SCENES.GAME_UI });
+      super({ key: SW_CST.SCENES.GAME_UI });
     }
 
     // Create

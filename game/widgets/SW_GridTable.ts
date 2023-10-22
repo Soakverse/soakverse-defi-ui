@@ -1,4 +1,4 @@
-import { CST } from "~/game/CST";
+import { SW_CST } from "~/game/SW_CST";
 import { GridTable } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 import Scrollable from "phaser3-rex-plugins/templates/ui/utils/scrollable/Scrollable";
 import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";

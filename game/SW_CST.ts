@@ -1,4 +1,4 @@
-export const CST = {
+export const SW_CST = {
     INDEX_INVALID: -1,
     SCENES: {
         BOOT: "BOOT",
