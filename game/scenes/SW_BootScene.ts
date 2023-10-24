@@ -6,6 +6,9 @@ import SW_GameUIScene from '~/game/scenes/SW_GameUIScene';
 import thudMp3 from '@/game/assets/thud.mp3';
 import thudOgg from '@/game/assets/thud.ogg';
 
+import assetCityTiled from '@/game/assets/maps/assetCityTiled.png';
+import cityMap from '@/game/assets/maps/cityMap.json';
+
 import inventorySlider from '@/game/assets/inventory/inventorySlider.png';
 import inventorySliderLine from '@/game/assets/inventory/inventorySliderLine.png';
 import inventorySlot from '@/game/assets/inventory/inventorySlot.png';
@@ -18,14 +21,17 @@ import player from '@/game/assets/characters/player.png';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
-    super({ key: 'BootScene' })
+    super({ key: SW_CST.SCENES.BOOT });
   }
 
   // Preload
   ////////////////////////////////////////////////////////////////////////
 
   public preload(): void {
-    this.load.audio('thud', [thudMp3, thudOgg]);
+    this.load.audio("thud", [thudMp3, thudOgg]);
+
+    this.load.image("assetCityTiled", assetCityTiled);
+    this.load.tilemapTiledJSON("cityMap", cityMap);
 
     this.load.image("inventorySlider", inventorySlider);
     this.load.image("inventorySliderLine", inventorySliderLine);

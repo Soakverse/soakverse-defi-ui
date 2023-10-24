@@ -37,15 +37,6 @@ export class SW_Character extends Phaser.Physics.Arcade.Sprite {
         super.destroy(fromScene);
     }
 
-    // Init
-    ////////////////////////////////////////////////////////////////////////
-
-    public init(): void {
-        this.characterMovementComponent.init(160, 250);
-        this.setDirection(SW_DIRECTIONS.Down);
-        this.setName("Character");
-    }
-
     // Update
     ////////////////////////////////////////////////////////////////////////
 

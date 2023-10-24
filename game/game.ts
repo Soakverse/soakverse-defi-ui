@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import SW_BootScene from "~/game/scenes/SW_BootScene";
+import { SW_CST } from "./SW_CST";
 
 function launch(containerId: string) {
   return new Phaser.Game({
@@ -17,7 +18,7 @@ function launch(containerId: string) {
       default: "arcade",
       arcade: {
         gravity: { y: 300 },
-        debug: false,
+        debug: SW_CST.DEBUG.PHYSIC,
       },
     },
     scene: [SW_BootScene],
