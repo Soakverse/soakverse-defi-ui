@@ -15,7 +15,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public create(): void
     {
-        this.add.text(100, 200, "Press O to toggle inventory");
         this.inventoryWidget = new SW_InventoryWidget(this, this.scale.displaySize.width * 0.5, 240);
         this.inventoryWidget.setVisible(false);
         this.inventoryWidget.on("objectClicked", (inventoryObjectData: SW_InventoryObject) => {
