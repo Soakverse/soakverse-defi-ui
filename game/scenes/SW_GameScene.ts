@@ -5,9 +5,14 @@ import SW_GameUIScene from "~/game/scenes/SW_GameUIScene";
 import { usePlayerStore } from "@/stores/game/player";
 import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_Player } from "~/game/characters/players/SW_Player";
-import { SW_CharacterSpawner } from "../characters/SW_CharacterSpawner";
+import { SW_CharacterSpawner } from "~/game/characters/SW_CharacterSpawner";
+import SW_Entrance from "../gameObjects/SW_Entrance";
 
 const playerStore = usePlayerStore();
+
+declare type GameSceneData = {
+  mapName: string;
+}
 
 export default class SW_GameScene extends SW_BaseScene {
   public name: string;
@@ -23,10 +28,18 @@ export default class SW_GameScene extends SW_BaseScene {
   declare private layerForeground2: Phaser.Tilemaps.TilemapLayer;
 
   declare protected player: SW_Player;
+  declare protected entrances: Phaser.Physics.Arcade.StaticGroup;
 
   constructor() {
     super({ key: SW_CST.SCENES.GAME });
     this.name = playerStore.name;
+  }
+
+  // Init
+  ////////////////////////////////////////////////////////////////////////
+
+  public init(data: GameSceneData): void {
+    console.log(data);
   }
 
   // Create
@@ -58,6 +71,7 @@ export default class SW_GameScene extends SW_BaseScene {
     const layerGround = this.currentMap.createLayer("Layer1", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
     this.layerBackground = this.currentMap.createLayer("Layer2", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
 
+    this.createEntrances();
     this.createPlayer();
 
     this.layerForeground1 = this.currentMap.createLayer("Layer3", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
@@ -65,6 +79,16 @@ export default class SW_GameScene extends SW_BaseScene {
 
     const bounds = layerGround.getBounds();
     this.physics.world.setBounds(0, 0, bounds.width, bounds.height);
+  }
+
+  private createEntrances(): void {
+    this.entrances = this.physics.add.staticGroup();
+
+    const entranceSpawners = this.currentMap.createFromObjects("Characters", {name: "Entrance", classType: SW_Entrance}) as SW_Entrance[];
+    for (const entrance of entranceSpawners) {
+      this.entrances.add(entrance);
+      entrance.setVisible(entrance.texture.key != "__MISSING");
+    }
   }
 
   private createPlayer(): void {
@@ -89,10 +113,12 @@ export default class SW_GameScene extends SW_BaseScene {
 
       this.physics.add.collider(this.player, this.layerBackground);
       this.physics.add.collider(this.player, this.layerForeground1);
+
+      this.physics.add.overlap(this.player, this.entrances, this.onPlayerEnter, undefined, this);
   }
 
   private createUI(): void {
-    this.UIscene = this.scene.get<SW_GameUIScene>(SW_CST.SCENES.GAME_UI);
+    this.UIscene = this.scene.get(SW_CST.SCENES.GAME_UI) as SW_GameUIScene;
     this.UIscene.events.on("inventoryObjectClicked", this.inventoryObjectClicked);
   }
 
@@ -124,5 +150,9 @@ export default class SW_GameScene extends SW_BaseScene {
 
   protected inventoryObjectClicked(inventoryObjectData: SW_InventoryObject): void {
     playerStore.setName(`You clicked on ${inventoryObjectData.name}`);
+  }
+
+  protected onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
+    this.scene.restart({ buildingName: entrance.mapName });
   }
 }

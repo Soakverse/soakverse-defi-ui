@@ -35,12 +35,69 @@
                  "height":0,
                  "id":2,
                  "name":"Player",
+                 "properties":[
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
                  "x":446,
                  "y":485
+                }, 
+                {
+                 "height":30,
+                 "id":18,
+                 "name":"Entrance",
+                 "properties":[
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"Home1"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40,
+                 "x":156,
+                 "y":422
+                }, 
+                {
+                 "height":30,
+                 "id":21,
+                 "name":"Entrance",
+                 "properties":[
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"HomePlayer"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40,
+                 "x":444,
+                 "y":294
+                }, 
+                {
+                 "height":30,
+                 "id":22,
+                 "name":"Entrance",
+                 "properties":[
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"Home2"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40,
+                 "x":604,
+                 "y":550
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -73,7 +130,7 @@
          "y":0
         }],
  "nextlayerid":18,
- "nextobjectid":15,
+ "nextobjectid":23,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",
