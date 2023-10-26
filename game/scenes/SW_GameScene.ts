@@ -55,7 +55,6 @@ export default class SW_GameScene extends SW_BaseScene {
     this.createPhysics();
     this.createCamera();
     this.createUI();
-    this.createShortcuts();
 
     this.updateInventory([
       {name: "Red Axe", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
@@ -102,7 +101,6 @@ export default class SW_GameScene extends SW_BaseScene {
 
       this.player = new SW_Player(this, playerSpawner.x, playerSpawner.y);
       this.player.init(playerSpawner.getSpawnData());
-
       playerSpawner.destroy();
   }
 
@@ -125,18 +123,7 @@ export default class SW_GameScene extends SW_BaseScene {
   private createUI(): void {
     this.UIscene = this.scene.get(SW_CST.SCENES.GAME_UI) as SW_GameUIScene;
     this.UIscene.events.on("inventoryObjectClicked", this.inventoryObjectClicked);
-  }
-
-  private createShortcuts(): void {
-    const keys = this.input.keyboard?.addKeys({
-      inventory: Phaser.Input.Keyboard.KeyCodes.O
-    }, false) as { inventory: any };
-
-    if (keys) {
-      keys.inventory.on("down", () => {
-        this.UIscene.toggleInventory();
-      }, this);
-    }
+    this.UIscene.events.on("menuVisibilityChange", this.onMenuVisibilityChange, this);
   }
 
   // Update
@@ -159,5 +146,14 @@ export default class SW_GameScene extends SW_BaseScene {
 
   protected onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
     this.scene.restart({ mapName: entrance.mapName, mapAsset: entrance.mapAsset });
+  }
+
+  protected onMenuVisibilityChange(isMenuVisible: boolean): void {
+    if (isMenuVisible) {
+      this.scene.pause(SW_CST.SCENES.GAME);
+    }
+    else {
+      this.scene.resume(SW_CST.SCENES.GAME);
+    }
   }
 }
