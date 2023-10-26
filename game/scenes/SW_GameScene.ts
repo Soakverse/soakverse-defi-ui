@@ -12,6 +12,7 @@ const playerStore = usePlayerStore();
 
 declare type GameSceneData = {
   mapName: string;
+  mapAsset: string;
 }
 
 export default class SW_GameScene extends SW_BaseScene {
@@ -27,8 +28,11 @@ export default class SW_GameScene extends SW_BaseScene {
   declare private layerForeground1: Phaser.Tilemaps.TilemapLayer;
   declare private layerForeground2: Phaser.Tilemaps.TilemapLayer;
 
-  declare protected player: SW_Player;
-  declare protected entrances: Phaser.Physics.Arcade.StaticGroup;
+  declare private player: SW_Player;
+  declare private entrances: Phaser.Physics.Arcade.StaticGroup;
+
+  declare private mapAssetKey: string;
+  declare private mapName: string;
 
   constructor() {
     super({ key: SW_CST.SCENES.GAME });
@@ -39,7 +43,8 @@ export default class SW_GameScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public init(data: GameSceneData): void {
-    console.log(data);
+    this.mapAssetKey = data.mapAsset;
+    this.mapName = data.mapName;
   }
 
   // Create
@@ -65,9 +70,9 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   private createMap(): void {
-    this.currentMap = this.add.tilemap("cityMap");
+    this.currentMap = this.add.tilemap(this.mapName);
 
-    const tileset = this.currentMap.addTilesetImage("assetCityTiled", "assetCityTiled") as Phaser.Tilemaps.Tileset;
+    const tileset = this.currentMap.addTilesetImage(this.mapAssetKey, this.mapAssetKey) as Phaser.Tilemaps.Tileset;
     const layerGround = this.currentMap.createLayer("Layer1", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
     this.layerBackground = this.currentMap.createLayer("Layer2", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
 
@@ -153,6 +158,6 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   protected onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
-    this.scene.restart({ buildingName: entrance.mapName });
+    this.scene.restart({ mapName: entrance.mapName, mapAsset: entrance.mapAsset });
   }
 }

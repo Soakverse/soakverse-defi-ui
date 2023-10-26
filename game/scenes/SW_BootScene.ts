@@ -6,8 +6,13 @@ import SW_GameUIScene from '~/game/scenes/SW_GameUIScene';
 import thudMp3 from '@/game/assets/thud.mp3';
 import thudOgg from '@/game/assets/thud.ogg';
 
-import assetCityTiled from '@/game/assets/maps/assetCityTiled.png';
-import cityMap from '@/game/assets/maps/cityMap.json';
+import outsideAssetTiled from '@/game/assets/maps/outsideAssetTiled.png';
+import interiorAssetTiled from '@/game/assets/maps/interiorAssetTiled.png';
+
+import villageMap from '@/game/assets/maps/villageMap.json';
+import homePlayerMap from '@/game/assets/maps/homePlayerMap.json';
+import home1 from '@/game/assets/maps/home1.json';
+import home2 from '@/game/assets/maps/home2.json';
 
 import inventorySlider from '@/game/assets/inventory/inventorySlider.png';
 import inventorySliderLine from '@/game/assets/inventory/inventorySliderLine.png';
@@ -30,8 +35,13 @@ export default class SW_BootScene extends SW_BaseScene {
   public preload(): void {
     this.load.audio("thud", [thudMp3, thudOgg]);
 
-    this.load.image("assetCityTiled", assetCityTiled);
-    this.load.tilemapTiledJSON("cityMap", cityMap);
+    this.load.image("interiorAssetTiled", interiorAssetTiled);
+    this.load.image("outsideAssetTiled", outsideAssetTiled);
+
+    this.load.tilemapTiledJSON("villageMap", villageMap);
+    this.load.tilemapTiledJSON("homePlayerMap", homePlayerMap);
+    this.load.tilemapTiledJSON("home1", home1);
+    this.load.tilemapTiledJSON("home2", home2);
 
     this.load.image("inventorySlider", inventorySlider);
     this.load.image("inventorySliderLine", inventorySliderLine);
@@ -50,7 +60,7 @@ export default class SW_BootScene extends SW_BaseScene {
   public create(): void {
     const sceneUI = this.scene.add(SW_CST.SCENES.GAME_UI, SW_GameUIScene, true, undefined) as SW_GameUIScene;
 
-    this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, { buildingName: "cityMap" });
+    this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, { mapName: "villageMap", mapAsset: "outsideAssetTiled" });
     sceneUI.scene.bringToTop();
 
     this.scene.remove(SW_CST.SCENES.BOOT);
