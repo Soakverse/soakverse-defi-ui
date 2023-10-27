@@ -47,6 +47,11 @@ export default class SW_GameUIScene extends SW_BaseScene {
     // Inventory
     ////////////////////////////////////////////////////////////////////////
 
+    public openInventory(): void {
+        this.inventoryWidget.setVisible(true);
+        this.events.emit("menuVisibilityChange", true);
+    }
+
     public toggleInventory(): void
     {
         this.inventoryWidget.setVisible(!this.inventoryWidget.visible);

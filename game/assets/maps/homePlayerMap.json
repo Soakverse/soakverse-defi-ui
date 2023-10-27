@@ -28,6 +28,39 @@
         }, 
         {
          "draworder":"topdown",
+         "id":18,
+         "name":"Objects",
+         "objects":[
+                {
+                 "height":44,
+                 "id":25,
+                 "name":"Incubator",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":20,
+                 "x":149,
+                 "y":36
+                }, 
+                {
+                 "height":44,
+                 "id":26,
+                 "name":"PlayerComputer",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":27,
+                 "x":83,
+                 "y":35
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":13,
          "name":"Characters",
          "objects":[
@@ -100,8 +133,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":18,
- "nextobjectid":25,
+ "nextlayerid":19,
+ "nextobjectid":27,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

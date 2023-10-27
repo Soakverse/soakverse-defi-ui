@@ -6,7 +6,12 @@ import { usePlayerStore } from "@/stores/game/player";
 import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 import { SW_CharacterSpawner } from "~/game/characters/SW_CharacterSpawner";
-import SW_Entrance from "../gameObjects/SW_Entrance";
+import { SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
+import { SW_IInteractable } from "~/game/Interactable/Interactable";
+
+import SW_Entrance from "~/game/gameObjects/SW_Entrance";
+import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
+import SW_Incubator from "~/game/gameObjects/SW_Incubator";
 
 const playerStore = usePlayerStore();
 
@@ -29,7 +34,12 @@ export default class SW_GameScene extends SW_BaseScene {
   declare private layerForeground2: Phaser.Tilemaps.TilemapLayer;
 
   declare private player: SW_Player;
+
+  /** All entrances to join a new map (ex: a door from a building, an path etc...) */
   declare private entrances: Phaser.Physics.Arcade.StaticGroup;
+
+  /** Any object the player can interact with */
+  declare private interactableObjects: Phaser.Physics.Arcade.StaticGroup;
 
   declare private mapAssetKey: string;
   declare private mapName: string;
@@ -56,6 +66,8 @@ export default class SW_GameScene extends SW_BaseScene {
     this.createCamera();
     this.createUI();
 
+    this.events.on("postupdate", this.postUpdate, this);
+
     this.updateInventory([
       {name: "Red Axe", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
       {name: "Blue Sword",  description: "A nice sword", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
@@ -76,6 +88,7 @@ export default class SW_GameScene extends SW_BaseScene {
     this.layerBackground = this.currentMap.createLayer("Layer2", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
 
     this.createEntrances();
+    this.createInteractableObjects();
     this.createPlayer();
 
     this.layerForeground1 = this.currentMap.createLayer("Layer3", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
@@ -92,6 +105,23 @@ export default class SW_GameScene extends SW_BaseScene {
     for (const entrance of entranceSpawners) {
       this.entrances.add(entrance);
       entrance.setVisible(entrance.texture.key != "__MISSING");
+    }
+  }
+
+  private createInteractableObjects(): void {
+    this.interactableObjects = this.physics.add.staticGroup();
+
+    const objectTypeData = [
+      { name: "PlayerComputer", classType: SW_PlayerComputer },
+      { name: "Incubator", classType: SW_Incubator }
+    ]
+
+    for (const objectData of objectTypeData) {
+      const interactableObjects = this.currentMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible)[];
+      for (const interactableObject of interactableObjects) {
+        this.interactableObjects.add(interactableObject);
+        interactableObject.setVisible(interactableObject.texture.key != "__MISSING");
+      }
     }
   }
 
@@ -118,6 +148,7 @@ export default class SW_GameScene extends SW_BaseScene {
       this.physics.add.collider(this.player, this.layerForeground1);
 
       this.physics.add.overlap(this.player, this.entrances, this.onPlayerEnter, undefined, this);
+      this.physics.add.overlap(this.player.getInteractableComp(), this.interactableObjects, this.onPlayerOverlapInteractable, undefined, this);
   }
 
   private createUI(): void {
@@ -129,11 +160,19 @@ export default class SW_GameScene extends SW_BaseScene {
   // Update
   ////////////////////////////////////////////////////////////////////////
 
-  public update(): void {
+  public update(time: number, delta: number): void {
     this.name = playerStore.name;
     this.nameText.setText(playerStore.name);
 
     this.player.update();
+  }
+
+  private postUpdate(sys: Phaser.Scenes.Systems, time: number, delta: number): void {
+      this.player.postUpdate();
+  }
+
+  public openInventory(): void {
+    this.UIscene.openInventory()
   }
 
   public updateInventory(newInventoryObjects: SW_InventoryObject[]): void {
@@ -146,6 +185,10 @@ export default class SW_GameScene extends SW_BaseScene {
 
   protected onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
     this.scene.restart({ mapName: entrance.mapName, mapAsset: entrance.mapAsset });
+  }
+
+  protected onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: SW_IInteractable): void {
+    interactionComponent.onInteractableOverlapped(interactable);
   }
 
   protected onMenuVisibilityChange(isMenuVisible: boolean): void {

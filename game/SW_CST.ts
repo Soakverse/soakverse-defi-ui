@@ -9,6 +9,6 @@ export const SW_CST = {
         ZOOM: 0.7
     },
     DEBUG: {
-        PHYSIC: false
+        PHYSIC: true
     }
 };

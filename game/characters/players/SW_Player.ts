@@ -2,7 +2,8 @@ import Phaser from "phaser";
 import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import { SW_Character } from "~/game/characters/SW_Character";
 import { SW_DIRECTIONS, SW_DIRECTIONS_NO_DIAGONALE } from "~/game/characters/SW_CharacterMovementComponent";
-import { SW_SpawnData } from "../SW_CharacterSpawner";
+import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
+import { SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
 
 declare type SW_PlayerKeys = {
     up: Phaser.Input.Keyboard.Key;
@@ -10,6 +11,7 @@ declare type SW_PlayerKeys = {
     left: Phaser.Input.Keyboard.Key;
     right: Phaser.Input.Keyboard.Key;
     run: Phaser.Input.Keyboard.Key;
+    interact: Phaser.Input.Keyboard.Key;
 }
 
 export class SW_Player extends SW_Character {
@@ -18,10 +20,14 @@ export class SW_Player extends SW_Character {
 
     declare public body: Phaser.Physics.Arcade.Body;
 
+    /** How far a player can interact with entities around them */
+    protected interactionRange: number = 30;
+
+    /** Component used to interact with interactable entities */
+    declare protected interactableComp: SW_InteractionComponent;
+
     constructor(scene: SW_BaseScene, x: number, y: number) {
         super(scene, x, y);
-
-        this.initKeys();
     }
 
     // Init
@@ -37,6 +43,23 @@ export class SW_Player extends SW_Character {
         this.body.setSize(28, 46);
         this.body.setOffset(17, 4);
         this.body.setCollideWorldBounds(true);
+
+        this.initIniteractableComp();
+        this.initKeys();
+    }
+
+    protected initIniteractableComp(): void {
+        this.interactableComp = new SW_InteractionComponent(this, this.x, this.y, this.interactionRange, this.interactionRange);
+        this.interactableComp.body.setAllowGravity(false);
+    }
+
+    public getInteractableComp(): SW_InteractionComponent
+    {
+        return this.interactableComp;
+    }
+
+    public getInteractionRange(): number {
+        return this.interactionRange;
     }
 
     protected initKeys(): void {
@@ -52,6 +75,7 @@ export class SW_Player extends SW_Character {
 
             this.keys.run.on("down", this.startRunning, this);
             this.keys.run.on("up", this.stopRunning, this);
+            this.keys.interact.on("down", this.interact, this);
         }
     }
 
@@ -80,6 +104,13 @@ export class SW_Player extends SW_Character {
     // Update
     ////////////////////////////////////////////////////////////////////////
 
+    public postUpdate(): void
+    {
+        super.postUpdate();
+        
+        this.interactableComp.update();
+    }
+
     protected updateControls(): void {
         if (this.keys.up.isDown) {
             this.walkUp();
@@ -105,5 +136,9 @@ export class SW_Player extends SW_Character {
         else {
             this.anims.play(`Idle${this.currentDirection}`, true);
         }
+    }
+
+    protected interact(): void {
+        this.interactableComp.interact();
     }
 }
