@@ -61,12 +61,12 @@ export default class SW_GameScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
+    this.addUniqueListener("postupdate", this.postUpdate, this);
+
     this.createMap();
     this.createPhysics();
     this.createCamera();
     this.createUI();
-
-    this.events.on("postupdate", this.postUpdate, this);
 
     this.updateInventory([
       {name: "Red Axe", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
@@ -153,8 +153,9 @@ export default class SW_GameScene extends SW_BaseScene {
 
   private createUI(): void {
     this.UIscene = this.scene.get(SW_CST.SCENES.GAME_UI) as SW_GameUIScene;
-    this.UIscene.events.on("inventoryObjectClicked", this.inventoryObjectClicked);
-    this.UIscene.events.on("menuVisibilityChange", this.onMenuVisibilityChange, this);
+
+    this.UIscene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked);
+    this.UIscene.addUniqueListener("menuVisibilityChange", this.onMenuVisibilityChange, this);
   }
 
   // Update
@@ -172,7 +173,7 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   public openInventory(): void {
-    this.UIscene.openInventory()
+    this.UIscene.openInventory();
   }
 
   public updateInventory(newInventoryObjects: SW_InventoryObject[]): void {
