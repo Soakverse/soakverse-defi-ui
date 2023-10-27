@@ -70,7 +70,7 @@ export class SW_Player extends SW_Character {
                 down: Phaser.Input.Keyboard.KeyCodes.S,
                 left: Phaser.Input.Keyboard.KeyCodes.A,
                 right: Phaser.Input.Keyboard.KeyCodes.D,
-                interact: Phaser.Input.Keyboard.KeyCodes.L
+                interact: Phaser.Input.Keyboard.KeyCodes.SPACE
             }, false) as SW_PlayerKeys;
 
             this.keys.run.on("down", this.startRunning, this);
