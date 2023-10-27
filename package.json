@@ -29,7 +29,6 @@
     "nuxtjs-phaser": "^3.0.17",
     "phaser": "^3.61.0-beta.1",
     "phaser3-rex-plugins": "^1.60.6",
-    "phavuer": "^0.12.1",
     "pinia": "2.1.3",
     "stream-browserify": "^3.0.0",
     "sweetalert2": "^11.4.23",
