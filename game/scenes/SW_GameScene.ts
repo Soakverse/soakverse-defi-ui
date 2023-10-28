@@ -68,7 +68,7 @@ export default class SW_GameScene extends SW_BaseScene {
     this.createCamera();
     this.createUI();
 
-    this.updateInventory([
+    this.updatePlayerInventory([
       {name: "Red Axe", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
       {name: "Blue Sword",  description: "A nice sword", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
       {name: "Blue Shield", description: "A strong shield", image: "shieldBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
@@ -176,8 +176,8 @@ export default class SW_GameScene extends SW_BaseScene {
     this.UIscene.openInventory();
   }
 
-  public updateInventory(newInventoryObjects: SW_InventoryObject[]): void {
-    this.UIscene.updateInventory(newInventoryObjects);
+  public updatePlayerInventory(newInventoryObjects: SW_InventoryObject[]): void {
+    this.UIscene.updatePlayerInventory(newInventoryObjects);
   }
 
   protected inventoryObjectClicked(inventoryObjectData: SW_InventoryObject): void {

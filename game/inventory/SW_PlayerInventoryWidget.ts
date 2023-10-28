@@ -4,7 +4,7 @@ import Cell from "phaser3-rex-plugins/plugins/gameobjects/container/gridtable/ta
 import { Label } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 import { SW_Inventory, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 
-export class SW_InventoryWidget extends Phaser.GameObjects.Container
+export class SW_PlayerInventoryWidget extends Phaser.GameObjects.Container
 {
     declare public scene: SW_BaseScene;
 
