@@ -60,17 +60,24 @@ export class SW_ChestInventoryWidget extends SW_BaseInventoryWidget
                 if (cellContainer == null)
                 {
                     const background = this.scene.add.image(0,0, "inventorySlot").setDisplaySize(cellWidth - 3, cellHeight - 3);
-                    const icon = this.scene.add.image(0, 0, "inventoryItems", inventoryItem.image);
 
-                    if (icon) {
-                        icon.setDisplaySize(background.displayWidth, background.displayHeight);
-                    }
+                    const frontContainer = this.scene.add.container(0, 0);
+                    const icon = this.scene.add.image(0, 0, "inventoryItems", inventoryItem.image);
+                    icon.setDisplaySize(background.displayWidth, background.displayHeight);
+                    frontContainer.add(icon);
+
+                    frontContainer.width = icon.displayWidth;
+                    frontContainer.height = icon.displayHeight;
+
+                    const quantityText = this.scene.add.text(icon.displayWidth * 0.5, icon.displayHeight * 0.5, `${inventoryItem.quantity}`, { fontSize: "16px", color: "white", stroke: "black", strokeThickness: 2, fontStyle: "bold" });
+                    quantityText.setOrigin(1, 1);
+                    frontContainer.add(quantityText);
 
                     cellContainer = this.scene.rexUI.add.label({
                         width: background.displayWidth,
                         height: background.displayHeight,
                         background: background,
-                        icon: icon
+                        icon: frontContainer
                     });
                 }
 
