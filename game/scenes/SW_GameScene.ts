@@ -75,6 +75,9 @@ export default class SW_GameScene extends SW_BaseScene {
       {name: "Blue Ring", description: "Fits your hand well!", image: "ringBlue", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
       {name: "Red Shield", description: "This shield is strong like a rock", image: "shieldRed", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
       {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
     ]);
 
     this.nameText = this.add.text(0, 0, playerStore.name);
@@ -172,12 +175,20 @@ export default class SW_GameScene extends SW_BaseScene {
       this.player.postUpdate();
   }
 
-  public openInventory(): void {
-    this.UIscene.openInventory();
+  public openPlayerInventory(): void {
+    this.UIscene.openPlayerInventory();
+  }
+
+  public openChestInventory(): void {
+    this.UIscene.openChestInventory();
   }
 
   public updatePlayerInventory(newInventoryObjects: SW_InventoryObject[]): void {
     this.UIscene.updatePlayerInventory(newInventoryObjects);
+  }
+
+  public updateChestInventory(newInventoryObjects: SW_InventoryObject[]): void {
+    this.UIscene.updateChestInventory(newInventoryObjects);
   }
 
   protected inventoryObjectClicked(inventoryObjectData: SW_InventoryObject): void {

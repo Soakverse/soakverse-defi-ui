@@ -6,7 +6,7 @@ export const SW_CST = {
         GAME_UI: "GAME_UI"
     },
     GAME: {
-        ZOOM: 0.7
+        ZOOM: 0.8
     },
     DEBUG: {
         PHYSIC: false

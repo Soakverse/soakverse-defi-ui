@@ -18,6 +18,6 @@ export default class SW_PlayerComputer extends Phaser.GameObjects.Image implemen
     }
 
     public onInteract(source: SW_Player): void {
-      this.scene.openInventory();
+      this.scene.openChestInventory();
     }
 }
