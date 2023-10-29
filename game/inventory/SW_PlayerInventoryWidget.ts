@@ -30,27 +30,6 @@ export class SW_PlayerInventoryWidget extends SW_BaseInventoryWidget
         this.add(this.selectedDescriptionObjectText);
     };
 
-    public setX(value?: number | undefined): this {
-        if (this.inventoryTable) {
-            this.inventoryTable.setX(value);
-        }
-        return super.setX(value);
-    }
-
-    public setY(value?: number | undefined): this {
-        if (this.inventoryTable) {
-            this.inventoryTable.setY(value);
-        }
-        return super.setY(value);
-    }
-
-    public setPosition(x?: number | undefined, y?: number | undefined, z?: number | undefined, w?: number | undefined): this {
-        if (this.inventoryTable) {
-            this.inventoryTable.setPosition(x,y,z,w);
-        }
-        return super.setPosition(x,y,z,w);
-    }
-
     private createInventoryTable(): void {
         const backgroundTable = this.scene.add.image(0, 12, "inventoryTableBackground").setScale(0.8);
         this.add(backgroundTable);
@@ -114,9 +93,6 @@ export class SW_PlayerInventoryWidget extends SW_BaseInventoryWidget
             const inventoryObjectData = this.inventoryTable.items[cellIndex];
             if (inventoryObjectData) {
                 this.selectedIndex = cellIndex;
-
-                // this.selectedNameObjectText.setText(inventoryObjectData.name);
-                // this.selectedDescriptionObjectText.setText(inventoryObjectData.description);
             }
             else {
                 this.selectedIndex = -1;
@@ -134,7 +110,7 @@ export class SW_PlayerInventoryWidget extends SW_BaseInventoryWidget
         this.inventoryTable.on("cell.click", (cellContainer: Label, cellIndex: number) => {
             const inventoryObjectData = this.inventoryTable.items[cellIndex];
             if (inventoryObjectData) {
-                this.emit("objectClicked", inventoryObjectData);
+                this.emit("objectClicked", cellIndex, inventoryObjectData);
             }
         });
     }

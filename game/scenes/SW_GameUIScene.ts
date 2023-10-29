@@ -1,6 +1,6 @@
 import { SW_CST } from "~/game/SW_CST";
 import SW_BaseScene from "~/game/scenes/SW_BaseScene";
-import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";
+import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_PlayerInventoryWidget } from "~/game/inventory/SW_PlayerInventoryWidget";
 import { SW_ChestInventoryWidget } from "~/game/inventory/SW_ChestInventoryWidget";
 
@@ -27,13 +27,44 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
         this.playerInventoryWidget.setVisible(false);
-        this.playerInventoryWidget.on("objectClicked", (inventoryObjectData: SW_InventoryObject) => {
-            this.events.emit("inventoryObjectClicked", inventoryObjectData);
-        });
+        this.playerInventoryWidget.on("objectClicked", this.onPlayerInventoryObjectClicked, this);
 
         this.chestInventoryWidget = new SW_ChestInventoryWidget(this, 0, 240);
         this.chestInventoryWidget.setX(this.scale.displaySize.width * 0.66 - this.chestInventoryWidget.width * 0.25);
         this.chestInventoryWidget.setVisible(false);
+        this.chestInventoryWidget.on("objectClicked", this.onChestInventoryObjectClicked, this);
+
+    this.updatePlayerInventory([
+        {name: "Red Axe", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
+        {name: "Blue Sword",  description: "A nice sword", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
+        {name: "Blue Shield", description: "A strong shield", image: "shieldBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+        {name: "Blue Ring", description: "Fits your hand well!", image: "ringBlue", type: SW_ENUM_IVENTORY_OBJECT.WEAPON},
+        {name: "Red Shield", description: "This shield is strong like a rock", image: "shieldRed", type: SW_ENUM_IVENTORY_OBJECT.ITEMS},
+        {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+        {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+        {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+        {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      ]);
+  
+      this.updateChestInventory([
+        {name: "Red Sword", description: "Fear this sword!", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+        {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+        {name: "Red Sword", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES},
+      ]);
+    }
+
+    protected onPlayerInventoryObjectClicked(objectIndex: number, inventoryObjectData: SW_InventoryObject): void {
+        if (this.chestInventoryWidget.visible) {
+            this.playerInventoryWidget.removeObjectAt(objectIndex);
+            this.chestInventoryWidget.addObject(inventoryObjectData);
+        }
+    }
+
+    protected onChestInventoryObjectClicked(objectIndex: number, inventoryObjectData: SW_InventoryObject): void {
+        if (this.chestInventoryWidget.visible) {
+            this.chestInventoryWidget.removeObjectAt(objectIndex);
+            this.playerInventoryWidget.addObject(inventoryObjectData);
+        }
     }
 
     protected initKeys(): void {

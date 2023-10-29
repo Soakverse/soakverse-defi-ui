@@ -22,7 +22,6 @@ export class SW_ChestInventoryWidget extends SW_BaseInventoryWidget
     };
 
     private createInventoryTable(): void {
-        
         const backgroundTable = this.scene.add.image(0, 12, "inventoryTableBackground").setScale(0.8);
         this.add(backgroundTable);
 
@@ -32,7 +31,7 @@ export class SW_ChestInventoryWidget extends SW_BaseInventoryWidget
         const tableWidth = backgroundTable.displayWidth + 12;
         const tableHeight = backgroundTable.displayHeight + 8;
 
-        const track = this.scene.add.image(0,0, "inventorySliderLine");
+        const track = this.scene.add.image(0, 0, "inventorySliderLine");
         track.displayHeight = tableHeight;
 
         this.inventoryTable = new SW_GridTable(this.scene, {
@@ -100,7 +99,7 @@ export class SW_ChestInventoryWidget extends SW_BaseInventoryWidget
         this.inventoryTable.on("cell.click", (cellContainer: Label, cellIndex: number) => {
             const inventoryObjectData = this.inventoryTable.items[cellIndex];
             if (inventoryObjectData) {
-                this.emit("objectClicked", inventoryObjectData);
+                this.emit("objectClicked", cellIndex, inventoryObjectData);
             }
         });
     }

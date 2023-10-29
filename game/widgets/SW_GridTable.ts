@@ -73,4 +73,21 @@ export default class SW_GridTable extends GridTable
     public setItems(items?: SW_InventoryObject[] | undefined): this {
         return super.setItems(items);
     }
+
+    public addObject(object: any): void {
+        Phaser.Utils.Array.Add(this.items, object);
+        this.refresh();
+    }
+
+    public addObjectAt(object: any, index: number): void {
+        Phaser.Utils.Array.AddAt(this.items, object, index);
+        this.refresh();
+    }
+
+    public removeObjectAt(index: number) {
+        if (index >= 0 && index < this.items.length) {
+            Phaser.Utils.Array.RemoveAt(this.items, index);
+            this.refresh();
+        }
+    }
 }

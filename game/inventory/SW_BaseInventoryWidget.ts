@@ -21,6 +21,27 @@ export class SW_BaseInventoryWidget extends Phaser.GameObjects.Container
         this.inventory = new SW_Inventory();
     };
 
+    public setX(value?: number | undefined): this {
+        if (this.inventoryTable) {
+            this.inventoryTable.setX(value);
+        }
+        return super.setX(value);
+    }
+
+    public setY(value?: number | undefined): this {
+        if (this.inventoryTable) {
+            this.inventoryTable.setY(value);
+        }
+        return super.setY(value);
+    }
+
+    public setPosition(x?: number | undefined, y?: number | undefined, z?: number | undefined, w?: number | undefined): this {
+        if (this.inventoryTable) {
+            this.inventoryTable.setPosition(x,y,z,w);
+        }
+        return super.setPosition(x,y,z,w);
+    }
+
     public setVisible(value: boolean): this {
         if (this.inventoryTable) {
             this.inventoryTable.setVisible(value);
@@ -41,5 +62,17 @@ export class SW_BaseInventoryWidget extends Phaser.GameObjects.Container
         if (this.inventoryTable) {
             this.inventoryTable.setItems(this.inventory.getObjects());
         }
+    }
+
+    public addObject(object: any): void {
+        this.inventoryTable.addObject(object);
+    }
+
+    public insertObject(object: any, index: number): void {
+        this.inventoryTable.addObjectAt(object, index);
+    }
+
+    public removeObjectAt(index: number): void {
+        this.inventoryTable.removeObjectAt(index);
     }
 }
