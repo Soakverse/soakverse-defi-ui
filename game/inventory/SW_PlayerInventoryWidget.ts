@@ -3,11 +3,12 @@ import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import SW_GridTable from "~/game/widgets/SW_GridTable";
 import Cell from "phaser3-rex-plugins/plugins/gameobjects/container/gridtable/table/Cell.js";
 import { Label } from "phaser3-rex-plugins/templates/ui/ui-components.js";
+import { SW_InventoryCounterWidget } from "~/game/inventory/SW_InventoryCounterWidget";
+import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 
 export class SW_PlayerInventoryWidget extends SW_BaseInventoryWidget
 {
-    declare private selectedNameObjectText: Phaser.GameObjects.Text;
-    declare private selectedDescriptionObjectText: Phaser.GameObjects.Text;
+    private counterWidget: SW_InventoryCounterWidget
 
     constructor(scene: SW_BaseScene, x: number, y: number) {
         super(scene, x, y);
@@ -23,12 +24,18 @@ export class SW_PlayerInventoryWidget extends SW_BaseInventoryWidget
 
         this.createInventoryTable();
 
-        this.selectedNameObjectText = this.scene.add.text(0, 140, "", { fontSize: "32px", color: "black"}).setOrigin(0.5);
-        this.add(this.selectedNameObjectText);
-
-        this.selectedDescriptionObjectText = this.scene.add.text(0, 160, "", { fontSize: "20px", color: "black"}).setOrigin(0.5);
-        this.add(this.selectedDescriptionObjectText);
+        this.counterWidget = new SW_InventoryCounterWidget(this.scene, 0, 0);
+        this.counterWidget.setVisible(false);
+        this.counterWidget.setDepth(2);
+        this.counterWidget.on("moveClicked", this.onCounterMoveButtonClicked, this)
     };
+
+    public setVisible(value: boolean): this {
+        if (!value && this.counterWidget) {
+            this.counterWidget.setVisible(false);
+        }
+        return super.setVisible(value);
+    }
 
     private createInventoryTable(): void {
         const backgroundTable = this.scene.add.image(0, 12, "inventoryTableBackground").setScale(0.8);
@@ -97,28 +104,34 @@ export class SW_PlayerInventoryWidget extends SW_BaseInventoryWidget
         });
 
         this.inventoryTable.on("cell.over", (cellContainer: Label, cellIndex: number) => {
-            const inventoryObjectData = this.inventoryTable.items[cellIndex];
-            if (inventoryObjectData) {
-                this.selectedIndex = cellIndex;
-            }
-            else {
-                this.selectedIndex = -1;
-            }
         }, this);
 
         this.inventoryTable.on("cell.out", (cellContainer: Label, cellIndex: number) => {
-            if (cellIndex == this.selectedIndex) {
-                this.selectedIndex = -1;
-                this.selectedNameObjectText.setText("");
-                this.selectedDescriptionObjectText.setText("");
-            }
         });
 
-        this.inventoryTable.on("cell.click", (cellContainer: Label, cellIndex: number) => {
+        this.inventoryTable.on("cell.click", (cellContainer: Label, cellIndex: number, pointer: Phaser.Input.Pointer) => {
             const inventoryObjectData = this.inventoryTable.items[cellIndex];
             if (inventoryObjectData) {
-                this.emit("objectClicked", cellIndex, inventoryObjectData);
+                this.selectedIndex = cellIndex;
+
+                if (inventoryObjectData.quantity == 1) {
+                    this.requestMoveObject(inventoryObjectData, 1);
+                }
+                else {
+                    this.counterWidget.setMaxQuantity(inventoryObjectData.quantity);
+                    this.counterWidget.setPosition(pointer.x, pointer.y);
+                    this.counterWidget.setVisible(true);
+                }
             }
         });
+    }
+
+    protected onCounterMoveButtonClicked(quantity: number): void {
+        this.requestMoveObject(this.inventoryTable.items[this.selectedIndex], quantity);
+    }
+
+    protected requestMoveObject(inventoryObjectData: SW_InventoryObject, quantity: number): void {
+        this.emit("moveObject", inventoryObjectData, quantity);
+        this.counterWidget.setVisible(false);
     }
 }

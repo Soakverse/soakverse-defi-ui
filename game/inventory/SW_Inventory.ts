@@ -5,10 +5,12 @@ export const SW_ENUM_IVENTORY_OBJECT = {
 }
 
 export declare type SW_InventoryObject = {
+    id: string,
     name: string,
     description: string,
     image: string,
     type: number,
+    quantity: number
 }
 
 export class SW_Inventory {

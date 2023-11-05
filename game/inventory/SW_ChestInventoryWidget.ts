@@ -98,9 +98,6 @@ export class SW_ChestInventoryWidget extends SW_BaseInventoryWidget
         }, this);
 
         this.inventoryTable.on("cell.out", (cellContainer: Label, cellIndex: number) => {
-            if (cellIndex == this.selectedIndex) {
-                this.selectedIndex = -1;
-            }
         });
 
         this.inventoryTable.on("cell.click", (cellContainer: Label, cellIndex: number) => {

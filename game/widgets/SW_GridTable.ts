@@ -74,18 +74,36 @@ export default class SW_GridTable extends GridTable
         return super.setItems(items);
     }
 
-    public addObject(object: any): void {
+    public isValidIndex(index: number): boolean {
+        return (index >= 0) && (index < this.items.length);
+    } 
+
+    public findObjectIndex(objectId: string): number {
+        for (let i = 0; i < this.items.length; ++i) {
+            if (this.items[i].id == objectId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public addObject(object: SW_InventoryObject): void {
         Phaser.Utils.Array.Add(this.items, object);
         this.refresh();
     }
 
-    public addObjectAt(object: any, index: number): void {
-        Phaser.Utils.Array.AddAt(this.items, object, index);
+    public addObjectAt(object: SW_InventoryObject, index: number): void {
+        if (this.isValidIndex(index)) {
+            Phaser.Utils.Array.AddAt(this.items, object, index);
+        }
+        else {
+            Phaser.Utils.Array.Add(this.items, object);
+        }
         this.refresh();
     }
 
     public removeObjectAt(index: number) {
-        if (index >= 0 && index < this.items.length) {
+        if (this.isValidIndex(index)) {
             Phaser.Utils.Array.RemoveAt(this.items, index);
             this.refresh();
         }

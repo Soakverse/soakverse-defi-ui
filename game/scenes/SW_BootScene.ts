@@ -6,6 +6,7 @@ import SW_GameUIScene from '~/game/scenes/SW_GameUIScene';
 import thudMp3 from '@/game/assets/thud.mp3';
 import thudOgg from '@/game/assets/thud.ogg';
 
+//Credit goes to Zerudez - See https://www.deviantart.com/zerudez/art/Public-Tileset-295115322
 import outsideAssetTiled from '@/game/assets/maps/outsideAssetTiled.png';
 import interiorAssetTiled from '@/game/assets/maps/interiorAssetTiled.png';
 
@@ -14,6 +15,11 @@ import homePlayerMap from '@/game/assets/maps/homePlayerMap.json';
 import home1 from '@/game/assets/maps/home1.json';
 import home2 from '@/game/assets/maps/home2.json';
 import road1 from '@/game/assets/maps/road1.json';
+
+import objectCounterBackground from '@/game/assets/inventory/objectCounterBackground.png';
+import objectCounterMinusButton from '@/game/assets/inventory/objectCounterMinusButton.png';
+import objectCounterPlusButton from '@/game/assets/inventory/objectCounterPlusButton.png';
+import objectCounterMoveButton from '@/game/assets/inventory/objectCounterMoveButton.png';
 
 import inventorySlider from '@/game/assets/inventory/inventorySlider.png';
 import inventorySliderLine from '@/game/assets/inventory/inventorySliderLine.png';
@@ -44,6 +50,11 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.tilemapTiledJSON("home1", home1);
     this.load.tilemapTiledJSON("home2", home2);
     this.load.tilemapTiledJSON("road1", road1);
+
+    this.load.image("objectCounterBackground", objectCounterBackground);
+    this.load.image("objectCounterMinusButton", objectCounterMinusButton);
+    this.load.image("objectCounterPlusButton", objectCounterPlusButton);
+    this.load.image("objectCounterMoveButton", objectCounterMoveButton);
 
     this.load.image("inventorySlider", inventorySlider);
     this.load.image("inventorySliderLine", inventorySliderLine);

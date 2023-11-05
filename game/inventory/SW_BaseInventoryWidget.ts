@@ -49,30 +49,60 @@ export class SW_BaseInventoryWidget extends Phaser.GameObjects.Container
         return super.setVisible(value);
     }
 
-    public updateInventory(newInventoryObjects: SW_InventoryObject[]): void
-    {
+    public updateInventory(newInventoryObjects: SW_InventoryObject[]): void {
         this.selectedIndex = -1;
 
         this.inventory.update(newInventoryObjects);
         this.showAllObjects();
     }
 
-    protected showAllObjects(): void
-    {
+    protected showAllObjects(): void {
         if (this.inventoryTable) {
             this.inventoryTable.setItems(this.inventory.getObjects());
         }
     }
 
-    public addObject(object: any): void {
-        this.inventoryTable.addObject(object);
+    public addObjectAt(object: SW_InventoryObject, quantity: number, index: number): void {
+
+        if (this.inventoryTable.isValidIndex(index)) {
+            this.inventoryTable.items[index].quantity += quantity;
+            this.inventoryTable.refresh();
+
+            console.log("add existing", quantity, this.inventoryTable.items);
+
+        }
+        else {
+            const newObject = Phaser.Utils.Objects.Clone(object) as SW_InventoryObject;
+            newObject.quantity = quantity;
+            this.inventoryTable.addObject(newObject);
+        }
     }
 
-    public insertObject(object: any, index: number): void {
-        this.inventoryTable.addObjectAt(object, index);
+    public addObject(object: SW_InventoryObject, quantity: number): void {
+        const index = this.inventoryTable.findObjectIndex(object.id);
+        this.addObjectAt(object, quantity, index);
     }
 
-    public removeObjectAt(index: number): void {
-        this.inventoryTable.removeObjectAt(index);
+    public removeObjectAt(index: number, quantity?: number): void {
+        if (this.inventoryTable.isValidIndex(index)) {
+            if (quantity && (quantity < this.inventoryTable.items[index].quantity)) {
+                this.inventoryTable.items[index].quantity -= quantity;
+                this.inventoryTable.refresh();
+
+                console.log("remove", quantity, "new quantity:", this.inventoryTable.items[index].quantity, this.inventoryTable.items);
+            }
+            else {
+                this.inventoryTable.removeObjectAt(index);
+            }
+        }
+    }
+
+    public removeObjectById(objectId: string, quantity?: number): void {
+        const index = this.inventoryTable.findObjectIndex(objectId);
+        this.removeObjectAt(index, quantity);
+    }
+
+    public removeObject(object: SW_InventoryObject, quantity?: number): void {
+        this.removeObjectById(object.id, quantity);
     }
 }
