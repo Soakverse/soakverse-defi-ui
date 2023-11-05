@@ -35,21 +35,21 @@ export default class SW_GameUIScene extends SW_BaseScene {
         this.chestInventoryWidget.on("objectClicked", this.onMoveChestInventoryObject, this);
 
     this.updatePlayerInventory([
-        // {name: "Red Axe", id: "object1", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON, quantity: 1},
+        {name: "Red Axe", id: "object1", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON, quantity: 1},
         {name: "Blue Sword", id: "object2", description: "A nice sword", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.ITEMS, quantity: 1},
-        // {name: "Blue Shield", id: "object3",  description: "A strong shield", image: "shieldBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 13},
-        // {name: "Blue Ring", id: "object4", description: "Fits your hand well!", image: "ringBlue", type: SW_ENUM_IVENTORY_OBJECT.WEAPON, quantity: 3},
-        // {name: "Red Shield", id: "object5", description: "This shield is strong like a rock", image: "shieldRed", type: SW_ENUM_IVENTORY_OBJECT.ITEMS, quantity: 1},
-        // {name: "Red Sword", id: "object6", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 10},
-        // {name: "Red Sword", id: "object7", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 1},
+        {name: "Blue Shield", id: "object3",  description: "A strong shield", image: "shieldBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 13},
+        {name: "Blue Ring", id: "object4", description: "Fits your hand well!", image: "ringBlue", type: SW_ENUM_IVENTORY_OBJECT.WEAPON, quantity: 3},
+        {name: "Red Shield", id: "object5", description: "This shield is strong like a rock", image: "shieldRed", type: SW_ENUM_IVENTORY_OBJECT.ITEMS, quantity: 1},
+        {name: "Red Sword", id: "object6", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 10},
+        {name: "Red Sword", id: "object7", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 1},
         {name: "Red Sword", id: "object8", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 41},
-        // {name: "Red Sword", id: "object9", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 1},
+        {name: "Red Sword", id: "object9", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 1},
       ]);
   
       this.updateChestInventory([
-        // {name: "Red Sword", id: "object10", description: "Fear this sword!", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 1},
-        // {name: "Red Sword", id: "object11", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 3},
-        // {name: "Red Sword", id: "object12", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 5},
+        {name: "Red Sword", id: "object10", description: "Fear this sword!", image: "swordBlue", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 1},
+        {name: "Red Sword", id: "object11", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 3},
+        {name: "Red Sword", id: "object12", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 5},
       ]);
     }
 
@@ -95,8 +95,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
             this.setChestInventoryVisibility(false);
         }
         else {
-            // this.setPlayerInventoryVisibility(true);
-            this.openChestInventory();
+            this.setPlayerInventoryVisibility(true);
         }
     }
 
