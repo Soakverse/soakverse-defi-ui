@@ -12,6 +12,7 @@ import { SW_IInteractable } from "~/game/Interactable/Interactable";
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
 import SW_Incubator from "~/game/gameObjects/SW_Incubator";
+import SW_RockVillage from "~/game/gameObjects/SW_RockVillage";
 
 const playerStore = usePlayerStore();
 
@@ -29,7 +30,8 @@ export default class SW_GameScene extends SW_BaseScene {
 
   /** The current tiled map */
   declare private currentMap: Phaser.Tilemaps.Tilemap;
-  declare private layerBackground: Phaser.Tilemaps.TilemapLayer;
+  declare private layerBackground1: Phaser.Tilemaps.TilemapLayer;
+  declare private layerBackground2: Phaser.Tilemaps.TilemapLayer;
   declare private layerForeground1: Phaser.Tilemaps.TilemapLayer;
   declare private layerForeground2: Phaser.Tilemaps.TilemapLayer;
 
@@ -76,14 +78,15 @@ export default class SW_GameScene extends SW_BaseScene {
 
     const tileset = this.currentMap.addTilesetImage(this.mapAssetKey, this.mapAssetKey) as Phaser.Tilemaps.Tileset;
     const layerGround = this.currentMap.createLayer("Layer1", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
-    this.layerBackground = this.currentMap.createLayer("Layer2", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
+    this.layerBackground1 = this.currentMap.createLayer("Layer2", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
+    this.layerBackground2 = this.currentMap.createLayer("Layer3", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
 
     this.createEntrances();
     this.createInteractableObjects();
     this.createPlayer();
 
-    this.layerForeground1 = this.currentMap.createLayer("Layer3", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
-    this.layerForeground2 = this.currentMap.createLayer("Layer4", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
+    this.layerForeground1 = this.currentMap.createLayer("Layer4", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
+    this.layerForeground2 = this.currentMap.createLayer("Layer5", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
 
     const bounds = layerGround.getBounds();
     this.physics.world.setBounds(0, 0, bounds.width, bounds.height);
@@ -104,7 +107,8 @@ export default class SW_GameScene extends SW_BaseScene {
 
     const objectTypeData = [
       { name: "PlayerComputer", classType: SW_PlayerComputer },
-      { name: "Incubator", classType: SW_Incubator }
+      { name: "Incubator", classType: SW_Incubator },
+      { name: "RockVillage", classType: SW_RockVillage },
     ]
 
     for (const objectData of objectTypeData) {
@@ -132,10 +136,10 @@ export default class SW_GameScene extends SW_BaseScene {
 
   private createPhysics(): void
   {
-      this.layerBackground.setCollisionByProperty({collides: true});
+      this.layerBackground1.setCollisionByProperty({collides: true});
       this.layerForeground1.setCollisionByProperty({collides: true});
 
-      this.physics.add.collider(this.player, this.layerBackground);
+      this.physics.add.collider(this.player, this.layerBackground1);
       this.physics.add.collider(this.player, this.layerForeground1);
 
       this.physics.add.overlap(this.player, this.entrances, this.onPlayerEnter, undefined, this);

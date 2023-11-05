@@ -15,6 +15,8 @@ import homePlayerMap from '@/game/assets/maps/homePlayerMap.json';
 import home1 from '@/game/assets/maps/home1.json';
 import home2 from '@/game/assets/maps/home2.json';
 import road1 from '@/game/assets/maps/road1.json';
+import road2 from '@/game/assets/maps/road2.json';
+import road3 from '@/game/assets/maps/road3.json';
 
 import objectCounterBackground from '@/game/assets/inventory/objectCounterBackground.png';
 import objectCounterMinusButton from '@/game/assets/inventory/objectCounterMinusButton.png';
@@ -50,6 +52,8 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.tilemapTiledJSON("home1", home1);
     this.load.tilemapTiledJSON("home2", home2);
     this.load.tilemapTiledJSON("road1", road1);
+    this.load.tilemapTiledJSON("road2", road2);
+    this.load.tilemapTiledJSON("road3", road3);
 
     this.load.image("objectCounterBackground", objectCounterBackground);
     this.load.image("objectCounterMinusButton", objectCounterMinusButton);
