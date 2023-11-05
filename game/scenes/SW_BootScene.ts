@@ -13,6 +13,7 @@ import villageMap from '@/game/assets/maps/villageMap.json';
 import homePlayerMap from '@/game/assets/maps/homePlayerMap.json';
 import home1 from '@/game/assets/maps/home1.json';
 import home2 from '@/game/assets/maps/home2.json';
+import road1 from '@/game/assets/maps/road1.json';
 
 import inventorySlider from '@/game/assets/inventory/inventorySlider.png';
 import inventorySliderLine from '@/game/assets/inventory/inventorySliderLine.png';
@@ -42,6 +43,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.tilemapTiledJSON("homePlayerMap", homePlayerMap);
     this.load.tilemapTiledJSON("home1", home1);
     this.load.tilemapTiledJSON("home2", home2);
+    this.load.tilemapTiledJSON("road1", road1);
 
     this.load.image("inventorySlider", inventorySlider);
     this.load.image("inventorySliderLine", inventorySliderLine);
