@@ -43,27 +43,15 @@
          "name":"Characters",
          "objects":[
                 {
-                 "height":0,
-                 "id":23,
-                 "name":"Player",
-                 "properties":[
-                        {
-                         "name":"startDirection",
-                         "type":"string",
-                         "value":"Up"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":154,
-                 "y":270
-                }, 
-                {
-                 "height":30,
+                 "height":17,
                  "id":24,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -73,13 +61,46 @@
                          "name":"mapName",
                          "type":"string",
                          "value":"villageMap"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Up"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":40,
                  "x":133,
-                 "y":300
+                 "y":313
+                }, 
+                {
+                 "height":0,
+                 "id":25,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"villageMap"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":152,
+                 "y":291
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -112,7 +133,7 @@
          "y":0
         }],
  "nextlayerid":19,
- "nextobjectid":25,
+ "nextobjectid":26,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

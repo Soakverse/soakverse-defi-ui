@@ -66,27 +66,15 @@
          "name":"Characters",
          "objects":[
                 {
-                 "height":0,
-                 "id":2,
-                 "name":"Player",
-                 "properties":[
-                        {
-                         "name":"startDirection",
-                         "type":"string",
-                         "value":"Down"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":378,
-                 "y":732
-                }, 
-                {
-                 "height":21,
+                 "height":13,
                  "id":26,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -96,6 +84,11 @@
                          "name":"mapName",
                          "type":"string",
                          "value":"road2"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Up"
                         }],
                  "rotation":0,
                  "type":"",
@@ -103,6 +96,34 @@
                  "width":44,
                  "x":354,
                  "y":761
+                }, 
+                {
+                 "height":0,
+                 "id":29,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"road2"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":376,
+                 "y":719
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -135,7 +156,7 @@
          "y":0
         }],
  "nextlayerid":20,
- "nextobjectid":28,
+ "nextobjectid":30,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

@@ -66,27 +66,20 @@
          "name":"Characters",
          "objects":[
                 {
-                 "height":0,
-                 "id":2,
-                 "name":"Player",
-                 "properties":[
-                        {
-                         "name":"startDirection",
-                         "type":"string",
-                         "value":"Down"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":451,
-                 "y":496
-                }, 
-                {
-                 "height":27,
+                 "height":19,
                  "id":18,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }, 
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -100,15 +93,25 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":23,
+                 "width":20,
                  "x":133,
-                 "y":412
+                 "y":433
                 }, 
                 {
                  "height":27,
                  "id":23,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }, 
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -123,14 +126,24 @@
                  "type":"",
                  "visible":true,
                  "width":23,
-                 "x":437,
-                 "y":251
+                 "x":436,
+                 "y":258
                 }, 
                 {
                  "height":27,
                  "id":24,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }, 
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -146,13 +159,23 @@
                  "visible":true,
                  "width":23,
                  "x":613,
-                 "y":541
+                 "y":549
                 }, 
                 {
-                 "height":27,
+                 "height":11,
                  "id":25,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }, 
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -166,9 +189,121 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":23,
-                 "x":845,
-                 "y":-8
+                 "width":48,
+                 "x":832,
+                 "y":-7
+                }, 
+                {
+                 "height":0,
+                 "id":36,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"home2"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":624,
+                 "y":611
+                }, 
+                {
+                 "height":0,
+                 "id":37,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"home1"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":144,
+                 "y":491
+                }, 
+                {
+                 "height":0,
+                 "id":38,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"homePlayerMap"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":447,
+                 "y":329
+                }, 
+                {
+                 "height":0,
+                 "id":39,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"road1"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":854,
+                 "y":73
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -201,7 +336,7 @@
          "y":0
         }],
  "nextlayerid":20,
- "nextobjectid":27,
+ "nextobjectid":40,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

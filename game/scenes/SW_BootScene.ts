@@ -77,7 +77,7 @@ export default class SW_BootScene extends SW_BaseScene {
   public create(): void {
     const sceneUI = this.scene.add(SW_CST.SCENES.GAME_UI, SW_GameUIScene, true, undefined) as SW_GameUIScene;
 
-    this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, { mapName: "villageMap", mapAsset: "outsideAssetTiled" });
+    this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, { currentMapName: "villageMap", currentMapAsset: "outsideAssetTiled", lastMapName: "homePlayerMap" });
     sceneUI.scene.bringToTop();
 
     this.scene.remove(SW_CST.SCENES.BOOT);

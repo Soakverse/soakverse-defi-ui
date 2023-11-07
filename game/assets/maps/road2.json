@@ -55,27 +55,15 @@
          "name":"Characters",
          "objects":[
                 {
-                 "height":0,
-                 "id":2,
-                 "name":"Player",
-                 "properties":[
-                        {
-                         "name":"startDirection",
-                         "type":"string",
-                         "value":"Down"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":291,
-                 "y":499
-                }, 
-                {
-                 "height":21,
+                 "height":12,
                  "id":26,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -85,19 +73,29 @@
                          "name":"mapName",
                          "type":"string",
                          "value":"road1"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Up"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":49,
                  "x":271,
-                 "y":565
+                 "y":568
                 }, 
                 {
-                 "height":27,
+                 "height":15,
                  "id":27,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -107,13 +105,74 @@
                          "name":"mapName",
                          "type":"string",
                          "value":"road3"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":48,
                  "x":272,
-                 "y":-5
+                 "y":-9
+                }, 
+                {
+                 "height":0,
+                 "id":29,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"road1"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":296,
+                 "y":530
+                }, 
+                {
+                 "height":0,
+                 "id":30,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"road3"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":296,
+                 "y":65
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -146,7 +205,7 @@
          "y":0
         }],
  "nextlayerid":20,
- "nextobjectid":28,
+ "nextobjectid":31,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",

@@ -65,27 +65,20 @@
          "name":"Characters",
          "objects":[
                 {
-                 "height":0,
-                 "id":23,
-                 "name":"Player",
-                 "properties":[
-                        {
-                         "name":"startDirection",
-                         "type":"string",
-                         "value":"Up"
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":151,
-                 "y":540
-                }, 
-                {
-                 "height":30,
+                 "height":11,
                  "id":24,
                  "name":"Entrance",
                  "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }, 
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":false
+                        }, 
                         {
                          "name":"mapAsset",
                          "type":"string",
@@ -101,7 +94,35 @@
                  "visible":true,
                  "width":40,
                  "x":130,
-                 "y":570
+                 "y":569
+                }, 
+                {
+                 "height":0,
+                 "id":27,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"mapName",
+                         "type":"string",
+                         "value":"villageMap"
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":152,
+                 "y":541
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -134,7 +155,7 @@
          "y":0
         }],
  "nextlayerid":19,
- "nextobjectid":27,
+ "nextobjectid":28,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.2",
