@@ -40,7 +40,7 @@ export class SW_Player extends SW_Character {
 
         this.characterMovementComponent.init(spawnData.walkSpeed, spawnData.runSpeed);
 
-        this.body.setSize(28, 46);
+        this.body.setSize(28, 48);
         this.body.setOffset(17, 4);
         this.body.setCollideWorldBounds(true);
 

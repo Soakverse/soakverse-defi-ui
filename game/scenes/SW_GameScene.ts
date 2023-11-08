@@ -161,10 +161,10 @@ export default class SW_GameScene extends SW_BaseScene {
 
   private createPhysics(): void
   {
-      this.layerBackground1.setCollisionByProperty({collides: true});
+      this.layerBackground2.setCollisionByProperty({collides: true});
       this.layerForeground1.setCollisionByProperty({collides: true});
 
-      this.physics.add.collider(this.player, this.layerBackground1);
+      this.physics.add.collider(this.player, this.layerBackground2);
       this.physics.add.collider(this.player, this.layerForeground1);
 
       this.physics.add.overlap(this.player, this.entrances, this.onPlayerEnter, this.canPlayerEnter, this);
