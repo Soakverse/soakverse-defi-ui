@@ -13,7 +13,7 @@ import { SW_IInteractable } from "~/game/Interactable/Interactable";
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
 import SW_Incubator from "~/game/gameObjects/SW_Incubator";
-import SW_RockVillage from "~/game/gameObjects/SW_RockVillage";
+import SW_DialogueEntity from "~/game/gameObjects/SW_DialogueEntity";
 
 const playerStore = usePlayerStore();
 
@@ -43,7 +43,7 @@ export default class SW_GameScene extends SW_BaseScene {
   declare private entrances: Phaser.Physics.Arcade.StaticGroup;
 
   /** All entrances used to spawn the player */
-  declare private entranceSpawners: SW_Entrance[]= [];
+  declare private entranceSpawners: SW_Entrance[];
 
   /** Any object the player can interact with */
   declare private interactableObjects: Phaser.Physics.Arcade.StaticGroup;
@@ -119,16 +119,31 @@ export default class SW_GameScene extends SW_BaseScene {
     this.interactableObjects = this.physics.add.staticGroup();
 
     const objectTypeData = [
-      { name: "PlayerComputer", classType: SW_PlayerComputer },
-      { name: "Incubator", classType: SW_Incubator },
-      { name: "RockVillage", classType: SW_RockVillage },
-    ]
+      { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
+      { name: "Incubator", isZone: true, classType: SW_Incubator },
+      { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
+    ];
 
     for (const objectData of objectTypeData) {
-      const interactableObjects = this.currentMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible)[];
+      const interactableObjects = this.currentMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
+
       for (const interactableObject of interactableObjects) {
-        this.interactableObjects.add(interactableObject);
-        interactableObject.setVisible(interactableObject.texture.key != "__MISSING");
+        if (objectData.isZone) {
+          const classType = objectData.classType;
+          const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
+          zone.width = interactableObject.scaleX * 32;
+          zone.height = interactableObject.scaleY * 32;
+
+          for (const key in interactableObject.data.list) {
+            zone[key] = interactableObject.data.list[key];
+          }
+
+          this.interactableObjects.add(zone);
+          interactableObject.destroy();
+        }
+        else {
+          this.interactableObjects.add(interactableObject);
+        }
       }
     }
   }

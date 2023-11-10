@@ -2,16 +2,19 @@ import SW_GameScene from "~/game/scenes/SW_GameScene";
 import { SW_IInteractable } from "~/game/Interactable/Interactable";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 
-export default class SW_RockVillage extends Phaser.GameObjects.Image implements SW_IInteractable {
+export default class SW_DialogueEntity extends Phaser.GameObjects.Zone implements SW_IInteractable {
     declare public scene: SW_GameScene;
     declare public body: Phaser.Physics.Arcade.StaticBody;
 
-    constructor(scene: SW_GameScene, x: number, y: number, texture: string | Phaser.Textures.Texture, frame?: string | number | undefined) {
-      super(scene, x, y, texture, frame);
+    /** The dialogue text to display */
+    public dialogue: string = "";
+
+    constructor(scene: SW_GameScene, x: number, y: number, width: number, height: number) {
+      super(scene, x, y, width, height);
       this.scene.add.existing(this);
     }
 
     public onInteract(source: SW_Player): void {
-      console.log("Welcome to the Soak village!");
+      console.log(this.dialogue);
     }
 }

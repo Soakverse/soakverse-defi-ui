@@ -68,7 +68,7 @@
                         {
                          "name":"dialogue",
                          "type":"string",
-                         "value":"The road is blocked..."
+                         "value":"The road is blocking the way..."
                         }],
                  "rotation":0,
                  "type":"",
