@@ -7,7 +7,7 @@ import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW
 import { SW_DIRECTION, SW_DIRECTIONS } from "~/game/characters/SW_CharacterMovementComponent";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 import { SW_CharacterSpawner, SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
-import { SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
+import { FocusType, SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
 import { SW_IInteractable } from "~/game/Interactable/Interactable";
 
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
@@ -134,8 +134,11 @@ export default class SW_GameScene extends SW_BaseScene {
           zone.width = interactableObject.scaleX * 32;
           zone.height = interactableObject.scaleY * 32;
 
-          for (const key in interactableObject.data.list) {
-            zone[key] = interactableObject.data.list[key];
+          if (interactableObject.data && interactableObject.data.list) {
+            for (const key in interactableObject.data.list) {
+              // @ts-ignore
+              zone[key] = interactableObject.data.list[key];
+            }
           }
 
           this.interactableObjects.add(zone);
@@ -235,7 +238,7 @@ export default class SW_GameScene extends SW_BaseScene {
     this.scene.restart({currentMapName: entrance.mapName, currentMapAsset: entrance.mapAsset, lastMapName: this.currentMapName });
   }
 
-  protected onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: SW_IInteractable): void {
+  protected onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: FocusType): void {
     interactionComponent.onInteractableOverlapped(interactable);
   }
 

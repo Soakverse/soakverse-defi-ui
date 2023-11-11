@@ -17,6 +17,14 @@ export default class SW_Incubator extends Phaser.GameObjects.Zone implements SW_
       this.scene.add.existing(this);
     }
 
+    public getHintName(): string {
+      return "Incubator";
+    }
+
+    public getHintOffsetY(): number {
+      return 0;
+    }
+
     public onInteract(source: SW_Player): void {
       console.log("Incubator in progress !");
     }

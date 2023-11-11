@@ -17,6 +17,14 @@ export default class SW_PlayerComputer extends Phaser.GameObjects.Zone implement
       this.scene.add.existing(this);
     }
 
+    public getHintName(): string {
+      return "Computer";
+    }
+
+    public getHintOffsetY(): number {
+      return 0;
+    }
+
     public onInteract(source: SW_Player): void {
       this.scene.openChestInventory();
     }

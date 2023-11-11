@@ -2,6 +2,8 @@ import { SW_IInteractable } from "~/game/Interactable/Interactable";
 import { SW_DIRECTIONS } from "~/game/characters/SW_CharacterMovementComponent";
 import { SW_Player,  } from "~/game/characters/players/SW_Player";
 
+export declare type FocusType = (SW_IInteractable & Phaser.Types.Physics.Arcade.ArcadeColliderType & Phaser.GameObjects.Components.ComputedSize);
+
 export class SW_InteractionComponent extends Phaser.GameObjects.Zone
 {
     declare public body: Phaser.Physics.Arcade.Body; 
@@ -10,7 +12,9 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone
     protected _owner: SW_Player;
 
     /** Map of all entities that this component can interact with */
-    protected currentFocus: (SW_IInteractable & Phaser.GameObjects.Components.Transform) | undefined;
+    protected currentFocus: FocusType | undefined;
+
+    protected focusNameText: Phaser.GameObjects.Text;
 
     constructor(owner: SW_Player, x: number, y: number, width?: number, height?: number)
     {
@@ -19,6 +23,11 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone
         this.scene.physics.add.existing(this);
 
         this._owner = owner;
+
+        this.focusNameText = this.scene.add.text(0, 0, "Name focus", { fontSize: "22px", color: "white", stroke: "black", strokeThickness: 3, fontStyle: "bold" });
+        this.focusNameText.setOrigin(0.5, 1);
+        this.focusNameText.setVisible(false);
+        this.focusNameText.setDepth(2);
     }
 
     public get owner(): SW_Player
@@ -30,10 +39,9 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone
     {
         this.updatePosition();
         
-        // @ts-ignore
         if (this.currentFocus && !this.scene.physics.overlap(this.currentFocus, this))
         {
-            this.currentFocus = undefined;
+            this.setCurrentFocus(undefined);
         }
     }
 
@@ -111,6 +119,19 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone
         interactableCompBody.setSize(compWidth, compHeight);
     }
 
+    protected setCurrentFocus(newFocus: FocusType | undefined): void {
+        this.currentFocus = newFocus;
+
+        if (this.currentFocus) {
+            this.focusNameText.setText(this.currentFocus.getHintName());
+            this.focusNameText.setPosition(this.currentFocus.x, this.currentFocus.y + this.currentFocus.getHintOffsetY());
+            this.focusNameText.setVisible(true);
+        }
+        else {
+            this.focusNameText.setVisible(false);
+        }
+    }
+
     public interact(): void
     {
         if (this.currentFocus)
@@ -119,11 +140,11 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone
         }
     }
 
-    public onInteractableOverlapped(interactable: SW_IInteractable & Phaser.GameObjects.Components.Transform): void
+    public onInteractableOverlapped(interactable: FocusType): void
     {
         if (!this.currentFocus)
         {
-            this.currentFocus = interactable
+            this.setCurrentFocus(interactable);
         }
         else
         {
@@ -132,7 +153,7 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone
 
             if (distPlayerInteractable < distPlayerCurrentFocus)
             {
-                this.currentFocus = interactable;
+                this.setCurrentFocus(interactable);
             }
         }
     }

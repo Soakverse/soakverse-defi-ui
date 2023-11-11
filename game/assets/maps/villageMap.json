@@ -52,6 +52,16 @@
                          "name":"dialogue",
                          "type":"string",
                          "value":"Welcome to Soak Village"
+                        }, 
+                        {
+                         "name":"hintName",
+                         "type":"string",
+                         "value":"Soak Rock"
+                        }, 
+                        {
+                         "name":"hintOffsetY",
+                         "type":"int",
+                         "value":-16
                         }],
                  "rotation":0,
                  "type":"",
@@ -69,6 +79,11 @@
                          "name":"dialogue",
                          "type":"string",
                          "value":"The road is blocking the way..."
+                        }, 
+                        {
+                         "name":"hintName",
+                         "type":"string",
+                         "value":"Rocks"
                         }],
                  "rotation":0,
                  "type":"",

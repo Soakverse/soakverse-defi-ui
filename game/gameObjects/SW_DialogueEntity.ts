@@ -9,6 +9,12 @@ export default class SW_DialogueEntity extends Phaser.GameObjects.Zone implement
     /** The dialogue text to display */
     public dialogue: string = "";
 
+    /** The name displayed on top of this entity before trying to interact with it */
+    public hintName: string = "";
+
+    /** The name displayed on top of this entity before trying to interact with it */
+    public hintOffsetY: number = 0;
+
     constructor(scene: SW_GameScene, x: number, y: number, width: number, height: number) {
       super(scene, x, y, width, height);
       this.scene.add.existing(this);
@@ -16,5 +22,13 @@ export default class SW_DialogueEntity extends Phaser.GameObjects.Zone implement
 
     public onInteract(source: SW_Player): void {
       console.log(this.dialogue);
+    }
+
+    public getHintName(): string {
+      return this.hintName;
+    }
+
+    public getHintOffsetY(): number {
+      return 0;
     }
 }
