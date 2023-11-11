@@ -9,9 +9,9 @@ function launch(containerId: string) {
     scale: {
       mode: Phaser.Scale.FIT,
       parent: "phaser-game-holder",
-      autoCenter: Phaser.Scale.CENTER_BOTH,
-      width: 800,
-      height: 600,
+      //autoCenter: Phaser.Scale.CENTER_BOTH,
+      width: SW_CST.GAME.WIDTH,
+      height: SW_CST.GAME.HEIGHT,
     },
     parent: containerId,
     physics: {

@@ -3,12 +3,10 @@ import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import SW_GameUIScene from "~/game/scenes/SW_GameUIScene";
 
 import { usePlayerStore } from "@/stores/game/player";
-import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
-import { SW_DIRECTION, SW_DIRECTIONS } from "~/game/characters/SW_CharacterMovementComponent";
+import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_Player } from "~/game/characters/players/SW_Player";
-import { SW_CharacterSpawner, SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
+import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
 import { FocusType, SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
-import { SW_IInteractable } from "~/game/Interactable/Interactable";
 
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
@@ -261,5 +259,11 @@ export default class SW_GameScene extends SW_BaseScene {
     else {
       this.scene.resume(SW_CST.SCENES.GAME);
     }
+  }
+
+  public requestDialogue(message: string, title: string, iconTexture: string = "", iconFrame: string = ""): void
+  {
+      this.UIscene.requestDialogue(message, title, iconTexture, iconFrame);
+      this.onMenuVisibilityChange(true);
   }
 }

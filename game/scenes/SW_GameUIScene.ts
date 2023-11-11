@@ -3,14 +3,19 @@ import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_PlayerInventoryWidget } from "~/game/inventory/SW_PlayerInventoryWidget";
 import { SW_ChestInventoryWidget } from "~/game/inventory/SW_ChestInventoryWidget";
+import { SW_DialogueBox } from "~/game/dialogues/SW_DialogueBox";
 
 declare type SW_UIKeys = {
-    menu: Phaser.Input.Keyboard.Key;
+    escape: Phaser.Input.Keyboard.Key;
+    space: Phaser.Input.Keyboard.Key;
+    nextPage: Phaser.Input.Keyboard.Key;
 }
 
 export default class SW_GameUIScene extends SW_BaseScene {
     /** Keys to handle the menus */
     declare protected keys: SW_UIKeys;
+
+    declare private dialogueBox: SW_DialogueBox;
 
     declare private playerInventoryWidget: SW_PlayerInventoryWidget;
     declare private chestInventoryWidget: SW_ChestInventoryWidget;
@@ -23,7 +28,9 @@ export default class SW_GameUIScene extends SW_BaseScene {
     ////////////////////////////////////////////////////////////////////////
 
     public create(): void{
-        this.initKeys();
+        this.createKeys();
+
+        this.createDialogueBox();
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
         this.playerInventoryWidget.setVisible(false);
@@ -53,6 +60,19 @@ export default class SW_GameUIScene extends SW_BaseScene {
       ]);
     }
 
+    protected createDialogueBox(): void {
+        this.dialogueBox = new SW_DialogueBox(this, {
+            x: SW_CST.GAME.WIDTH * 0.5,
+            y: SW_CST.GAME.HEIGHT - 12,
+            width: SW_CST.GAME.WIDTH - 100,
+            height: 80,
+            page: { maxLines: 3, pageBreak: "\n" }
+        });
+
+        this.dialogueBox.setOrigin(0.5, 1);
+        this.dialogueBox.layout();
+    }
+
     protected onMovePlayerInventoryMoveObject(inventoryObjectData: SW_InventoryObject, quantity: number): void {
         if (this.chestInventoryWidget.visible) {
             this.playerInventoryWidget.removeObject(inventoryObjectData, quantity);
@@ -68,13 +88,46 @@ export default class SW_GameUIScene extends SW_BaseScene {
         // }
     }
 
-    protected initKeys(): void {
+    protected createKeys(): void {
         if (this.input.keyboard) {
             this.keys = this.input.keyboard.addKeys({
-                menu: Phaser.Input.Keyboard.KeyCodes.ESC
+                escape: Phaser.Input.Keyboard.KeyCodes.ESC,
+                space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+                nextPage: Phaser.Input.Keyboard.KeyCodes.ENTER,
             }, false) as SW_UIKeys;
 
-            this.keys.menu.on("down", this.toggleMenus, this);
+            this.keys.escape.on("down", this.toggleMenus, this);
+            this.keys.space.on("down", this.onNextPageButtonDown, this);
+            this.keys.nextPage.on("down", this.onNextPageButtonDown, this);
+        }
+    }
+
+    protected onEscapeButtonDown(): void {
+        // TODO: Have a generic way to handle menus, have priorities and be able to close the focused one 
+        if (this.dialogueBox.visible) {
+            this.dialogueBox.stop(true);
+            this.dialogueBox.closeDialogue();
+        }
+        else {
+            this.toggleMenus();
+        }
+    }
+
+    protected onNextPageButtonDown(): void {
+        if (this.dialogueBox.visible) {
+            if (this.dialogueBox.isTyping)
+            {
+                this.dialogueBox.stop(true);
+            }
+            else if(this.dialogueBox.isLastPage)
+            {
+                this.dialogueBox.closeDialogue();
+                this.events.emit("menuVisibilityChange", false);
+            }
+            else
+            {
+                this.dialogueBox.typeNextPage();
+            }
         }
     }
 
@@ -130,5 +183,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public updateChestInventory(newInventoryObjects: SW_InventoryObject[]) {
         this.chestInventoryWidget.updateInventory(newInventoryObjects);
+    }
+
+    public requestDialogue(message: string, title: string, iconTexture: string = "", iconFrame: string = ""): void
+    {
+        this.dialogueBox.showMessage(message, title, iconTexture, iconFrame);
     }
 };

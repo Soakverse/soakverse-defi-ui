@@ -78,7 +78,7 @@
                         {
                          "name":"dialogue",
                          "type":"string",
-                         "value":"The road is blocking the way..."
+                         "value":"There are rocks blocking the way..."
                         }, 
                         {
                          "name":"hintName",
@@ -27173,7 +27173,7 @@
                         {
                          "name":"collides",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
@@ -27182,7 +27182,7 @@
                         {
                          "name":"collides",
                          "type":"bool",
-                         "value":true
+                         "value":false
                         }]
                 }, 
                 {
