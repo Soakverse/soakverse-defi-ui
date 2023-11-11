@@ -152,20 +152,32 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   private createPlayer(): void {
+    let playerEntrance: SW_Entrance | undefined;
+
     for (const entrance of this.entranceSpawners) {
       if (entrance.isSpawner && (entrance.mapName == this.lastMapName)) {
-        const playerSpawnData = {
-          name: "player",
-          characterTexture: "player",
-          startDirection: entrance.startDirection,
-          walkSpeed: 110,
-          runSpeed: 190
-        } as SW_SpawnData;
-
-        this.player = new SW_Player(this, entrance.x, entrance.y);
-        this.player.init(playerSpawnData);
+        playerEntrance = entrance;
       }
+    }
 
+    // Take a a default entrance to at least spawn
+    if (playerEntrance == undefined) {
+      console.error("No valid entrance was found. Using a default entrance");
+      playerEntrance = this.entranceSpawners[0];
+    }
+
+    const playerSpawnData = {
+      name: "player",
+      characterTexture: "player",
+      startDirection: playerEntrance.startDirection,
+      walkSpeed: 110,
+      runSpeed: 190
+    } as SW_SpawnData;
+
+    this.player = new SW_Player(this, playerEntrance.x, playerEntrance.y);
+    this.player.init(playerSpawnData);
+
+    for (const entrance of this.entranceSpawners) {
       entrance.destroy();
     }
 
