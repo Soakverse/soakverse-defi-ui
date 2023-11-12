@@ -86,16 +86,28 @@ export class SW_Player extends SW_Character {
 
         for (let i = 0; i < directions.length; ++i) {
             const direction = directions[i];
+
+            // TODO - Make this cleaner once we get the right assets
+            const row = Math.floor(i * 0.5) * 12;
+            const column = (i % 2) == 0 ? 0 : 1;
+
             this.anims.create({
                 key: `Idle${direction}`,
-                frames: this.anims.generateFrameNumbers(texture, { start: i * 3 + 1, end: i * 3 + 1 }),
+                frames: this.anims.generateFrameNumbers(texture, { start: row + column * 3 + 1, end: row + column * 3 + 1 }),
                 frameRate: 1,
                 repeat: 0
             });
 
             this.anims.create({
                 key: `Walk${direction}`,
-                frames: this.anims.generateFrameNumbers(texture, { start: i * 3, end: (i + 1) * 3 - 1 }),
+                frames: this.anims.generateFrameNumbers(texture, { start: row + column * 3, end: row + (column + 1) * 3 - 1 }),
+                frameRate: 6,
+                repeat: -1
+            });
+
+            this.anims.create({
+                key: `Run${direction}`,
+                frames: this.anims.generateFrameNumbers(texture, { start: row + column * 3 + 6, end: row + (column + 1) * 3 - 1 + 6}),
                 frameRate: 6,
                 repeat: -1
             });
@@ -147,7 +159,12 @@ export class SW_Player extends SW_Character {
 
     protected updateAnimations(): void {
         if (this.isWalking) {
-            this.anims.play(`Walk${this.currentDirection}`, true);
+            if (this.wantsToRun) {
+                this.anims.play(`Run${this.currentDirection}`, true);
+            }
+            else {
+                this.anims.play(`Walk${this.currentDirection}`, true);
+            }
         }
         else {
             this.anims.play(`Idle${this.currentDirection}`, true);
