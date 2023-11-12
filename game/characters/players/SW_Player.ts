@@ -40,8 +40,8 @@ export class SW_Player extends SW_Character {
 
         this.characterMovementComponent.init(spawnData.walkSpeed, spawnData.runSpeed);
 
-        this.body.setSize(28, 48);
-        this.body.setOffset(17, 4);
+        this.body.setSize(28, 54);
+        this.body.setOffset(36, 34);
         this.body.setCollideWorldBounds(true);
 
         this.initIniteractableComp();
@@ -82,30 +82,30 @@ export class SW_Player extends SW_Character {
     protected initAnimations(texture: string): void {
         this.setTexture(texture);
 
-        const directions = Object.keys(SW_DIRECTIONS_NO_DIAGONALE);
+        const directions = [SW_DIRECTIONS.Down, SW_DIRECTIONS.DownLeft, SW_DIRECTIONS.Left, SW_DIRECTIONS.DownRight, SW_DIRECTIONS.Right, SW_DIRECTIONS.UpLeft, SW_DIRECTIONS.Up, SW_DIRECTIONS.UpRight];
+
         for (let i = 0; i < directions.length; ++i) {
             const direction = directions[i];
             this.anims.create({
                 key: `Idle${direction}`,
-                frames: this.anims.generateFrameNumbers(texture, { start: i * 4, end: i * 4 }),
+                frames: this.anims.generateFrameNumbers(texture, { start: i * 3 + 1, end: i * 3 + 1 }),
                 frameRate: 1,
                 repeat: 0
             });
 
             this.anims.create({
                 key: `Walk${direction}`,
-                frames: this.anims.generateFrameNumbers(texture, { start: i * 4, end: (i + 1) * 4 - 1 }),
+                frames: this.anims.generateFrameNumbers(texture, { start: i * 3, end: (i + 1) * 3 - 1 }),
                 frameRate: 6,
                 repeat: -1
             });
-        }    
+        }
     }
 
     // Update
     ////////////////////////////////////////////////////////////////////////
 
-    public postUpdate(): void
-    {
+    public postUpdate(): void {
         super.postUpdate();
         
         this.interactableComp.update();
@@ -113,10 +113,26 @@ export class SW_Player extends SW_Character {
 
     protected updateControls(): void {
         if (this.keys.up.isDown) {
-            this.walkUp();
+            if (this.keys.right.isDown) {
+                this.walkUpRight();
+            }
+            else if (this.keys.left.isDown) {
+                this.walkUpLeft();
+            }
+            else {
+                this.walkUp();
+            }
         }
         else if (this.keys.down.isDown) {
-            this.walkDown();
+            if (this.keys.right.isDown) {
+                this.walkDownRight();
+            }
+            else if (this.keys.left.isDown) {
+                this.walkDownLeft();
+            }
+            else {
+                this.walkDown();
+            }
         }
         else if (this.keys.right.isDown) {
             this.walkOnRight();

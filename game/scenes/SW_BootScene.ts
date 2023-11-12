@@ -66,7 +66,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image("inventoryTableBackground", inventoryTableBackground);
     this.load.image("inventoryWidgetBackground", inventoryWidgetBackground);
 
-    this.load.spritesheet("player", player, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet("player", player, { frameWidth: 100, frameHeight: 100 });
 
     this.load.atlas("inventoryItems", inventoryItemsImage, inventoryItemsJson);
   }
