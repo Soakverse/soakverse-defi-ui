@@ -12,6 +12,7 @@ import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
 import SW_Incubator from "~/game/gameObjects/SW_Incubator";
 import SW_DialogueEntity from "~/game/gameObjects/SW_DialogueEntity";
+import { SW_SubMapData, SW_MapManager } from "~/game/maps/SW_MapManager";
 
 const playerStore = usePlayerStore();
 
@@ -28,27 +29,13 @@ export default class SW_GameScene extends SW_BaseScene {
   /** Represents the UI in game */
   declare private UIscene: SW_GameUIScene;
 
-  /** The current tiled map */
-  declare private currentMap: Phaser.Tilemaps.Tilemap;
-  declare private layerBackground1: Phaser.Tilemaps.TilemapLayer;
-  declare private layerBackground2: Phaser.Tilemaps.TilemapLayer;
-  declare private layerForeground1: Phaser.Tilemaps.TilemapLayer;
-  declare private layerForeground2: Phaser.Tilemaps.TilemapLayer;
-
   declare private player: SW_Player;
-
-  /** All entrances to join a new map (ex: a door from a building, an path etc...) */
-  declare private entrances: Phaser.Physics.Arcade.StaticGroup;
-
-  /** All entrances used to spawn the player */
-  declare private entranceSpawners: SW_Entrance[];
-
-  /** Any object the player can interact with */
-  declare private interactableObjects: Phaser.Physics.Arcade.StaticGroup;
 
   declare private currentMapAssetKey: string;
   declare private currentMapName: string;
   declare private lastMapName: string | undefined;
+
+  declare private worldSubMapManager: SW_MapManager;
 
   constructor() {
     super({ key: SW_CST.SCENES.GAME });
@@ -70,116 +57,116 @@ export default class SW_GameScene extends SW_BaseScene {
   public create(): void {
     this.addUniqueListener("postupdate", this.postUpdate, this);
 
-    this.createMap();
+    this.createPlayer();
+    
+    this.worldSubMapManager = new SW_MapManager(this.player);
+    this.worldSubMapManager.createSubMap(0, 0);
+
     this.createPhysics();
     this.createCamera();
     this.createUI();
 
     this.nameText = this.add.text(0, 0, playerStore.name);
-  }
 
-  private createMap(): void {
-    this.currentMap = this.add.tilemap(this.currentMapName);
-
-    const tileset = this.currentMap.addTilesetImage(this.currentMapAssetKey, this.currentMapAssetKey) as Phaser.Tilemaps.Tileset;
-    const layerGround = this.currentMap.createLayer("Layer1", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
-    this.layerBackground1 = this.currentMap.createLayer("Layer2", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
-    this.layerBackground2 = this.currentMap.createLayer("Layer3", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
-
-    this.createEntrances();
-    this.createInteractableObjects();
-    this.createPlayer();
-
-    this.layerForeground1 = this.currentMap.createLayer("Layer4", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
-    this.layerForeground2 = this.currentMap.createLayer("Layer5", tileset, 0, 0) as Phaser.Tilemaps.TilemapLayer;
-
-    const bounds = layerGround.getBounds();
-    this.physics.world.setBounds(0, 0, bounds.width, bounds.height);
+    this.physics.world.setBounds(0, 0, 1000000, 1000000);
   }
 
   private createEntrances(): void {
-    this.entrances = this.physics.add.staticGroup();
-    this.entranceSpawners = [];
+    // this.entrances = this.physics.add.staticGroup();
+    // this.entranceSpawners = [];
 
-    const entranceSpawners = this.currentMap.createFromObjects("Characters", {name: "Entrance", classType: SW_Entrance}) as SW_Entrance[];
-    for (const entrance of entranceSpawners) {
-      if (entrance.isSpawner) {
-        this.entranceSpawners.push(entrance);
-      }
-      else {
-        this.entrances.add(entrance);
-      }
-      entrance.setVisible(entrance.texture.key != "__MISSING");
-    }
+    // const entranceSpawners = this.currentMap.createFromObjects("Characters", {name: "Entrance", classType: SW_Entrance}) as SW_Entrance[];
+    // for (const entrance of entranceSpawners) {
+    //   if (entrance.isSpawner) {
+    //     this.entranceSpawners.push(entrance);
+    //   }
+    //   else {
+    //     this.entrances.add(entrance);
+    //   }
+    //   entrance.setVisible(entrance.texture.key != "__MISSING");
+    // }
   }
 
   private createInteractableObjects(): void {
-    this.interactableObjects = this.physics.add.staticGroup();
+    // this.interactableObjects = this.physics.add.staticGroup();
 
-    const objectTypeData = [
-      { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
-      { name: "Incubator", isZone: true, classType: SW_Incubator },
-      { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
-    ];
+    // const objectTypeData = [
+    //   { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
+    //   { name: "Incubator", isZone: true, classType: SW_Incubator },
+    //   { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
+    // ];
 
-    for (const objectData of objectTypeData) {
-      const interactableObjects = this.currentMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
+    // for (const objectData of objectTypeData) {
+    //   const interactableObjects = this.currentMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
 
-      for (const interactableObject of interactableObjects) {
-        if (objectData.isZone) {
-          const classType = objectData.classType;
-          const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
-          zone.width = interactableObject.scaleX * 32;
-          zone.height = interactableObject.scaleY * 32;
+    //   for (const interactableObject of interactableObjects) {
+    //     if (objectData.isZone) {
+    //       const classType = objectData.classType;
+    //       const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
+    //       zone.width = interactableObject.scaleX * 32;
+    //       zone.height = interactableObject.scaleY * 32;
 
-          if (interactableObject.data && interactableObject.data.list) {
-            for (const key in interactableObject.data.list) {
-              // @ts-ignore
-              zone[key] = interactableObject.data.list[key];
-            }
-          }
+    //       if (interactableObject.data && interactableObject.data.list) {
+    //         for (const key in interactableObject.data.list) {
+    //           // @ts-ignore
+    //           zone[key] = interactableObject.data.list[key];
+    //         }
+    //       }
 
-          this.interactableObjects.add(zone);
-          interactableObject.destroy();
-        }
-        else {
-          this.interactableObjects.add(interactableObject);
-        }
-      }
-    }
+    //       this.interactableObjects.add(zone);
+    //       interactableObject.destroy();
+    //     }
+    //     else {
+    //       this.interactableObjects.add(interactableObject);
+    //     }
+    //   }
+    // }
   }
 
   private createPlayer(): void {
-    let playerEntrance: SW_Entrance | undefined;
-
-    for (const entrance of this.entranceSpawners) {
-      if (entrance.isSpawner && (entrance.mapName == this.lastMapName)) {
-        playerEntrance = entrance;
-      }
-    }
-
-    // Take a a default entrance to at least spawn
-    if (playerEntrance == undefined) {
-      console.error("No valid entrance was found. Using a default entrance");
-      playerEntrance = this.entranceSpawners[0];
-    }
-
     const playerSpawnData = {
       name: "player",
       characterTexture: "player",
-      startDirection: playerEntrance.startDirection,
+      startDirection: "Down",
       walkSpeed: 110,
       runSpeed: 190
     } as SW_SpawnData;
 
-    this.player = new SW_Player(this, playerEntrance.x, playerEntrance.y);
+    this.player = new SW_Player(this, 200, 200);
     this.player.init(playerSpawnData);
+    this.player.setDepth(2);
 
-    for (const entrance of this.entranceSpawners) {
-      entrance.destroy();
-    }
+    // let playerEntrance: SW_Entrance | undefined;
 
-    this.entranceSpawners = [];
+    // for (const entrance of this.entranceSpawners) {
+    //   if (entrance.isSpawner && (entrance.mapName == this.lastMapName)) {
+    //     playerEntrance = entrance;
+    //   }
+    // }
+
+    // // Take a a default entrance to at least spawn
+    // if (playerEntrance == undefined) {
+    //   console.error("No valid entrance was found. Using a default entrance");
+    //   playerEntrance = this.entranceSpawners[0];
+    // }
+
+    // const playerSpawnData = {
+    //   name: "player",
+    //   characterTexture: "player",
+    //   startDirection: playerEntrance.startDirection,
+    //   walkSpeed: 110,
+    //   runSpeed: 190
+    // } as SW_SpawnData;
+
+    // this.player = new SW_Player(this, playerEntrance.x, playerEntrance.y);
+    // this.player.init(playerSpawnData);
+    // this.player.setDepth(2);
+
+    // for (const entrance of this.entranceSpawners) {
+    //   entrance.destroy();
+    // }
+
+    // this.entranceSpawners = [];
   }
 
   private createCamera(): void {
@@ -189,14 +176,14 @@ export default class SW_GameScene extends SW_BaseScene {
 
   private createPhysics(): void
   {
-      this.layerBackground2.setCollisionByProperty({collides: true});
-      this.layerForeground1.setCollisionByProperty({collides: true});
+      // this.layerBackground2.setCollisionByProperty({collides: true});
+      // this.layerForeground1.setCollisionByProperty({collides: true});
 
-      this.physics.add.collider(this.player, this.layerBackground2);
-      this.physics.add.collider(this.player, this.layerForeground1);
+      // this.physics.add.collider(this.player, this.layerBackground2);
+      // this.physics.add.collider(this.player, this.layerForeground1);
 
-      this.physics.add.overlap(this.player, this.entrances, this.onPlayerEnter, this.canPlayerEnter, this);
-      this.physics.add.overlap(this.player.getInteractableComp(), this.interactableObjects, this.onPlayerOverlapInteractable, undefined, this);
+      // this.physics.add.overlap(this.player, this.entrances, this.onPlayerEnter, this.canPlayerEnter, this);
+      // this.physics.add.overlap(this.player.getInteractableComp(), this.interactableObjects, this.onPlayerOverlapInteractable, undefined, this);
   }
 
   private createUI(): void {
@@ -213,6 +200,7 @@ export default class SW_GameScene extends SW_BaseScene {
     // this.name = playerStore.name;
     // this.nameText.setText(playerStore.name);
 
+    this.worldSubMapManager.update();    
     this.player.update();
   }
 
