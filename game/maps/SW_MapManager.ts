@@ -4,7 +4,7 @@ import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 
 export declare type SW_SubMapData = {
     /** The tiled sub map */
-    submap: Phaser.Tilemaps.Tilemap;
+    subMap: Phaser.Tilemaps.Tilemap;
   
     /** All entrances to join a new map (ex: a door from a building, an path etc...) */
     entrances: Phaser.Physics.Arcade.StaticGroup;
@@ -26,9 +26,12 @@ export class SW_MapManager {
     private player: SW_Player;
     private subMapDataMap: Map<string, SW_SubMapData>;
 
+    private prevLocalPercentMapX: number = 0;
+    private prevLocalPercentMapY: number = 0;
+
     private currentLocalPercentMapX: number = 0;
     private currentLocalPercentMapY: number = 0;
-  
+
     private currentSubMapX: number = 0;
     private currentSubMapY: number = 0;
   
@@ -38,23 +41,25 @@ export class SW_MapManager {
     private subMapMaxX: number = 2;
     private subMapMaxY: number = 2;
 
-    private subMapThreshold: number = 0.2;
+    private subMapThreshold: number = 0.35;
 
     constructor (player: SW_Player) {
         this.scene = player.scene as SW_GameScene;
         this.player = player;
         this.subMapDataMap = new Map<string, SW_SubMapData>();
+
+        this.initSubMaps();
     }
 
-    public hasSubMap(subMapX: number, subMapY: number): boolean {
+    private hasSubMap(subMapX: number, subMapY: number): boolean {
         return this.subMapDataMap.has(`${subMapX}_${subMapY}`);
     }
 
-    public isMapCoordValid(subMapX: number, subMapY: number): boolean {
+    private isMapCoordValid(subMapX: number, subMapY: number): boolean {
         return (subMapX >= 0) && (subMapX <= this.subMapMaxX) && (subMapY >= 0) && (subMapY <= this.subMapMaxY);
     }
 
-    public createSubMap(subMapX: number, subMapY: number): void {
+    private spawnSubMap(subMapX: number, subMapY: number): void {
         if (!this.isMapCoordValid(subMapX, subMapY) || this.hasSubMap(subMapX, subMapY)) {
             return;
         }
@@ -84,7 +89,7 @@ export class SW_MapManager {
         // const interactableObjects = createInteractableObjects();
 
         const subMapData = {
-            submap: subMap,
+            subMap: subMap,
             entrances: this.scene.physics.add.staticGroup(),
             entranceSpawners: [],
             interactableObjects: this.scene.physics.add.staticGroup(),
@@ -97,145 +102,229 @@ export class SW_MapManager {
         this.subMapDataMap.set(subMapId, subMapData);
     }
 
+    private spawnSubMapOnRight(): void {
+        const rightSubMapX = this.currentSubMapX + 1; 
+        const downSubMapY = this.currentSubMapY + 1;
+        const upSubMapY = this.currentSubMapY - 1;
+
+        this.spawnSubMap(rightSubMapX, this.currentSubMapY);
+
+        if (this.hasSubMap(this.currentSubMapX, downSubMapY)) {
+            this.spawnSubMap(rightSubMapX, downSubMapY);
+        }
+        else if (this.hasSubMap(this.currentSubMapX, upSubMapY)) {
+            this.spawnSubMap(rightSubMapX, upSubMapY);
+        }
+    }
+
+    private spawnSubMapOnLeft(): void {
+        const leftSubMapX = this.currentSubMapX - 1;
+        const downSubMapY = this.currentSubMapY + 1;
+        const upSubMapY = this.currentSubMapY - 1;
+
+        this.spawnSubMap(leftSubMapX, this.currentSubMapY);
+
+        if (this.hasSubMap(this.currentSubMapX, downSubMapY)) {
+            this.spawnSubMap(leftSubMapX, downSubMapY);
+        }
+        else if (this.hasSubMap(this.currentSubMapX, upSubMapY)) {
+            this.spawnSubMap(leftSubMapX, upSubMapY);
+        }
+    }
+
+    private spawnSubMapOnBottom(): void {
+        const rightSubMapX = this.currentSubMapX + 1; 
+        const leftSubMapX = this.currentSubMapX - 1;
+        const downSubMapY = this.currentSubMapY + 1;
+
+        this.spawnSubMap(this.currentSubMapX, downSubMapY);
+
+        if (this.hasSubMap(leftSubMapX, this.currentSubMapY)) {
+            this.spawnSubMap(leftSubMapX, downSubMapY);
+        }
+        else if (this.hasSubMap(rightSubMapX, this.currentSubMapY)) {
+            this.spawnSubMap(rightSubMapX, downSubMapY);
+        }
+    }
+
+    private spawnSubMapOnTop(): void {
+        const rightSubMapX = this.currentSubMapX + 1; 
+        const leftSubMapX = this.currentSubMapX - 1;
+        const upSubMapY = this.currentSubMapY - 1;
+
+        this.spawnSubMap(this.currentSubMapX, upSubMapY);
+
+        if (this.hasSubMap(leftSubMapX, this.currentSubMapY)) {
+            this.spawnSubMap(leftSubMapX, upSubMapY);
+        }
+        else if (this.hasSubMap(rightSubMapX, this.currentSubMapY)) {
+            this.spawnSubMap(rightSubMapX, upSubMapY);
+        }
+    }
+
+    private clearSubMapOnRight(): void {
+        const rightSubMapX = this.currentSubMapX + 1; 
+        const upSubMapY = this.currentSubMapY - 1;
+        const downSubMapY = this.currentSubMapY + 1;
+
+        this.clearSubMap(rightSubMapX, this.currentSubMapY);
+        this.clearSubMap(rightSubMapX, downSubMapY);
+        this.clearSubMap(rightSubMapX, upSubMapY);
+    }
+
+    private clearSubMapOnLeft(): void {
+        const leftSubMapX = this.currentSubMapX - 1;
+        const upSubMapY = this.currentSubMapY - 1;
+        const downSubMapY = this.currentSubMapY + 1;
+
+        this.clearSubMap(leftSubMapX, this.currentSubMapY);
+        this.clearSubMap(leftSubMapX, downSubMapY);
+        this.clearSubMap(leftSubMapX, upSubMapY);
+    }
+
+    private clearSubMapOnBottom(): void {
+        const rightSubMapX = this.currentSubMapX + 1; 
+        const leftSubMapX = this.currentSubMapX - 1;
+        const downSubMapY = this.currentSubMapY + 1;
+
+        this.clearSubMap(this.currentSubMapX, downSubMapY);
+        this.clearSubMap(leftSubMapX, downSubMapY);
+        this.clearSubMap(rightSubMapX, downSubMapY);
+    }
+
+    private clearSubMapOnTop(): void {
+        const rightSubMapX = this.currentSubMapX + 1; 
+        const leftSubMapX = this.currentSubMapX - 1;
+        const upSubMapY = this.currentSubMapY - 1;
+
+        this.clearSubMap(this.currentSubMapX, upSubMapY);
+        this.clearSubMap(leftSubMapX, upSubMapY);
+        this.clearSubMap(rightSubMapX, upSubMapY);
+    }
+
+
     private clearSubMap(subMapX: number, subMapY: number): void {
-        console.log("clear ?", subMapX, subMapY)
         const subMapId = `${subMapX}_${subMapY}`;
         const subMapData = this.subMapDataMap.get(subMapId);
 
         if (subMapData)
         {
-            subMapData.submap.destroy();
+            subMapData.subMap.destroy();
             subMapData.entrances.clear(true, true);
             this.subMapDataMap.delete(subMapId);
         }
     }
 
-    private shouldSpawnSubMapOnRight(newPercentX: number): boolean {
-        return (newPercentX > (1 - this.subMapThreshold)) && (this.currentLocalPercentMapX <= (1 - this.subMapThreshold));
+    private isPlayerNearSubMapRight(): boolean {
+        return (this.currentLocalPercentMapX > (1 - this.subMapThreshold));
     }
 
-    private shouldClearSubMapOnRight(newPercentX: number): boolean {
-        return (this.currentLocalPercentMapX > (1 - this.subMapThreshold)) && (newPercentX <= (1 - this.subMapThreshold));
+    private isPlayerNearSubMapLeft(): boolean {
+        return (this.currentLocalPercentMapX < this.subMapThreshold) ;
     }
 
-    private shouldSpawnSubMapOnLeft(newPercentX: number): boolean {
-        return (newPercentX < this.subMapThreshold) && (this.currentLocalPercentMapX >= this.subMapThreshold);
+    private isPlayerNearSubMapBottom(): boolean {
+        return (this.currentLocalPercentMapY > (1 - this.subMapThreshold));
     }
 
-    private shouldClearSubMapOnLeft(newPercentX: number): boolean {
-        return (this.currentLocalPercentMapX < this.subMapThreshold) && (newPercentX >= this.subMapThreshold);
+    private isPlayerNearSubMapTop(): boolean {
+        return (this.currentLocalPercentMapY < this.subMapThreshold);
     }
 
-    private shouldSpawnSubMapOnBottom(newPercentY: number): boolean {
-        return (newPercentY > (1 - this.subMapThreshold)) && (this.currentLocalPercentMapY <= (1 - this.subMapThreshold));
+    private shouldSpawnSubMapOnRight(): boolean {
+        return this.isPlayerNearSubMapRight() && (this.prevLocalPercentMapX <= (1 - this.subMapThreshold));
     }
 
-    private shouldClearSubMapOnBottom(newPercentY: number): boolean {
-        return (this.currentLocalPercentMapY > (1 - this.subMapThreshold)) && (newPercentY <= (1 - this.subMapThreshold));
+    private shouldClearSubMapOnRight(): boolean {
+        return (this.prevLocalPercentMapX > (1 - this.subMapThreshold)) && (this.currentLocalPercentMapX <= (1 - this.subMapThreshold));
     }
 
-    private shouldSpawnSubMapOnTop(newPercentY: number): boolean {
-        return (newPercentY < this.subMapThreshold) && (this.currentLocalPercentMapY >= this.subMapThreshold);
+    private shouldSpawnSubMapOnLeft(): boolean {
+        return this.isPlayerNearSubMapLeft() && (this.prevLocalPercentMapX >= this.subMapThreshold);
     }
 
-    private shouldClearSubMapOnTop(newPercentY: number): boolean {
-        return (this.currentLocalPercentMapY < this.subMapThreshold) && (newPercentY >= this.subMapThreshold);
+    private shouldClearSubMapOnLeft(): boolean {
+        return (this.prevLocalPercentMapX < this.subMapThreshold) && (this.currentLocalPercentMapX >= this.subMapThreshold);
+    }
+
+    private shouldSpawnSubMapOnBottom(): boolean {
+        return this.isPlayerNearSubMapBottom() && (this.prevLocalPercentMapY <= (1 - this.subMapThreshold));
+    }
+
+    private shouldClearSubMapOnBottom(): boolean {
+        return (this.prevLocalPercentMapY > (1 - this.subMapThreshold)) && (this.currentLocalPercentMapY <= (1 - this.subMapThreshold));
+    }
+
+    private shouldSpawnSubMapOnTop(): boolean {
+        return this.isPlayerNearSubMapTop() && (this.prevLocalPercentMapY >= this.subMapThreshold);
+    }
+
+    private shouldClearSubMapOnTop(): boolean {
+        return (this.prevLocalPercentMapY < this.subMapThreshold) && (this.currentLocalPercentMapY >= this.subMapThreshold);
+    }
+
+    private updatePlayerData(): void {
+        this.prevLocalPercentMapX = this.currentLocalPercentMapX;
+        this.prevLocalPercentMapY = this.currentLocalPercentMapY;
+
+        this.currentLocalPercentMapX = (this.player.x % this.mapWidth) / this.mapWidth;
+        this.currentLocalPercentMapY = (this.player.y % this.mapHeight) / this.mapHeight;
+
+        this.currentSubMapX = Math.floor(this.player.x / this.mapWidth);
+        this.currentSubMapY = Math.floor(this.player.y / this.mapHeight);
+    }
+
+    public initSubMaps(): void {
+        this.updatePlayerData();
+
+        this.spawnSubMap(this.currentSubMapX, this.currentSubMapY);
+
+        if (this.isPlayerNearSubMapRight()) {
+            this.spawnSubMapOnRight();
+        }
+        else if (this.isPlayerNearSubMapLeft()) {
+            this.spawnSubMapOnLeft();
+        }
+        
+        if (this.isPlayerNearSubMapBottom()) {
+            this.spawnSubMapOnBottom();
+        }
+        else if (this.isPlayerNearSubMapTop()) {
+            this.spawnSubMapOnTop();
+        }
     }
 
     public update(): void {
-        const newSubMapX = Math.floor(this.player.x / this.mapWidth);
-        const newSubMapY = Math.floor(this.player.y / this.mapHeight);
+        this.updatePlayerData();
 
-        const localMapX = (this.player.x % this.mapWidth);
-        const localMapY = (this.player.y % this.mapHeight);
-
-        const newlocalPercentMapX = localMapX / this.mapWidth;
-        const newlocalPercentMapY = localMapY / this.mapHeight;
-
-        const rightSubMapX = newSubMapX + 1; 
-        const leftSubMapX = newSubMapX - 1;
-
-        const downSubMapY = newSubMapY + 1;
-        const upSubMapY = newSubMapY - 1;
-
-        if (this.currentSubMapX == newSubMapX) {
-            if (this.shouldSpawnSubMapOnRight(newlocalPercentMapX)) {
-                this.createSubMap(rightSubMapX, newSubMapY);
-
-                if (this.hasSubMap(newSubMapX, downSubMapY)) {
-                    
-                    this.createSubMap(rightSubMapX, downSubMapY);
-                }
-                else if (this.hasSubMap(newSubMapX, upSubMapY)) {
-                    
-                    this.createSubMap(rightSubMapX, upSubMapY);
-                }
+        if (this.currentSubMapX == this.currentSubMapX) {
+            if (this.shouldSpawnSubMapOnRight()) {
+                this.spawnSubMapOnRight();
             }
-            else if (this.shouldClearSubMapOnRight(newlocalPercentMapX)) {
-                this.clearSubMap(rightSubMapX, newSubMapY);
-                this.clearSubMap(rightSubMapX, downSubMapY);
-                this.clearSubMap(rightSubMapX, upSubMapY);
+            else if (this.shouldClearSubMapOnRight()) {
+                this.clearSubMapOnRight();
             }
-            else if (this.shouldSpawnSubMapOnLeft(newlocalPercentMapX)) {
-                this.createSubMap(leftSubMapX, newSubMapY);
-
-                if (this.hasSubMap(newSubMapX, downSubMapY)) {
-                    
-                    this.createSubMap(leftSubMapX, downSubMapY);
-                }
-                else if (this.hasSubMap(newSubMapX, upSubMapY)) {
-                    
-                    this.createSubMap(leftSubMapX, upSubMapY);
-                }
+            else if (this.shouldSpawnSubMapOnLeft()) {
+                this.spawnSubMapOnLeft();
             }
-            else if (this.shouldClearSubMapOnLeft(newlocalPercentMapX)) {
-                this.clearSubMap(leftSubMapX, newSubMapY);
-                this.clearSubMap(leftSubMapX, downSubMapY);
-                this.clearSubMap(leftSubMapX, upSubMapY);
+            else if (this.shouldClearSubMapOnLeft()) {
+                this.clearSubMapOnLeft();
             }
         }
         
-        if (this.currentSubMapY == newSubMapY) {
-            if (this.shouldSpawnSubMapOnBottom(newlocalPercentMapY)) {
-                this.createSubMap(newSubMapX, downSubMapY);
-
-                if (this.hasSubMap(leftSubMapX, newSubMapY)) {
-                    
-                    this.createSubMap(leftSubMapX, downSubMapY);
-                }
-                else if (this.hasSubMap(rightSubMapX, newSubMapY)) {
-                    
-                    this.createSubMap(rightSubMapX, downSubMapY);
-                }
+        if (this.currentSubMapY == this.currentSubMapY) {
+            if (this.shouldSpawnSubMapOnBottom()) {
+                this.spawnSubMapOnBottom();
             }
-            else if (this.shouldClearSubMapOnBottom(newlocalPercentMapY)) {
-                this.clearSubMap(newSubMapX, downSubMapY);
-                this.clearSubMap(leftSubMapX, downSubMapY);
-                this.clearSubMap(rightSubMapX, downSubMapY);
+            else if (this.shouldClearSubMapOnBottom()) {
+                this.clearSubMapOnBottom();
             }
-            else if (this.shouldSpawnSubMapOnTop(newlocalPercentMapY)) {
-                this.createSubMap(newSubMapX, upSubMapY);
-
-                if (this.hasSubMap(leftSubMapX, newSubMapY)) {
-                    
-                    this.createSubMap(leftSubMapX, upSubMapY);
-                }
-                else if (this.hasSubMap(rightSubMapX, newSubMapY)) {
-                    
-                    this.createSubMap(rightSubMapX, upSubMapY);
-                }
+            else if (this.shouldSpawnSubMapOnTop()) {
+                this.spawnSubMapOnTop();
             }
-            else if (this.shouldClearSubMapOnTop(newlocalPercentMapY)) {
-                this.clearSubMap(newSubMapX, upSubMapY);
-                this.clearSubMap(leftSubMapX, upSubMapY);
-                this.clearSubMap(rightSubMapX, upSubMapY);
+            else if (this.shouldClearSubMapOnTop()) {
+                this.clearSubMapOnTop();
             }
         }
-        
-        this.currentLocalPercentMapX = newlocalPercentMapX;
-        this.currentLocalPercentMapY = newlocalPercentMapY;
-
-        this.currentSubMapX = newSubMapX;
-        this.currentSubMapY = newSubMapY;
     }
 }

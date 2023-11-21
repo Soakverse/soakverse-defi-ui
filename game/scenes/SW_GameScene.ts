@@ -60,7 +60,6 @@ export default class SW_GameScene extends SW_BaseScene {
     this.createPlayer();
     
     this.worldSubMapManager = new SW_MapManager(this.player);
-    this.worldSubMapManager.createSubMap(0, 0);
 
     this.createPhysics();
     this.createCamera();
@@ -128,7 +127,7 @@ export default class SW_GameScene extends SW_BaseScene {
       name: "player",
       characterTexture: "player",
       startDirection: "Down",
-      walkSpeed: 110,
+      walkSpeed: 340,
       runSpeed: 190
     } as SW_SpawnData;
 
