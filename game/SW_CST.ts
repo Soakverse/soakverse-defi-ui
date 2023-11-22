@@ -8,12 +8,7 @@ export const SW_CST = {
     GAME: {
         WIDTH: 800,
         HEIGHT: 500,
-        ZOOM: 0.5,
-        DEPTH: {
-            BACKGROUND: 1,
-            PLAYER: 2,
-            FOREGROUND: 3
-        }
+        ZOOM: 0.5
     },
     STYLE: {
         TEXT: {

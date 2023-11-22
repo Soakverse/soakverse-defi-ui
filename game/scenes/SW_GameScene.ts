@@ -133,7 +133,6 @@ export default class SW_GameScene extends SW_BaseScene {
 
     this.player = new SW_Player(this, 200, 200);
     this.player.init(playerSpawnData);
-    this.player.setDepth(2);
 
     // let playerEntrance: SW_Entrance | undefined;
 

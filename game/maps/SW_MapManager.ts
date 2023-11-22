@@ -2,23 +2,34 @@ import SW_GameScene from "~/game/scenes/SW_GameScene";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 
+const depthBackground = 1;
+const depthPlayer = 2;
+const depthForeground = 3;
+
 export declare type SW_SubMapData = {
+    subMapX: number;
+    subMapY: number;
+
     /** The tiled sub map */
     subMap: Phaser.Tilemaps.Tilemap;
-  
+
+    /** Tileset to use for the tile assets */
+    tileset: Phaser.Tilemaps.Tileset;
+
     /** All entrances to join a new map (ex: a door from a building, an path etc...) */
     entrances: Phaser.Physics.Arcade.StaticGroup;
-  
+
     /** All entrances used to spawn the player */
     entranceSpawners: SW_Entrance[];
-  
+
     /** Any object the player can interact with */
-    interactableObjects: Phaser.Physics.Arcade.StaticGroup;
-  
-    layerBackground1: Phaser.Tilemaps.TilemapLayer;
-    layerBackground2: Phaser.Tilemaps.TilemapLayer;
-    layerForeground1: Phaser.Tilemaps.TilemapLayer;
-    layerForeground2: Phaser.Tilemaps.TilemapLayer;
+    interactableObjects: Phaser.Physics.Arcade.StaticGroup | undefined;
+
+    layerGround: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerBackground1: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerBackground2: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerForeground1: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerForeground2: Phaser.Tilemaps.TilemapLayer | undefined;
   };
 
 export class SW_MapManager {
@@ -43,11 +54,15 @@ export class SW_MapManager {
 
     private subMapThreshold: number = 0.35;
 
+    private spawnMapQueue: SW_SubMapData[] = [];
+
     constructor (player: SW_Player) {
         this.scene = player.scene as SW_GameScene;
+       
         this.player = player;
-        this.subMapDataMap = new Map<string, SW_SubMapData>();
+        this.player.setDepth(depthPlayer);
 
+        this.subMapDataMap = new Map<string, SW_SubMapData>();
         this.initSubMaps();
     }
 
@@ -65,39 +80,28 @@ export class SW_MapManager {
         }
 
         const subMapId = `${subMapX}_${subMapY}`;
-        const offsetX = subMapX * this.mapWidth;
-        const offsetY = subMapY * this.mapHeight;
-
         const subMap = this.scene.add.tilemap(`soakWorld_${subMapId}`);
-
-        const tileset = subMap.addTilesetImage("outsideAssetTiled", "outsideAssetTiled") as Phaser.Tilemaps.Tileset;
-        const layerGround = subMap.createLayer("Layer1", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
-        layerGround.setDepth(1);
-
-        const layerBackground1 = subMap.createLayer("Layer2", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
-        layerBackground1.setDepth(1);
-        const layerBackground2 = subMap.createLayer("Layer3", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
-        layerBackground2.setDepth(1);
-
-        const layerForeground1 = subMap.createLayer("Layer4", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
-        layerForeground1.setDepth(3);
-        const layerForeground2 = subMap.createLayer("Layer5", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
-        layerForeground2.setDepth(3);   
 
         // const entrances = createEntrances();
         // const entranceSpawners
         // const interactableObjects = createInteractableObjects();
 
         const subMapData = {
+            subMapX: subMapX,
+            subMapY: subMapY,
             subMap: subMap,
+            tileset: subMap.addTilesetImage("outsideAssetTiled", "outsideAssetTiled") as Phaser.Tilemaps.Tileset,
             entrances: this.scene.physics.add.staticGroup(),
             entranceSpawners: [],
-            interactableObjects: this.scene.physics.add.staticGroup(),
-            layerBackground1: layerBackground1,
-            layerBackground2: layerBackground2,
-            layerForeground1: layerForeground1,
-            layerForeground2: layerForeground2
+            interactableObjects: undefined,
+            layerGround: undefined,
+            layerBackground1: undefined,
+            layerBackground2: undefined,
+            layerForeground1: undefined,
+            layerForeground2: undefined
         } as SW_SubMapData;
+
+        this.spawnMapQueue.push(subMapData);
 
         this.subMapDataMap.set(subMapId, subMapData);
     }
@@ -202,7 +206,6 @@ export class SW_MapManager {
         this.clearSubMap(rightSubMapX, upSubMapY);
     }
 
-
     private clearSubMap(subMapX: number, subMapY: number): void {
         const subMapId = `${subMapX}_${subMapY}`;
         const subMapData = this.subMapDataMap.get(subMapId);
@@ -212,6 +215,18 @@ export class SW_MapManager {
             subMapData.subMap.destroy();
             subMapData.entrances.clear(true, true);
             this.subMapDataMap.delete(subMapId);
+
+            this.removeFromSubMapQueue(subMapX, subMapY);
+        }
+    }
+
+    private removeFromSubMapQueue(subMapX: number, subMapY: number): void {
+        const index = this.spawnMapQueue.findIndex((subMapData: SW_SubMapData) => {
+            return (subMapData.subMapX == subMapX) && (subMapData.subMapY == subMapY);
+        });
+
+        if ((index >= 0) && (index < this.spawnMapQueue.length)) {
+            this.spawnMapQueue.splice(index);
         }
     }
 
@@ -275,6 +290,8 @@ export class SW_MapManager {
     }
 
     public initSubMaps(): void {
+        this.clear();
+
         this.updatePlayerData();
 
         this.spawnSubMap(this.currentSubMapX, this.currentSubMapY);
@@ -294,7 +311,53 @@ export class SW_MapManager {
         }
     }
 
+    public clear(): void {
+        this.spawnMapQueue = [];
+
+        this.subMapDataMap.forEach((subMapData: SW_SubMapData) => {
+            subMapData.subMap.destroy();
+            subMapData.entrances.clear(true, true);
+        }, this);
+        this.subMapDataMap.clear();
+    }
+
+    private updateQueue(): void {
+        const length = this.spawnMapQueue.length;
+
+        if (length > 0) {
+            const subMapData = this.spawnMapQueue[length - 1];
+            const offsetX = subMapData.subMapX * this.mapWidth;
+            const offsetY = subMapData.subMapY * this.mapHeight;
+            const tileset = subMapData.tileset;
+
+            if (!subMapData.layerGround) {
+                subMapData.layerGround = subMapData.subMap.createLayer("Layer1", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
+                subMapData.layerGround.setDepth(depthBackground);
+            }
+            else if (!subMapData.layerBackground1) {
+                subMapData.layerBackground1 =  subMapData.subMap.createLayer("Layer2", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
+                subMapData.layerBackground1.setDepth(depthBackground);
+            }
+            else if (!subMapData.layerBackground2) {
+                subMapData.layerBackground2 =  subMapData.subMap.createLayer("Layer3", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
+                subMapData.layerBackground2.setDepth(depthBackground);
+            }
+            else if (!subMapData.layerForeground1) {
+                subMapData.layerForeground1 =  subMapData.subMap.createLayer("Layer4", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
+                subMapData.layerForeground1.setDepth(depthForeground);
+            }
+            else if (!subMapData.layerForeground2) {
+                subMapData.layerForeground2 =  subMapData.subMap.createLayer("Layer5", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
+                subMapData.layerForeground2.setDepth(depthForeground);
+            }
+            else {
+                this.spawnMapQueue.pop();
+            }
+        }
+    }
+
     public update(): void {
+        this.updateQueue();
         this.updatePlayerData();
 
         if (this.currentSubMapX == this.currentSubMapX) {
