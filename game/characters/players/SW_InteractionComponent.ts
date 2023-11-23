@@ -27,7 +27,7 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone
         this.focusNameText = this.scene.add.text(0, 0, "Name focus", { fontSize: "22px", color: "white", stroke: "black", strokeThickness: 3, fontStyle: "bold" });
         this.focusNameText.setOrigin(0.5, 1);
         this.focusNameText.setVisible(false);
-        this.focusNameText.setDepth(2);
+        this.focusNameText.setDepth(9999);
     }
 
     public get owner(): SW_Player

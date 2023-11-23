@@ -23,16 +23,21 @@ export declare type SW_SubMapData = {
     entranceSpawners: SW_Entrance[];
 
     /** Any object the player can interact with */
-    interactableObjects: Phaser.Physics.Arcade.StaticGroup | undefined;
+    interactableObjects?: Phaser.Physics.Arcade.StaticGroup | undefined;
 
-    layerGround: Phaser.Tilemaps.TilemapLayer | undefined;
-    layerBackground1: Phaser.Tilemaps.TilemapLayer | undefined;
-    layerBackground2: Phaser.Tilemaps.TilemapLayer | undefined;
-    layerForeground1: Phaser.Tilemaps.TilemapLayer | undefined;
-    layerForeground2: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerGround?: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerBackground1?: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerBackground2?: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerForeground1?: Phaser.Tilemaps.TilemapLayer | undefined;
+    layerForeground2?: Phaser.Tilemaps.TilemapLayer | undefined;
+
+    layerForeground1_collider?: Phaser.Physics.Arcade.Collider | undefined;
+    layerBackground2_collider?: Phaser.Physics.Arcade.Collider | undefined;
+    entrances_collider?: Phaser.Physics.Arcade.Collider | undefined;
+    interactableObjects_collider?: Phaser.Physics.Arcade.Collider | undefined;
   };
 
-export class SW_MapManager {
+export class SW_MapManager extends Phaser.Events.EventEmitter {
     private scene: SW_GameScene;
     private player: SW_Player;
     private subMapDataMap: Map<string, SW_SubMapData>;
@@ -57,12 +62,16 @@ export class SW_MapManager {
     private spawnMapQueue: SW_SubMapData[] = [];
 
     constructor (player: SW_Player) {
+        super();
+
         this.scene = player.scene as SW_GameScene;
        
         this.player = player;
         this.player.setDepth(depthPlayer);
 
         this.subMapDataMap = new Map<string, SW_SubMapData>();
+        this.spawnMapQueue = [];
+
         this.initSubMaps();
     }
 
@@ -93,12 +102,6 @@ export class SW_MapManager {
             tileset: subMap.addTilesetImage("outsideAssetTiled", "outsideAssetTiled") as Phaser.Tilemaps.Tileset,
             entrances: this.scene.physics.add.staticGroup(),
             entranceSpawners: [],
-            interactableObjects: undefined,
-            layerGround: undefined,
-            layerBackground1: undefined,
-            layerBackground2: undefined,
-            layerForeground1: undefined,
-            layerForeground2: undefined
         } as SW_SubMapData;
 
         this.spawnMapQueue.push(subMapData);
@@ -212,6 +215,10 @@ export class SW_MapManager {
 
         if (subMapData)
         {
+            subMapData.layerBackground2_collider?.destroy();
+            subMapData.layerForeground1_collider?.destroy();
+            subMapData.entrances_collider?.destroy();
+            subMapData.interactableObjects_collider?.destroy();
             subMapData.subMap.destroy();
             subMapData.entrances.clear(true, true);
             this.subMapDataMap.delete(subMapId);
@@ -321,6 +328,22 @@ export class SW_MapManager {
         this.subMapDataMap.clear();
     }
 
+    private createEntrances(subMapData: SW_SubMapData): Phaser.Physics.Arcade.StaticGroup {
+        const entranceGroup = this.scene.physics.add.staticGroup();
+
+        const entrances = subMapData.subMap.createFromObjects("Characters", {name: "Entrance", classType: SW_Entrance}) as SW_Entrance[];
+        for (const entrance of entrances) {
+            if (!entrance.isSpawner) {
+                entranceGroup.add(entrance);
+                entrance.setVisible(entrance.texture.key != "__MISSING");
+            }
+            else {
+                entrance.destroy();
+            }
+        }
+        return entranceGroup;
+    }
+
     private updateQueue(): void {
         const length = this.spawnMapQueue.length;
 
@@ -341,14 +364,28 @@ export class SW_MapManager {
             else if (!subMapData.layerBackground2) {
                 subMapData.layerBackground2 =  subMapData.subMap.createLayer("Layer3", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
                 subMapData.layerBackground2.setDepth(depthBackground);
+                subMapData.layerBackground2.setCollisionByProperty({collides: true});
+                subMapData.layerBackground2_collider = this.scene.physics.add.collider(this.player, subMapData.layerBackground2);
             }
             else if (!subMapData.layerForeground1) {
                 subMapData.layerForeground1 =  subMapData.subMap.createLayer("Layer4", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
                 subMapData.layerForeground1.setDepth(depthForeground);
+                subMapData.layerForeground1.setCollisionByProperty({collides: true});
+                subMapData.layerForeground1_collider = this.scene.physics.add.collider(this.player, subMapData.layerForeground1);
             }
             else if (!subMapData.layerForeground2) {
                 subMapData.layerForeground2 =  subMapData.subMap.createLayer("Layer5", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
                 subMapData.layerForeground2.setDepth(depthForeground);
+            }
+            else if (!subMapData.entrances) {
+                subMapData.entrances = this.createEntrances(subMapData);
+                // @ts-ignore - onPlayerEnter has the right parameter types
+                subMapData.entrances_collider = this.scene.physics.add.overlap(this.player, subMapData.entrances, this.scene.onPlayerEnter, this.scene.canPlayerEnter, this);
+            }
+            else if (!subMapData.interactableObjects) {
+                subMapData.interactableObjects = this.scene.createInteractableObjects(subMapData);
+                // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
+                subMapData.interactableObjects_collider = this.scene.physics.add.overlap(this.player.getInteractableComp(), subMapData.interactableObjects, this.scene.onPlayerOverlapInteractable, undefined, this);
             }
             else {
                 this.spawnMapQueue.pop();

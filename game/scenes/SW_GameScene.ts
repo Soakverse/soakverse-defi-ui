@@ -61,7 +61,6 @@ export default class SW_GameScene extends SW_BaseScene {
     
     this.worldSubMapManager = new SW_MapManager(this.player);
 
-    this.createPhysics();
     this.createCamera();
     this.createUI();
 
@@ -70,56 +69,41 @@ export default class SW_GameScene extends SW_BaseScene {
     this.physics.world.setBounds(0, 0, 1000000, 1000000);
   }
 
-  private createEntrances(): void {
-    // this.entrances = this.physics.add.staticGroup();
-    // this.entranceSpawners = [];
+  public createInteractableObjects(subMapData: SW_SubMapData): Phaser.Physics.Arcade.StaticGroup {
+    const interactableObjectGroup = this.physics.add.staticGroup();
 
-    // const entranceSpawners = this.currentMap.createFromObjects("Characters", {name: "Entrance", classType: SW_Entrance}) as SW_Entrance[];
-    // for (const entrance of entranceSpawners) {
-    //   if (entrance.isSpawner) {
-    //     this.entranceSpawners.push(entrance);
-    //   }
-    //   else {
-    //     this.entrances.add(entrance);
-    //   }
-    //   entrance.setVisible(entrance.texture.key != "__MISSING");
-    // }
-  }
+    const objectTypeData = [
+      { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
+      { name: "Incubator", isZone: true, classType: SW_Incubator },
+      { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
+    ];
 
-  private createInteractableObjects(): void {
-    // this.interactableObjects = this.physics.add.staticGroup();
+    for (const objectData of objectTypeData) {
+      const interactableObjects = subMapData.subMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
 
-    // const objectTypeData = [
-    //   { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
-    //   { name: "Incubator", isZone: true, classType: SW_Incubator },
-    //   { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
-    // ];
+      for (const interactableObject of interactableObjects) {
+        if (objectData.isZone) {
+          const classType = objectData.classType;
+          const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
+          zone.width = interactableObject.scaleX * 32;
+          zone.height = interactableObject.scaleY * 32;
 
-    // for (const objectData of objectTypeData) {
-    //   const interactableObjects = this.currentMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
+          if (interactableObject.data && interactableObject.data.list) {
+            for (const key in interactableObject.data.list) {
+              // @ts-ignore
+              zone[key] = interactableObject.data.list[key];
+            }
+          }
 
-    //   for (const interactableObject of interactableObjects) {
-    //     if (objectData.isZone) {
-    //       const classType = objectData.classType;
-    //       const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
-    //       zone.width = interactableObject.scaleX * 32;
-    //       zone.height = interactableObject.scaleY * 32;
-
-    //       if (interactableObject.data && interactableObject.data.list) {
-    //         for (const key in interactableObject.data.list) {
-    //           // @ts-ignore
-    //           zone[key] = interactableObject.data.list[key];
-    //         }
-    //       }
-
-    //       this.interactableObjects.add(zone);
-    //       interactableObject.destroy();
-    //     }
-    //     else {
-    //       this.interactableObjects.add(interactableObject);
-    //     }
-    //   }
-    // }
+          interactableObjectGroup.add(zone);
+          interactableObject.destroy();
+        }
+        else {
+          interactableObjectGroup.add(interactableObject);
+        }
+      }
+    }
+    return interactableObjectGroup;
   }
 
   private createPlayer(): void {
@@ -172,18 +156,6 @@ export default class SW_GameScene extends SW_BaseScene {
     this.cameras.main.setZoom(SW_CST.GAME.ZOOM);
   }
 
-  private createPhysics(): void
-  {
-      // this.layerBackground2.setCollisionByProperty({collides: true});
-      // this.layerForeground1.setCollisionByProperty({collides: true});
-
-      // this.physics.add.collider(this.player, this.layerBackground2);
-      // this.physics.add.collider(this.player, this.layerForeground1);
-
-      // this.physics.add.overlap(this.player, this.entrances, this.onPlayerEnter, this.canPlayerEnter, this);
-      // this.physics.add.overlap(this.player.getInteractableComp(), this.interactableObjects, this.onPlayerOverlapInteractable, undefined, this);
-  }
-
   private createUI(): void {
     this.UIscene = this.scene.get(SW_CST.SCENES.GAME_UI) as SW_GameUIScene;
 
@@ -226,15 +198,15 @@ export default class SW_GameScene extends SW_BaseScene {
     playerStore.setName(`You clicked on ${inventoryObjectData.name}`);
   }
 
-  protected canPlayerEnter(player: SW_Player, entrance: SW_Entrance): boolean {
+  public canPlayerEnter(player: SW_Player, entrance: SW_Entrance): boolean {
     return player.getCurrentDirection() == entrance.enterDirection;
   }
 
-  protected onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
+  public onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
     this.scene.restart({currentMapName: entrance.mapName, currentMapAsset: entrance.mapAsset, lastMapName: this.currentMapName });
   }
 
-  protected onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: FocusType): void {
+  public onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: FocusType): void {
     interactionComponent.onInteractableOverlapped(interactable);
   }
 
