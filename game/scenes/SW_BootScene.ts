@@ -33,7 +33,6 @@ import inventoryItemsJson from '@/game/assets/inventory/items/inventoryItems.jso
 
 import player from '@/game/assets/characters/player.png';
 
-
 import soakWorld_0_0 from '@/game/assets/maps/soakWorld/soakWorld_0-0.json';
 import soakWorld_1_0 from '@/game/assets/maps/soakWorld/soakWorld_1-0.json';
 import soakWorld_2_0 from '@/game/assets/maps/soakWorld/soakWorld_2-0.json';
