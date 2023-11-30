@@ -25,10 +25,7 @@ export declare type SW_SubMapData = {
     tileset: Phaser.Tilemaps.Tileset;
 
     /** All entrances to join a new map (ex: a door from a building, an path etc...) */
-    entrances: Phaser.Physics.Arcade.StaticGroup;
-
-    /** All entrances used to spawn the player */
-    entranceSpawners: SW_Entrance[];
+    entrances?: Phaser.Physics.Arcade.StaticGroup | undefined;
 
     /** Any object the player can interact with */
     interactableObjects?: Phaser.Physics.Arcade.StaticGroup | undefined;
@@ -205,8 +202,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             subMapY: subMapY,
             subMap: subMap,
             tileset: subMap.addTilesetImage(tilesetName, tilesetName) as Phaser.Tilemaps.Tileset,
-            entrances: this.scene.physics.add.staticGroup(),
-            entranceSpawners: [],
         } as SW_SubMapData;
 
         this.spawnMapQueue.push(subMapData);
@@ -324,7 +319,8 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             subMapData.entrances_collider?.destroy();
             subMapData.interactableObjects_collider?.destroy();
             subMapData.subMap.destroy();
-            subMapData.entrances.clear(true, true);
+            // subMapData.entrances?.clear(true, true);
+            // subMapData.entrances?.destroy(); // TODO - See if we could pool the static groups
             this.spawnedSubMapDataMap.delete(subMapId);
 
             this.removeFromSubMapQueue(subMapX, subMapY);
@@ -405,18 +401,23 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
         this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
             subMapData.subMap.destroy();
-            subMapData.entrances.clear(true, true);
+            // subMapData.entrances?.clear(true, true);
+            // subMapData.entrances?.destroy();
         }, this);
         this.spawnedSubMapDataMap.clear();
     }
 
-    private createEntrances(subMapData: SW_SubMapData): Phaser.Physics.Arcade.StaticGroup {
+    private createEntrances(subMapData: SW_SubMapData, offsetX: number, offsetY: number): Phaser.Physics.Arcade.StaticGroup {
         const entranceGroup = this.scene.physics.add.staticGroup();
 
         const entrances = subMapData.subMap.createFromObjects("Characters", {name: "Entrance", classType: SW_Entrance}) as SW_Entrance[];
+
         for (const entrance of entrances) {
             if (!entrance.isSpawner) {
                 entranceGroup.add(entrance);
+                entrance.setPosition(entrance.x + offsetX, entrance.y + offsetY);
+                entrance.body.x = entrance.x - entrance.displayWidth * 0.5;
+                entrance.body.y = entrance.y - entrance.displayHeight * 0.5;
                 entrance.setVisible(entrance.texture.key != "__MISSING");
             }
             else {
@@ -460,9 +461,9 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
                 subMapData.layerForeground2.setDepth(depthForeground);
             }
             else if (!subMapData.entrances) {
-                subMapData.entrances = this.createEntrances(subMapData);
+                subMapData.entrances = this.createEntrances(subMapData, offsetX, offsetY);
                 // @ts-ignore - onPlayerEnter has the right parameter types
-                subMapData.entrances_collider = this.scene.physics.add.overlap(this.player, subMapData.entrances, this.scene.onPlayerEnter, this.scene.canPlayerEnter, this);
+                subMapData.entrances_collider = this.scene.physics.add.overlap(this.player, subMapData.entrances, this.scene.onPlayerEnter, this.scene.canPlayerEnter, this.scene);
             }
             else if (!subMapData.interactableObjects) {
                 subMapData.interactableObjects = this.scene.createInteractableObjects(subMapData, offsetX, offsetY);

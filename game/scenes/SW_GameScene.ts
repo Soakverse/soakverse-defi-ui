@@ -99,7 +99,7 @@ export default class SW_GameScene extends SW_BaseScene {
       const interactableObjects = subMapData.subMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
       for (const interactableObject of interactableObjects) {
         interactableObject.setPosition(interactableObject.x + offsetX, interactableObject.y + offsetY);
-        
+
         if (objectData.isZone) {
           const classType = objectData.classType;
           const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
@@ -180,7 +180,6 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   public onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: FocusType): void {
-    console.log("cc")
     interactionComponent.onInteractableOverlapped(interactable);
   }
 

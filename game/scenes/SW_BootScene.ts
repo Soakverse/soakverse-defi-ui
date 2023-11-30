@@ -33,6 +33,9 @@ import inventoryItemsJson from '@/game/assets/inventory/items/inventoryItems.jso
 
 import player from '@/game/assets/characters/player.png';
 
+
+////// WORLDS
+// SoakWorld
 import soakWorld from '@/game/assets/maps/soakWorld/soakWorld.json';
 import soakWorld_0_0 from '@/game/assets/maps/soakWorld/soakWorld_0-0.json';
 import soakWorld_1_0 from '@/game/assets/maps/soakWorld/soakWorld_1-0.json';
@@ -43,6 +46,10 @@ import soakWorld_2_1 from '@/game/assets/maps/soakWorld/soakWorld_2-1.json';
 import soakWorld_0_2 from '@/game/assets/maps/soakWorld/soakWorld_0-2.json';
 import soakWorld_1_2 from '@/game/assets/maps/soakWorld/soakWorld_1-2.json';
 import soakWorld_2_2 from '@/game/assets/maps/soakWorld/soakWorld_2-2.json';
+
+// Home player
+import homePlayer from '@/game/assets/maps/homePlayer/homePlayer.json';
+import homePlayer_0_0 from '@/game/assets/maps/homePlayer/homePlayer_0-0.json';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
@@ -91,6 +98,9 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.tilemapTiledJSON("soakWorld_0_2", soakWorld_0_2);
     this.load.tilemapTiledJSON("soakWorld_1_2", soakWorld_1_2);
     this.load.tilemapTiledJSON("soakWorld_2_2", soakWorld_2_2);
+
+    this.load.json("homePlayer", homePlayer);
+    this.load.tilemapTiledJSON("homePlayer_0_0", homePlayer_0_0);
   }
 
   // Create

@@ -290,8 +290,63 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":450,
-                 "y":377
+                 "x":316,
+                 "y":623
+                }, 
+                {
+                 "height":17,
+                 "id":43,
+                 "name":"Entrance",
+                 "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }, 
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":false
+                        }, 
+                        {
+                         "name":"worldName",
+                         "type":"string",
+                         "value":"homePlayer"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":40,
+                 "x":427,
+                 "y":261
+                }, 
+                {
+                 "height":0,
+                 "id":45,
+                 "name":"Entrance",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"isSpawner",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }, 
+                        {
+                         "name":"worldName",
+                         "type":"string",
+                         "value":"homePlayer"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":447,
+                 "y":333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -432,7 +487,7 @@
          "y":0
         }],
  "nextlayerid":20,
- "nextobjectid":42,
+ "nextobjectid":46,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
