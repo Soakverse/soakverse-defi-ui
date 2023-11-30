@@ -8,7 +8,14 @@ export const SW_CST = {
     GAME: {
         WIDTH: 800,
         HEIGHT: 500,
-        ZOOM: 0.5
+        ZOOM: 0.84,
+        PLAYER: {
+            WALK_SPEED: 130,
+            RUN_SPEED: 200
+        }
+    },
+    MAP: {
+        SUBMAP_THRESHOLD: 0.46
     },
     STYLE: {
         TEXT: {

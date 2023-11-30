@@ -33,6 +33,7 @@ import inventoryItemsJson from '@/game/assets/inventory/items/inventoryItems.jso
 
 import player from '@/game/assets/characters/player.png';
 
+import soakWorld from '@/game/assets/maps/soakWorld/soakWorld.json';
 import soakWorld_0_0 from '@/game/assets/maps/soakWorld/soakWorld_0-0.json';
 import soakWorld_1_0 from '@/game/assets/maps/soakWorld/soakWorld_1-0.json';
 import soakWorld_2_0 from '@/game/assets/maps/soakWorld/soakWorld_2-0.json';
@@ -40,8 +41,8 @@ import soakWorld_0_1 from '@/game/assets/maps/soakWorld/soakWorld_0-1.json';
 import soakWorld_1_1 from '@/game/assets/maps/soakWorld/soakWorld_1-1.json';
 import soakWorld_2_1 from '@/game/assets/maps/soakWorld/soakWorld_2-1.json';
 import soakWorld_0_2 from '@/game/assets/maps/soakWorld/soakWorld_0-2.json';
-import soakWorld_1_2 from '@/game/assets/maps/soakWorld/soakWorld_2-2.json';
-import soakWorld_2_2 from '@/game/assets/maps/soakWorld/soakWorld_0-2.json';
+import soakWorld_1_2 from '@/game/assets/maps/soakWorld/soakWorld_1-2.json';
+import soakWorld_2_2 from '@/game/assets/maps/soakWorld/soakWorld_2-2.json';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
@@ -80,8 +81,7 @@ export default class SW_BootScene extends SW_BaseScene {
 
     this.load.atlas("inventoryItems", inventoryItemsImage, inventoryItemsJson);
 
-
-
+    this.load.json("soakWorld", soakWorld);
     this.load.tilemapTiledJSON("soakWorld_0_0", soakWorld_0_0);
     this.load.tilemapTiledJSON("soakWorld_1_0", soakWorld_1_0);
     this.load.tilemapTiledJSON("soakWorld_2_0", soakWorld_2_0);
@@ -99,7 +99,11 @@ export default class SW_BootScene extends SW_BaseScene {
   public create(): void {
     const sceneUI = this.scene.add(SW_CST.SCENES.GAME_UI, SW_GameUIScene, true, undefined) as SW_GameUIScene;
 
-    this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, { currentMapName: "soakWorld_000_000", currentMapAsset: "outsideAssetTiled", lastMapName: "homePlayerMap" });
+    this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, {
+      worldName: "soakWorld",
+      //startPosition: new Phaser.Math.Vector2(200, 200)
+      previousWorldName: "Starter"
+    });
     sceneUI.scene.bringToTop();
 
     this.scene.remove(SW_CST.SCENES.BOOT);

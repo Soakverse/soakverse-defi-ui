@@ -6,10 +6,7 @@ export default class SW_Entrance extends Phaser.GameObjects.Image {
     declare public body: Phaser.Physics.Arcade.StaticBody;
 
     /** Which map this entrance should open */
-    public mapName: string = "";
-
-    /** Which map image asset this entrance should use with mapName */
-    public mapAsset: string = "";
+    public worldName: string = "";
 
     /** Whether this entrance is used a spawner */
     public isSpawner: boolean = false;

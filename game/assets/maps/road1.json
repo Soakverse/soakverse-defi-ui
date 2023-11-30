@@ -75,7 +75,7 @@
                          "value":"outsideAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"villageMap"
                         }],
@@ -107,7 +107,7 @@
                          "value":"outsideAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road2"
                         }],
@@ -130,7 +130,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"villageMap"
                         }, 
@@ -158,7 +158,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road2"
                         }, 
@@ -195,7 +195,7 @@
                          "value":"outsideAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road4"
                         }],
@@ -218,7 +218,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road4"
                         }, 

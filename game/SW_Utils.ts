@@ -1,3 +1,9 @@
+export declare type SW_TiledObjectProperties = {
+    name: string;
+    type: string;
+    value: any;
+};
+
 export class SW_Utils {
     // This function is based on https://github.com/photonstorm/phaser/blob/v3.51.0/src/display/color/HexStringToColor.js
     // and https://stackoverflow.com/questions/17945972/converting-rgba-values-into-one-integer-in-javascript

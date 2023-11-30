@@ -1,10 +1,18 @@
+import { SW_CST } from "~/game/SW_CST";
 import SW_GameScene from "~/game/scenes/SW_GameScene";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
+import { SW_TiledObjectProperties } from "~/game/SW_Utils";
+import { SW_DIRECTIONS } from "~/game/characters/SW_CharacterMovementComponent";
 
 const depthBackground = 1;
 const depthPlayer = 2;
 const depthForeground = 3;
+
+export declare type SW_SubMapPlayerSpawnData = {
+    position: Phaser.Math.Vector2,
+    startDirection: SW_DIRECTIONS
+}
 
 export declare type SW_SubMapData = {
     subMapX: number;
@@ -35,12 +43,13 @@ export declare type SW_SubMapData = {
     layerBackground2_collider?: Phaser.Physics.Arcade.Collider | undefined;
     entrances_collider?: Phaser.Physics.Arcade.Collider | undefined;
     interactableObjects_collider?: Phaser.Physics.Arcade.Collider | undefined;
-  };
+};
 
 export class SW_MapManager extends Phaser.Events.EventEmitter {
     private scene: SW_GameScene;
-    private player: SW_Player;
-    private subMapDataMap: Map<string, SW_SubMapData>;
+
+    declare private player: SW_Player;
+    private spawnedSubMapDataMap: Map<string, SW_SubMapData>;
 
     private prevLocalPercentMapX: number = 0;
     private prevLocalPercentMapY: number = 0;
@@ -57,26 +66,125 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     private subMapMaxX: number = 2;
     private subMapMaxY: number = 2;
 
-    private subMapThreshold: number = 0.35;
+    private subMapThreshold: number = SW_CST.MAP.SUBMAP_THRESHOLD;
 
     private spawnMapQueue: SW_SubMapData[] = [];
 
-    constructor (player: SW_Player) {
+    private worldName: string;
+
+    constructor (scene: SW_GameScene, worldName: string) {
         super();
 
-        this.scene = player.scene as SW_GameScene;
-       
-        this.player = player;
-        this.player.setDepth(depthPlayer);
-
-        this.subMapDataMap = new Map<string, SW_SubMapData>();
+        this.scene = scene;
+        this.worldName = worldName;
+        this.spawnedSubMapDataMap = new Map<string, SW_SubMapData>();
         this.spawnMapQueue = [];
 
+        this.initWorld();
+    }
+    
+    private initWorld(): void {
+        this.clear();
+
+        if (this.worldName) {
+            const worldData = this.scene.cache.json.get(this.worldName);
+            const worldMaps = worldData ? worldData.maps : [];
+
+            if (worldMaps && worldMaps.length > 0) {
+                this.mapWidth = worldMaps[0].width; // Assumme that all submaps have the same dimensions
+                this.mapHeight = worldMaps[0].height; // Assumme that all submaps have the same dimensions
+                this.subMapMaxX = Math.sqrt(worldData.maps.length) - 1; // TODO - Find a way to read this value from the world file
+                this.subMapMaxY = this.subMapMaxX;
+                this.scene.physics.world.setBounds(0, 0, this.mapWidth * (this.subMapMaxX + 1), this.mapHeight * (this.subMapMaxY + 1));
+            }
+            else {
+                this.mapWidth = 0;
+                this.mapHeight = 0;
+                this.subMapMaxX = 0;
+                this.subMapMaxY = 0;
+                console.error("SW_MapManager::initWorld - World provided but the data are invalid");
+            }
+        }
+        else {
+            this.mapWidth = 0;
+            this.mapHeight = 0;
+            this.subMapMaxX = 0;
+            this.subMapMaxY = 0;
+            console.error("SW_MapManager::initWorld - Invalid world data");
+        }
+    }
+
+    private initSubMaps(): void {
+        this.updatePlayerData();
+
+        this.spawnSubMap(this.currentSubMapX, this.currentSubMapY);
+
+        if (this.isPlayerNearSubMapRight()) {
+            this.spawnSubMapOnRight();
+        }
+        else if (this.isPlayerNearSubMapLeft()) {
+            this.spawnSubMapOnLeft();
+        }
+        
+        if (this.isPlayerNearSubMapBottom()) {
+            this.spawnSubMapOnBottom();
+        }
+        else if (this.isPlayerNearSubMapTop()) {
+            this.spawnSubMapOnTop();
+        }
+    }
+
+    public setPlayer(player: SW_Player): void {
+        this.player = player;
+        this.player.setDepth(depthPlayer);
         this.initSubMaps();
     }
 
+    public findSpawnPosition(entranceName: string): SW_SubMapPlayerSpawnData {
+        for (let i = 0; i <= this.subMapMaxX; ++i) {
+            for (let j = 0; j <= this.subMapMaxY; ++j) {
+                const subMapId = `${i}_${j}`;
+                const subMap = this.scene.add.tilemap(`${this.worldName}_${subMapId}`);
+                const tileObjects = subMap.objects[1].objects;
+
+                for (const tileObject of tileObjects) {
+                    if (tileObject.name == "Entrance") {
+                        const propertyArray = tileObject.properties as SW_TiledObjectProperties[];
+
+                        const isSpawnerProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                            return objectProperties.name == "isSpawner";
+                        });
+
+                        if (isSpawnerProperty && isSpawnerProperty.value) {
+                            const worldNameProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                                return objectProperties.name == "worldName";
+                            });
+
+                            if (worldNameProperty && worldNameProperty.value == entranceName) {
+                                const directionProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                                    return objectProperties.name == "startDirection";
+                                });
+
+                                const spawnX = (tileObject.x as number) + i * this.mapWidth;
+                                const spawnY = (tileObject.y as number) + j * this.mapHeight;
+                                const startDirection = directionProperty ? directionProperty.value : SW_DIRECTIONS.Down;
+                                subMap.destroy();
+                                
+                                return { position: new Phaser.Math.Vector2(spawnX, spawnY), startDirection: startDirection };
+                            }
+                        }
+                    }
+                }
+
+                subMap.destroy();
+            }
+        }
+
+        return { position: new Phaser.Math.Vector2(0, 0), startDirection: SW_DIRECTIONS.Down };
+    }
+
     private hasSubMap(subMapX: number, subMapY: number): boolean {
-        return this.subMapDataMap.has(`${subMapX}_${subMapY}`);
+        return this.spawnedSubMapDataMap.has(`${subMapX}_${subMapY}`);
     }
 
     private isMapCoordValid(subMapX: number, subMapY: number): boolean {
@@ -89,24 +197,20 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         }
 
         const subMapId = `${subMapX}_${subMapY}`;
-        const subMap = this.scene.add.tilemap(`soakWorld_${subMapId}`);
-
-        // const entrances = createEntrances();
-        // const entranceSpawners
-        // const interactableObjects = createInteractableObjects();
+        const subMap = this.scene.add.tilemap(`${this.worldName}_${subMapId}`);
+        const tilesetName = subMap.tilesets[0].name; // Assume there is only one tileset per submap
 
         const subMapData = {
             subMapX: subMapX,
             subMapY: subMapY,
             subMap: subMap,
-            tileset: subMap.addTilesetImage("outsideAssetTiled", "outsideAssetTiled") as Phaser.Tilemaps.Tileset,
+            tileset: subMap.addTilesetImage(tilesetName, tilesetName) as Phaser.Tilemaps.Tileset,
             entrances: this.scene.physics.add.staticGroup(),
             entranceSpawners: [],
         } as SW_SubMapData;
 
         this.spawnMapQueue.push(subMapData);
-
-        this.subMapDataMap.set(subMapId, subMapData);
+        this.spawnedSubMapDataMap.set(subMapId, subMapData);
     }
 
     private spawnSubMapOnRight(): void {
@@ -211,7 +315,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
     private clearSubMap(subMapX: number, subMapY: number): void {
         const subMapId = `${subMapX}_${subMapY}`;
-        const subMapData = this.subMapDataMap.get(subMapId);
+        const subMapData = this.spawnedSubMapDataMap.get(subMapId);
 
         if (subMapData)
         {
@@ -221,7 +325,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             subMapData.interactableObjects_collider?.destroy();
             subMapData.subMap.destroy();
             subMapData.entrances.clear(true, true);
-            this.subMapDataMap.delete(subMapId);
+            this.spawnedSubMapDataMap.delete(subMapId);
 
             this.removeFromSubMapQueue(subMapX, subMapY);
         }
@@ -296,36 +400,14 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.currentSubMapY = Math.floor(this.player.y / this.mapHeight);
     }
 
-    public initSubMaps(): void {
-        this.clear();
-
-        this.updatePlayerData();
-
-        this.spawnSubMap(this.currentSubMapX, this.currentSubMapY);
-
-        if (this.isPlayerNearSubMapRight()) {
-            this.spawnSubMapOnRight();
-        }
-        else if (this.isPlayerNearSubMapLeft()) {
-            this.spawnSubMapOnLeft();
-        }
-        
-        if (this.isPlayerNearSubMapBottom()) {
-            this.spawnSubMapOnBottom();
-        }
-        else if (this.isPlayerNearSubMapTop()) {
-            this.spawnSubMapOnTop();
-        }
-    }
-
     public clear(): void {
         this.spawnMapQueue = [];
 
-        this.subMapDataMap.forEach((subMapData: SW_SubMapData) => {
+        this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
             subMapData.subMap.destroy();
             subMapData.entrances.clear(true, true);
         }, this);
-        this.subMapDataMap.clear();
+        this.spawnedSubMapDataMap.clear();
     }
 
     private createEntrances(subMapData: SW_SubMapData): Phaser.Physics.Arcade.StaticGroup {
@@ -383,7 +465,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
                 subMapData.entrances_collider = this.scene.physics.add.overlap(this.player, subMapData.entrances, this.scene.onPlayerEnter, this.scene.canPlayerEnter, this);
             }
             else if (!subMapData.interactableObjects) {
-                subMapData.interactableObjects = this.scene.createInteractableObjects(subMapData);
+                subMapData.interactableObjects = this.scene.createInteractableObjects(subMapData, offsetX, offsetY);
                 // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
                 subMapData.interactableObjects_collider = this.scene.physics.add.overlap(this.player.getInteractableComp(), subMapData.interactableObjects, this.scene.onPlayerOverlapInteractable, undefined, this);
             }
@@ -397,33 +479,37 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.updateQueue();
         this.updatePlayerData();
 
-        if (this.currentSubMapX == this.currentSubMapX) {
-            if (this.shouldSpawnSubMapOnRight()) {
-                this.spawnSubMapOnRight();
-            }
-            else if (this.shouldClearSubMapOnRight()) {
-                this.clearSubMapOnRight();
-            }
-            else if (this.shouldSpawnSubMapOnLeft()) {
-                this.spawnSubMapOnLeft();
-            }
-            else if (this.shouldClearSubMapOnLeft()) {
-                this.clearSubMapOnLeft();
+        if (this.subMapMaxX > 1) {
+            if (this.currentSubMapX == this.currentSubMapX) {
+                if (this.shouldSpawnSubMapOnRight()) {
+                    this.spawnSubMapOnRight();
+                }
+                else if (this.shouldClearSubMapOnRight()) {
+                    this.clearSubMapOnRight();
+                }
+                else if (this.shouldSpawnSubMapOnLeft()) {
+                    this.spawnSubMapOnLeft();
+                }
+                else if (this.shouldClearSubMapOnLeft()) {
+                    this.clearSubMapOnLeft();
+                }
             }
         }
         
-        if (this.currentSubMapY == this.currentSubMapY) {
-            if (this.shouldSpawnSubMapOnBottom()) {
-                this.spawnSubMapOnBottom();
-            }
-            else if (this.shouldClearSubMapOnBottom()) {
-                this.clearSubMapOnBottom();
-            }
-            else if (this.shouldSpawnSubMapOnTop()) {
-                this.spawnSubMapOnTop();
-            }
-            else if (this.shouldClearSubMapOnTop()) {
-                this.clearSubMapOnTop();
+        if (this.subMapMaxY > 1) {
+            if (this.currentSubMapY == this.currentSubMapY) {
+                if (this.shouldSpawnSubMapOnBottom()) {
+                    this.spawnSubMapOnBottom();
+                }
+                else if (this.shouldClearSubMapOnBottom()) {
+                    this.clearSubMapOnBottom();
+                }
+                else if (this.shouldSpawnSubMapOnTop()) {
+                    this.spawnSubMapOnTop();
+                }
+                else if (this.shouldClearSubMapOnTop()) {
+                    this.clearSubMapOnTop();
+                }
             }
         }
     }

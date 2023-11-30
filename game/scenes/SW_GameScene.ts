@@ -13,13 +13,20 @@ import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
 import SW_Incubator from "~/game/gameObjects/SW_Incubator";
 import SW_DialogueEntity from "~/game/gameObjects/SW_DialogueEntity";
 import { SW_SubMapData, SW_MapManager } from "~/game/maps/SW_MapManager";
+import { SW_DIRECTIONS } from "../characters/SW_CharacterMovementComponent";
 
 const playerStore = usePlayerStore();
 
+/** All the data of the game scene to initialize it */
 declare type GameSceneData = {
-  currentMapName: string;
-  currentMapAsset: string;
-  lastMapName: string | undefined;
+  /** The name of the Tiled world. */
+  worldName: string;
+
+  /** The name of the previous world before reaching the new one. Ignored if startPosition is set */
+  previousWorldName?: string;
+
+  /** Where the player should start on this world. */
+  startPosition?: Phaser.Math.Vector2;
 }
 
 export default class SW_GameScene extends SW_BaseScene {
@@ -27,15 +34,15 @@ export default class SW_GameScene extends SW_BaseScene {
   public nameText: any = null;
 
   /** Represents the UI in game */
-  declare private UIscene: SW_GameUIScene;
+  declare private UIScene: SW_GameUIScene;
 
   declare private player: SW_Player;
 
-  declare private currentMapAssetKey: string;
-  declare private currentMapName: string;
-  declare private lastMapName: string | undefined;
+  declare private worldName: string;
+  declare private previousWorldName: string | undefined;
+  declare private startPosition: Phaser.Math.Vector2 | undefined;
 
-  declare private worldSubMapManager: SW_MapManager;
+  declare private mapManager: SW_MapManager;
 
   constructor() {
     super({ key: SW_CST.SCENES.GAME });
@@ -46,9 +53,9 @@ export default class SW_GameScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public init(data: GameSceneData): void {
-    this.currentMapAssetKey = data.currentMapAsset;
-    this.currentMapName = data.currentMapName;
-    this.lastMapName = data.lastMapName;
+    this.worldName = data.worldName;
+    this.startPosition = data.startPosition;
+    this.previousWorldName = data.previousWorldName;
   }
 
   // Create
@@ -56,20 +63,30 @@ export default class SW_GameScene extends SW_BaseScene {
 
   public create(): void {
     this.addUniqueListener("postupdate", this.postUpdate, this);
-
-    this.createPlayer();
     
-    this.worldSubMapManager = new SW_MapManager(this.player);
+    this.mapManager = new SW_MapManager(this, this.worldName);
+
+    const playerStartPosition = this.startPosition ? { position: this.startPosition, startDirection: SW_DIRECTIONS.Down }
+                                                    : this.mapManager.findSpawnPosition(this.previousWorldName as string);
+
+    this.player = new SW_Player(this, playerStartPosition.position.x, playerStartPosition.position.y);
+    this.player.init({
+      name: "player",
+      characterTexture: "player",
+      startDirection: playerStartPosition.startDirection,
+      walkSpeed: SW_CST.GAME.PLAYER.WALK_SPEED,
+      runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED
+    } as SW_SpawnData);
+
+    this.mapManager.setPlayer(this.player);
 
     this.createCamera();
     this.createUI();
 
     this.nameText = this.add.text(0, 0, playerStore.name);
-
-    this.physics.world.setBounds(0, 0, 1000000, 1000000);
   }
 
-  public createInteractableObjects(subMapData: SW_SubMapData): Phaser.Physics.Arcade.StaticGroup {
+  public createInteractableObjects(subMapData: SW_SubMapData, offsetX: number, offsetY: number): Phaser.Physics.Arcade.StaticGroup {
     const interactableObjectGroup = this.physics.add.staticGroup();
 
     const objectTypeData = [
@@ -80,8 +97,9 @@ export default class SW_GameScene extends SW_BaseScene {
 
     for (const objectData of objectTypeData) {
       const interactableObjects = subMapData.subMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
-
       for (const interactableObject of interactableObjects) {
+        interactableObject.setPosition(interactableObject.x + offsetX, interactableObject.y + offsetY);
+        
         if (objectData.isZone) {
           const classType = objectData.classType;
           const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
@@ -106,61 +124,16 @@ export default class SW_GameScene extends SW_BaseScene {
     return interactableObjectGroup;
   }
 
-  private createPlayer(): void {
-    const playerSpawnData = {
-      name: "player",
-      characterTexture: "player",
-      startDirection: "Down",
-      walkSpeed: 340,
-      runSpeed: 190
-    } as SW_SpawnData;
-
-    this.player = new SW_Player(this, 200, 200);
-    this.player.init(playerSpawnData);
-
-    // let playerEntrance: SW_Entrance | undefined;
-
-    // for (const entrance of this.entranceSpawners) {
-    //   if (entrance.isSpawner && (entrance.mapName == this.lastMapName)) {
-    //     playerEntrance = entrance;
-    //   }
-    // }
-
-    // // Take a a default entrance to at least spawn
-    // if (playerEntrance == undefined) {
-    //   console.error("No valid entrance was found. Using a default entrance");
-    //   playerEntrance = this.entranceSpawners[0];
-    // }
-
-    // const playerSpawnData = {
-    //   name: "player",
-    //   characterTexture: "player",
-    //   startDirection: playerEntrance.startDirection,
-    //   walkSpeed: 110,
-    //   runSpeed: 190
-    // } as SW_SpawnData;
-
-    // this.player = new SW_Player(this, playerEntrance.x, playerEntrance.y);
-    // this.player.init(playerSpawnData);
-    // this.player.setDepth(2);
-
-    // for (const entrance of this.entranceSpawners) {
-    //   entrance.destroy();
-    // }
-
-    // this.entranceSpawners = [];
-  }
-
   private createCamera(): void {
     this.cameras.main.startFollow(this.player);
     this.cameras.main.setZoom(SW_CST.GAME.ZOOM);
   }
 
   private createUI(): void {
-    this.UIscene = this.scene.get(SW_CST.SCENES.GAME_UI) as SW_GameUIScene;
+    this.UIScene = this.scene.get(SW_CST.SCENES.GAME_UI) as SW_GameUIScene;
 
-    this.UIscene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked);
-    this.UIscene.addUniqueListener("menuVisibilityChange", this.onMenuVisibilityChange, this);
+    this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked);
+    this.UIScene.addUniqueListener("menuVisibilityChange", this.onMenuVisibilityChange, this);
   }
 
   // Update
@@ -170,7 +143,7 @@ export default class SW_GameScene extends SW_BaseScene {
     // this.name = playerStore.name;
     // this.nameText.setText(playerStore.name);
 
-    this.worldSubMapManager.update();    
+    this.mapManager.update();    
     this.player.update();
   }
 
@@ -179,19 +152,19 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   public openPlayerInventory(): void {
-    this.UIscene.openPlayerInventory();
+    this.UIScene.openPlayerInventory();
   }
 
   public openChestInventory(): void {
-    this.UIscene.openChestInventory();
+    this.UIScene.openChestInventory();
   }
 
   public updatePlayerInventory(newInventoryObjects: SW_InventoryObject[]): void {
-    this.UIscene.updatePlayerInventory(newInventoryObjects);
+    this.UIScene.updatePlayerInventory(newInventoryObjects);
   }
 
   public updateChestInventory(newInventoryObjects: SW_InventoryObject[]): void {
-    this.UIscene.updateChestInventory(newInventoryObjects);
+    this.UIScene.updateChestInventory(newInventoryObjects);
   }
 
   protected inventoryObjectClicked(inventoryObjectData: SW_InventoryObject): void {
@@ -203,10 +176,11 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   public onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
-    this.scene.restart({currentMapName: entrance.mapName, currentMapAsset: entrance.mapAsset, lastMapName: this.currentMapName });
+    this.scene.restart({worldName: entrance.worldName, previousWorldName: this.worldName });
   }
 
   public onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: FocusType): void {
+    console.log("cc")
     interactionComponent.onInteractableOverlapped(interactable);
   }
 
@@ -221,7 +195,7 @@ export default class SW_GameScene extends SW_BaseScene {
 
   public requestDialogue(message: string, title: string, iconTexture: string = "", iconFrame: string = ""): void
   {
-      this.UIscene.requestDialogue(message, title, iconTexture, iconFrame);
+      this.UIScene.requestDialogue(message, title, iconTexture, iconFrame);
       this.onMenuVisibilityChange(true);
   }
 }

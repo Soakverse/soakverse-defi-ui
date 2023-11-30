@@ -6,12 +6,6 @@ export default class SW_PlayerComputer extends Phaser.GameObjects.Zone implement
     declare public scene: SW_GameScene;
     declare public body: Phaser.Physics.Arcade.StaticBody;
 
-    /** Which map this entrance should open */
-    public mapName: string = "";
-
-    /** Which map image asset this entrance should use with mapName */
-    public mapAsset: string = "";
-
     constructor(scene: SW_GameScene, x: number, y: number, width: number, height: number) {
       super(scene, x, y, width, width);
       this.scene.add.existing(this);

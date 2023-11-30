@@ -97,7 +97,7 @@
                          "value":"outsideAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road2"
                         }, 
@@ -125,7 +125,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road2"
                         }, 

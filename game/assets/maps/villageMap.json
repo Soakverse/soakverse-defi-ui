@@ -286,7 +286,7 @@
                          "value":"interiorAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"home1"
                         }],
@@ -318,7 +318,7 @@
                          "value":"interiorAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"homePlayerMap"
                         }],
@@ -350,7 +350,7 @@
                          "value":"interiorAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"home2"
                         }],
@@ -382,7 +382,7 @@
                          "value":"outsideAssetTiled"
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road1"
                         }],
@@ -405,7 +405,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"home2"
                         }, 
@@ -433,7 +433,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"home1"
                         }, 
@@ -461,7 +461,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"homePlayerMap"
                         }, 
@@ -489,7 +489,7 @@
                          "value":true
                         }, 
                         {
-                         "name":"mapName",
+                         "name":"worldName",
                          "type":"string",
                          "value":"road1"
                         }, 
