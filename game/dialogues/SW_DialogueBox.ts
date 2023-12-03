@@ -35,6 +35,11 @@ export class SW_DialogueBox extends TextBox {
         this.setVisible(false);
     }
 
+    public setVisible(value: boolean): this {
+        this.emit("visibilityChanged", value);
+        return super.setVisible(value);
+    }
+
     public showMessage(message: string, title: string, iconTexture?: string, iconFrame?: string, typingSpeed: number = 30) {
         this.setTitle(title);
         this.start(message, typingSpeed);

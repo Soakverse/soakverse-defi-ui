@@ -16,6 +16,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
     declare protected keys: SW_UIKeys;
 
     declare private dialogueBox: SW_DialogueBox;
+    declare private dialogueCharactersLeft: Phaser.GameObjects.Image;
+    declare private dialogueCharactersRight: Phaser.GameObjects.Image;
 
     declare private playerInventoryWidget: SW_PlayerInventoryWidget;
     declare private chestInventoryWidget: SW_ChestInventoryWidget;
@@ -29,7 +31,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public create(): void{
         this.createKeys();
-
         this.createDialogueBox();
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
@@ -58,19 +59,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
         {name: "Red Sword", id: "object11", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 3},
         {name: "Red Sword", id: "object12", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 5},
       ]);
-    }
-
-    protected createDialogueBox(): void {
-        this.dialogueBox = new SW_DialogueBox(this, {
-            x: SW_CST.GAME.WIDTH * 0.5,
-            y: SW_CST.GAME.HEIGHT - 12,
-            width: SW_CST.GAME.WIDTH - 100,
-            height: 80,
-            page: { maxLines: 3, pageBreak: "\n" }
-        });
-
-        this.dialogueBox.setOrigin(0.5, 1);
-        this.dialogueBox.layout();
     }
 
     protected onMovePlayerInventoryMoveObject(inventoryObjectData: SW_InventoryObject, quantity: number): void {
@@ -183,6 +171,43 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public updateChestInventory(newInventoryObjects: SW_InventoryObject[]) {
         this.chestInventoryWidget.updateInventory(newInventoryObjects);
+    }
+
+    // Dialogue
+    ////////////////////////////////////////////////////////////////////////
+
+    protected createDialogueBox(): void {
+        const scale = 0.3;
+        this.dialogueCharactersLeft = this.add.image(12, SW_CST.GAME.HEIGHT * 0.5, "dialogueImage_YB").setScale(scale).setOrigin(0, 0.5);
+        this.dialogueCharactersRight = this.add.image(SW_CST.GAME.WIDTH - 20, SW_CST.GAME.HEIGHT * 0.5, "dialogueImage_YB").setScale(scale).setOrigin(1, 0.5).setFlipX(true);
+
+        this.dialogueCharactersLeft.setVisible(false);
+        this.dialogueCharactersRight.setVisible(false);
+
+        this.dialogueBox = new SW_DialogueBox(this, {
+            x: SW_CST.GAME.WIDTH * 0.5,
+            y: SW_CST.GAME.HEIGHT - 12,
+            width: SW_CST.GAME.WIDTH - 100,
+            height: 80,
+            page: { maxLines: 3, pageBreak: "\n" }
+        });
+
+        this.dialogueBox.setOrigin(0.5, 1);
+        this.dialogueBox.layout();
+
+        // TODO: Make the box and the images in a container
+        this.dialogueBox.on("visibilityChanged", (value: boolean) => {
+            this.dialogueCharactersRight.setVisible(false);
+
+            this.dialogueCharactersLeft.setVisible(value);
+            this.dialogueCharactersLeft.setX(-this.dialogueCharactersLeft.displayWidth);
+            this.tweens.add({
+                targets: this.dialogueCharactersLeft,
+                x: 12,
+                duration: 300
+            })
+            
+        }, this);
     }
 
     public requestDialogue(message: string, title: string, iconTexture: string = "", iconFrame: string = ""): void

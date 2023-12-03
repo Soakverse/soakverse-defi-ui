@@ -51,6 +51,9 @@ import soakWorld_2_2 from '@/game/assets/maps/soakWorld/soakWorld_2-2.json';
 import homePlayer from '@/game/assets/maps/homePlayer/homePlayer.json';
 import homePlayer_0_0 from '@/game/assets/maps/homePlayer/homePlayer_0-0.json';
 
+// Dialogue
+import dialogueImage_YB from '@/game/assets/dialogueImage_YB.png';
+
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
     super({ key: SW_CST.SCENES.BOOT });
@@ -101,6 +104,9 @@ export default class SW_BootScene extends SW_BaseScene {
 
     this.load.json("homePlayer", homePlayer);
     this.load.tilemapTiledJSON("homePlayer_0_0", homePlayer_0_0);
+
+    // Dialogue
+    this.load.image("dialogueImage_YB", dialogueImage_YB);
   }
 
   // Create
