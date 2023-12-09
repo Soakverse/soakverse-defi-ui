@@ -35,18 +35,6 @@ import player from '@/game/assets/characters/player.png';
 
 
 ////// WORLDS
-// SoakWorld
-import soakWorld from '@/game/assets/maps/soakWorld/soakWorld.json';
-import soakWorld_0_0 from '@/game/assets/maps/soakWorld/soakWorld_0-0.json';
-import soakWorld_1_0 from '@/game/assets/maps/soakWorld/soakWorld_1-0.json';
-import soakWorld_2_0 from '@/game/assets/maps/soakWorld/soakWorld_2-0.json';
-import soakWorld_0_1 from '@/game/assets/maps/soakWorld/soakWorld_0-1.json';
-import soakWorld_1_1 from '@/game/assets/maps/soakWorld/soakWorld_1-1.json';
-import soakWorld_2_1 from '@/game/assets/maps/soakWorld/soakWorld_2-1.json';
-import soakWorld_0_2 from '@/game/assets/maps/soakWorld/soakWorld_0-2.json';
-import soakWorld_1_2 from '@/game/assets/maps/soakWorld/soakWorld_1-2.json';
-import soakWorld_2_2 from '@/game/assets/maps/soakWorld/soakWorld_2-2.json';
-
 // Home player
 import homePlayer from '@/game/assets/maps/homePlayer/homePlayer.json';
 import homePlayer_0_0 from '@/game/assets/maps/homePlayer/homePlayer_0-0.json';
@@ -91,16 +79,16 @@ export default class SW_BootScene extends SW_BaseScene {
 
     this.load.atlas("inventoryItems", inventoryItemsImage, inventoryItemsJson);
 
-    this.load.json("soakWorld", soakWorld);
-    this.load.tilemapTiledJSON("soakWorld_0_0", soakWorld_0_0);
-    this.load.tilemapTiledJSON("soakWorld_1_0", soakWorld_1_0);
-    this.load.tilemapTiledJSON("soakWorld_2_0", soakWorld_2_0);
-    this.load.tilemapTiledJSON("soakWorld_0_1", soakWorld_0_1);
-    this.load.tilemapTiledJSON("soakWorld_1_1", soakWorld_1_1);
-    this.load.tilemapTiledJSON("soakWorld_2_1", soakWorld_2_1);
-    this.load.tilemapTiledJSON("soakWorld_0_2", soakWorld_0_2);
-    this.load.tilemapTiledJSON("soakWorld_1_2", soakWorld_1_2);
-    this.load.tilemapTiledJSON("soakWorld_2_2", soakWorld_2_2);
+    this.load.json("soakWorld", "/game/assets/maps/soakWorld/soakWorld.world");
+    this.load.tilemapTiledJSON("soakWorld_0_0", "/game/assets/maps/soakWorld/soakWorld_0-0.json");
+    this.load.tilemapTiledJSON("soakWorld_1_0", "/game/assets/maps/soakWorld/soakWorld_1-0.json");
+    this.load.tilemapTiledJSON("soakWorld_2_0", "/game/assets/maps/soakWorld/soakWorld_2-0.json");
+    this.load.tilemapTiledJSON("soakWorld_0_1", "/game/assets/maps/soakWorld/soakWorld_0-1.json");
+    this.load.tilemapTiledJSON("soakWorld_1_1", "/game/assets/maps/soakWorld/soakWorld_1-1.json");
+    this.load.tilemapTiledJSON("soakWorld_2_1", "/game/assets/maps/soakWorld/soakWorld_2-1.json");
+    this.load.tilemapTiledJSON("soakWorld_0_2", "/game/assets/maps/soakWorld/soakWorld_0-2.json");
+    this.load.tilemapTiledJSON("soakWorld_1_2", "/game/assets/maps/soakWorld/soakWorld_1-2.json");
+    this.load.tilemapTiledJSON("soakWorld_2_2", "/game/assets/maps/soakWorld/soakWorld_2-2.json");
 
     this.load.json("homePlayer", homePlayer);
     this.load.tilemapTiledJSON("homePlayer_0_0", homePlayer_0_0);
