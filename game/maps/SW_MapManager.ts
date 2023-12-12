@@ -294,7 +294,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         const downSubMapY = this.currentSubMapY + 1;
         const upSubMapY = this.currentSubMapY - 1;
 
-        this.spawnSubMap(rightSubMapX, this.currentSubMapY);
+        this.spawnSubMap(rightSubMapX, this.currentSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(this.currentSubMapX, downSubMapY)) {
             this.spawnSubMap(rightSubMapX, downSubMapY, shouldAsyncSpawn);
@@ -309,7 +309,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         const downSubMapY = this.currentSubMapY + 1;
         const upSubMapY = this.currentSubMapY - 1;
 
-        this.spawnSubMap(leftSubMapX, this.currentSubMapY);
+        this.spawnSubMap(leftSubMapX, this.currentSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(this.currentSubMapX, downSubMapY)) {
             this.spawnSubMap(leftSubMapX, downSubMapY, shouldAsyncSpawn);
@@ -324,7 +324,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         const leftSubMapX = this.currentSubMapX - 1;
         const downSubMapY = this.currentSubMapY + 1;
 
-        this.spawnSubMap(this.currentSubMapX, downSubMapY);
+        this.spawnSubMap(this.currentSubMapX, downSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(leftSubMapX, this.currentSubMapY)) {
             this.spawnSubMap(leftSubMapX, downSubMapY, shouldAsyncSpawn);
@@ -339,7 +339,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         const leftSubMapX = this.currentSubMapX - 1;
         const upSubMapY = this.currentSubMapY - 1;
 
-        this.spawnSubMap(this.currentSubMapX, upSubMapY);
+        this.spawnSubMap(this.currentSubMapX, upSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(leftSubMapX, this.currentSubMapY)) {
             this.spawnSubMap(leftSubMapX, upSubMapY, shouldAsyncSpawn);
