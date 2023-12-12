@@ -22,6 +22,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
     declare private playerInventoryWidget: SW_PlayerInventoryWidget;
     declare private chestInventoryWidget: SW_ChestInventoryWidget;
 
+    declare private loadingScreen: Phaser.GameObjects.Graphics;
+
     constructor() {
       super({ key: SW_CST.SCENES.GAME_UI });
     }
@@ -59,6 +61,28 @@ export default class SW_GameUIScene extends SW_BaseScene {
         {name: "Red Sword", id: "object11", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 3},
         {name: "Red Sword", id: "object12", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 5},
       ]);
+
+      this.loadingScreen = this.add.graphics();
+      this.loadingScreen.fillStyle(0x000000, 1.0);
+      this.loadingScreen.fillRect(0, 0, this.scale.displaySize.width, this.scale.displaySize.height);
+      this.loadingScreen.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.scale.displaySize.width, this.scale.displaySize.height), Phaser.Geom.Rectangle.Contains);
+
+      this.hideLoadingScreen();
+    }
+
+    public showLoadingScreen(): void {
+        this.loadingScreen.setAlpha(1);
+        this.loadingScreen.setVisible(true);
+    }
+
+    public hideLoadingScreen(): void {
+        this.tweens.add({
+            targets: this.loadingScreen,
+            alpha: 0,
+            duration: 200,
+            onComplete: () => { this.loadingScreen.setVisible(false); },
+            callbackScope: this
+        });
     }
 
     protected onMovePlayerInventoryMoveObject(inventoryObjectData: SW_InventoryObject, quantity: number): void {

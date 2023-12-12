@@ -62,6 +62,8 @@ export default class SW_GameScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
+    this.createUI();
+
     this.addUniqueListener(Phaser.Scenes.Events.POST_UPDATE, this.postUpdate, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.shutdown, this);
 
@@ -83,15 +85,16 @@ export default class SW_GameScene extends SW_BaseScene {
       this.mapManager.once("initialized", this.onMapManagerInitialized, this);
     }
 
-    this.createCamera();
-    this.createUI();
-
     this.nameText = this.add.text(0, 0, playerStore.name);
   }
 
   private onMapManagerInitialized(): void {
     this.events.on(Phaser.Scenes.Events.UPDATE, this.player.update, this.player);
     this.events.on(Phaser.Scenes.Events.POST_UPDATE, this.player.postUpdate, this.player);
+
+    this.setupCamera();
+    this.setupUI();
+    this.UIScene.hideLoadingScreen();
   }
 
   public createInteractableObjects(subMapData: SW_SubMapData, offsetX: number, offsetY: number): Phaser.Physics.Arcade.StaticGroup {
@@ -132,14 +135,17 @@ export default class SW_GameScene extends SW_BaseScene {
     return interactableObjectGroup;
   }
 
-  private createCamera(): void {
+  private setupCamera(): void {
     this.cameras.main.startFollow(this.player);
     this.cameras.main.setZoom(SW_CST.GAME.ZOOM);
   }
 
   private createUI(): void {
     this.UIScene = this.scene.get(SW_CST.SCENES.GAME_UI) as SW_GameUIScene;
+    this.UIScene.showLoadingScreen();
+  }
 
+  private setupUI(): void {
     this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked);
     this.UIScene.addUniqueListener("menuVisibilityChange", this.onMenuVisibilityChange, this);
   }
@@ -186,6 +192,7 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   public onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
+    this.UIScene.showLoadingScreen();
     this.scene.restart({worldName: entrance.worldName, previousWorldName: this.worldName });
   }
 
