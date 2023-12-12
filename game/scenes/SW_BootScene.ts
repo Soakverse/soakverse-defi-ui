@@ -33,12 +33,6 @@ import inventoryItemsJson from '@/game/assets/inventory/items/inventoryItems.jso
 
 import player from '@/game/assets/characters/player.png';
 
-
-////// WORLDS
-// Home player
-import homePlayer from '@/game/assets/maps/homePlayer/homePlayer.json';
-import homePlayer_0_0 from '@/game/assets/maps/homePlayer/homePlayer_0-0.json';
-
 // Dialogue
 import dialogueImage_YB from '@/game/assets/dialogueImage_YB.png';
 
@@ -79,7 +73,6 @@ export default class SW_BootScene extends SW_BaseScene {
 
     this.load.atlas("inventoryItems", inventoryItemsImage, inventoryItemsJson);
 
-    this.load.json("soakWorld", "/game/assets/maps/soakWorld/soakWorld.world");
     this.load.tilemapTiledJSON("soakWorld_0_0", "/game/assets/maps/soakWorld/soakWorld_0-0.json");
     this.load.tilemapTiledJSON("soakWorld_1_0", "/game/assets/maps/soakWorld/soakWorld_1-0.json");
     this.load.tilemapTiledJSON("soakWorld_2_0", "/game/assets/maps/soakWorld/soakWorld_2-0.json");
@@ -90,8 +83,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.tilemapTiledJSON("soakWorld_1_2", "/game/assets/maps/soakWorld/soakWorld_1-2.json");
     this.load.tilemapTiledJSON("soakWorld_2_2", "/game/assets/maps/soakWorld/soakWorld_2-2.json");
 
-    this.load.json("homePlayer", homePlayer);
-    this.load.tilemapTiledJSON("homePlayer_0_0", homePlayer_0_0);
+    this.load.tilemapTiledJSON("homePlayer_0_0", "/game/assets/maps/homePlayer/homePlayer_0-0.json");
 
     // Dialogue
     this.load.image("dialogueImage_YB", dialogueImage_YB);

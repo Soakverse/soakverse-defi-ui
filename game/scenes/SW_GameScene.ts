@@ -23,7 +23,7 @@ declare type GameSceneData = {
   worldName: string;
 
   /** The name of the previous world before reaching the new one. Ignored if startPosition is set */
-  previousWorldName?: string;
+  previousWorldName: string;
 
   /** Where the player should start on this world. */
   startPosition?: Phaser.Math.Vector2;
@@ -39,7 +39,7 @@ export default class SW_GameScene extends SW_BaseScene {
   declare private player: SW_Player;
 
   declare private worldName: string;
-  declare private previousWorldName: string | undefined;
+  declare private previousWorldName: string;
   declare private startPosition: Phaser.Math.Vector2 | undefined;
 
   declare private mapManager: SW_MapManager;
@@ -62,28 +62,36 @@ export default class SW_GameScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
-    this.addUniqueListener("postupdate", this.postUpdate, this);
-    
-    this.mapManager = new SW_MapManager(this, this.worldName);
+    this.addUniqueListener(Phaser.Scenes.Events.POST_UPDATE, this.postUpdate, this);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.shutdown, this);
 
-    const playerStartPosition = this.startPosition ? { position: this.startPosition, startDirection: SW_DIRECTIONS.Down }
-                                                    : this.mapManager.findSpawnPosition(this.previousWorldName as string);
-
-    this.player = new SW_Player(this, playerStartPosition.position.x, playerStartPosition.position.y);
+    this.player = new SW_Player(this, 0, 0);
     this.player.init({
       name: "player",
       characterTexture: "player",
-      startDirection: playerStartPosition.startDirection,
+      startDirection: SW_DIRECTIONS.Down,
       walkSpeed: SW_CST.GAME.PLAYER.WALK_SPEED,
       runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED
     } as SW_SpawnData);
 
-    this.mapManager.setPlayer(this.player);
+    this.mapManager = new SW_MapManager(this.player, this.worldName, this.previousWorldName);
+
+    if (this.mapManager.isInitialized()) {
+      this.onMapManagerInitialized();
+    }
+    else {
+      this.mapManager.once("initialized", this.onMapManagerInitialized, this);
+    }
 
     this.createCamera();
     this.createUI();
 
     this.nameText = this.add.text(0, 0, playerStore.name);
+  }
+
+  private onMapManagerInitialized(): void {
+    this.events.on(Phaser.Scenes.Events.UPDATE, this.player.update, this.player);
+    this.events.on(Phaser.Scenes.Events.POST_UPDATE, this.player.postUpdate, this.player);
   }
 
   public createInteractableObjects(subMapData: SW_SubMapData, offsetX: number, offsetY: number): Phaser.Physics.Arcade.StaticGroup {
@@ -142,13 +150,15 @@ export default class SW_GameScene extends SW_BaseScene {
   public update(time: number, delta: number): void {
     // this.name = playerStore.name;
     // this.nameText.setText(playerStore.name);
-
-    this.mapManager.update();    
-    this.player.update();
   }
 
   private postUpdate(sys: Phaser.Scenes.Systems, time: number, delta: number): void {
-      this.player.postUpdate();
+  }
+
+  private shutdown(): void {
+    this.events.off(Phaser.Scenes.Events.UPDATE, this.player.update, this.player);
+    this.events.off(Phaser.Scenes.Events.POST_UPDATE, this.player.postUpdate, this.player);
+    this.mapManager.clear();
   }
 
   public openPlayerInventory(): void {
