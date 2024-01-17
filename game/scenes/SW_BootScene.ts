@@ -50,15 +50,6 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image("interiorAssetTiled", interiorAssetTiled);
     this.load.image("outsideAssetTiled", outsideAssetTiled);
 
-    this.load.tilemapTiledJSON("villageMap", villageMap);
-    this.load.tilemapTiledJSON("homePlayerMap", homePlayerMap);
-    this.load.tilemapTiledJSON("home1", home1);
-    this.load.tilemapTiledJSON("home2", home2);
-    this.load.tilemapTiledJSON("road1", road1);
-    this.load.tilemapTiledJSON("road2", road2);
-    this.load.tilemapTiledJSON("road3", road3);
-    this.load.tilemapTiledJSON("homePlayer_0_0", "/game/assets/maps/homePlayer/homePlayer_0-0.json");
-
     this.load.image("objectCounterBackground", objectCounterBackground);
     this.load.image("objectCounterMinusButton", objectCounterMinusButton);
     this.load.image("objectCounterPlusButton", objectCounterPlusButton);
