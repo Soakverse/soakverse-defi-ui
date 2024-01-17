@@ -57,6 +57,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.tilemapTiledJSON("road1", road1);
     this.load.tilemapTiledJSON("road2", road2);
     this.load.tilemapTiledJSON("road3", road3);
+    this.load.tilemapTiledJSON("homePlayer_0_0", "/game/assets/maps/homePlayer/homePlayer_0-0.json");
 
     this.load.image("objectCounterBackground", objectCounterBackground);
     this.load.image("objectCounterMinusButton", objectCounterMinusButton);
@@ -72,18 +73,6 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.spritesheet("player", player, { frameWidth: 100, frameHeight: 100 });
 
     this.load.atlas("inventoryItems", inventoryItemsImage, inventoryItemsJson);
-
-    this.load.tilemapTiledJSON("soakWorld_0_0", "/game/assets/maps/soakWorld/soakWorld_0-0.json");
-    this.load.tilemapTiledJSON("soakWorld_1_0", "/game/assets/maps/soakWorld/soakWorld_1-0.json");
-    this.load.tilemapTiledJSON("soakWorld_2_0", "/game/assets/maps/soakWorld/soakWorld_2-0.json");
-    this.load.tilemapTiledJSON("soakWorld_0_1", "/game/assets/maps/soakWorld/soakWorld_0-1.json");
-    this.load.tilemapTiledJSON("soakWorld_1_1", "/game/assets/maps/soakWorld/soakWorld_1-1.json");
-    this.load.tilemapTiledJSON("soakWorld_2_1", "/game/assets/maps/soakWorld/soakWorld_2-1.json");
-    this.load.tilemapTiledJSON("soakWorld_0_2", "/game/assets/maps/soakWorld/soakWorld_0-2.json");
-    this.load.tilemapTiledJSON("soakWorld_1_2", "/game/assets/maps/soakWorld/soakWorld_1-2.json");
-    this.load.tilemapTiledJSON("soakWorld_2_2", "/game/assets/maps/soakWorld/soakWorld_2-2.json");
-
-    this.load.tilemapTiledJSON("homePlayer_0_0", "/game/assets/maps/homePlayer/homePlayer_0-0.json");
 
     // Dialogue
     this.load.image("dialogueImage_YB", dialogueImage_YB);

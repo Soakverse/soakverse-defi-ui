@@ -45,8 +45,13 @@ export declare type SW_SubMapData = {
 export class SW_MapManager extends Phaser.Events.EventEmitter {
     private scene: SW_GameScene;
 
-    declare private player: SW_Player;
+    private player: SW_Player;
+
+    /** All the submaps that are spawned and visible for the target. This map is dynamically updated with the target position changes*/
     private spawnedSubMapDataMap: Map<string, SW_SubMapData>;
+
+    /** All the submap filenames that can be spawned in this world. */
+    private subMapNamesMap: Map<string, string>;
 
     private prevLocalPercentMapX: number = 0;
     private prevLocalPercentMapY: number = 0;
@@ -57,11 +62,13 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     private currentSubMapX: number = 0;
     private currentSubMapY: number = 0;
   
-    private mapWidth: number = 1040;
-    private mapHeight: number = 880;
+    private subMapWidth: number = 1040;
+    private subMapHeight: number = 880;
   
-    private subMapMaxX: number = 2;
-    private subMapMaxY: number = 2;
+    private subMapMinX: number = 0;
+    private subMapMinY: number = 0;
+    private subMapMaxX: number = 0;
+    private subMapMaxY: number = 0;
 
     private subMapThreshold: number = SW_CST.MAP.SUBMAP_THRESHOLD;
 
@@ -85,9 +92,14 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.worldName = worldName;
 
         this.spawnedSubMapDataMap = new Map<string, SW_SubMapData>();
+        this.subMapNamesMap = new Map<string, string>();
         this.spawnMapQueue = [];
 
         this.initWorld();
+    }
+
+    public isInitialized(): boolean {
+        return this._isInitialized;
     }
     
     private initWorld(): void {
@@ -98,128 +110,196 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             this.preloadWorldAssets();
         }
         else {
-            this.mapWidth = 0;
-            this.mapHeight = 0;
+            this.subMapWidth = 0;
+            this.subMapHeight = 0;
             this.subMapMaxX = 0;
             this.subMapMaxY = 0;
             console.error("SW_MapManager::initWorld - Invalid world data");
         }
     }
 
-    private preloadWorldAssets(): void {        
+    private preloadWorldAssets(): void {
         if (this.scene.cache.json.exists(this.worldName)) {
-            this.setupWorld();
+            this.createWorld();
         }
         else {
+            this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}json-${this.worldName}`, this.createWorld, this);
             this.scene.load.json(`${this.worldName}`, `/game/assets/maps/${this.worldName}/${this.worldName}.world`);
             this.scene.load.start();
-            this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
-                this.setupWorld();
-            }, this);
         }
     }
 
-    private setupWorld(): void {
+    private createWorld(): void {
+        const isWorldValid = this.setupWorldMaps();
+        if (isWorldValid) {
+            this.once("playerPositionInitialized", this.onPlayerPositionInitialized);
+            this.initPlayerPosition(this.previousWorldName);
+        }
+    }
+
+    private onPlayerPositionInitialized(): void {
+        this.initSubMaps();
+        this.update();
+
+        this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
+
+        this.emit("initialized");
+        this._isInitialized = true;
+    }
+
+    /** Read the submap names from the world file. Their names will be saved based on their map coordinatates.
+     * So we can preload them when it's needed
+     */
+    private setupWorldMaps(): boolean {
         const worldData = this.scene.cache.json.get(this.worldName);
         const worldMaps = worldData ? worldData.maps : [];
-        
-        if (worldMaps && worldMaps.length > 0) {
-            this.mapWidth = worldMaps[0].width; // Assumme that all submaps have the same dimensions
-            this.mapHeight = worldMaps[0].height; // Assumme that all submaps have the same dimensions
-            this.subMapMaxX = Math.sqrt(worldData.maps.length) - 1; // TODO - Find a way to read this value from the world file
-            this.subMapMaxY = this.subMapMaxX;
-            this.scene.physics.world.setBounds(0, 0, this.mapWidth * (this.subMapMaxX + 1), this.mapHeight * (this.subMapMaxY + 1));
 
-            this.initPlayerPosition();
-            this.initSubMaps();
-            this.update();
-
-            this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
-
-            this.emit("initialized");
-            this._isInitialized = true;
-        }
-        else {
-            this.mapWidth = 0;
-            this.mapHeight = 0;
+        if (worldMaps.length <= 0) {
+            console.error("SW_MapManager::setupWorldMaps - World provided but the data are invalid");
+            this.subMapWidth = 0;
+            this.subMapHeight = 0;
             this.subMapMaxX = 0;
             this.subMapMaxY = 0;
-            console.error("SW_MapManager::initWorld - World provided but the data are invalid");
+            return false;
         }
-    }
 
-    private initPlayerPosition(): void {
-        const playerSpawnData = this.findSpawnPosition(this.previousWorldName as string);
-        this.player.setPosition(playerSpawnData.position.x, playerSpawnData.position.y);
-        this.player.setDirection(playerSpawnData.startDirection);
+        this.subMapWidth = worldMaps[0].width; // Assumme that all submaps have the same dimensions
+        this.subMapHeight = worldMaps[0].height; // Assumme that all submaps have the same dimensions
+        this.subMapMinX = Infinity;
+        this.subMapMinY = Infinity;
+        this.subMapMaxX = -Infinity;
+        this.subMapMaxY = -Infinity;
+
+        for (const subMap of worldData.maps) {
+            if ((subMap.width != this.subMapWidth) || (subMap.height != this.subMapHeight)) {
+                console.error("SW_MapManager::setupWorldMaps - Submaps don't have the same dimensions!");
+            }
+
+            const subMapX = Math.floor(subMap.x / subMap.width);
+            const subMapY = Math.floor(subMap.y / subMap.height);
+
+            this.subMapMinX = Math.min(this.subMapMinX, subMapX);
+            this.subMapMinY = Math.min(this.subMapMinY, subMapY);
+            this.subMapMaxX = Math.max(this.subMapMaxX, subMapX);
+            this.subMapMaxY = Math.max(this.subMapMaxY, subMapY);
+
+            const subMapId = `${subMapX}_${subMapY}`;
+            this.subMapNamesMap.set(subMapId, subMap.fileName);
+        }
+
+        this.scene.physics.world.setBounds(0, 0, this.subMapWidth * (this.subMapMaxX + 1), this.subMapHeight * (this.subMapMaxY + 1));
+        return true;
     }
 
     private initSubMaps(): void {
         this.updatePlayerData();
 
         const shouldAsyncLoad = false;
-        this.spawnSubMap(this.currentSubMapX, this.currentSubMapY, shouldAsyncLoad);
+        this.trySpawnSubMap(this.currentSubMapX, this.currentSubMapY, shouldAsyncLoad);
 
         if (this.isPlayerNearSubMapRight()) {
-            this.spawnSubMapOnRight(shouldAsyncLoad);
+            this.trySpawnSubMapOnRight(shouldAsyncLoad);
         }
         else if (this.isPlayerNearSubMapLeft()) {
-            this.spawnSubMapOnLeft(shouldAsyncLoad);
+            this.trySpawnSubMapOnLeft(shouldAsyncLoad);
         }
         
         if (this.isPlayerNearSubMapBottom()) {
-            this.spawnSubMapOnBottom(shouldAsyncLoad);
+            this.trySpawnSubMapOnBottom(shouldAsyncLoad);
         }
         else if (this.isPlayerNearSubMapTop()) {
-            this.spawnSubMapOnTop(shouldAsyncLoad);
+            this.trySpawnSubMapOnTop(shouldAsyncLoad);
         }
     }
 
-    public isInitialized(): boolean {
-        return this._isInitialized;
-    }
+    public initPlayerPosition(entranceName: string): void {
+        this.once("playerSpawnPositionFound", () => { this.emit("playerPositionInitialized"); }, this);
 
-    public findSpawnPosition(entranceName: string): SW_SubMapPlayerSpawnData {
+        this.player.setPosition(0, 0);
+        this.player.setDirection(SW_DIRECTIONS.Down);
+
         for (let i = 0; i <= this.subMapMaxX; ++i) {
             for (let j = 0; j <= this.subMapMaxY; ++j) {
-                const subMapId = `${i}_${j}`;
-                const subMap = this.scene.add.tilemap(`${this.worldName}_${subMapId}`);
-                const tileObjects = subMap.objects[1].objects;
+                const subMapName = this.getSubMapName(i, j);
+                if (!subMapName) {
+                    console.warn(`SW_MapManager::initPlayerPosition - subMapName not found at (${i},${j})`);
+                    continue;
+                }
+                this.scene.load.json(`${subMapName}`, `/game/assets/maps/${this.worldName}/${subMapName}`);
+            }
+        }
 
-                for (const tileObject of tileObjects) {
-                    if (tileObject.name == "Entrance") {
-                        const propertyArray = tileObject.properties as SW_TiledObjectProperties[];
-                        
-                        const isSpawnerProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
-                            return objectProperties.name == "isSpawner";
-                        });
+        this.scene.load.start();
+        this.scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+            const clearPreloadJsonMaps = () => {
+                for (let i = 0; i <= this.subMapMaxX; ++i) {
+                    for (let j = 0; j <= this.subMapMaxY; ++j) {
+                        const subMapName = this.getSubMapName(i, j);
+                        if (subMapName) {
+                            this.scene.cache.json.remove(subMapName);
+                        }
+                    }
+                }
+            };
 
-                        if (isSpawnerProperty && isSpawnerProperty.value) {
-                            
-                            const worldNameProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
-                                return objectProperties.name == "worldName";
+            for (let i = 0; i <= this.subMapMaxX; ++i) {
+                for (let j = 0; j <= this.subMapMaxY; ++j) {
+                    const subMapName = this.getSubMapName(i, j);
+                    if (!subMapName) {
+                        console.warn(`SW_MapManager::initPlayerPosition - subMapName not found at (${i},${j})`);
+                        continue;
+                    }
+
+                    const subMapDataJson = this.scene.cache.json.entries.get(subMapName);
+                    if (!subMapDataJson) {
+                        console.warn(`SW_MapManager::initPlayerPosition - subMapDataJson not associated to (${subMapName})`);
+                        continue;
+                    }
+
+                    const layerWithEntrances = subMapDataJson.layers.find((layerData: any) => {
+                        return layerData.name == "Characters";
+                    });
+
+                    if (!layerWithEntrances) {
+                        continue;
+                    }
+
+                    for (const layerObject of layerWithEntrances.objects) {
+                        if (layerObject.name == "Entrance") {
+                            const propertyArray = layerObject.properties as SW_TiledObjectProperties[];
+
+                            const isSpawnerProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                                return objectProperties.name == "isSpawner";
                             });
 
-                            if (worldNameProperty && worldNameProperty.value == entranceName) {
-                                const directionProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
-                                    return objectProperties.name == "startDirection";
+                            if (isSpawnerProperty && isSpawnerProperty.value) {
+                                const worldNameProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                                    return objectProperties.name == "worldName";
                                 });
 
-                                const spawnX = (tileObject.x as number) + i * this.mapWidth;
-                                const spawnY = (tileObject.y as number) + j * this.mapHeight;
-                                const startDirection = directionProperty ? directionProperty.value : SW_DIRECTIONS.Down;
-                                subMap.destroy();
-                                
-                                return { position: new Phaser.Math.Vector2(spawnX, spawnY), startDirection: startDirection };
+                                if (worldNameProperty && worldNameProperty.value == entranceName) {
+                                    const directionProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                                        return objectProperties.name == "startDirection";
+                                    });
+
+                                    const spawnX = (layerObject.x as number) + i * this.subMapWidth;
+                                    const spawnY = (layerObject.y as number) + j * this.subMapHeight;
+                                    const startDirection = directionProperty ? directionProperty.value : SW_DIRECTIONS.Down;
+
+                                    this.player.setPosition(spawnX, spawnY);
+                                    this.player.setDirection(startDirection);
+
+                                    clearPreloadJsonMaps();
+                                    this.emit("playerSpawnPositionFound");
+                                    return;
+                                }
                             }
                         }
                     }
                 }
-                subMap.destroy();
             }
-        }
-
-        return { position: new Phaser.Math.Vector2(0, 0), startDirection: SW_DIRECTIONS.Down };
+            clearPreloadJsonMaps();
+        }, this);
     }
 
     private hasSubMap(subMapX: number, subMapY: number): boolean {
@@ -227,16 +307,38 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }
 
     private isMapCoordValid(subMapX: number, subMapY: number): boolean {
-        return (subMapX >= 0) && (subMapX <= this.subMapMaxX) && (subMapY >= 0) && (subMapY <= this.subMapMaxY);
+        return (subMapX >= this.subMapMinX) && (subMapX <= this.subMapMaxX) && (subMapY >= this.subMapMinY) && (subMapY <= this.subMapMaxY);
     }
 
-    private spawnSubMap(subMapX: number, subMapY: number, shouldAsyncSpawn: boolean = true): void {
+    private getSubMapName(subMapX: number, subMapY: number): string | undefined {
+        return this.subMapNamesMap.get(`${subMapX}_${subMapY}`);
+    }
+
+    private trySpawnSubMap(subMapX: number, subMapY: number, shouldAsyncSpawn: boolean = true): void {
         if (!this.isMapCoordValid(subMapX, subMapY) || this.hasSubMap(subMapX, subMapY)) {
             return;
         }
 
-        const subMapId = `${subMapX}_${subMapY}`;
-        const subMap = this.scene.add.tilemap(`${this.worldName}_${subMapId}`);
+        const subMapName = this.getSubMapName(subMapX, subMapY);
+        if (!subMapName) {
+            console.warn("SW_MapManager::trySpawnSubMap - subMapName not found");
+            return;
+        }
+
+        if (this.scene.cache.tilemap.exists(subMapName)) {
+            this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+        }
+        else {
+            this.scene.load.tilemapTiledJSON(`${subMapName}`, `/game/assets/maps/${this.worldName}/${subMapName}`);
+            this.scene.load.start();
+            this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}tilemapJSON-${subMapName}`, (key: string, type: string, data: any) => {
+                this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+            }, this);
+        }
+    }
+
+    private spawnSubMap(subMapName: string, subMapX: number, subMapY: number, shouldAsyncSpawn: boolean = true): void {
+        const subMap = this.scene.add.tilemap(subMapName);
         const tilesetName = subMap.tilesets[0].name; // Assume there is only one tileset per submap
 
         const subMapData = {
@@ -247,18 +349,19 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         } as SW_SubMapData;
 
         if (shouldAsyncSpawn) {
-            this.spawnMapQueue.push(subMapData);
+            Phaser.Utils.Array.AddAt(this.spawnMapQueue, subMapData, 0);
         }
         else {
             this.spawnSubMapSynchrounously(subMapData)
         }
         
+        const subMapId = `${subMapX}_${subMapY}`;
         this.spawnedSubMapDataMap.set(subMapId, subMapData);
     }
 
     private spawnSubMapSynchrounously(subMapData: SW_SubMapData): void {
-        const offsetX = subMapData.subMapX * this.mapWidth;
-        const offsetY = subMapData.subMapY * this.mapHeight;
+        const offsetX = subMapData.subMapX * this.subMapWidth;
+        const offsetY = subMapData.subMapY * this.subMapHeight;
         const tileset = subMapData.tileset;
 
         subMapData.layerGround = subMapData.subMap.createLayer("Layer1", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
@@ -289,63 +392,63 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         subMapData.interactableObjects_collider = this.scene.physics.add.overlap(this.player.getInteractableComp(), subMapData.interactableObjects, this.scene.onPlayerOverlapInteractable, undefined, this);
     }
 
-    private spawnSubMapOnRight(shouldAsyncSpawn: boolean = true): void {
+    private trySpawnSubMapOnRight(shouldAsyncSpawn: boolean = true): void {
         const rightSubMapX = this.currentSubMapX + 1; 
         const downSubMapY = this.currentSubMapY + 1;
         const upSubMapY = this.currentSubMapY - 1;
 
-        this.spawnSubMap(rightSubMapX, this.currentSubMapY, shouldAsyncSpawn);
+        this.trySpawnSubMap(rightSubMapX, this.currentSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(this.currentSubMapX, downSubMapY)) {
-            this.spawnSubMap(rightSubMapX, downSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(rightSubMapX, downSubMapY, shouldAsyncSpawn);
         }
         else if (this.hasSubMap(this.currentSubMapX, upSubMapY)) {
-            this.spawnSubMap(rightSubMapX, upSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(rightSubMapX, upSubMapY, shouldAsyncSpawn);
         }
     }
 
-    private spawnSubMapOnLeft(shouldAsyncSpawn: boolean = true): void {
+    private trySpawnSubMapOnLeft(shouldAsyncSpawn: boolean = true): void {
         const leftSubMapX = this.currentSubMapX - 1;
         const downSubMapY = this.currentSubMapY + 1;
         const upSubMapY = this.currentSubMapY - 1;
 
-        this.spawnSubMap(leftSubMapX, this.currentSubMapY, shouldAsyncSpawn);
+        this.trySpawnSubMap(leftSubMapX, this.currentSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(this.currentSubMapX, downSubMapY)) {
-            this.spawnSubMap(leftSubMapX, downSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(leftSubMapX, downSubMapY, shouldAsyncSpawn);
         }
         else if (this.hasSubMap(this.currentSubMapX, upSubMapY)) {
-            this.spawnSubMap(leftSubMapX, upSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(leftSubMapX, upSubMapY, shouldAsyncSpawn);
         }
     }
 
-    private spawnSubMapOnBottom(shouldAsyncSpawn: boolean = true): void {
+    private trySpawnSubMapOnBottom(shouldAsyncSpawn: boolean = true): void {
         const rightSubMapX = this.currentSubMapX + 1; 
         const leftSubMapX = this.currentSubMapX - 1;
         const downSubMapY = this.currentSubMapY + 1;
 
-        this.spawnSubMap(this.currentSubMapX, downSubMapY, shouldAsyncSpawn);
+        this.trySpawnSubMap(this.currentSubMapX, downSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(leftSubMapX, this.currentSubMapY)) {
-            this.spawnSubMap(leftSubMapX, downSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(leftSubMapX, downSubMapY, shouldAsyncSpawn);
         }
         else if (this.hasSubMap(rightSubMapX, this.currentSubMapY)) {
-            this.spawnSubMap(rightSubMapX, downSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(rightSubMapX, downSubMapY, shouldAsyncSpawn);
         }
     }
 
-    private spawnSubMapOnTop(shouldAsyncSpawn: boolean = true): void {
+    private trySpawnSubMapOnTop(shouldAsyncSpawn: boolean = true): void {
         const rightSubMapX = this.currentSubMapX + 1; 
         const leftSubMapX = this.currentSubMapX - 1;
         const upSubMapY = this.currentSubMapY - 1;
 
-        this.spawnSubMap(this.currentSubMapX, upSubMapY, shouldAsyncSpawn);
+        this.trySpawnSubMap(this.currentSubMapX, upSubMapY, shouldAsyncSpawn);
 
         if (this.hasSubMap(leftSubMapX, this.currentSubMapY)) {
-            this.spawnSubMap(leftSubMapX, upSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(leftSubMapX, upSubMapY, shouldAsyncSpawn);
         }
         else if (this.hasSubMap(rightSubMapX, this.currentSubMapY)) {
-            this.spawnSubMap(rightSubMapX, upSubMapY, shouldAsyncSpawn);
+            this.trySpawnSubMap(rightSubMapX, upSubMapY, shouldAsyncSpawn);
         }
     }
 
@@ -405,6 +508,12 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             this.spawnedSubMapDataMap.delete(subMapId);
 
             this.removeFromSubMapQueue(subMapX, subMapY);
+
+            const subMapName = this.getSubMapName(subMapX, subMapY);
+            if (subMapName)
+            {
+                this.scene.cache.tilemap.remove(subMapName);
+            }
         }
     }
 
@@ -470,11 +579,11 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.prevLocalPercentMapX = this.currentLocalPercentMapX;
         this.prevLocalPercentMapY = this.currentLocalPercentMapY;
 
-        this.currentLocalPercentMapX = (this.player.x % this.mapWidth) / this.mapWidth;
-        this.currentLocalPercentMapY = (this.player.y % this.mapHeight) / this.mapHeight;
+        this.currentLocalPercentMapX = (this.player.x % this.subMapWidth) / this.subMapWidth;
+        this.currentLocalPercentMapY = (this.player.y % this.subMapHeight) / this.subMapHeight;
 
-        this.currentSubMapX = Math.floor(this.player.x / this.mapWidth);
-        this.currentSubMapY = Math.floor(this.player.y / this.mapHeight);
+        this.currentSubMapX = Math.floor(this.player.x / this.subMapWidth);
+        this.currentSubMapY = Math.floor(this.player.y / this.subMapHeight);
     }
 
     public clear(): void {
@@ -489,6 +598,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             // subMapData.entrances?.destroy();
         }, this);
         this.spawnedSubMapDataMap.clear();
+        this.subMapNamesMap.clear();
     }
 
     private createEntrances(subMapData: SW_SubMapData, offsetX: number, offsetY: number): Phaser.Physics.Arcade.StaticGroup {
@@ -516,8 +626,8 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
         if (length > 0) {
             const subMapData = this.spawnMapQueue[length - 1];
-            const offsetX = subMapData.subMapX * this.mapWidth;
-            const offsetY = subMapData.subMapY * this.mapHeight;
+            const offsetX = subMapData.subMapX * this.subMapWidth;
+            const offsetY = subMapData.subMapY * this.subMapHeight;
             const tileset = subMapData.tileset;
 
             if (!subMapData.layerGround) {
@@ -566,36 +676,32 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.updatePlayerData();
 
         if (this.subMapMaxX > 1) {
-            if (this.currentSubMapX == this.currentSubMapX) {
-                if (this.shouldSpawnSubMapOnRight()) {
-                    this.spawnSubMapOnRight();
-                }
-                else if (this.shouldClearSubMapOnRight()) {
-                    this.clearSubMapOnRight();
-                }
-                else if (this.shouldSpawnSubMapOnLeft()) {
-                    this.spawnSubMapOnLeft();
-                }
-                else if (this.shouldClearSubMapOnLeft()) {
-                    this.clearSubMapOnLeft();
-                }
+            if (this.shouldSpawnSubMapOnRight()) {
+                this.trySpawnSubMapOnRight();
+            }
+            else if (this.shouldClearSubMapOnRight()) {
+                this.clearSubMapOnRight();
+            }
+            else if (this.shouldSpawnSubMapOnLeft()) {
+                this.trySpawnSubMapOnLeft();
+            }
+            else if (this.shouldClearSubMapOnLeft()) {
+                this.clearSubMapOnLeft();
             }
         }
         
         if (this.subMapMaxY > 1) {
-            if (this.currentSubMapY == this.currentSubMapY) {
-                if (this.shouldSpawnSubMapOnBottom()) {
-                    this.spawnSubMapOnBottom();
-                }
-                else if (this.shouldClearSubMapOnBottom()) {
-                    this.clearSubMapOnBottom();
-                }
-                else if (this.shouldSpawnSubMapOnTop()) {
-                    this.spawnSubMapOnTop();
-                }
-                else if (this.shouldClearSubMapOnTop()) {
-                    this.clearSubMapOnTop();
-                }
+            if (this.shouldSpawnSubMapOnBottom()) {
+                this.trySpawnSubMapOnBottom();
+            }
+            else if (this.shouldClearSubMapOnBottom()) {
+                this.clearSubMapOnBottom();
+            }
+            else if (this.shouldSpawnSubMapOnTop()) {
+                this.trySpawnSubMapOnTop();
+            }
+            else if (this.shouldClearSubMapOnTop()) {
+                this.clearSubMapOnTop();
             }
         }
     }

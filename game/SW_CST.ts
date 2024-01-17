@@ -11,7 +11,7 @@ export const SW_CST = {
         ZOOM: 0.44,
         PLAYER: {
             WALK_SPEED: 130,
-            RUN_SPEED: 200
+            RUN_SPEED: 400
         }
     },
     MAP: {
