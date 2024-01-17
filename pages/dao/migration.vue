@@ -6,15 +6,6 @@
     <div class="container-fluid d-flex p-2 game-sublayout">
       <div class="row w-100 mt-auto g-0">
         <div class="col-12 mb-2">
-          <div class="card text-left h-100">
-            <h4>
-              <span class="me-2 duvall-font mb-2 d-inline-block"
-                >Soakverse DAO Pass Claim
-              </span>
-            </h4>
-          </div>
-        </div>
-        <div class="col-12 mb-2">
           <div class="card text-center h-100">
             <ERC721Migration
               :newContract="soakverseDAOPassSmartContract"

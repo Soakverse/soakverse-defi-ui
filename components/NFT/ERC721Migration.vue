@@ -20,7 +20,7 @@
       </button>
     </div>
     <div v-else-if="state.migratingIsActive" class="col-12">
-      <h3>Welcome to {{ props.newContract.name }} migration page</h3>
+      <h3>{{ props.newContract.name }} migration hub</h3>
       <p>You own: {{ state.oldContractCount }} {{ props.oldContract.name }}</p>
       <hr />
       <p v-if="state.oldContractCount > props.migrationLimit">
