@@ -47,9 +47,6 @@ export default class SW_BootScene extends SW_BaseScene {
   public preload(): void {
     this.load.audio("thud", [thudMp3, thudOgg]);
 
-    this.load.image("interiorAssetTiled", interiorAssetTiled);
-    this.load.image("outsideAssetTiled", outsideAssetTiled);
-
     this.load.image("objectCounterBackground", objectCounterBackground);
     this.load.image("objectCounterMinusButton", objectCounterMinusButton);
     this.load.image("objectCounterPlusButton", objectCounterPlusButton);

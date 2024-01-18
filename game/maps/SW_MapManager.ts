@@ -332,7 +332,19 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             this.scene.load.tilemapTiledJSON(`${subMapName}`, `/game/assets/maps/${this.worldName}/${subMapName}`);
             this.scene.load.start();
             this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}tilemapJSON-${subMapName}`, (key: string, type: string, data: any) => {
-                this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+                const tileset = this.scene.cache.tilemap.get(subMapName).data.tilesets[0]; // Assume there is only one tileset per submap
+                const tilesetName = tileset.name;
+
+                if (this.scene.textures.exists(tilesetName)) {
+                    this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+                }
+                else {
+                    this.scene.load.image(`${tilesetName}`, `/game/assets/maps/${this.worldName}/${tileset.image}`);
+                    this.scene.load.start();
+                    this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}image-${tilesetName}`, (key: string, type: string, data: any) => {
+                        this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+                    });
+                }
             }, this);
         }
     }
