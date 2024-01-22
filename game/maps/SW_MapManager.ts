@@ -1,3 +1,8 @@
+/** TODO LIST 
+ * 1. Have a generic map manager with a simple gameobject as the target then make the sw version with the player passed and a game scene.
+ * 2. See if we could have a global colliders (layerForeground1_collider, entrances_collider...) instead of making one per submap. This would divide the number of colliders up to 4
+*/
+
 import { SW_CST } from "~/game/SW_CST";
 import SW_GameScene from "~/game/scenes/SW_GameScene";
 import { SW_Player } from "~/game/characters/players/SW_Player";
@@ -50,6 +55,13 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     /** All the submaps that are spawned and visible for the target. This map is dynamically updated with the target position changes*/
     private spawnedSubMapDataMap: Map<string, SW_SubMapData>;
 
+    /** All the submaps that are ready to be spawned but in the queue. Each update will spawn a part of the submpas until they are fully spawned. 
+     * This prevent freezes in a frame since spawing tiles/images is not async */
+    private spawnSubMapQueue: SW_SubMapData[] = [];
+
+    /** All the submaps whose assets are preloading. Once their assets are loaded, the submap will be either spawned or added to the submapQueue */
+    private preloadingSubMapDataMap: Map<string /** subMapId */, boolean /** isValid */>;
+
     /** All the submap filenames that can be spawned in this world. */
     private subMapNamesMap: Map<string, string>;
 
@@ -72,15 +84,11 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
     private subMapThreshold: number = SW_CST.MAP.SUBMAP_THRESHOLD;
 
-    private spawnMapQueue: SW_SubMapData[] = [];
-
     private worldName: string;
     private previousWorldName: string;
 
     private _isInitialized: boolean = false;
 
-    // TODO: Have a generic map manager with a simple gameobject as the target
-    // then make the sw version with the player passed and a game scene.
     constructor (player: SW_Player, worldName: string, previousWorldName: string) {
         super();
 
@@ -92,8 +100,9 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.worldName = worldName;
 
         this.spawnedSubMapDataMap = new Map<string, SW_SubMapData>();
+        this.preloadingSubMapDataMap = new Map<string, boolean>();
         this.subMapNamesMap = new Map<string, string>();
-        this.spawnMapQueue = [];
+        this.spawnSubMapQueue = [];
 
         this.initWorld();
     }
@@ -183,8 +192,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             this.subMapMaxX = Math.max(this.subMapMaxX, subMapX);
             this.subMapMaxY = Math.max(this.subMapMaxY, subMapY);
 
-            const subMapId = `${subMapX}_${subMapY}`;
-            this.subMapNamesMap.set(subMapId, subMap.fileName);
+            this.subMapNamesMap.set(this.getSubMapId(subMapX, subMapY), subMap.fileName);
         }
 
         this.scene.physics.world.setBounds(0, 0, this.subMapWidth * (this.subMapMaxX + 1), this.subMapHeight * (this.subMapMaxY + 1));
@@ -303,7 +311,8 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }
 
     private hasSubMap(subMapX: number, subMapY: number): boolean {
-        return this.spawnedSubMapDataMap.has(`${subMapX}_${subMapY}`);
+        const subMapId = this.getSubMapId(subMapX, subMapY);
+        return this.spawnedSubMapDataMap.has(subMapId) || !!this.preloadingSubMapDataMap.get(subMapId);
     }
 
     private isMapCoordValid(subMapX: number, subMapY: number): boolean {
@@ -311,7 +320,12 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }
 
     private getSubMapName(subMapX: number, subMapY: number): string | undefined {
-        return this.subMapNamesMap.get(`${subMapX}_${subMapY}`);
+        const subMapId = this.getSubMapId(subMapX, subMapY);
+        return this.subMapNamesMap.get(subMapId);
+    }
+
+    private getSubMapId(subMapX: number, subMapY: number): string {
+        return `${subMapX}_${subMapY}`;
     }
 
     private trySpawnSubMap(subMapX: number, subMapY: number, shouldAsyncSpawn: boolean = true): void {
@@ -329,23 +343,43 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
         }
         else {
+            const subMapId = this.getSubMapId(subMapX, subMapY); 
+            this.preloadingSubMapDataMap.set(subMapId, true);
+
             this.scene.load.tilemapTiledJSON(`${subMapName}`, `/game/assets/maps/${this.worldName}/${subMapName}`);
             this.scene.load.start();
             this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}tilemapJSON-${subMapName}`, (key: string, type: string, data: any) => {
-                const tileset = this.scene.cache.tilemap.get(subMapName).data.tilesets[0]; // Assume there is only one tileset per submap
-                const tilesetName = tileset.name;
-
-                if (this.scene.textures.exists(tilesetName)) {
-                    this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
-                }
-                else {
-                    this.scene.load.image(`${tilesetName}`, `/game/assets/maps/${this.worldName}/${tileset.image}`);
-                    this.scene.load.start();
-                    this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}image-${tilesetName}`, (key: string, type: string, data: any) => {
-                        this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
-                    });
-                }
+                this.onTilemapJsonLoaded(subMapX, subMapY, shouldAsyncSpawn);
             }, this);
+        }
+    }
+
+    private onTilemapJsonLoaded(subMapX: number, subMapY: number, shouldAsyncSpawn: boolean): void {
+        const subMapId = this.getSubMapId(subMapX, subMapY);
+        if (!this.preloadingSubMapDataMap.has(subMapId)) {
+            return;
+        }
+
+        const subMapName = this.getSubMapName(subMapX, subMapY);
+        if (!subMapName) {
+            console.warn("SW_MapManager::onTilemapJsonLoaded - subMapName not found");
+            return;
+        }
+
+        this.removeFromPreloadingDataMap(subMapX, subMapY);
+
+        const tileset = this.scene.cache.tilemap.get(subMapName).data.tilesets[0]; // Assume there is only one tileset per submap
+        const tilesetName = tileset.name;
+
+        if (this.scene.textures.exists(tilesetName)) {
+            this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+        }
+        else {
+            this.scene.load.image(`${tilesetName}`, `/game/assets/maps/${this.worldName}/${tileset.image}`);
+            this.scene.load.start();
+            this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}image-${tilesetName}`, (key: string, type: string, data: any) => {
+                this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+            });
         }
     }
 
@@ -361,13 +395,13 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         } as SW_SubMapData;
 
         if (shouldAsyncSpawn) {
-            Phaser.Utils.Array.AddAt(this.spawnMapQueue, subMapData, 0);
+            Phaser.Utils.Array.AddAt(this.spawnSubMapQueue, subMapData, 0);
         }
         else {
             this.spawnSubMapSynchrounously(subMapData)
         }
         
-        const subMapId = `${subMapX}_${subMapY}`;
+        const subMapId = this.getSubMapId(subMapX, subMapY);
         this.spawnedSubMapDataMap.set(subMapId, subMapData);
     }
 
@@ -378,10 +412,10 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
         subMapData.layerGround = subMapData.subMap.createLayer("Layer1", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
         subMapData.layerGround.setDepth(depthBackground);
-        
+
         subMapData.layerBackground1 =  subMapData.subMap.createLayer("Layer2", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
         subMapData.layerBackground1.setDepth(depthBackground);
-        
+
         subMapData.layerBackground2 =  subMapData.subMap.createLayer("Layer3", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
         subMapData.layerBackground2.setDepth(depthBackground);
         subMapData.layerBackground2.setCollisionByProperty({collides: true});
@@ -505,38 +539,58 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }
 
     private clearSubMap(subMapX: number, subMapY: number): void {
-        const subMapId = `${subMapX}_${subMapY}`;
+        this.removeFromPreloadingDataMap(subMapX, subMapY);
+        this.removeFromSubMapQueue(subMapX, subMapY);
+        this.removeSpawnedSubMapByIndexes(subMapX, subMapY);
+
+        const subMapName = this.getSubMapName(subMapX, subMapY);
+        if (subMapName)
+        {
+            const tilemapData = this.scene.cache.tilemap.get(subMapName);
+            const tilesets = tilemapData ? tilemapData.tilesets : undefined;
+
+            if (tilesets && tilesets.length() > 0)
+            {
+                this.scene.textures.remove(tilemapData.tilesets[0].name);
+            }
+            this.scene.cache.tilemap.remove(subMapName);
+        }
+    }
+
+    private removeSpawnedSubMapByIndexes(subMapX: number, subMapY: number): void {
+        const subMapId = this.getSubMapId(subMapX, subMapY);
         const subMapData = this.spawnedSubMapDataMap.get(subMapId);
 
         if (subMapData)
         {
-            subMapData.layerBackground2_collider?.destroy();
-            subMapData.layerForeground1_collider?.destroy();
-            subMapData.entrances_collider?.destroy();
-            subMapData.interactableObjects_collider?.destroy();
-            subMapData.subMap.destroy();
-            // subMapData.entrances?.clear(true, true);
-            // subMapData.entrances?.destroy(); // TODO - See if we could pool the static groups
+            this.removeSpawnedSubMap(subMapData);
             this.spawnedSubMapDataMap.delete(subMapId);
-
-            this.removeFromSubMapQueue(subMapX, subMapY);
-
-            const subMapName = this.getSubMapName(subMapX, subMapY);
-            if (subMapName)
-            {
-                this.scene.cache.tilemap.remove(subMapName);
-            }
         }
     }
 
+    private removeSpawnedSubMap(subMapData: SW_SubMapData): void {
+        subMapData.layerBackground2_collider?.destroy();
+        subMapData.layerForeground1_collider?.destroy();
+        subMapData.entrances_collider?.destroy();
+        subMapData.interactableObjects_collider?.destroy();
+        subMapData.entrances?.clear(true, true);
+        subMapData.interactableObjects?.clear(true, true);
+        subMapData.subMap.destroy();
+    }
+
     private removeFromSubMapQueue(subMapX: number, subMapY: number): void {
-        const index = this.spawnMapQueue.findIndex((subMapData: SW_SubMapData) => {
+        const index = this.spawnSubMapQueue.findIndex((subMapData: SW_SubMapData) => {
             return (subMapData.subMapX == subMapX) && (subMapData.subMapY == subMapY);
         });
 
-        if ((index >= 0) && (index < this.spawnMapQueue.length)) {
-            this.spawnMapQueue.splice(index);
+        if ((index >= 0) && (index < this.spawnSubMapQueue.length)) {
+            this.spawnSubMapQueue.splice(index);
         }
+    }
+
+    private removeFromPreloadingDataMap(subMapX: number, subMapY: number): void {
+        const subMapId = this.getSubMapId(subMapX, subMapY);
+        this.preloadingSubMapDataMap.delete(subMapId);
     }
 
     private isPlayerNearSubMapRight(): boolean {
@@ -602,15 +656,14 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.removeAllListeners();
         this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
-        this.spawnMapQueue = [];
+        this.spawnSubMapQueue = [];
 
         this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
-            subMapData.subMap.destroy();
-            // subMapData.entrances?.clear(true, true);
-            // subMapData.entrances?.destroy();
+            this.removeSpawnedSubMap(subMapData);
         }, this);
         this.spawnedSubMapDataMap.clear();
         this.subMapNamesMap.clear();
+        this.preloadingSubMapDataMap.clear();
     }
 
     private createEntrances(subMapData: SW_SubMapData, offsetX: number, offsetY: number): Phaser.Physics.Arcade.StaticGroup {
@@ -634,10 +687,10 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }
 
     private updateQueue(): void {
-        const length = this.spawnMapQueue.length;
+        const length = this.spawnSubMapQueue.length;
 
         if (length > 0) {
-            const subMapData = this.spawnMapQueue[length - 1];
+            const subMapData = this.spawnSubMapQueue[length - 1];
             const offsetX = subMapData.subMapX * this.subMapWidth;
             const offsetY = subMapData.subMapY * this.subMapHeight;
             const tileset = subMapData.tileset;
@@ -677,7 +730,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
                 subMapData.interactableObjects_collider = this.scene.physics.add.overlap(this.player.getInteractableComp(), subMapData.interactableObjects, this.scene.onPlayerOverlapInteractable, undefined, this);
             }
             else {
-                this.spawnMapQueue.pop();
+                this.spawnSubMapQueue.pop();
                 this.updateQueue(); // Try to update the next submap if there is any left
             }
         }
