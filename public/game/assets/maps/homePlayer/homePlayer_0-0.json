@@ -346,7 +346,7 @@
         {
          "columns":40,
          "firstgid":1,
-         "image":"..\/interiorAssetTiled.png",
+         "image":"interiorAssetTiled.png",
          "imageheight":720,
          "imagewidth":720,
          "margin":1,

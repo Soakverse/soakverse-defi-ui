@@ -65,7 +65,6 @@ export default class SW_GameScene extends SW_BaseScene {
     this.createUI();
 
     this.addUniqueListener(Phaser.Scenes.Events.POST_UPDATE, this.postUpdate, this);
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.shutdown, this);
 
     this.player = new SW_Player(this, 0, 0);
     this.player.init({
@@ -193,6 +192,7 @@ export default class SW_GameScene extends SW_BaseScene {
 
   public onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
     this.UIScene.showLoadingScreen();
+    this.shutdown();
     this.scene.restart({worldName: entrance.worldName, previousWorldName: this.worldName });
   }
 

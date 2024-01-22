@@ -6,18 +6,6 @@ import SW_GameUIScene from '~/game/scenes/SW_GameUIScene';
 import thudMp3 from '@/game/assets/thud.mp3';
 import thudOgg from '@/game/assets/thud.ogg';
 
-//Credit goes to Zerudez - See https://www.deviantart.com/zerudez/art/Public-Tileset-295115322
-import outsideAssetTiled from '@/game/assets/maps/outsideAssetTiled.png';
-import interiorAssetTiled from '@/game/assets/maps/interiorAssetTiled.png';
-
-import villageMap from '@/game/assets/maps/villageMap.json';
-import homePlayerMap from '@/game/assets/maps/homePlayerMap.json';
-import home1 from '@/game/assets/maps/home1.json';
-import home2 from '@/game/assets/maps/home2.json';
-import road1 from '@/game/assets/maps/road1.json';
-import road2 from '@/game/assets/maps/road2.json';
-import road3 from '@/game/assets/maps/road3.json';
-
 import objectCounterBackground from '@/game/assets/inventory/objectCounterBackground.png';
 import objectCounterMinusButton from '@/game/assets/inventory/objectCounterMinusButton.png';
 import objectCounterPlusButton from '@/game/assets/inventory/objectCounterPlusButton.png';
