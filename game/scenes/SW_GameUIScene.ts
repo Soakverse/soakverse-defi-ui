@@ -66,8 +66,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this.loadingScreen.fillStyle(0x000000, 1.0);
       this.loadingScreen.fillRect(0, 0, this.scale.displaySize.width, this.scale.displaySize.height);
       this.loadingScreen.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.scale.displaySize.width, this.scale.displaySize.height), Phaser.Geom.Rectangle.Contains);
-
-      this.hideLoadingScreen();
     }
 
     public showLoadingScreen(): void {
@@ -79,7 +77,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
         this.tweens.add({
             targets: this.loadingScreen,
             alpha: 0,
-            duration: 200,
+            duration: 400,
             onComplete: () => { this.loadingScreen.setVisible(false); },
             callbackScope: this
         });

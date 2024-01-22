@@ -151,7 +151,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.update();
 
         this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
-
+        
         this.emit("initialized");
         this._isInitialized = true;
     }
