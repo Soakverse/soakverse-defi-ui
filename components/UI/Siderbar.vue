@@ -27,6 +27,15 @@
       </li>
       <li>
         <nuxt-link
+          to="/dao"
+          class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
+          ><i class="fa-solid fa-scale-balanced"></i
+          ><span class="label">DAO Dashboard</span>
+        </nuxt-link>
+      </li>
+      <li>
+        <nuxt-link
           to="/play"
           class="sidebar-link"
           :class="{ 'text-center w-auto': !isSidebarOpen }"
