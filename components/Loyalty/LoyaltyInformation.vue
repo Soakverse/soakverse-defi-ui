@@ -1,5 +1,5 @@
 <template>
-  <div class="row text-left px-1 mt-4">
+  <div class="row text-left mt-4">
     <div class="col-12">
       <h5>
         <i class="fa-solid fa-award"></i> Soakverse Loyalty Program
