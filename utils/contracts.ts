@@ -5,18 +5,10 @@ import soakverseDAOPassNFTAbi from "./abi/soakverseDAOPassNFT.json";
 import eggzNFTAbi from "./abi/eggzNFT.json";
 import wizhNFTAbi from "./abi/wizhNFT.json";
 import spocAbi from "./abi/spocToken.json";
-
-export type SmartContractDefinition = {
-  address: string;
-  abi: any[];
-  name: string;
-  ticker: string;
-  chainId: number;
-};
-
-export interface TokenSmartContractDefinition extends SmartContractDefinition {
-  decimals: number;
-}
+import {
+  SmartContractDefinition,
+  TokenSmartContractDefinition,
+} from "~~/types/blockchain/BlockchainTypes";
 
 export const soakmontTokenContract: TokenSmartContractDefinition = {
   address: "0x1b2fdb1626285b94782af2fda8e270e95cebc3b4",

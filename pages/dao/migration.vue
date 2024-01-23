@@ -5,7 +5,10 @@
   >
     <div class="container-fluid d-flex p-2 game-sublayout">
       <div class="row w-100 mt-auto g-0">
-        <div class="col-12 mb-2">
+        <div class="col-12">
+          <nuxt-link to="/dao" class="btn btn-primary mb-2">
+            DAO Dashboard
+          </nuxt-link>
           <div class="card text-center h-100">
             <ERC721Migration
               :newContract="soakverseDAOPassSmartContract"
@@ -36,7 +39,7 @@ useHead({
 
 <style lang="scss">
 #migration-layout {
-  background-image: url("/images/soakverse-dao.webp");
+  background-image: url("/images/dao-migration.webp");
   background-size: cover;
   background-position: center center;
 }

@@ -32,10 +32,10 @@
 <script setup>
 const socials = [
   {
-    name: "DAO Pass Migration",
+    name: "DAO Dashboard",
     color: "#f24578",
-    link: "/dao/migration",
-    icon: "fas fa-arrow-right-from-bracket",
+    link: "/dao",
+    icon: "fas fa-scale-balanced",
   },
   {
     name: "SKMT Staking",
