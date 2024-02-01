@@ -268,14 +268,9 @@
                 {
                  "height":0,
                  "id":41,
-                 "name":"Entrance",
+                 "name":"Spawner",
                  "point":true,
                  "properties":[
-                        {
-                         "name":"isSpawner",
-                         "type":"bool",
-                         "value":true
-                        }, 
                         {
                          "name":"startDirection",
                          "type":"string",
@@ -304,11 +299,6 @@
                          "value":"Up"
                         }, 
                         {
-                         "name":"isSpawner",
-                         "type":"bool",
-                         "value":false
-                        }, 
-                        {
                          "name":"worldName",
                          "type":"string",
                          "value":"homePlayer"
@@ -323,14 +313,9 @@
                 {
                  "height":0,
                  "id":45,
-                 "name":"Entrance",
+                 "name":"Spawner",
                  "point":true,
                  "properties":[
-                        {
-                         "name":"isSpawner",
-                         "type":"bool",
-                         "value":true
-                        }, 
                         {
                          "name":"startDirection",
                          "type":"string",

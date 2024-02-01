@@ -273,34 +273,28 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
                     }
 
                     for (const layerObject of layerWithEntrances.objects) {
-                        if (layerObject.name == "Entrance") {
+                        if (layerObject.name == "Spawner") {
                             const propertyArray = layerObject.properties as SW_TiledObjectProperties[];
 
-                            const isSpawnerProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
-                                return objectProperties.name == "isSpawner";
+                            const worldNameProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                                return objectProperties.name == "worldName";
                             });
 
-                            if (isSpawnerProperty && isSpawnerProperty.value) {
-                                const worldNameProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
-                                    return objectProperties.name == "worldName";
+                            if (worldNameProperty && worldNameProperty.value == entranceName) {
+                                const directionProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
+                                    return objectProperties.name == "startDirection";
                                 });
 
-                                if (worldNameProperty && worldNameProperty.value == entranceName) {
-                                    const directionProperty = propertyArray.find((objectProperties: SW_TiledObjectProperties) => {
-                                        return objectProperties.name == "startDirection";
-                                    });
+                                const spawnX = (layerObject.x as number) + i * this.subMapWidth;
+                                const spawnY = (layerObject.y as number) + j * this.subMapHeight;
+                                const startDirection = directionProperty ? directionProperty.value : SW_DIRECTIONS.Down;
 
-                                    const spawnX = (layerObject.x as number) + i * this.subMapWidth;
-                                    const spawnY = (layerObject.y as number) + j * this.subMapHeight;
-                                    const startDirection = directionProperty ? directionProperty.value : SW_DIRECTIONS.Down;
+                                this.player.setPosition(spawnX, spawnY);
+                                this.player.setDirection(startDirection);
 
-                                    this.player.setPosition(spawnX, spawnY);
-                                    this.player.setDirection(startDirection);
-
-                                    clearPreloadJsonMaps();
-                                    this.emit("playerSpawnPositionFound");
-                                    return;
-                                }
+                                clearPreloadJsonMaps();
+                                this.emit("playerSpawnPositionFound");
+                                return;
                             }
                         }
                     }
@@ -682,16 +676,11 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         const entrances = subMapData.subMap.createFromObjects("Characters", {name: "Entrance", classType: SW_Entrance}) as SW_Entrance[];
 
         for (const entrance of entrances) {
-            if (!entrance.isSpawner) {
-                entranceGroup.add(entrance);
-                entrance.setPosition(entrance.x + offsetX, entrance.y + offsetY);
-                entrance.body.x = entrance.x - entrance.displayWidth * 0.5;
-                entrance.body.y = entrance.y - entrance.displayHeight * 0.5;
-                entrance.setVisible(entrance.texture.key != "__MISSING");
-            }
-            else {
-                entrance.destroy();
-            }
+            entranceGroup.add(entrance);
+            entrance.setPosition(entrance.x + offsetX, entrance.y + offsetY);
+            entrance.body.x = entrance.x - entrance.displayWidth * 0.5;
+            entrance.body.y = entrance.y - entrance.displayHeight * 0.5;
+            entrance.setVisible(entrance.texture.key != "__MISSING");
         }
         return entranceGroup;
     }

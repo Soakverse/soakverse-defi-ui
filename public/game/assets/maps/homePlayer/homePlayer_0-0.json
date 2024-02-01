@@ -145,11 +145,6 @@
                          "value":"Down"
                         }, 
                         {
-                         "name":"isSpawner",
-                         "type":"bool",
-                         "value":false
-                        }, 
-                        {
                          "name":"worldName",
                          "type":"string",
                          "value":"soakWorld"
@@ -164,14 +159,9 @@
                 {
                  "height":0,
                  "id":27,
-                 "name":"Entrance",
+                 "name":"Spawner",
                  "point":true,
                  "properties":[
-                        {
-                         "name":"isSpawner",
-                         "type":"bool",
-                         "value":true
-                        }, 
                         {
                          "name":"startDirection",
                          "type":"string",
