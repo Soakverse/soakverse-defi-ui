@@ -3,7 +3,8 @@ import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_PlayerInventoryWidget } from "~/game/inventory/SW_PlayerInventoryWidget";
 import { SW_ChestInventoryWidget } from "~/game/inventory/SW_ChestInventoryWidget";
-import { SW_DialogueBox } from "~/game/dialogues/SW_DialogueBox";
+import { SW_DialogTextBox } from "~/game/dialogues/SW_DialogTextBox";
+import { SW_DialogQuest } from "../dialogues/SW_DialogQuest";
 
 declare type SW_UIKeys = {
     escape: Phaser.Input.Keyboard.Key;
@@ -15,9 +16,11 @@ export default class SW_GameUIScene extends SW_BaseScene {
     /** Keys to handle the menus */
     declare protected keys: SW_UIKeys;
 
-    declare private dialogueBox: SW_DialogueBox;
+    declare private dialogueBox: SW_DialogTextBox;
     declare private dialogueCharactersLeft: Phaser.GameObjects.Image;
     declare private dialogueCharactersRight: Phaser.GameObjects.Image;
+
+    declare private dialogueQuest: SW_DialogQuest;
 
     declare private playerInventoryWidget: SW_PlayerInventoryWidget;
     declare private chestInventoryWidget: SW_ChestInventoryWidget;
@@ -34,6 +37,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
     public create(): void{
         this.createKeys();
         this.createDialogueBox();
+        this.createDialogueQuest();
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
         this.playerInventoryWidget.setVisible(false);
@@ -124,6 +128,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
     }
 
     protected onNextPageButtonDown(): void {
+        // const dialoguBox = this.dialogueQuest.
+
         if (this.dialogueBox.visible) {
             if (this.dialogueBox.isTyping)
             {
@@ -206,7 +212,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
         this.dialogueCharactersLeft.setVisible(false);
         this.dialogueCharactersRight.setVisible(false);
 
-        this.dialogueBox = new SW_DialogueBox(this, {
+        this.dialogueBox = new SW_DialogTextBox(this, {
             x: SW_CST.GAME.WIDTH * 0.5,
             y: SW_CST.GAME.HEIGHT - 12,
             width: SW_CST.GAME.WIDTH - 100,
@@ -230,6 +236,15 @@ export default class SW_GameUIScene extends SW_BaseScene {
             })
             
         }, this);
+    }
+
+    protected createDialogueQuest(): void {
+        this.dialogueQuest = new SW_DialogQuest(this, {
+            x: this.cameras.main.width * 0.5,
+            y: this.cameras.main.height * 0.5,
+            width: SW_CST.GAME.WIDTH - 100
+        });
+        this.dialogueQuest.start();
     }
 
     public requestDialogue(message: string, title: string, iconTexture: string = "", iconFrame: string = ""): void

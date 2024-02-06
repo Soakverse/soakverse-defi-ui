@@ -3,7 +3,7 @@ import { SW_Utils } from "~/game/SW_Utils";
 import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import TextBox from "phaser3-rex-plugins/templates/ui/textbox/TextBox";
 
-export class SW_DialogueBox extends TextBox {
+export class SW_DialogTextBox extends TextBox {
     declare public scene: SW_BaseScene;
 
     constructor(scene: SW_BaseScene, config: TextBox.IConfig) {
@@ -40,8 +40,8 @@ export class SW_DialogueBox extends TextBox {
         return super.setVisible(value);
     }
 
-    public showMessage(message: string, title: string, iconTexture?: string, iconFrame?: string, typingSpeed: number = 30) {
-        this.setTitle(title);
+    public showMessage(message: string, title?: string, iconTexture?: string, iconFrame?: string, typingSpeed: number = 30) {
+        this.setTitle(title ?? "");
         this.start(message, typingSpeed);
         //this.setIconTexture(iconTexture, iconFrame);
         this.setVisible(true);
