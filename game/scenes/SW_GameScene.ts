@@ -145,7 +145,7 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   private setupUI(): void {
-    this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked);
+    this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked, this);
     this.UIScene.addUniqueListener("menuVisibilityChange", this.onMenuVisibilityChange, this);
   }
 
