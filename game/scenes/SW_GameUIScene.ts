@@ -16,10 +16,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
     /** Keys to handle the menus */
     declare protected keys: SW_UIKeys;
 
-    declare private dialogueBox: SW_DialogTextBox;
-    declare private dialogueCharactersLeft: Phaser.GameObjects.Image;
-    declare private dialogueCharactersRight: Phaser.GameObjects.Image;
-
     declare private dialogueQuest: SW_DialogQuest;
 
     declare private playerInventoryWidget: SW_PlayerInventoryWidget;
@@ -36,7 +32,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public create(): void{
         this.createKeys();
-        this.createDialogueBox();
         this.createDialogueQuest();
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
@@ -111,40 +106,21 @@ export default class SW_GameUIScene extends SW_BaseScene {
             }, false) as SW_UIKeys;
 
             this.keys.escape.on("down", this.toggleMenus, this);
-            this.keys.space.on("down", this.onNextPageButtonDown, this);
+            this.keys.space.on("down", this.onSpaceButtonDown, this);
             this.keys.nextPage.on("down", this.onNextPageButtonDown, this);
         }
     }
 
     protected onEscapeButtonDown(): void {
-        // TODO: Have a generic way to handle menus, have priorities and be able to close the focused one 
-        if (this.dialogueBox.visible) {
-            this.dialogueBox.stop(true);
-            this.dialogueBox.closeDialogue();
-        }
-        else {
-            this.toggleMenus();
-        }
+        this.toggleMenus();
+    }
+
+    protected onSpaceButtonDown(): void {
+        this.dialogueQuest.continueDialog();
     }
 
     protected onNextPageButtonDown(): void {
-        // const dialoguBox = this.dialogueQuest.
-
-        if (this.dialogueBox.visible) {
-            if (this.dialogueBox.isTyping)
-            {
-                this.dialogueBox.stop(true);
-            }
-            else if(this.dialogueBox.isLastPage)
-            {
-                this.dialogueBox.closeDialogue();
-                this.events.emit("menuVisibilityChange", false);
-            }
-            else
-            {
-                this.dialogueBox.typeNextPage();
-            }
-        }
+        this.dialogueQuest.continueDialog();
     }
 
     // Update
@@ -204,51 +180,15 @@ export default class SW_GameUIScene extends SW_BaseScene {
     // Dialogue
     ////////////////////////////////////////////////////////////////////////
 
-    protected createDialogueBox(): void {
-        const scale = 0.3;
-        this.dialogueCharactersLeft = this.add.image(12, SW_CST.GAME.HEIGHT * 0.5, "dialogueImage_YB").setScale(scale).setOrigin(0, 0.5);
-        this.dialogueCharactersRight = this.add.image(SW_CST.GAME.WIDTH - 20, SW_CST.GAME.HEIGHT * 0.5, "dialogueImage_YB").setScale(scale).setOrigin(1, 0.5).setFlipX(true);
-
-        this.dialogueCharactersLeft.setVisible(false);
-        this.dialogueCharactersRight.setVisible(false);
-
-        this.dialogueBox = new SW_DialogTextBox(this, {
-            x: SW_CST.GAME.WIDTH * 0.5,
-            y: SW_CST.GAME.HEIGHT - 12,
-            width: SW_CST.GAME.WIDTH - 100,
-            height: 80,
-            page: { maxLines: 3, pageBreak: "\n" }
-        });
-
-        this.dialogueBox.setOrigin(0.5, 1);
-        this.dialogueBox.layout();
-
-        // TODO: Make the box and the images in a container
-        this.dialogueBox.on("visibilityChanged", (value: boolean) => {
-            this.dialogueCharactersRight.setVisible(false);
-
-            this.dialogueCharactersLeft.setVisible(value);
-            this.dialogueCharactersLeft.setX(-this.dialogueCharactersLeft.displayWidth);
-            this.tweens.add({
-                targets: this.dialogueCharactersLeft,
-                x: 12,
-                duration: 300
-            })
-            
-        }, this);
-    }
-
     protected createDialogueQuest(): void {
         this.dialogueQuest = new SW_DialogQuest(this, {
             x: this.cameras.main.width * 0.5,
-            y: this.cameras.main.height * 0.5,
+            y: this.cameras.main.height - 24,
+            originX: 0.5,
+            originY: 1,
             width: SW_CST.GAME.WIDTH - 100
         });
-        this.dialogueQuest.start();
-    }
-
-    public requestDialogue(message: string, title: string, iconTexture: string = "", iconFrame: string = ""): void
-    {
-        this.dialogueBox.showMessage(message, title, iconTexture, iconFrame);
+        
+        //this.dialogueQuest.start();
     }
 };

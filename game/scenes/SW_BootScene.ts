@@ -23,6 +23,8 @@ import player from '@/game/assets/characters/player.png';
 
 // Dialogue
 import dialogueImage_YB from '@/game/assets/dialogueImage_YB.png';
+import GPADJK_d2_1 from '@/game/assets/GPADJK_d2_1.png';
+import Scribb from '@/game/assets/Scribb.png';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
@@ -52,6 +54,8 @@ export default class SW_BootScene extends SW_BaseScene {
 
     // Dialogue
     this.load.image("dialogueImage_YB", dialogueImage_YB);
+    this.load.image("GPADJK_d2_1", GPADJK_d2_1);
+    this.load.image("Scribb", Scribb);
   }
 
   // Create

@@ -12,15 +12,15 @@ export class SW_DialogTextBox extends TextBox {
         config.space = { left: 12, right: 12, top: 12, bottom: 12, icon: 16, text: 0, separator: 6, separatorRight: 200};
 
         config.layoutMode = 1;
-        const background = scene.rexUI.add.roundRectangle(0, 0, config.width - (config.space.left as number) - (config.space.right as number), config.height - (config.space.top as number) - (config.space.bottom as number), 3, SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.WHITE));
-        background.strokeColor = SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.BLUE);
-        background.lineWidth = 2;
+        const background = scene.rexUI.add.roundRectangle(0, 0, config.width - (config.space.left as number) - (config.space.right as number), config.height - (config.space.top as number) - (config.space.bottom as number), 3, SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.BLACK), 0.7);
+        background.strokeColor = SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.BLACK);
+        background.lineWidth = 0;
 
         config.background = background;
         // config.separator = scene.rexUI.add.roundRectangle(0, 0, 10, 1, 0, SW_Utils.hexColorToNumber(CST.STYLE.COLOR.BLUE));
         //config.title = scene.add.text(0, 0, "", { fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY, fontSize: "16px", fontStyle: "bold", color: SW_CST.STYLE.COLOR.BLUE, align: "left"});
         // config.icon = scene.add.image(0, 0, "").setScale(1.1);
-        config.text = scene.add.text(0, 0, "", {fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY, fontSize: "14px", color: SW_CST.STYLE.COLOR.BLACK, align: "left", wordWrap: { width: config.width - (config.space.left as number) - (config.space.right as number) }}).setFixedSize(config.width - (config.space.left as number) - (config.space.right as number), config.height - (config.space.top as number) - (config.space.bottom as number));
+        config.text = scene.add.text(0, 0, "", {fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY, fontSize: "14px", color: SW_CST.STYLE.COLOR.WHITE, align: "left", wordWrap: { width: config.width - (config.space.left as number) - (config.space.right as number) }}).setFixedSize(config.width - (config.space.left as number) - (config.space.right as number), config.height - (config.space.top as number) - (config.space.bottom as number));
         config.page = config.page ? config.page : {maxLines: 4, pageBreak: "\n"};
 
         config.width = 0; // Prevent warnings as we don't care about the minimum size
