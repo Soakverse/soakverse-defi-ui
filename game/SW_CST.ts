@@ -8,7 +8,7 @@ export const SW_CST = {
     GAME: {
         WIDTH: 800,
         HEIGHT: 500,
-        ZOOM: 0.44,
+        ZOOM: 0.74,
         PLAYER: {
             WALK_SPEED: 130,
             RUN_SPEED: 400
