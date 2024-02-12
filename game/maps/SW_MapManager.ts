@@ -1,6 +1,5 @@
 /** TODO LIST 
  * 1. Have a generic map manager with a simple gameobject as the target then make the sw version with the player passed and a game scene.
- * 2. See if we could have a global colliders (layerForeground1_collider, entrances_collider...) instead of making one per submap. This would divide the number of colliders up to 4
 */
 
 import { SW_CST } from "~/game/SW_CST";
@@ -27,7 +26,7 @@ export declare type SW_SubMapData = {
     subMap: Phaser.Tilemaps.Tilemap;
 
     /** Tileset to use for the tile assets */
-    tileset: Phaser.Tilemaps.Tileset;
+    tilesets: Phaser.Tilemaps.Tileset[];
 
     /** All entrances to join a new map (ex: a door from a building, an path etc...) */
     entrances?: Phaser.Physics.Arcade.StaticGroup | undefined;
@@ -369,30 +368,44 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
         this.removeFromPreloadingDataMap(subMapX, subMapY);
 
-        const tileset = this.scene.cache.tilemap.get(subMapName).data.tilesets[0]; // Assume there is only one tileset per submap
-        const tilesetName = tileset.name;
+        const tilesets = this.scene.cache.tilemap.get(subMapName).data.tilesets;
+        let tilesetToPreloadCount = tilesets.length;
 
-        if (this.scene.textures.exists(tilesetName)) {
-            this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+        // We will start spawning the submap once all the tileset images have been preloaded
+        for (const tileset of tilesets) {
+            if (this.scene.textures.exists(tileset.name)) {
+                --tilesetToPreloadCount;
+            }
+            else {
+                this.scene.load.image(`${tileset.name}`, `/game/assets/maps/${this.worldName}/${tileset.image}`);
+                this.scene.load.start();
+                this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}image-${tileset.name}`, (key: string, type: string, data: any) => {
+                    --tilesetToPreloadCount;
+                    if (tilesetToPreloadCount <= 0) {
+                        this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
+                    }
+                });
+            }
         }
-        else {
-            this.scene.load.image(`${tilesetName}`, `/game/assets/maps/${this.worldName}/${tileset.image}`);
-            this.scene.load.start();
-            this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}image-${tilesetName}`, (key: string, type: string, data: any) => {
-                this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
-            });
+
+        if (tilesetToPreloadCount <= 0) {
+            this.spawnSubMap(subMapName, subMapX, subMapY, shouldAsyncSpawn);
         }
     }
 
     private spawnSubMap(subMapName: string, subMapX: number, subMapY: number, shouldAsyncSpawn: boolean = true): void {
         const subMap = this.scene.add.tilemap(subMapName);
-        const tilesetName = subMap.tilesets[0].name; // Assume there is only one tileset per submap
+
+        let tilesets = [];
+        for (const tileset of subMap.tilesets) {
+            tilesets.push(subMap.addTilesetImage(tileset.name, tileset.name));
+        }
 
         const subMapData = {
             subMapX: subMapX,
             subMapY: subMapY,
             subMap: subMap,
-            tileset: subMap.addTilesetImage(tilesetName, tilesetName) as Phaser.Tilemaps.Tileset,
+            tilesets: tilesets,
         } as SW_SubMapData;
 
         if (shouldAsyncSpawn) {
@@ -409,7 +422,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     private spawnSubMapSynchrounously(subMapData: SW_SubMapData): void {
         const offsetX = subMapData.subMapX * this.subMapWidth;
         const offsetY = subMapData.subMapY * this.subMapHeight;
-        const tileset = subMapData.tileset;
+        const tileset = subMapData.tilesets;
 
         subMapData.layerCollision = subMapData.subMap.createLayer("LayerCollision", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
         subMapData.layerCollision.setCollisionByProperty({collides: true});
@@ -692,7 +705,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             const subMapData = this.spawnSubMapQueue[length - 1];
             const offsetX = subMapData.subMapX * this.subMapWidth;
             const offsetY = subMapData.subMapY * this.subMapHeight;
-            const tileset = subMapData.tileset;
+            const tileset = subMapData.tilesets;
 
             if (!subMapData.layerCollision) {
                 subMapData.layerCollision = subMapData.subMap.createLayer("LayerCollision", tileset, offsetX, offsetY) as Phaser.Tilemaps.TilemapLayer;
@@ -741,34 +754,30 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
         this.updateQueue();
         this.updatePlayerData();
 
-        if (this.subMapMaxX > 1) {
-            if (this.shouldSpawnSubMapOnRight()) {
-                this.trySpawnSubMapOnRight();
-            }
-            else if (this.shouldClearSubMapOnRight()) {
-                this.clearSubMapOnRight();
-            }
-            else if (this.shouldSpawnSubMapOnLeft()) {
-                this.trySpawnSubMapOnLeft();
-            }
-            else if (this.shouldClearSubMapOnLeft()) {
-                this.clearSubMapOnLeft();
-            }
+        if (this.shouldSpawnSubMapOnRight()) {
+            this.trySpawnSubMapOnRight();
+        }
+        else if (this.shouldClearSubMapOnRight()) {
+            this.clearSubMapOnRight();
+        }
+        else if (this.shouldSpawnSubMapOnLeft()) {
+            this.trySpawnSubMapOnLeft();
+        }
+        else if (this.shouldClearSubMapOnLeft()) {
+            this.clearSubMapOnLeft();
         }
         
-        if (this.subMapMaxY > 1) {
-            if (this.shouldSpawnSubMapOnBottom()) {
-                this.trySpawnSubMapOnBottom();
-            }
-            else if (this.shouldClearSubMapOnBottom()) {
-                this.clearSubMapOnBottom();
-            }
-            else if (this.shouldSpawnSubMapOnTop()) {
-                this.trySpawnSubMapOnTop();
-            }
-            else if (this.shouldClearSubMapOnTop()) {
-                this.clearSubMapOnTop();
-            }
+        if (this.shouldSpawnSubMapOnBottom()) {
+            this.trySpawnSubMapOnBottom();
+        }
+        else if (this.shouldClearSubMapOnBottom()) {
+            this.clearSubMapOnBottom();
+        }
+        else if (this.shouldSpawnSubMapOnTop()) {
+            this.trySpawnSubMapOnTop();
+        }
+        else if (this.shouldClearSubMapOnTop()) {
+            this.clearSubMapOnTop();
         }
     }
 }
