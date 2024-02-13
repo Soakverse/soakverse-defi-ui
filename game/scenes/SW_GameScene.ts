@@ -252,7 +252,7 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   public canPlayerEnter(player: SW_Player, entrance: SW_Entrance): boolean {
-    return player.getCurrentDirection() == entrance.enterDirection;
+    return player.getCurrentDirection().includes(entrance.enterDirection);
   }
 
   public onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
