@@ -918,12 +918,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
           offsetX,
           offsetY
         ) as Phaser.Tilemaps.TilemapLayer;
-
-        subMapData.layerBackground1.setCollisionFromCollisionGroup();
-        subMapData.layerCollision_collider = this.scene.physics.add.collider(
-          this.player,
-          subMapData.layerBackground1
-        );
         subMapData.layerBackground1.setDepth(depthBackground);
       } else if (!subMapData.layerBackground2) {
         subMapData.layerBackground2 = subMapData.subMap.createLayer(
