@@ -538,10 +538,15 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
       subMapData.layerCollision
     );
 
-    subMapData.layerCollision.setAlpha(0.5);
-    SW_CST.DEBUG.PHYSIC
-      ? subMapData.layerCollision.setDepth(10000)
-      : subMapData.layerCollision.setDepth(-9999);
+    if (SW_CST.DEBUG.PHYSIC) {
+      subMapData.layerCollision.setVisible(true);
+      subMapData.layerCollision.setAlpha(0.5);
+      subMapData.layerCollision.setDepth(10000);
+    }
+    else {
+      subMapData.layerCollision.setVisible(false);
+      subMapData.layerCollision.setDepth(-9999);
+    }
 
     subMapData.layerGround = subMapData.subMap.createLayer(
       "Layer1",
