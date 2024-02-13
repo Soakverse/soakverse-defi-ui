@@ -1,12 +1,7 @@
 <template>
-  <div class="container-fluid p-0 game-layout" id="soakverse-layout">
-    <div>
-      <p>Please enter your name</p>
-      <input class="form-control" v-model="name" />
-      <p>{{ playerStore.name }}</p>
-    </div>
+  <div class="container-fluid p-0 pt-5 game-layout" id="soakverse-layout">
     <div
-      class="container-fluid d-flex p-0 game-sublayout"
+      class="container-fluid d-flex p-0 game-sublayout mt-4"
       id="phaser-game-holder"
     >
       <Suspense>

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 import SW_BootScene from "~/game/scenes/SW_BootScene";
 import { SW_CST } from "./SW_CST";
 
@@ -23,10 +23,8 @@ function launch(containerId: string) {
     },
     scene: [SW_BootScene],
     plugins: {
-      scene: [
-          {key: 'rexUI',  plugin: UIPlugin, mapping: 'rexUI'}
-      ]
-  }
+      scene: [{ key: "rexUI", plugin: UIPlugin, mapping: "rexUI" }],
+    },
   });
 }
 

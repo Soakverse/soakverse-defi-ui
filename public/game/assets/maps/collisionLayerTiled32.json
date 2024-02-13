@@ -1,0 +1,14 @@
+{ "columns":2,
+ "image":"collisionLayerTiled32.png",
+ "imageheight":34,
+ "imagewidth":68,
+ "margin":2,
+ "name":"collisionLayerTiled32",
+ "spacing":1,
+ "tilecount":2,
+ "tiledversion":"1.10.2",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.10"
+}

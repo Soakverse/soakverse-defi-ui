@@ -6,7 +6,10 @@ import { usePlayerStore } from "@/stores/game/player";
 import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
-import { FocusType, SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
+import {
+  FocusType,
+  SW_InteractionComponent,
+} from "~/game/characters/players/SW_InteractionComponent";
 
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
@@ -27,22 +30,22 @@ declare type GameSceneData = {
 
   /** Where the player should start on this world. */
   startPosition?: Phaser.Math.Vector2;
-}
+};
 
 export default class SW_GameScene extends SW_BaseScene {
   public name: string;
   public nameText: any = null;
 
   /** Represents the UI in game */
-  declare private UIScene: SW_GameUIScene;
+  private declare UIScene: SW_GameUIScene;
 
-  declare private player: SW_Player;
+  private declare player: SW_Player;
 
-  declare private worldName: string;
-  declare private previousWorldName: string;
-  declare private startPosition: Phaser.Math.Vector2 | undefined;
+  private declare worldName: string;
+  private declare previousWorldName: string;
+  private declare startPosition: Phaser.Math.Vector2 | undefined;
 
-  declare private mapManager: SW_MapManager;
+  private declare mapManager: SW_MapManager;
 
   constructor() {
     super({ key: SW_CST.SCENES.GAME });
@@ -64,7 +67,11 @@ export default class SW_GameScene extends SW_BaseScene {
   public create(): void {
     this.createUI();
 
-    this.addUniqueListener(Phaser.Scenes.Events.POST_UPDATE, this.postUpdate, this);
+    this.addUniqueListener(
+      Phaser.Scenes.Events.POST_UPDATE,
+      this.postUpdate,
+      this
+    );
 
     this.player = new SW_Player(this, 0, 0);
     this.player.init({
@@ -72,15 +79,18 @@ export default class SW_GameScene extends SW_BaseScene {
       characterTexture: "player",
       startDirection: SW_DIRECTIONS.Down,
       walkSpeed: SW_CST.GAME.PLAYER.WALK_SPEED,
-      runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED
+      runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED,
     } as SW_SpawnData);
 
-    this.mapManager = new SW_MapManager(this.player, this.worldName, this.previousWorldName);
+    this.mapManager = new SW_MapManager(
+      this.player,
+      this.worldName,
+      this.previousWorldName
+    );
 
     if (this.mapManager.isInitialized()) {
       this.onMapManagerInitialized();
-    }
-    else {
+    } else {
       this.mapManager.once("initialized", this.onMapManagerInitialized, this);
     }
 
@@ -88,15 +98,27 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   private onMapManagerInitialized(): void {
-    this.events.on(Phaser.Scenes.Events.UPDATE, this.player.update, this.player);
-    this.events.on(Phaser.Scenes.Events.POST_UPDATE, this.player.postUpdate, this.player);
+    this.events.on(
+      Phaser.Scenes.Events.UPDATE,
+      this.player.update,
+      this.player
+    );
+    this.events.on(
+      Phaser.Scenes.Events.POST_UPDATE,
+      this.player.postUpdate,
+      this.player
+    );
 
     this.setupCamera();
     this.setupUI();
     this.UIScene.hideLoadingScreen();
   }
 
-  public createInteractableObjects(subMapData: SW_SubMapData, offsetX: number, offsetY: number): Phaser.Physics.Arcade.StaticGroup {
+  public createInteractableObjects(
+    subMapData: SW_SubMapData,
+    offsetX: number,
+    offsetY: number
+  ): Phaser.Physics.Arcade.StaticGroup {
     const interactableObjectGroup = this.physics.add.staticGroup();
 
     const objectTypeData = [
@@ -106,13 +128,34 @@ export default class SW_GameScene extends SW_BaseScene {
     ];
 
     for (const objectData of objectTypeData) {
-      const interactableObjects = subMapData.subMap.createFromObjects("Objects", {name: objectData.name, classType: objectData.isZone ? Phaser.GameObjects.Image : objectData.classType }) as (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.TextureCrop & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.ComputedSize)[];
+      const interactableObjects = subMapData.subMap.createFromObjects(
+        "Objects",
+        {
+          name: objectData.name,
+          classType: objectData.isZone
+            ? Phaser.GameObjects.Image
+            : objectData.classType,
+        }
+      ) as (Phaser.GameObjects.GameObject &
+        Phaser.GameObjects.Components.TextureCrop &
+        Phaser.GameObjects.Components.Visible &
+        Phaser.GameObjects.Components.Transform &
+        Phaser.GameObjects.Components.ComputedSize)[];
       for (const interactableObject of interactableObjects) {
-        interactableObject.setPosition(interactableObject.x + offsetX, interactableObject.y + offsetY);
+        interactableObject.setPosition(
+          interactableObject.x + offsetX,
+          interactableObject.y + offsetY
+        );
 
         if (objectData.isZone) {
           const classType = objectData.classType;
-          const zone = new classType(this, interactableObject.x, interactableObject.y, interactableObject.width, interactableObject.height);
+          const zone = new classType(
+            this,
+            interactableObject.x,
+            interactableObject.y,
+            interactableObject.width,
+            interactableObject.height
+          );
           zone.width = interactableObject.scaleX * 32;
           zone.height = interactableObject.scaleY * 32;
 
@@ -125,8 +168,7 @@ export default class SW_GameScene extends SW_BaseScene {
 
           interactableObjectGroup.add(zone);
           interactableObject.destroy();
-        }
-        else {
+        } else {
           interactableObjectGroup.add(interactableObject);
         }
       }
@@ -145,8 +187,16 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   private setupUI(): void {
-    this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked, this);
-    this.UIScene.addUniqueListener("menuVisibilityChange", this.onMenuVisibilityChange, this);
+    this.UIScene.addUniqueListener(
+      "inventoryObjectClicked",
+      this.inventoryObjectClicked,
+      this
+    );
+    this.UIScene.addUniqueListener(
+      "menuVisibilityChange",
+      this.onMenuVisibilityChange,
+      this
+    );
   }
 
   // Update
@@ -157,12 +207,23 @@ export default class SW_GameScene extends SW_BaseScene {
     // this.nameText.setText(playerStore.name);
   }
 
-  private postUpdate(sys: Phaser.Scenes.Systems, time: number, delta: number): void {
-  }
+  private postUpdate(
+    sys: Phaser.Scenes.Systems,
+    time: number,
+    delta: number
+  ): void {}
 
   private shutdown(): void {
-    this.events.off(Phaser.Scenes.Events.UPDATE, this.player.update, this.player);
-    this.events.off(Phaser.Scenes.Events.POST_UPDATE, this.player.postUpdate, this.player);
+    this.events.off(
+      Phaser.Scenes.Events.UPDATE,
+      this.player.update,
+      this.player
+    );
+    this.events.off(
+      Phaser.Scenes.Events.POST_UPDATE,
+      this.player.postUpdate,
+      this.player
+    );
     this.mapManager.clear();
   }
 
@@ -174,7 +235,9 @@ export default class SW_GameScene extends SW_BaseScene {
     this.UIScene.openChestInventory();
   }
 
-  public updatePlayerInventory(newInventoryObjects: SW_InventoryObject[]): void {
+  public updatePlayerInventory(
+    newInventoryObjects: SW_InventoryObject[]
+  ): void {
     this.UIScene.updatePlayerInventory(newInventoryObjects);
   }
 
@@ -182,7 +245,9 @@ export default class SW_GameScene extends SW_BaseScene {
     this.UIScene.updateChestInventory(newInventoryObjects);
   }
 
-  protected inventoryObjectClicked(inventoryObjectData: SW_InventoryObject): void {
+  protected inventoryObjectClicked(
+    inventoryObjectData: SW_InventoryObject
+  ): void {
     playerStore.setName(`You clicked on ${inventoryObjectData.name}`);
   }
 
@@ -193,25 +258,34 @@ export default class SW_GameScene extends SW_BaseScene {
   public onPlayerEnter(player: SW_Player, entrance: SW_Entrance): void {
     this.UIScene.showLoadingScreen();
     this.shutdown();
-    this.scene.restart({worldName: entrance.worldName, previousWorldName: this.worldName });
+    this.scene.restart({
+      worldName: entrance.worldName,
+      previousWorldName: this.worldName,
+    });
   }
 
-  public onPlayerOverlapInteractable(interactionComponent: SW_InteractionComponent, interactable: FocusType): void {
+  public onPlayerOverlapInteractable(
+    interactionComponent: SW_InteractionComponent,
+    interactable: FocusType
+  ): void {
     interactionComponent.onInteractableOverlapped(interactable);
   }
 
   protected onMenuVisibilityChange(isMenuVisible: boolean): void {
     if (isMenuVisible) {
       this.scene.pause(SW_CST.SCENES.GAME);
-    }
-    else {
+    } else {
       this.scene.resume(SW_CST.SCENES.GAME);
     }
   }
 
-  public requestDialogue(message: string, title: string, iconTexture: string = "", iconFrame: string = ""): void
-  {
-      this.UIScene.requestDialogue(message, title, iconTexture, iconFrame);
-      this.onMenuVisibilityChange(true);
+  public requestDialogue(
+    message: string,
+    title: string,
+    iconTexture: string = "",
+    iconFrame: string = ""
+  ): void {
+    this.UIScene.requestDialogue(message, title, iconTexture, iconFrame);
+    this.onMenuVisibilityChange(true);
   }
 }
