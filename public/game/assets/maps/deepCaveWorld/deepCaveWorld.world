@@ -1,14 +1,14 @@
 {
     "maps": [
         {
-            "fileName": "./deepCaveWorld0_0.json",
+            "fileName": "deepCaveWorld0_0.json",
             "height": 1280,
             "width": 1600,
             "x": 0,
             "y": 0
         },
-		{
-            "fileName": "./deepCaveWorld0_1.json",
+        {
+            "fileName": "deepCaveWorld0_1.json",
             "height": 1280,
             "width": 1600,
             "x": 1600,

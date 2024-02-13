@@ -26,6 +26,10 @@ import dialogueImage_YB from '@/game/assets/dialogueImage_YB.png';
 import GPADJK_d2_1 from '@/game/assets/GPADJK_d2_1.png';
 import Scribb from '@/game/assets/Scribb.png';
 
+// Menus
+import menuHeader from '@/game/assets/menuHeader.png';
+import menuBackground from '@/game/assets/menuBackground.png';
+
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
     super({ key: SW_CST.SCENES.BOOT });
@@ -67,7 +71,8 @@ export default class SW_BootScene extends SW_BaseScene {
     this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, {
       worldName: "grassWorld",
       //startPosition: new Phaser.Math.Vector2(200, 200)
-      previousWorldName: "Starter"
+      previousWorldName: "Starter",
+      spawnPositionName: "Starter"
     });
     sceneUI.scene.bringToTop();
 

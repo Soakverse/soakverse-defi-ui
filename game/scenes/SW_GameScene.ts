@@ -21,14 +21,17 @@ import { SW_DIRECTIONS } from "../characters/SW_CharacterMovementComponent";
 const playerStore = usePlayerStore();
 
 /** All the data of the game scene to initialize it */
-declare type GameSceneData = {
+declare type SW_GameSceneData = {
   /** The name of the Tiled world. */
   worldName: string;
 
   /** The name of the previous world before reaching the new one. Ignored if startPosition is set */
   previousWorldName: string;
 
-  /** Where the player should start on this world. */
+  /** The spawn id to determine where the player should spawn in the given world */
+  spawnPositionName: string;
+
+  /** Where the player should start on this world. Not used at this moment */
   startPosition?: Phaser.Math.Vector2;
 };
 
@@ -43,6 +46,7 @@ export default class SW_GameScene extends SW_BaseScene {
 
   private declare worldName: string;
   private declare previousWorldName: string;
+  private declare spawnPositionName: string;
   private declare startPosition: Phaser.Math.Vector2 | undefined;
 
   private declare mapManager: SW_MapManager;
@@ -55,10 +59,12 @@ export default class SW_GameScene extends SW_BaseScene {
   // Init
   ////////////////////////////////////////////////////////////////////////
 
-  public init(data: GameSceneData): void {
+  public init(data: SW_GameSceneData): void {
     this.worldName = data.worldName;
     this.startPosition = data.startPosition;
+    this.spawnPositionName = data.spawnPositionName;
     this.previousWorldName = data.previousWorldName;
+
   }
 
   // Create
@@ -85,7 +91,8 @@ export default class SW_GameScene extends SW_BaseScene {
     this.mapManager = new SW_MapManager(
       this.player,
       this.worldName,
-      this.previousWorldName
+      this.previousWorldName,
+      this.spawnPositionName
     );
 
     if (this.mapManager.isInitialized()) {
@@ -261,6 +268,7 @@ export default class SW_GameScene extends SW_BaseScene {
     this.scene.restart({
       worldName: entrance.worldName,
       previousWorldName: this.worldName,
+      spawnPositionName: entrance.spawnPositionName
     });
   }
 

@@ -88,10 +88,11 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
   private worldName: string;
   private previousWorldName: string;
+  private spawnPositionName: string;
 
   private _isInitialized: boolean = false;
 
-  constructor(player: SW_Player, worldName: string, previousWorldName: string) {
+  constructor(player: SW_Player, worldName: string, previousWorldName: string, spawnPositionName: string) {
     super();
 
     this.player = player;
@@ -100,6 +101,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     this.scene = player.scene as SW_GameScene;
     this.previousWorldName = previousWorldName;
     this.worldName = worldName;
+    this.spawnPositionName = spawnPositionName;
 
     this.subMapNamesMap = new Map<string, string>();
     this.spawnedSubMapDataMap = new Map<string, SW_SubMapData>();
@@ -149,7 +151,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     const isWorldValid = this.setupWorldMaps();
     if (isWorldValid) {
       this.once("playerPositionInitialized", this.onPlayerPositionInitialized);
-      this.initPlayerPosition(this.previousWorldName);
+      this.initPlayerPosition(this.previousWorldName, this.spawnPositionName);
     }
   }
 
@@ -245,7 +247,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }
   }
 
-  public initPlayerPosition(entranceName: string): void {
+  public initPlayerPosition(entranceName: string, spawnPositionName: string): void {
     this.once(
       "playerSpawnPositionFound",
       () => {
@@ -328,10 +330,16 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
                   }
                 );
 
-                if (
-                  worldNameProperty &&
-                  worldNameProperty.value == entranceName
-                ) {
+                const spawnPositionNameProperty = propertyArray.find(
+                    (objectProperties: SW_TiledObjectProperties) => {
+                      return objectProperties.name == "spawnPositionName";
+                    }
+                  );
+
+                const isValidWorldName = worldNameProperty && worldNameProperty.value == entranceName;
+                const isValidSpawnPositionName = spawnPositionNameProperty && spawnPositionNameProperty.value == spawnPositionName;
+
+                if (isValidWorldName && isValidSpawnPositionName) {
                   const directionProperty = propertyArray.find(
                     (objectProperties: SW_TiledObjectProperties) => {
                       return objectProperties.name == "startDirection";

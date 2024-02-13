@@ -8,6 +8,9 @@ export default class SW_Entrance extends Phaser.GameObjects.Image {
     /** Which map this entrance should open */
     public worldName: string = "";
 
+    /** The spawn id to determine where the player should spawn in the given world */
+    public spawnPositionName: string = "";
+
     /** Which direction the player will be looking at once spawned in the new map*/
     public startDirection: SW_DIRECTION = SW_DIRECTIONS.Down;
 

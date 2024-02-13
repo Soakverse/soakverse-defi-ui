@@ -178,6 +178,11 @@
                  "point":true,
                  "properties":[
                         {
+                         "name":"spawnPositionName",
+                         "type":"string",
+                         "value":"cave1"
+                        }, 
+                        {
                          "name":"startDirection",
                          "type":"string",
                          "value":"Up"
@@ -203,6 +208,11 @@
                          "name":"enterDirection",
                          "type":"string",
                          "value":"Down"
+                        }, 
+                        {
+                         "name":"spawnPositionName",
+                         "type":"string",
+                         "value":"cave1"
                         }, 
                         {
                          "name":"worldName",
@@ -387,7 +397,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":10,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
