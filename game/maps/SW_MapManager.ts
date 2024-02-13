@@ -576,10 +576,10 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     subMapData.layerForeground2.setDepth(depthForeground);
 
     subMapData.entrances = this.createEntrances(subMapData, offsetX, offsetY);
-    // @ts-ignore - onPlayerEnter has the right parameter types
     subMapData.entrances_collider = this.scene.physics.add.overlap(
       this.player,
       subMapData.entrances,
+      // @ts-ignore - onPlayerEnter has the right parameter types
       this.scene.onPlayerEnter,
       this.scene.canPlayerEnter,
       this.scene
@@ -590,10 +590,10 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
       offsetX,
       offsetY
     );
-    // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
     subMapData.interactableObjects_collider = this.scene.physics.add.overlap(
       this.player.getInteractableComp(),
       subMapData.interactableObjects,
+      // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
       this.scene.onPlayerOverlapInteractable,
       undefined,
       this
@@ -947,10 +947,11 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
           offsetX,
           offsetY
         );
-        // @ts-ignore - onPlayerEnter has the right parameter types
+
         subMapData.entrances_collider = this.scene.physics.add.overlap(
           this.player,
           subMapData.entrances,
+          // @ts-ignore - onPlayerEnter has the right parameter types
           this.scene.onPlayerEnter,
           this.scene.canPlayerEnter,
           this.scene
@@ -961,11 +962,12 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
           offsetX,
           offsetY
         );
-        // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
+
         subMapData.interactableObjects_collider =
           this.scene.physics.add.overlap(
             this.player.getInteractableComp(),
             subMapData.interactableObjects,
+            // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
             this.scene.onPlayerOverlapInteractable,
             undefined,
             this

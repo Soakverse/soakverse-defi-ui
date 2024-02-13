@@ -198,12 +198,46 @@
                  "height":76,
                  "id":9,
                  "name":"Entrance",
+                 "properties":[
+                        {
+                         "name":"enterDirection",
+                         "type":"string",
+                         "value":"Up"
+                        }, 
+                        {
+                         "name":"worldName",
+                         "type":"string",
+                         "value":"deepCaveWorld"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":62,
                  "x":256.666666666667,
                  "y":1074.66666666667
+                }, 
+                {
+                 "height":0,
+                 "id":10,
+                 "name":"Spawner",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"startDirection",
+                         "type":"string",
+                         "value":"Down"
+                        }, 
+                        {
+                         "name":"worldName",
+                         "type":"string",
+                         "value":"deepCaveWorld"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":285,
+                 "y":1177
                 }],
          "opacity":1,
          "properties":[
@@ -376,7 +410,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":10,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
