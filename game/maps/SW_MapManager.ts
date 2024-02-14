@@ -1,5 +1,6 @@
 /** TODO LIST
  * 1. Have a generic map manager with a simple gameobject as the target then make the sw version with the player passed and a game scene.
+ * 2. Split updateQueue into 2 subfunctions to make easier the readability of the function
  */
 
 import { SW_CST } from "~/game/SW_CST";
@@ -524,69 +525,19 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   private spawnSubMapSynchrounously(subMapData: SW_SubMapData): void {
     const offsetX = subMapData.subMapX * this.subMapWidth;
     const offsetY = subMapData.subMapY * this.subMapHeight;
-    const tileset = subMapData.tilesets;
 
-    subMapData.layerCollision = subMapData.subMap.createLayer(
-      "LayerCollision",
-      tileset,
-      offsetX,
-      offsetY
-    ) as Phaser.Tilemaps.TilemapLayer;
-    subMapData.layerCollision.setCollisionByProperty({ collides: true });
-    subMapData.layerCollision_collider = this.scene.physics.add.collider(
-      this.player,
-      subMapData.layerCollision
-    );
+    this.spawnCollisionLayer(subMapData, offsetX, offsetY);
 
-    if (SW_CST.DEBUG.PHYSIC) {
-      subMapData.layerCollision.setVisible(true);
-      subMapData.layerCollision.setAlpha(0.5);
-      subMapData.layerCollision.setDepth(10000);
-    }
-    else {
-      subMapData.layerCollision.setVisible(false);
-      subMapData.layerCollision.setDepth(-9999);
+    // Special case for empty maps that would only have layer collisions
+    if (subMapData.tilesets.length <= 1) {
+      return;
     }
 
-    subMapData.layerGround = subMapData.subMap.createLayer(
-      "Layer1",
-      tileset,
-      offsetX,
-      offsetY
-    ) as Phaser.Tilemaps.TilemapLayer;
-    subMapData.layerGround.setDepth(depthBackground);
-
-    subMapData.layerBackground1 = subMapData.subMap.createLayer(
-      "Layer2",
-      tileset,
-      offsetX,
-      offsetY
-    ) as Phaser.Tilemaps.TilemapLayer;
-    subMapData.layerBackground1.setDepth(depthBackground);
-
-    subMapData.layerBackground2 = subMapData.subMap.createLayer(
-      "Layer3",
-      tileset,
-      offsetX,
-      offsetY
-    ) as Phaser.Tilemaps.TilemapLayer;
-    subMapData.layerBackground2.setDepth(depthBackground);
-
-    subMapData.layerForeground1 = subMapData.subMap.createLayer(
-      "Layer4",
-      tileset,
-      offsetX,
-      offsetY
-    ) as Phaser.Tilemaps.TilemapLayer;
-    subMapData.layerForeground1.setDepth(depthForeground);
-
-    subMapData.layerForeground2 = subMapData.subMap.createLayer(
-      "Layer5",
-      tileset,
-      offsetX,
-      offsetY
-    ) as Phaser.Tilemaps.TilemapLayer;
-    subMapData.layerForeground2.setDepth(depthForeground);
+    subMapData.layerGround = this.spawnVisualLayer(subMapData, "Layer1", offsetX, offsetY, depthBackground);
+    subMapData.layerBackground1 = this.spawnVisualLayer(subMapData, "Layer2", offsetX, offsetY, depthBackground);
+    subMapData.layerBackground2 = this.spawnVisualLayer(subMapData, "Layer3", offsetX, offsetY, depthBackground);
+    subMapData.layerForeground1 = this.spawnVisualLayer(subMapData, "Layer4", offsetX, offsetY, depthForeground);
+    subMapData.layerForeground2 = this.spawnVisualLayer(subMapData, "Layer5", offsetX, offsetY, depthForeground);
 
     subMapData.entrances = this.createEntrances(subMapData, offsetX, offsetY);
     subMapData.entrances_collider = this.scene.physics.add.overlap(
@@ -611,6 +562,41 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
       undefined,
       this
     );
+  }
+
+  private spawnCollisionLayer(subMapData: SW_SubMapData, offsetX: number, offsetY: number): void {
+    subMapData.layerCollision = subMapData.subMap.createLayer(
+      "LayerCollision",
+      subMapData.tilesets,
+      offsetX,
+      offsetY
+    ) as Phaser.Tilemaps.TilemapLayer;
+    subMapData.layerCollision.setCollisionByProperty({ collides: true });
+    subMapData.layerCollision_collider = this.scene.physics.add.collider(
+      this.player,
+      subMapData.layerCollision
+    );
+
+    if (SW_CST.DEBUG.PHYSIC) {
+      subMapData.layerCollision.setVisible(true);
+      subMapData.layerCollision.setAlpha(0.5);
+      subMapData.layerCollision.setDepth(10000);
+    }
+    else {
+      subMapData.layerCollision.setVisible(false);
+      subMapData.layerCollision.setDepth(-9999);
+    }
+  }
+
+  private spawnVisualLayer(subMapData: SW_SubMapData, layerName: string, offsetX: number, offsetY: number, layerDepth: number = 0): Phaser.Tilemaps.TilemapLayer {
+    const layer = subMapData.subMap.createLayer(
+      layerName,
+      subMapData.tilesets,
+      offsetX,
+      offsetY
+    ) as Phaser.Tilemaps.TilemapLayer;
+    layer.setDepth(layerDepth);
+    return layer;
   }
 
   private trySpawnSubMapOnRight(shouldAsyncSpawn: boolean = true): void {
@@ -893,95 +879,64 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
       const subMapData = this.spawnSubMapQueue[length - 1];
       const offsetX = subMapData.subMapX * this.subMapWidth;
       const offsetY = subMapData.subMapY * this.subMapHeight;
-      const tileset = subMapData.tilesets;
 
-      if (!subMapData.layerCollision) {
-        subMapData.layerCollision = subMapData.subMap.createLayer(
-          "LayerCollision",
-          tileset,
-          offsetX,
-          offsetY
-        ) as Phaser.Tilemaps.TilemapLayer;
-        subMapData.layerCollision.setCollisionByProperty({ collides: true });
-        subMapData.layerCollision_collider = this.scene.physics.add.collider(
-          this.player,
-          subMapData.layerCollision
-        );
-        subMapData.layerCollision.setVisible(false);
-      } else if (!subMapData.layerGround) {
-        subMapData.layerGround = subMapData.subMap.createLayer(
-          "Layer1",
-          tileset,
-          offsetX,
-          offsetY
-        ) as Phaser.Tilemaps.TilemapLayer;
-        subMapData.layerGround.setDepth(depthBackground);
-      } else if (!subMapData.layerBackground1) {
-        subMapData.layerBackground1 = subMapData.subMap.createLayer(
-          "Layer2",
-          tileset,
-          offsetX,
-          offsetY
-        ) as Phaser.Tilemaps.TilemapLayer;
-        subMapData.layerBackground1.setDepth(depthBackground);
-      } else if (!subMapData.layerBackground2) {
-        subMapData.layerBackground2 = subMapData.subMap.createLayer(
-          "Layer3",
-          tileset,
-          offsetX,
-          offsetY
-        ) as Phaser.Tilemaps.TilemapLayer;
-        subMapData.layerBackground2.setDepth(depthBackground);
-      } else if (!subMapData.layerForeground1) {
-        subMapData.layerForeground1 = subMapData.subMap.createLayer(
-          "Layer4",
-          tileset,
-          offsetX,
-          offsetY
-        ) as Phaser.Tilemaps.TilemapLayer;
-        subMapData.layerForeground1.setDepth(depthForeground);
-      } else if (!subMapData.layerForeground2) {
-        subMapData.layerForeground2 = subMapData.subMap.createLayer(
-          "Layer5",
-          tileset,
-          offsetX,
-          offsetY
-        ) as Phaser.Tilemaps.TilemapLayer;
-        subMapData.layerForeground2.setDepth(depthForeground);
-      } else if (!subMapData.entrances) {
-        subMapData.entrances = this.createEntrances(
-          subMapData,
-          offsetX,
-          offsetY
-        );
-
-        subMapData.entrances_collider = this.scene.physics.add.overlap(
-          this.player,
-          subMapData.entrances,
-          // @ts-ignore - onPlayerEnter has the right parameter types
-          this.scene.onPlayerEnter,
-          this.scene.canPlayerEnter,
-          this.scene
-        );
-      } else if (!subMapData.interactableObjects) {
-        subMapData.interactableObjects = this.scene.createInteractableObjects(
-          subMapData,
-          offsetX,
-          offsetY
-        );
-
-        subMapData.interactableObjects_collider =
-          this.scene.physics.add.overlap(
-            this.player.getInteractableComp(),
-            subMapData.interactableObjects,
-            // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
-            this.scene.onPlayerOverlapInteractable,
-            undefined,
-            this
+      // Special case for empty maps that would only have layer collisions
+      if (subMapData.tilesets.length <= 1) {
+        if (!subMapData.layerCollision) {
+          this.spawnCollisionLayer(subMapData, offsetX, offsetY);
+        } else {
+          this.spawnSubMapQueue.pop();
+          this.updateQueue(); // Try to update the next submap if there is any left
+        }
+      }
+      else {
+        if (!subMapData.layerCollision) {
+          this.spawnCollisionLayer(subMapData, offsetX, offsetY);
+        } else if (!subMapData.layerGround) {
+          subMapData.layerGround = this.spawnVisualLayer(subMapData, "Layer1", offsetX, offsetY, depthBackground);
+        } else if (!subMapData.layerBackground1) {
+          subMapData.layerBackground1 = this.spawnVisualLayer(subMapData, "Layer2", offsetX, offsetY, depthBackground);
+        } else if (!subMapData.layerBackground2) {
+          subMapData.layerBackground2 = this.spawnVisualLayer(subMapData, "Layer3", offsetX, offsetY, depthBackground);
+        } else if (!subMapData.layerForeground1) {
+          subMapData.layerForeground1 = this.spawnVisualLayer(subMapData, "Layer4", offsetX, offsetY, depthForeground);
+        } else if (!subMapData.layerForeground2) {
+          subMapData.layerForeground2 = this.spawnVisualLayer(subMapData, "Layer5", offsetX, offsetY, depthForeground);
+        } else if (!subMapData.entrances) {
+          subMapData.entrances = this.createEntrances(
+            subMapData,
+            offsetX,
+            offsetY
           );
-      } else {
-        this.spawnSubMapQueue.pop();
-        this.updateQueue(); // Try to update the next submap if there is any left
+  
+          subMapData.entrances_collider = this.scene.physics.add.overlap(
+            this.player,
+            subMapData.entrances,
+            // @ts-ignore - onPlayerEnter has the right parameter types
+            this.scene.onPlayerEnter,
+            this.scene.canPlayerEnter,
+            this.scene
+          );
+        } else if (!subMapData.interactableObjects) {
+          subMapData.interactableObjects = this.scene.createInteractableObjects(
+            subMapData,
+            offsetX,
+            offsetY
+          );
+  
+          subMapData.interactableObjects_collider =
+            this.scene.physics.add.overlap(
+              this.player.getInteractableComp(),
+              subMapData.interactableObjects,
+              // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
+              this.scene.onPlayerOverlapInteractable,
+              undefined,
+              this
+            );
+        } else {
+          this.spawnSubMapQueue.pop();
+          this.updateQueue(); // Try to update the next submap if there is any left
+        }
       }
     }
   }

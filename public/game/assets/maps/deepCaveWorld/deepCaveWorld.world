@@ -13,6 +13,13 @@
             "width": 1600,
             "x": 1600,
             "y": 0
+        },
+        {
+            "fileName": "deepCaveWorld0_2.json",
+            "height": 1280,
+            "width": 1600,
+            "x": 3200,
+            "y": 0
         }
     ],
     "onlyShowAdjacentMaps": false,
