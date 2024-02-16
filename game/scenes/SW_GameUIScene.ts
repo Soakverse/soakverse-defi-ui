@@ -3,8 +3,8 @@ import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import { SW_ENUM_IVENTORY_OBJECT, SW_InventoryObject } from "~/game/inventory/SW_Inventory";
 import { SW_PlayerInventoryWidget } from "~/game/inventory/SW_PlayerInventoryWidget";
 import { SW_ChestInventoryWidget } from "~/game/inventory/SW_ChestInventoryWidget";
-import { SW_DialogTextBox } from "~/game/dialogues/SW_DialogTextBox";
 import { SW_DialogQuest } from "../dialogues/SW_DialogQuest";
+import { SW_WizhMenu } from "../UI/Menus/WizhMenu/SW_WizhMenu";
 
 declare type SW_UIKeys = {
     escape: Phaser.Input.Keyboard.Key;
@@ -22,6 +22,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
     declare private chestInventoryWidget: SW_ChestInventoryWidget;
 
     declare private loadingScreen: Phaser.GameObjects.Graphics;
+
+    declare private wizhMenu: SW_WizhMenu;
 
     constructor() {
       super({ key: SW_CST.SCENES.GAME_UI });
@@ -61,10 +63,12 @@ export default class SW_GameUIScene extends SW_BaseScene {
         {name: "Red Sword", id: "object12", description: "Fear this sword!", image: "swordRed", type: SW_ENUM_IVENTORY_OBJECT.RUNES, quantity: 5},
       ]);
 
+      this.wizhMenu = new SW_WizhMenu(this, SW_CST.GAME.WIDTH * 0.5, SW_CST.GAME.HEIGHT * 0.5);
+
       this.loadingScreen = this.add.graphics();
       this.loadingScreen.fillStyle(0x000000, 1.0);
-      this.loadingScreen.fillRect(0, 0, this.scale.displaySize.width, this.scale.displaySize.height);
-      this.loadingScreen.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.scale.displaySize.width, this.scale.displaySize.height), Phaser.Geom.Rectangle.Contains);
+      this.loadingScreen.fillRect(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT);
+      this.loadingScreen.setInteractive(new Phaser.Geom.Rectangle(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT), Phaser.Geom.Rectangle.Contains);
     }
 
     public showLoadingScreen(): void {

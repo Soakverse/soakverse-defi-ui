@@ -27,8 +27,10 @@ import GPADJK_d2_1 from '@/game/assets/GPADJK_d2_1.png';
 import Scribb from '@/game/assets/Scribb.png';
 
 // Menus
-import menuHeader from '@/game/assets/menuHeader.png';
-import menuBackground from '@/game/assets/menuBackground.png';
+import menuHeader from '@/game/assets/ui/menus/menuHeader.png';
+import menuBackground from '@/game/assets/ui/menus/menuBackground.png';
+import menuButtonNormal from '@/game/assets/ui/menus/menuButtonNormal.png';
+import menuButtonPressed from '@/game/assets/ui/menus/menuButtonPressed.png';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor () {
@@ -39,6 +41,8 @@ export default class SW_BootScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public preload(): void {
+    this.preloadMenuAssets();
+
     this.load.audio("thud", [thudMp3, thudOgg]);
 
     this.load.image("objectCounterBackground", objectCounterBackground);
@@ -60,6 +64,13 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image("dialogueImage_YB", dialogueImage_YB);
     this.load.image("GPADJK_d2_1", GPADJK_d2_1);
     this.load.image("Scribb", Scribb);
+  }
+
+  private preloadMenuAssets(): void {
+    this.load.image("menuHeader", menuHeader);
+    this.load.image("menuBackground", menuBackground);
+    this.load.image("menuButtonNormal", menuButtonNormal);
+    this.load.image("menuButtonPressed", menuButtonPressed);
   }
 
   // Create

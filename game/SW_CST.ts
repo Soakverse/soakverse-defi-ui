@@ -19,7 +19,7 @@ export const SW_CST = {
   },
   STYLE: {
     TEXT: {
-      FONT_FAMILY: "Arial",
+      FONT_FAMILY: "Poppins",
     },
     COLOR: {
       BLUE: "#2c4b7e",
