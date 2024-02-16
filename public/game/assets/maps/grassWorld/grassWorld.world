@@ -6,6 +6,46 @@
             "width": 1600,
             "x": 0,
             "y": 0
+        },
+
+        {
+            "fileName": "./grassWorld0_1.json",
+            "height": 1280,
+            "width": 1600,
+            "x": 1600,
+            "y": 0
+        },
+
+        {
+            "fileName": "./grassWorld0_2.json",
+            "height": 1280,
+            "width": 1600,
+            "x": 3200,
+            "y": 0
+        },
+
+        {
+            "fileName": "./grassWorld1_0.json",
+            "height": 1280,
+            "width": 1600,
+            "x": 0,
+            "y": 1280
+        },
+
+        {
+            "fileName": "./grassWorld1_1.json",
+            "height": 1280,
+            "width": 1600,
+            "x": 1600,
+            "y": 1280
+        },
+
+        {
+            "fileName": "./grassWorld1_2.json",
+            "height": 1280,
+            "width": 1600,
+            "x": 3200,
+            "y": 1280
         }
     ],
     "onlyShowAdjacentMaps": false,
