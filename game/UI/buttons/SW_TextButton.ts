@@ -60,7 +60,7 @@ export class SW_TextButton extends Phaser.GameObjects.Container {
             hitArea: new Phaser.Geom.Rectangle(0, 0, this.displayWidth, this.displayHeight),
             hitAreaCallback: Phaser.Geom.Rectangle.Contains,
             pixelPerfect: style ? style.pixelPerfect : true,
-            cursor: "url(assets/cursors/icono-selectedstatic.cur), pointer"
+            // cursor: "url(assets/cursors/icono-selectedstatic.cur), pointer"
         });
 
         // Behaviors

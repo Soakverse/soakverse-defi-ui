@@ -77,6 +77,8 @@ export default class SW_BootScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
+    this.input.setDefaultCursor("url(../game/assets/cursors/cursorNormal.cur), pointer");
+
     const sceneUI = this.scene.add(SW_CST.SCENES.GAME_UI, SW_GameUIScene, true, undefined) as SW_GameUIScene;
 
     this.scene.add(SW_CST.SCENES.GAME, SW_GameScene, true, {
