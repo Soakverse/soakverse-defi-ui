@@ -17,6 +17,7 @@ import SW_Incubator from "~/game/gameObjects/SW_Incubator";
 import SW_DialogueEntity from "~/game/gameObjects/SW_DialogueEntity";
 import { SW_SubMapData, SW_MapManager } from "~/game/maps/SW_MapManager";
 import { SW_DIRECTIONS } from "../characters/SW_CharacterMovementComponent";
+import SW_WizhWell from "../gameObjects/SW_WizhWell";
 
 const playerStore = usePlayerStore();
 
@@ -128,10 +129,19 @@ export default class SW_GameScene extends SW_BaseScene {
   ): Phaser.Physics.Arcade.StaticGroup {
     const interactableObjectGroup = this.physics.add.staticGroup();
 
+    // TODO - Just have an InteractableZone class that triggers a gameplay event
+    // These events could then be handle on GameplayEventManager
+    this.addUniqueListener(
+      "wizhWellRequested",
+      () => { this.UIScene.showWizhWellMenu(); },
+      this
+    );
+
     const objectTypeData = [
       { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
       { name: "Incubator", isZone: true, classType: SW_Incubator },
       { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
+      { name: "WizhWell", isZone: true, classType: SW_WizhWell },
     ];
 
     for (const objectData of objectTypeData) {
@@ -285,6 +295,10 @@ export default class SW_GameScene extends SW_BaseScene {
     } else {
       this.scene.resume(SW_CST.SCENES.GAME);
     }
+  }
+
+  public onWizhWellRequested(): void {
+    this.UIScene.showWizhWellMenu();
   }
 
   public requestDialogue(

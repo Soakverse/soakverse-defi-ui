@@ -64,6 +64,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
       ]);
 
       this.wizhMenu = new SW_WizhMenu(this, SW_CST.GAME.WIDTH * 0.5, SW_CST.GAME.HEIGHT * 0.5);
+      this.wizhMenu.setVisible(false);
 
       this.loadingScreen = this.add.graphics();
       this.loadingScreen.fillStyle(0x000000, 1.0);
@@ -129,6 +130,13 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     // Update
     ////////////////////////////////////////////////////////////////////////
+
+    // Menus
+    ////////////////////////////////////////////////////////////////////////
+
+    public showWizhWellMenu(): void {
+        this.wizhMenu.setVisible(true);
+    }
 
     // Inventory
     ////////////////////////////////////////////////////////////////////////
