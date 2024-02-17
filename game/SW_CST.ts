@@ -25,6 +25,7 @@ export const SW_CST = {
       BLUE: "#2c4b7e",
       BLACK: "#000000",
       WHITE: "#f9f9f9",
+      LIGHT_GREY: "#dcdcdc",
     },
   },
   DEBUG: {
