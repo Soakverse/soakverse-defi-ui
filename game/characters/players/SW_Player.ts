@@ -1,10 +1,7 @@
 import Phaser from "phaser";
 import SW_BaseScene from "~/game/scenes/SW_BaseScene";
 import { SW_Character } from "~/game/characters/SW_Character";
-import {
-  SW_DIRECTIONS,
-  SW_DIRECTIONS_NO_DIAGONALE,
-} from "~/game/characters/SW_CharacterMovementComponent";
+import { SW_DIRECTIONS, SW_DIRECTIONS_NO_DIAGONALE} from "~/game/characters/SW_CharacterMovementComponent";
 import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
 import { SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
 

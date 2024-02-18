@@ -5,6 +5,7 @@ import { SW_PlayerInventoryWidget } from "~/game/inventory/SW_PlayerInventoryWid
 import { SW_ChestInventoryWidget } from "~/game/inventory/SW_ChestInventoryWidget";
 import { SW_DialogQuest } from "../dialogues/SW_DialogQuest";
 import { SW_WizhMenu } from "../UI/Menus/WizhMenu/SW_WizhMenu";
+import { SW_MenuManager } from "../UI/Menus/SW_MenuManager";
 
 declare type SW_UIKeys = {
     escape: Phaser.Input.Keyboard.Key;
@@ -15,6 +16,8 @@ declare type SW_UIKeys = {
 export default class SW_GameUIScene extends SW_BaseScene {
     /** Keys to handle the menus */
     declare protected keys: SW_UIKeys;
+
+    declare private menuManager: SW_MenuManager;
 
     declare private dialogueQuest: SW_DialogQuest;
 
@@ -33,17 +36,20 @@ export default class SW_GameUIScene extends SW_BaseScene {
     ////////////////////////////////////////////////////////////////////////
 
     public create(): void{
+        this.menuManager = new SW_MenuManager();
+
         this.createKeys();
         this.createDialogueQuest();
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
-        this.playerInventoryWidget.setVisible(false);
         this.playerInventoryWidget.on("moveObject", this.onMovePlayerInventoryMoveObject, this);
+        this.menuManager.setDefaultMenu(this.playerInventoryWidget);
+        this.menuManager.hideMenu(this.playerInventoryWidget);
 
         this.chestInventoryWidget = new SW_ChestInventoryWidget(this, 0, 240);
         this.chestInventoryWidget.setX(this.scale.displaySize.width * 0.66 - this.chestInventoryWidget.width * 0.25);
-        this.chestInventoryWidget.setVisible(false);
         this.chestInventoryWidget.on("objectClicked", this.onMoveChestInventoryObject, this);
+        this.menuManager.hideMenu(this.chestInventoryWidget);
 
     this.updatePlayerInventory([
         {name: "Red Axe", id: "object1", description: "A badass axe!", image: "axeRed", type: SW_ENUM_IVENTORY_OBJECT.WEAPON, quantity: 1},
@@ -64,7 +70,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
       ]);
 
       this.wizhMenu = new SW_WizhMenu(this, SW_CST.GAME.WIDTH * 0.5, SW_CST.GAME.HEIGHT * 0.5);
-      this.wizhMenu.setVisible(false);
+      this.wizhMenu.on("makeAWizhButtonClicked", this.onMakeAWizhButtonClicked, this);
+      this.menuManager.hideMenu(this.wizhMenu);
 
       this.loadingScreen = this.add.graphics();
       this.loadingScreen.fillStyle(0x000000, 1.0);
@@ -72,6 +79,20 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this.loadingScreen.setInteractive(new Phaser.Geom.Rectangle(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT), Phaser.Geom.Rectangle.Contains);
     }
 
+    protected createKeys(): void {
+        if (this.input.keyboard) {
+            this.keys = this.input.keyboard.addKeys({
+                escape: Phaser.Input.Keyboard.KeyCodes.ESC,
+                space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+                nextPage: Phaser.Input.Keyboard.KeyCodes.ENTER,
+            }, false) as SW_UIKeys;
+
+            this.keys.escape.on("down", this.onEscapeButtonDown, this);
+            this.keys.space.on("down", this.onSpaceButtonDown, this);
+            this.keys.nextPage.on("down", this.onNextPageButtonDown, this);
+        }
+    }
+    
     public showLoadingScreen(): void {
         this.loadingScreen.setAlpha(1);
         this.loadingScreen.setVisible(true);
@@ -102,22 +123,21 @@ export default class SW_GameUIScene extends SW_BaseScene {
         // }
     }
 
-    protected createKeys(): void {
-        if (this.input.keyboard) {
-            this.keys = this.input.keyboard.addKeys({
-                escape: Phaser.Input.Keyboard.KeyCodes.ESC,
-                space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-                nextPage: Phaser.Input.Keyboard.KeyCodes.ENTER,
-            }, false) as SW_UIKeys;
-
-            this.keys.escape.on("down", this.toggleMenus, this);
-            this.keys.space.on("down", this.onSpaceButtonDown, this);
-            this.keys.nextPage.on("down", this.onNextPageButtonDown, this);
-        }
+    protected onMakeAWizhButtonClicked(): void {
+        this.menuManager.hideMenu(this.wizhMenu);
     }
 
     protected onEscapeButtonDown(): void {
-        this.toggleMenus();
+        // TODO: Have the dialog integrated to the menu manager
+        if (this.dialogueQuest.isQuestActive()) {
+            // TODO: Try close dialog when it's allowed. I feel that there could be situations where we don't want that
+        }
+        else if (this.menuManager.hasVisibleMenu()) {
+            this.menuManager.hideFocusedMenu();
+        }
+        else {
+            this.menuManager.showDefaultMenu();
+        }
     }
 
     protected onSpaceButtonDown(): void {
@@ -135,7 +155,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
     ////////////////////////////////////////////////////////////////////////
 
     public showWizhWellMenu(): void {
-        this.wizhMenu.setVisible(true);
+        this.menuManager.showMenu(this.wizhMenu);
     }
 
     // Inventory
@@ -145,7 +165,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
         this.setPlayerInventoryVisibility(true);
     }
 
-    public toggleMenus(): void
+    public toggleInventoryMenus(): void
     {
         if (this.playerInventoryWidget.visible) {
             this.setPlayerInventoryVisibility(false);

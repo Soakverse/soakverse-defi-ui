@@ -31,10 +31,10 @@ export class SW_WizhMenu extends Phaser.GameObjects.Container
 
         const makeAWizhButton = new SW_TextButton(this.scene, makeAWizhText.x, makeAWizhText.y + makeAWizhText.height + 76, "Make a Wizh", {});
         this.add(makeAWizhButton);
-        makeAWizhButton.onClicked(this.onMakeAWizhClicked, this);
+        makeAWizhButton.onClicked(this.onMakeAWizhButtonClicked, this);
     }
 
-    protected onMakeAWizhClicked(): void {
-        this.setVisible(false);
+    protected onMakeAWizhButtonClicked(): void {
+        this.emit("makeAWizhButtonClicked");
     }
 }
