@@ -1,5 +1,5 @@
 <template>
-  <div class="row text-left px-1 mt-4">
+  <div class="row text-left mt-4">
     <div class="col-12">
       <h5>
         <i class="fa-solid fa-award"></i> Soakverse Loyalty Program
@@ -13,10 +13,12 @@
             {{ convertWeiToEther(state.stakingUserInfo) }}
           </p>
           <p class="my-0">
-            <b>Soakverse OGs count:</b> {{ state.ownedStaches.length }}
+            <b>Soakverse OGs + DAO Passes count:</b>
+            {{ state.ownedStaches.length }}
           </p>
           <p class="mb-4">
-            <b>Soakverse OGs Highest level:</b> {{ state.highestOwnedStache }}
+            <b>Soakverse OGs + DAO Passes Highest level:</b>
+            {{ state.highestOwnedStache }}
           </p>
 
           <h5>{{ levelFunnyLabel[state.currentLoyaltyLevel] }}</h5>
@@ -94,6 +96,7 @@
 import {
   soakmontStakingContract,
   soakverseOGsSmartContract,
+  soakverseDAOPassSmartContract,
 } from "~~/utils/contracts";
 import ProgressBar from "~~/components/Loyalty/ProgressBar.vue";
 import { showLoader, hideLoader } from "~~/utils/helpers";
@@ -133,27 +136,27 @@ const state = reactive({
   checkedSteps: [
     {
       id: 1,
-      label: "Soakverse OGs Level 1, 2 or 3: +3 levels",
+      label: "Soakverse OGs or DAO Pass Level 1, 2 or 3: +3 levels",
       checked: false,
     },
     {
       id: 2,
-      label: "Soakverse OGs Level 4: +1 level",
+      label: "Soakverse OGs or DAO Pass Level 4: +1 level",
       checked: false,
     },
     {
       id: 3,
-      label: "Soakverse OGs Level 5: +1 level",
+      label: "Soakverse OGs or DAO Pass Level 5: +1 level",
       checked: false,
     },
     {
       id: 4,
-      label: "Owns 5 or more Soakverse OGs: +1 level",
+      label: "Owns 5 or more Soakverse OGs and DAO Pass: +1 level",
       checked: false,
     },
     {
       id: 5,
-      label: "Owns 10 or more Soakverse OGs: +1 level",
+      label: "Owns 10 or more Soakverse OGs and DAO Pass: +1 level",
       checked: false,
     },
     {
@@ -230,6 +233,29 @@ async function getEcosystemBalance() {
 
     let highestOwnedStache = null;
     for (let nft of nftList) {
+      const tokenId = parseInt(nft.id.tokenId, 16);
+      const nftLevel = nftLevels[tokenId - 1];
+      state.ownedStaches.push({
+        id: nft.tokenId,
+        level: nftLevel,
+      });
+
+      if (nftLevel > highestOwnedStache) highestOwnedStache = nftLevel;
+    }
+
+    state.highestOwnedStache = highestOwnedStache;
+
+    const url2 = `${baseURL}/getNFTs/?owner=${state.currentAccount}&contractAddresses[]=${soakverseDAOPassSmartContract.address}`;
+
+    var requestOptions = {
+      method: "get",
+      redirect: "follow",
+    };
+
+    const nfts2 = await $fetch(url2);
+
+    const nftList2 = nfts2["ownedNfts"];
+    for (let nft of nftList2) {
       const tokenId = parseInt(nft.id.tokenId, 16);
       const nftLevel = nftLevels[tokenId - 1];
       state.ownedStaches.push({
