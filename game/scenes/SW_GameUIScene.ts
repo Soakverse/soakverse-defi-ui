@@ -6,6 +6,7 @@ import { SW_ChestInventoryWidget } from "~/game/inventory/SW_ChestInventoryWidge
 import { SW_DialogQuest } from "../dialogues/SW_DialogQuest";
 import { SW_WizhMenu } from "../UI/Menus/WizhMenu/SW_WizhMenu";
 import { SW_MenuManager } from "../UI/Menus/SW_MenuManager";
+import { SW_DialogTextBox } from "../dialogues/SW_DialogTextBox";
 
 declare type SW_UIKeys = {
     escape: Phaser.Input.Keyboard.Key;
@@ -19,7 +20,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     declare private menuManager: SW_MenuManager;
 
-    declare private dialogueQuest: SW_DialogQuest;
+    declare private dialogQuest: SW_DialogQuest;
+    declare private dialogTextBox: SW_DialogTextBox;
 
     declare private playerInventoryWidget: SW_PlayerInventoryWidget;
     declare private chestInventoryWidget: SW_ChestInventoryWidget;
@@ -39,7 +41,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
         this.menuManager = new SW_MenuManager();
 
         this.createKeys();
-        this.createDialogueQuest();
+        this.createDialogQuest();
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
         this.playerInventoryWidget.on("moveObject", this.onMovePlayerInventoryMoveObject, this);
@@ -88,7 +90,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
             }, false) as SW_UIKeys;
 
             this.keys.escape.on("down", this.onEscapeButtonDown, this);
-            this.keys.space.on("down", this.onSpaceButtonDown, this);
             this.keys.nextPage.on("down", this.onNextPageButtonDown, this);
         }
     }
@@ -129,8 +130,12 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     protected onEscapeButtonDown(): void {
         // TODO: Have the dialog integrated to the menu manager
-        if (this.dialogueQuest.isQuestActive()) {
-            // TODO: Try close dialog when it's allowed. I feel that there could be situations where we don't want that
+        // if (this.dialogQuest.isQuestActive()) {
+        //     // TODO: Try close dialog when it's allowed. I feel that there could be situations where we don't want that
+        // }
+        if (this.dialogTextBox.visible) {
+            this.dialogTextBox.stop(true);
+            this.dialogTextBox.closeDialogue();
         }
         else if (this.menuManager.hasVisibleMenu()) {
             this.menuManager.hideFocusedMenu();
@@ -140,12 +145,24 @@ export default class SW_GameUIScene extends SW_BaseScene {
         }
     }
 
-    protected onSpaceButtonDown(): void {
-        this.dialogueQuest.continueDialog();
-    }
-
     protected onNextPageButtonDown(): void {
-        this.dialogueQuest.continueDialog();
+        if (this.dialogTextBox.visible) {
+            if (this.dialogTextBox.isTyping)
+            {
+                this.dialogTextBox.stop(true);
+            }
+            else if(this.dialogTextBox.isLastPage)
+            {
+                this.dialogTextBox.closeDialogue();
+            }
+            else
+            {
+                this.dialogTextBox.typeNextPage();
+            }
+        }
+        // if (this.dialogQuest.isQuestActive()) {
+        //     this.dialogQuest.continueDialog();
+        // }
     }
 
     // Update
@@ -212,15 +229,29 @@ export default class SW_GameUIScene extends SW_BaseScene {
     // Dialogue
     ////////////////////////////////////////////////////////////////////////
 
-    protected createDialogueQuest(): void {
-        this.dialogueQuest = new SW_DialogQuest(this, {
-            x: this.cameras.main.width * 0.5,
-            y: this.cameras.main.height - 24,
-            originX: 0.5,
-            originY: 1,
-            width: SW_CST.GAME.WIDTH - 100
+    protected createDialogQuest(): void {
+        // this.dialogQuest = new SW_DialogQuest(this, {
+        //     x: this.cameras.main.width * 0.5,
+        //     y: this.cameras.main.height - 24,
+        //     originX: 0.5,
+        //     originY: 1,
+        //     width: SW_CST.GAME.WIDTH - 100
+        // });
+        this.dialogTextBox = new SW_DialogTextBox(this, {
+            x: SW_CST.GAME.WIDTH * 0.5,
+            y: SW_CST.GAME.HEIGHT - 12,
+            width: SW_CST.GAME.WIDTH - 100,
+            height: 80,
+            page: { maxLines: 3, pageBreak: "\n" }
         });
-        
-        //this.dialogueQuest.start();
+
+        this.dialogTextBox.setOrigin(0.5, 1);
+        this.dialogTextBox.layout();
+    }
+
+    public requestDialogue(dialogue: string): void {
+        // this.dialogQuest.start();
+        this.dialogTextBox.showMessage(dialogue);
+        this.dialogTextBox.setVisible(true);
     }
 };

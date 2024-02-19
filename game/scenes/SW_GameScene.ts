@@ -301,13 +301,7 @@ export default class SW_GameScene extends SW_BaseScene {
     this.UIScene.showWizhWellMenu();
   }
 
-  public requestDialogue(
-    message: string,
-    title: string,
-    iconTexture: string = "",
-    iconFrame: string = ""
-  ): void {
-    this.UIScene.requestDialogue(message, title, iconTexture, iconFrame);
-    this.onMenuVisibilityChange(true);
+  public requestDialogue(dialogue: string): void {
+    this.UIScene.requestDialogue(dialogue);
   }
 }
