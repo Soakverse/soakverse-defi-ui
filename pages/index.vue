@@ -6,8 +6,16 @@
           <h4>Welcome to Soakverse</h4>
           <p>Soakverse's rich ecosystem is ready for you!</p>
           <div class="row">
-            <div v-for="social in socials" :key="social.name" class="col-12 col-md-4 social-card">
-              <nuxt-link :to="social.link" class="social-holder w-100" :style="`background-color:${social.color}`">
+            <div
+              v-for="social in socials"
+              :key="social.name"
+              class="col-12 col-md-4 social-card"
+            >
+              <nuxt-link
+                :to="social.link"
+                class="social-holder w-100"
+                :style="`background-color:${social.color}`"
+              >
                 <div class="m-auto">
                   <i class="fa-4x" :class="social.icon" />
                   <p>{{ social.name }}</p>
@@ -24,10 +32,10 @@
 <script setup>
 const socials = [
   {
-    name: "Soakverse World",
-    color: "#f0f",
-    link: "/play",
-    icon: "fas fa-gamepad",
+    name: "DAO Dashboard",
+    color: "#f24578",
+    link: "/dao",
+    icon: "fas fa-scale-balanced",
   },
   {
     name: "SKMT Staking",

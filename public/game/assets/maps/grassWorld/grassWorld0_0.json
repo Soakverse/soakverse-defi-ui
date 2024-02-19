@@ -159,7 +159,40 @@
          "draworder":"topdown",
          "id":7,
          "name":"Objects",
-         "objects":[],
+         "objects":[
+                {
+                 "height":43,
+                 "id":13,
+                 "name":"WizhWell",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":43,
+                 "x":938,
+                 "y":558
+                }, 
+                {
+                 "height":44,
+                 "id":14,
+                 "name":"DialogueEntity",
+                 "properties":[
+                        {
+                         "name":"dialogue",
+                         "type":"string",
+                         "value":"Welcome to the grass world"
+                        }, 
+                        {
+                         "name":"hintName",
+                         "type":"string",
+                         "value":"Panel"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":27,
+                 "x":419,
+                 "y":559
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -472,15 +505,15 @@
          "height":40,
          "id":6,
          "name":"LayerCollision",
-         "opacity":1,
+         "opacity":0.5,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":50,
          "x":0,
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":13,
+ "nextobjectid":15,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

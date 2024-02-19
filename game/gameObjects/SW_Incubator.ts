@@ -7,7 +7,7 @@ export default class SW_Incubator extends Phaser.GameObjects.Zone implements SW_
     declare public body: Phaser.Physics.Arcade.StaticBody;
 
     constructor(scene: SW_GameScene, x: number, y: number, width: number, height: number) {
-      super(scene, x, y, width, width);
+      super(scene, x, y, width, height);
       this.scene.add.existing(this);
     }
 

@@ -21,7 +21,7 @@ export default class SW_DialogueEntity extends Phaser.GameObjects.Zone implement
     }
 
     public onInteract(source: SW_Player): void {
-      this.scene.requestDialogue(this.dialogue, this.hintName);
+      this.scene.requestDialogue(this.dialogue);
     }
 
     public getHintName(): string {

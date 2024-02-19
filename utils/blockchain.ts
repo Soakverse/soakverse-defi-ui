@@ -1,5 +1,9 @@
-// https://chainlist.org/
-export const chainDefinition: any = {
+import {
+  BlockchainDefinitionRegistry,
+  AssetsDefinitionRegistry,
+} from "~~/types/blockchain/BlockchainTypes";
+
+export const blockchainDefinitions: BlockchainDefinitionRegistry = {
   "1": {
     name: "Ethereum",
     shortName: "ETH",
@@ -10,7 +14,7 @@ export const chainDefinition: any = {
     currencySymbol: "ETH",
   },
   "5": {
-    name: "Goerli",
+    name: "Goerli Ethereum Testnet",
     shortName: "Goerli",
     chainId: 5,
     networkFullName: "Ethereum Mainnet",
@@ -38,7 +42,7 @@ export const chainDefinition: any = {
   },
 };
 
-export const assetsDefinition: any = {
+export const assetsDefinition: AssetsDefinitionRegistry = {
   "1": {
     WETH: {
       address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",

@@ -2,7 +2,7 @@ import SW_GameScene from "~/game/scenes/SW_GameScene";
 import { SW_IInteractable } from "~/game/Interactable/Interactable";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 
-export default class SW_PlayerComputer extends Phaser.GameObjects.Zone implements SW_IInteractable {
+export default class SW_WizhWell extends Phaser.GameObjects.Zone implements SW_IInteractable {
     declare public scene: SW_GameScene;
     declare public body: Phaser.Physics.Arcade.StaticBody;
 
@@ -12,7 +12,7 @@ export default class SW_PlayerComputer extends Phaser.GameObjects.Zone implement
     }
 
     public getHintName(): string {
-      return "Computer";
+      return "Wizh Well";
     }
 
     public getHintOffsetY(): number {
@@ -20,6 +20,6 @@ export default class SW_PlayerComputer extends Phaser.GameObjects.Zone implement
     }
 
     public onInteract(source: SW_Player): void {
-      this.scene.openChestInventory();
+      this.scene.events.emit("wizhWellRequested");
     }
 }

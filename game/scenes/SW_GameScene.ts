@@ -17,6 +17,7 @@ import SW_Incubator from "~/game/gameObjects/SW_Incubator";
 import SW_DialogueEntity from "~/game/gameObjects/SW_DialogueEntity";
 import { SW_SubMapData, SW_MapManager } from "~/game/maps/SW_MapManager";
 import { SW_DIRECTIONS } from "../characters/SW_CharacterMovementComponent";
+import SW_WizhWell from "../gameObjects/SW_WizhWell";
 
 const playerStore = usePlayerStore();
 
@@ -64,7 +65,6 @@ export default class SW_GameScene extends SW_BaseScene {
     this.startPosition = data.startPosition;
     this.spawnPositionName = data.spawnPositionName;
     this.previousWorldName = data.previousWorldName;
-
   }
 
   // Create
@@ -128,10 +128,19 @@ export default class SW_GameScene extends SW_BaseScene {
   ): Phaser.Physics.Arcade.StaticGroup {
     const interactableObjectGroup = this.physics.add.staticGroup();
 
+    // TODO - Just have an InteractableZone class that triggers a gameplay event
+    // These events could then be handle on GameplayEventManager
+    this.addUniqueListener(
+      "wizhWellRequested",
+      () => { this.UIScene.showWizhWellMenu(); },
+      this
+    );
+
     const objectTypeData = [
       { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
       { name: "Incubator", isZone: true, classType: SW_Incubator },
       { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
+      { name: "WizhWell", isZone: true, classType: SW_WizhWell },
     ];
 
     for (const objectData of objectTypeData) {
@@ -200,8 +209,8 @@ export default class SW_GameScene extends SW_BaseScene {
       this
     );
     this.UIScene.addUniqueListener(
-      "menuVisibilityChange",
-      this.onMenuVisibilityChange,
+      "menuVisibilityChanged",
+      this.onMenuVisibilityChanged,
       this
     );
   }
@@ -279,21 +288,20 @@ export default class SW_GameScene extends SW_BaseScene {
     interactionComponent.onInteractableOverlapped(interactable);
   }
 
-  protected onMenuVisibilityChange(isMenuVisible: boolean): void {
-    if (isMenuVisible) {
-      this.scene.pause(SW_CST.SCENES.GAME);
-    } else {
-      this.scene.resume(SW_CST.SCENES.GAME);
+  protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
+    if (hasVisibleMenu) {
+      this.player.lockControls();
+    }
+    else {
+      this.player.unlockControls();
     }
   }
 
-  public requestDialogue(
-    message: string,
-    title: string,
-    iconTexture: string = "",
-    iconFrame: string = ""
-  ): void {
-    this.UIScene.requestDialogue(message, title, iconTexture, iconFrame);
-    this.onMenuVisibilityChange(true);
+  public onWizhWellRequested(): void {
+    this.UIScene.showWizhWellMenu();
+  }
+
+  public requestDialogue(dialogue: string): void {
+    this.UIScene.requestDialogue(dialogue);
   }
 }

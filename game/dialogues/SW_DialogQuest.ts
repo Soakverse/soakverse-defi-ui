@@ -183,6 +183,10 @@ export class SW_DialogQuest extends DialogQuest {
         this.setPosition(config.x, config.y);
     }
 
+    public isQuestActive(): boolean {
+        return this.dialog.visible;
+    }
+
     protected onUpdateDialog(dialog: SW_Dialog, question: SW_DialogQuestion, quest: SW_DialogQuest): void {
         this.currentQuestion = question;
 

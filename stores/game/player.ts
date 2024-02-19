@@ -15,5 +15,16 @@ export const usePlayerStore = defineStore({
     setName(name: string) {
       this.name = name;
     },
+    showName() {
+      useNuxtApp().$swal.fire({
+        title: "Success",
+        text: "Minting successful",
+        icon: "success",
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: "btn btn-success btn-fill",
+        },
+      });
+    },
   },
 });
