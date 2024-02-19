@@ -80,6 +80,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this.loadingScreen.fillStyle(0x000000, 1.0);
       this.loadingScreen.fillRect(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT);
       this.loadingScreen.setInteractive(new Phaser.Geom.Rectangle(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT), Phaser.Geom.Rectangle.Contains);
+      this.loadingScreen.setVisible(false);
     }
 
     protected createKeys(): void {
@@ -97,7 +98,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
     
     public showLoadingScreen(): void {
         this.loadingScreen.setAlpha(1);
-        this.loadingScreen.setVisible(true);
+        this.menuManager.showMenu(this.loadingScreen);
     }
 
     public hideLoadingScreen(): void {
@@ -105,14 +106,13 @@ export default class SW_GameUIScene extends SW_BaseScene {
             targets: this.loadingScreen,
             alpha: 0,
             duration: 400,
-            onComplete: () => { this.loadingScreen.setVisible(false); },
+            onComplete: () => { this.menuManager.hideMenu(this.loadingScreen); },
             callbackScope: this
         });
     }
 
     protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
-        // TODO: Include dialogue to the menu manager
-        this.events.emit("menuVisibilityChanged", hasVisibleMenu || this.dialogTextBox.visible);
+        this.events.emit("menuVisibilityChanged", hasVisibleMenu);
     }
 
     protected onMovePlayerInventoryMoveObject(inventoryObjectData: SW_InventoryObject, quantity: number): void {
@@ -135,13 +135,13 @@ export default class SW_GameUIScene extends SW_BaseScene {
     }
 
     protected onEscapeButtonDown(): void {
-        // TODO: Have the dialog integrated to the menu manager
         // if (this.dialogQuest.isQuestActive()) {
         //     // TODO: Try close dialog when it's allowed. I feel that there could be situations where we don't want that
         // }
         if (this.dialogTextBox.visible) {
             this.dialogTextBox.stop(true);
             this.dialogTextBox.closeDialogue();
+            this.menuManager.hideMenu(this.dialogTextBox);
         }
         else if (this.menuManager.hasVisibleMenu()) {
             this.menuManager.hideFocusedMenu();
@@ -160,8 +160,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
             else if(this.dialogTextBox.isLastPage)
             {
                 this.dialogTextBox.closeDialogue();
-                // TODO: Include dialogue to the menu manager
-                this.onMenuVisibilityChanged(this.menuManager.hasVisibleMenu());
+                this.menuManager.hideMenu(this.dialogTextBox);
             }
             else
             {
@@ -254,10 +253,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public requestDialogue(dialogue: string): void {
         // this.dialogQuest.start();
+        this.menuManager.showMenu(this.dialogTextBox);
         this.dialogTextBox.showMessage(dialogue);
-        this.dialogTextBox.setVisible(true);
-
-        // TODO: Include dialogue to the menu manager
-        this.onMenuVisibilityChanged(this.menuManager.hasVisibleMenu());
     }
 };

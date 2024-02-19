@@ -44,11 +44,9 @@ export class SW_DialogTextBox extends TextBox {
         this.setTitle(title ?? "");
         this.start(message, typingSpeed);
         //this.setIconTexture(iconTexture, iconFrame);
-        this.setVisible(true);
     }
 
     public closeDialogue(): void {
-        this.setVisible(false);
         this.stop();
     }
 }
