@@ -1,11 +1,13 @@
+declare type SW_MenuType = Phaser.GameObjects.Components.Depth & Phaser.GameObjects.Components.Visible;
+
 export class SW_MenuManager extends Phaser.Events.EventEmitter {
     /** 
      * All the visible menus this manager handles. The order of the array determines the Z-order of the menus.
      * The first menu from this array will be displayed behind the others. The last menu from this array will be displayed on top of the others
      */
-    protected menus: Phaser.GameObjects.Container[];
+    protected menus: SW_MenuType[];
 
-    protected defaultMenu: Phaser.GameObjects.Container | undefined;
+    protected defaultMenu: SW_MenuType | undefined;
 
     constructor() {
         super();
@@ -13,7 +15,7 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
         this.menus = [];
     }
 
-    public setDefaultMenu(menu: Phaser.GameObjects.Container): void {
+    public setDefaultMenu(menu: SW_MenuType): void {
         if (this.defaultMenu != menu) {
             this.defaultMenu = menu;
         }
@@ -35,7 +37,7 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
         }
     }
 
-    public showMenu(menu: Phaser.GameObjects.Container, hideOtherMenus: boolean = false): void {
+    public showMenu(menu: SW_MenuType, hideOtherMenus: boolean = false): void {
         if (menu.visible) {
             return;
         }
@@ -58,7 +60,7 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
         this.emit("menuVisibilityChanged", false);
     }
 
-    public hideMenu(menu: Phaser.GameObjects.Container): void {
+    public hideMenu(menu: SW_MenuType): void {
         menu.setVisible(false);
         Phaser.Utils.Array.Remove(this.menus, menu);
         this.emit("menuVisibilityChanged", this.hasVisibleMenu());
