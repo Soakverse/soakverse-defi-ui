@@ -39,6 +39,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     public create(): void{
         this.menuManager = new SW_MenuManager();
+        this.menuManager.on("menuVisibilityChanged", this.onMenuVisibilityChanged, this);
 
         this.createKeys();
         this.createDialogQuest();
@@ -109,6 +110,11 @@ export default class SW_GameUIScene extends SW_BaseScene {
         });
     }
 
+    protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
+        // TODO: Include dialogue to the menu manager
+        this.events.emit("menuVisibilityChanged", hasVisibleMenu || this.dialogTextBox.visible);
+    }
+
     protected onMovePlayerInventoryMoveObject(inventoryObjectData: SW_InventoryObject, quantity: number): void {
         if (this.chestInventoryWidget.visible) {
             this.playerInventoryWidget.removeObject(inventoryObjectData, quantity);
@@ -154,6 +160,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
             else if(this.dialogTextBox.isLastPage)
             {
                 this.dialogTextBox.closeDialogue();
+                // TODO: Include dialogue to the menu manager
+                this.onMenuVisibilityChanged(this.menuManager.hasVisibleMenu());
             }
             else
             {
@@ -164,9 +172,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
         //     this.dialogQuest.continueDialog();
         // }
     }
-
-    // Update
-    ////////////////////////////////////////////////////////////////////////
 
     // Menus
     ////////////////////////////////////////////////////////////////////////
@@ -193,10 +198,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
         }
     }
 
+    // TODO: Review the visibility functions below with menu manager
     protected setPlayerInventoryVisibility(isVisible: boolean): void {
         this.playerInventoryWidget.setX(this.scale.displaySize.width * 0.5 - this.playerInventoryWidget.width * 0.25);
         this.playerInventoryWidget.setVisible(isVisible);
-        this.events.emit("menuVisibilityChange", this.playerInventoryWidget.visible);
     }
 
     public openChestInventory(): void {
@@ -204,8 +209,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
         this.setChestInventoryVisibility(true);
     }
 
-    public toggleChestInventory(): void
-    {
+    public toggleChestInventory(): void {
         this.setPlayerInventoryVisibility(!this.playerInventoryWidget.visible);
     }
 
@@ -215,7 +219,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
         }
         
         this.chestInventoryWidget.setVisible(isVisible);
-        this.events.emit("menuVisibilityChange", this.playerInventoryWidget.visible);
     }
 
     public updatePlayerInventory(newInventoryObjects: SW_InventoryObject[]) {
@@ -253,5 +256,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
         // this.dialogQuest.start();
         this.dialogTextBox.showMessage(dialogue);
         this.dialogTextBox.setVisible(true);
+
+        // TODO: Include dialogue to the menu manager
+        this.onMenuVisibilityChanged(this.menuManager.hasVisibleMenu());
     }
 };

@@ -26,6 +26,9 @@ export class SW_Player extends SW_Character {
   /** Component used to interact with interactable entities */
   protected declare interactableComp: SW_InteractionComponent;
 
+  /** Whether the player can be controlled. The control could be locked while interacting with something or during a dialogue */
+  protected isControlLocked: boolean = false;
+
   constructor(scene: SW_BaseScene, x: number, y: number) {
     super(scene, x, y);
   }
@@ -51,6 +54,8 @@ export class SW_Player extends SW_Character {
     this.body.setSize(28, 28);
     this.body.setOffset(36, 68);
     this.body.setCollideWorldBounds(true);
+
+    this.isControlLocked = false;
 
     this.initIniteractableComp();
     this.initKeys();
@@ -157,7 +162,20 @@ export class SW_Player extends SW_Character {
     this.interactableComp.update();
   }
 
+  public lockControls(): void {
+    this.isControlLocked = true;
+    this.stopWalking();
+  }
+
+  public unlockControls(): void {
+    this.isControlLocked = false;
+  }
+
   protected updateControls(): void {
+    if (this.isControlLocked) {
+      return;
+    }
+
     if (this.keys.up.isDown) {
       if (this.keys.right.isDown) {
         this.walkUpRight();
@@ -196,6 +214,8 @@ export class SW_Player extends SW_Character {
   }
 
   protected interact(): void {
-    this.interactableComp.interact();
+    if (!this.isControlLocked) {
+      this.interactableComp.interact();
+    }
   }
 }

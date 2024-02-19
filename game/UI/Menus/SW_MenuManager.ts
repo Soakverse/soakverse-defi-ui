@@ -47,6 +47,7 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
         this.menus.push(menu);
         menu.setDepth(this.menus.length);
         menu.setVisible(true);
+        this.emit("menuVisibilityChanged", true);
     }
 
     public hideAllMenus(): void {
@@ -54,17 +55,20 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
             menu.setVisible(false);
         }
         this.menus = [];
+        this.emit("menuVisibilityChanged", false);
     }
 
     public hideMenu(menu: Phaser.GameObjects.Container): void {
         menu.setVisible(false);
         Phaser.Utils.Array.Remove(this.menus, menu);
+        this.emit("menuVisibilityChanged", this.hasVisibleMenu());
     }
 
     public hideFocusedMenu(): void {
         const removedMenu = this.menus.pop();
         if (removedMenu) {
             removedMenu.setVisible(false);
+            this.emit("menuVisibilityChanged", this.hasVisibleMenu());
         }
     }
 }

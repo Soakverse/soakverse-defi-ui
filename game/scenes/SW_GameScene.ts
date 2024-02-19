@@ -65,7 +65,6 @@ export default class SW_GameScene extends SW_BaseScene {
     this.startPosition = data.startPosition;
     this.spawnPositionName = data.spawnPositionName;
     this.previousWorldName = data.previousWorldName;
-
   }
 
   // Create
@@ -210,8 +209,8 @@ export default class SW_GameScene extends SW_BaseScene {
       this
     );
     this.UIScene.addUniqueListener(
-      "menuVisibilityChange",
-      this.onMenuVisibilityChange,
+      "menuVisibilityChanged",
+      this.onMenuVisibilityChanged,
       this
     );
   }
@@ -289,11 +288,12 @@ export default class SW_GameScene extends SW_BaseScene {
     interactionComponent.onInteractableOverlapped(interactable);
   }
 
-  protected onMenuVisibilityChange(isMenuVisible: boolean): void {
-    if (isMenuVisible) {
-      this.scene.pause(SW_CST.SCENES.GAME);
-    } else {
-      this.scene.resume(SW_CST.SCENES.GAME);
+  protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
+    if (hasVisibleMenu) {
+      this.player.lockControls();
+    }
+    else {
+      this.player.unlockControls();
     }
   }
 
