@@ -571,11 +571,11 @@
         {
          "columns":5,
          "firstgid":3843,
-         "image":"wishing_well.png",
+         "image":"wizhing_well_aura.png",
          "imageheight":170,
          "imagewidth":170,
          "margin":1,
-         "name":"wishing_well",
+         "name":"wizhing_well_aura",
          "spacing":2,
          "tilecount":25,
          "tileheight":32,
