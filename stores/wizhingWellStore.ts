@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 // project imports
 import axios from "~/plugins/axios.client";
-import { showLoader, hideLoader } from "~~/utils/helpers";
 
 export const useWizhingWellStore = defineStore({
   id: "WizhingWellStore",
@@ -17,7 +16,8 @@ export const useWizhingWellStore = defineStore({
       return this.name;
     },
     triggerAction2() {
-      useNuxtApp().$swal.fire({
+      const nuxtApp = useNuxtApp();
+      nuxtApp.$swal.fire({
         title: "Success",
         text: "Minting successful",
         icon: "success",
