@@ -8,10 +8,8 @@ import SW_GameScene from "~/game/scenes/SW_GameScene";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 import { SW_TiledObjectProperties } from "~/game/SW_Utils";
-import {
-  SW_DIRECTIONS,
-  SW_DIRECTION,
-} from "~/game/characters/SW_CharacterMovementComponent";
+import { SW_DIRECTIONS, SW_DIRECTION } from "~/game/characters/SW_CharacterMovementComponent";
+import { SW_TileAnimationsManager } from "./SW_TileAnimationsManager";
 
 const depthBackground = 1;
 const depthPlayer = 2;
@@ -52,6 +50,8 @@ export declare type SW_SubMapData = {
 
 export class SW_MapManager extends Phaser.Events.EventEmitter {
   private scene: SW_GameScene;
+
+  declare private tileAnimationsManager: SW_TileAnimationsManager;
 
   private player: SW_Player;
 
@@ -112,6 +112,14 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     this.initWorld();
   }
 
+  public getScene(): SW_GameScene {
+    return this.scene;
+  }
+
+  public getWorldName(): string {
+    return this.worldName;
+  }
+
   public isInitialized(): boolean {
     return this._isInitialized;
   }
@@ -151,6 +159,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   private createWorld(): void {
     const isWorldValid = this.setupWorldMaps();
     if (isWorldValid) {
+      this.tileAnimationsManager = new SW_TileAnimationsManager(this);
       this.once("playerPositionInitialized", this.onPlayerPositionInitialized);
       this.initPlayerPosition(this.previousWorldName, this.spawnPositionName);
     }
@@ -406,6 +415,10 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     return `${subMapX}_${subMapY}`;
   }
 
+  private getTileLayerId(layerName: string, subMapX: number, subMapY: number): string {
+    return `${layerName}_${subMapX}_${subMapY}`;
+  }
+
   private trySpawnSubMap(
     subMapX: number,
     subMapY: number,
@@ -597,70 +610,8 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     ) as Phaser.Tilemaps.TilemapLayer;
     layer.setDepth(layerDepth);
 
-    const animatableTiles = [
-      { gid: 845, texture: "tree1D_ss", frames: [0, 5, 10, 15, 20, 125, 130, 135, 140, 145] },
-      { gid: 846, texture: "tree1D_ss", frames: [1, 6, 11, 16, 21, 126, 131, 136, 141, 146] },
-      { gid: 847, texture: "tree1D_ss", frames: [2, 7, 12, 17, 22, 127, 132, 137, 142, 147] },
-      { gid: 848, texture: "tree1D_ss", frames: [3, 8, 13, 18, 23, 128, 133, 138, 143, 148] },
-      { gid: 849, texture: "tree1D_ss", frames: [4, 9, 14, 19, 24, 129, 134, 139, 144, 149] },
-
-      { gid: 877, texture: "tree1D_ss", frames: [25, 30, 35, 40, 45, 150, 155, 160, 165, 170] },
-      { gid: 878, texture: "tree1D_ss", frames: [26, 31, 36, 41, 46, 151, 156, 161, 166, 171] },
-      { gid: 879, texture: "tree1D_ss", frames: [27, 32, 37, 42, 47, 152, 157, 162, 167, 172] },
-      { gid: 880, texture: "tree1D_ss", frames: [28, 33, 38, 43, 48, 153, 158, 163, 168, 173] },
-      { gid: 881, texture: "tree1D_ss", frames: [29, 34, 39, 44, 49, 154, 159, 164, 169, 174] },
-      
-      { gid: 909, texture: "tree1D_ss", frames: [50, 55, 60, 65, 70, 175, 180, 185, 190, 195] },
-      { gid: 910, texture: "tree1D_ss", frames: [51, 56, 61, 66, 71, 176, 181, 186, 191, 196] },
-      { gid: 911, texture: "tree1D_ss", frames: [52, 57, 62, 67, 72, 177, 182, 187, 192, 197] },
-      { gid: 912, texture: "tree1D_ss", frames: [53, 58, 63, 68, 73, 178, 183, 188, 193, 198] },
-      { gid: 913, texture: "tree1D_ss", frames: [54, 59, 64, 69, 74, 179, 184, 189, 194, 199] },
-
-      { gid: 941, texture: "tree1D_ss", frames: [75, 80, 85, 90, 95, 200, 205, 210, 215, 220] },
-      { gid: 942, texture: "tree1D_ss", frames: [76, 81, 86, 91, 96, 201, 206, 211, 216, 221] },
-      { gid: 943, texture: "tree1D_ss", frames: [77, 82, 87, 92, 97, 202, 207, 212, 217, 222] },
-      { gid: 944, texture: "tree1D_ss", frames: [78, 83, 88, 93, 98, 203, 208, 213, 218, 223] },
-      { gid: 945, texture: "tree1D_ss", frames: [79, 84, 89, 94, 99, 204, 209, 214, 219, 224] },
-
-      
-
-      { gid: 653, texture: "tree1B_ss", frames: [0, 5, 10, 15, 20, 125, 130, 135, 140, 145] },
-      { gid: 654, texture: "tree1B_ss", frames: [1, 6, 11, 16, 21, 126, 131, 136, 141, 146] },
-      { gid: 655, texture: "tree1B_ss", frames: [2, 7, 12, 17, 22, 127, 132, 137, 142, 147] },
-      { gid: 656, texture: "tree1B_ss", frames: [3, 8, 13, 18, 23, 128, 133, 138, 143, 148] },
-      { gid: 657, texture: "tree1B_ss", frames: [4, 9, 14, 19, 24, 129, 134, 139, 144, 149] },
-
-      { gid: 685, texture: "tree1B_ss", frames: [25, 30, 35, 40, 45, 150, 155, 160, 165, 170] },
-      { gid: 686, texture: "tree1B_ss", frames: [26, 31, 36, 41, 46, 151, 156, 161, 166, 171] },
-      { gid: 687, texture: "tree1B_ss", frames: [27, 32, 37, 42, 47, 152, 157, 162, 167, 172] },
-      { gid: 688, texture: "tree1B_ss", frames: [28, 33, 38, 43, 48, 153, 158, 163, 168, 173] },
-      { gid: 689, texture: "tree1B_ss", frames: [29, 34, 39, 44, 49, 154, 159, 164, 169, 174] },
-      
-      { gid: 717, texture: "tree1B_ss", frames: [50, 55, 60, 65, 70, 175, 180, 185, 190, 195] },
-      { gid: 718, texture: "tree1B_ss", frames: [51, 56, 61, 66, 71, 176, 181, 186, 191, 196] },
-      { gid: 719, texture: "tree1B_ss", frames: [52, 57, 62, 67, 72, 177, 182, 187, 192, 197] },
-      { gid: 720, texture: "tree1B_ss", frames: [53, 58, 63, 68, 73, 178, 183, 188, 193, 198] },
-      { gid: 721, texture: "tree1B_ss", frames: [54, 59, 64, 69, 74, 179, 184, 189, 194, 199] },
-
-      { gid: 749, texture: "tree1B_ss", frames: [75, 80, 85, 90, 95, 200, 205, 210, 215, 220] },
-      { gid: 750, texture: "tree1B_ss", frames: [76, 81, 86, 91, 96, 201, 206, 211, 216, 221] },
-      { gid: 751, texture: "tree1B_ss", frames: [77, 82, 87, 92, 97, 202, 207, 212, 217, 222] },
-      { gid: 752, texture: "tree1B_ss", frames: [78, 83, 88, 93, 98, 203, 208, 213, 218, 223] },
-      { gid: 753, texture: "tree1B_ss", frames: [79, 84, 89, 94, 99, 204, 209, 214, 219, 224] },
-      
-    ];
-
-      for (const tileData of animatableTiles) {
-        const sprites = layer.createFromTiles(tileData.gid + 1, -1, { key: "" }, this.scene);
-        for (const sprite of sprites) {
-          sprite.setOrigin(0, 0);
-          sprite.setDepth(layerDepth);
-          console.log(`${tileData.texture}${tileData.gid}`)
-          sprite.anims.play(`${tileData.texture}${tileData.gid}`);
-        }
-
-
-    }
+    const layerId = this.getTileLayerId(layer.layer.name, subMapData.subMapX, subMapData.subMapY);
+    this.emit("layerSpawned", layer, layerId, layerDepth);
 
     return layer;
   }
@@ -768,11 +719,30 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
     const subMapName = this.getSubMapName(subMapX, subMapY);
     if (subMapName) {
-      const tilemapData = this.scene.cache.tilemap.get(subMapName);
-      const tilesets = tilemapData ? tilemapData.tilesets : undefined;
+      const tilemap = this.scene.cache.tilemap.get(subMapName);
+      const tilemapData = tilemap ? tilemap.data : undefined;
 
-      if (tilesets && tilesets.length() > 0) {
-        this.scene.textures.remove(tilemapData.tilesets[0].name);
+      if (tilemapData) {
+        const tilesets = tilemapData.tilesets as Phaser.Tilemaps.Tileset[];
+
+        if (tilesets) {
+          for (const tileset of tilesets) {
+            // TODO: We can't remove the texture images right away because they could be used by another submap
+            // Either store the tileset image name and check if it used somewhere else before removing it
+            // or simply keep track of the images and only remove them when we leave the world. 
+            // The later solution might be a good  one if we assume that all/most of the maps use the same tileset images
+            // this.scene.textures.remove(tileset.name);
+          }
+        }
+
+        const layers = tilemapData.layers as {name: string}[];
+        if (layers) {
+          let layerIds = [] as string[];
+          for (const layer of layers) {
+            layerIds.push(this.getTileLayerId(layer.name, subMapX, subMapY));
+          }
+          this.emit("layerCleared", layerIds);
+        }
       }
       this.scene.cache.tilemap.remove(subMapName);
     }
@@ -903,7 +873,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   }
 
   public clear(): void {
-    this.removeAllListeners();
     this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
     this.spawnSubMapQueue = [];
@@ -914,6 +883,9 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }, this);
     this.spawnedSubMapDataMap.clear();
     this.subMapNamesMap.clear();
+
+    this.emit("cleared");
+    this.removeAllListeners();
   }
 
   private createEntrances(
