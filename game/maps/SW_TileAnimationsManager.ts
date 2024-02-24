@@ -97,29 +97,31 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
             }
             this.scene.textures.remove(tileTexture);
         }
-        this.animatableTiles = this.scene.cache.json.remove("tileAnimations");
-        
+
+        this.scene.cache.json.remove("tileAnimations");
         this.mapManager.off("layerSpawned");
         this.mapManager.off("cleared");
     }
 
     private onLayerSpawned(layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number): void {
-        let animatedTiles = [] as Phaser.GameObjects.Sprite[];
+        let allAnimatedTiles = [] as Phaser.GameObjects.Sprite[];
 
         for (const tileTexture in this.animatableTiles) {
             const tileDataArray = this.animatableTiles[tileTexture] as SW_TileAnimationData[];
+            const animDelay = Phaser.Math.Between(0, 2000);
+
             for (const tileData of tileDataArray) {
-                const singleAnimatedTiles = layer.createFromTiles(tileData.gid + 1, -1, { key: tileTexture }, this.scene);
-                for (const animatedTile of singleAnimatedTiles) {
+                const animatedTiles = layer.createFromTiles(tileData.gid, -1, { key: tileTexture }, this.scene);
+                for (const animatedTile of animatedTiles) {
                     animatedTile.setOrigin(0, 0);
                     animatedTile.setDepth(layerDepth);
-                    animatedTile.anims.play(`${tileTexture}${tileData.gid}`);
+                    animatedTile.anims.play({ key: `${tileTexture}${tileData.gid}`, delay: animDelay, showBeforeDelay: true });
                 }
-                
-                animatedTiles = animatedTiles.concat(singleAnimatedTiles);
+
+                allAnimatedTiles = allAnimatedTiles.concat(animatedTiles);
             }
         }
-        this.animatedTilesPerLayer.set(layerId, animatedTiles);
+        this.animatedTilesPerLayer.set(layerId, allAnimatedTiles);
     }
 
     private onLayersCleared(layerIds: string[]): void {
