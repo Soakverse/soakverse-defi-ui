@@ -2,9 +2,14 @@ import SW_GameScene from "../scenes/SW_GameScene";
 import { SW_MapManager } from "./SW_MapManager";
 
 declare type SW_TileAnimationData = {
+    frameRate: number;
+    framesData: SW_TileAnimationFrameData[];
+}
+
+declare type SW_TileAnimationFrameData = {
     gid: number;
     frames: number[];
-    frameRate: number;
+    frameRate?: number;
 }
 
 export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
@@ -61,12 +66,13 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
     }
 
     private onTileTextureLoaded(tileTexture: string): void {
-        const tileDataArray = this.animatableTiles[tileTexture] as SW_TileAnimationData[];
+        const tileData = this.animatableTiles[tileTexture] as SW_TileAnimationData;
 
-        for (const tileData of tileDataArray) {
-            this.scene.anims.create({ key: `${tileTexture}${tileData.gid}`,
-                frames: this.scene.anims.generateFrameNumbers(`${tileTexture}`, { frames: tileData.frames }),
-                frameRate: tileData.frameRate,
+        for (const frameData of tileData.framesData) {
+            const frameRate = frameData.frameRate ?? tileData.frameRate;
+            this.scene.anims.create({ key: `${tileTexture}${frameData.gid}`,
+                frames: this.scene.anims.generateFrameNumbers(`${tileTexture}`, { frames: frameData.frames }),
+                frameRate: frameRate,
                 repeat: Phaser.FOREVER
             });
         }
@@ -91,9 +97,9 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
         this.animatedTilesPerLayer.clear();
 
         for (const tileTexture in this.animatableTiles) {
-            const tileDataArray = this.animatableTiles[tileTexture] as SW_TileAnimationData[];
-            for (const tileData of tileDataArray) {
-                this.scene.anims.remove(`${tileTexture}${tileData.gid}`);
+            const tileData = this.animatableTiles[tileTexture] as SW_TileAnimationData;
+            for (const frameData of tileData.framesData) {
+                this.scene.anims.remove(`${tileTexture}${frameData.gid}`);
             }
             this.scene.textures.remove(tileTexture);
         }
@@ -107,15 +113,15 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
         let allAnimatedTiles = [] as Phaser.GameObjects.Sprite[];
 
         for (const tileTexture in this.animatableTiles) {
-            const tileDataArray = this.animatableTiles[tileTexture] as SW_TileAnimationData[];
+            const tileData = this.animatableTiles[tileTexture] as SW_TileAnimationData;
             const animDelay = Phaser.Math.Between(0, 2000);
 
-            for (const tileData of tileDataArray) {
-                const animatedTiles = layer.createFromTiles(tileData.gid, -1, { key: tileTexture }, this.scene);
+            for (const frameData of tileData.framesData) {
+                const animatedTiles = layer.createFromTiles(frameData.gid, -1, { key: tileTexture }, this.scene);
                 for (const animatedTile of animatedTiles) {
                     animatedTile.setOrigin(0, 0);
                     animatedTile.setDepth(layerDepth);
-                    animatedTile.anims.play({ key: `${tileTexture}${tileData.gid}`, delay: animDelay, showBeforeDelay: true });
+                    animatedTile.anims.play({ key: `${tileTexture}${frameData.gid}`, delay: animDelay, showBeforeDelay: true });
                 }
 
                 allAnimatedTiles = allAnimatedTiles.concat(animatedTiles);
