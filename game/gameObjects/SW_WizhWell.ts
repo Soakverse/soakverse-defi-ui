@@ -5,6 +5,7 @@ import { SW_Player } from "~/game/characters/players/SW_Player";
 export default class SW_WizhWell extends Phaser.GameObjects.Zone implements SW_IInteractable {
     declare public scene: SW_GameScene;
     declare public body: Phaser.Physics.Arcade.StaticBody;
+    public hintOffsetY: number = 0;
 
     constructor(scene: SW_GameScene, x: number, y: number, width: number, height: number) {
       super(scene, x, y, width, height);
@@ -16,7 +17,7 @@ export default class SW_WizhWell extends Phaser.GameObjects.Zone implements SW_I
     }
 
     public getHintOffsetY(): number {
-      return 0;
+      return this.hintOffsetY;
     }
 
     public onInteract(source: SW_Player): void {
