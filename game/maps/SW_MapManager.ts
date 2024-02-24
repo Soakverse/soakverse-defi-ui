@@ -55,7 +55,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
   private player: SW_Player;
 
-  /** All the submaps that are spawned and visible for the target. This map is dynamically updated with the target position changes*/
+  /** All the submaps that are fully spawned and visible for the target. This map is dynamically updated with the target position changes*/
   private spawnedSubMapDataMap: Map<string, SW_SubMapData>;
 
   /** All the submaps that are ready to be spawned but in the queue. Each update will spawn a part of the submpas until they are fully spawned.
@@ -417,6 +417,51 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
   private getTileLayerId(layerName: string, subMapX: number, subMapY: number): string {
     return `${layerName}_${subMapX}_${subMapY}`;
+  }
+
+  public getVisibleMapLayersData(): { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[] {
+    const fnAddVisibleLayerstoArray = (subMapData: SW_SubMapData): { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[] => {
+      let layers = [] as { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[];
+
+      if (subMapData.layerGround) {
+        const layerGround = subMapData.layerGround;
+        layers.push({ layer: layerGround, layerId: this.getTileLayerId(layerGround.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthBackground })
+      }
+      
+      if (subMapData.layerBackground1) {
+        const layerBackground1 = subMapData.layerBackground1;
+        layers.push({ layer: layerBackground1, layerId: this.getTileLayerId(layerBackground1.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthBackground })
+      }
+      
+      if (subMapData.layerBackground2) {
+        const layerBackground2 = subMapData.layerBackground2;
+        layers.push({ layer: layerBackground2, layerId: this.getTileLayerId(layerBackground2.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthBackground })
+      }
+      
+      if (subMapData.layerForeground1) {
+        const layerForeground1 = subMapData.layerForeground1;
+        layers.push({ layer: layerForeground1, layerId: this.getTileLayerId(layerForeground1.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthForeground })
+      }
+      
+      if (subMapData.layerForeground2) {
+        const layerForeground2 = subMapData.layerForeground2;
+        layers.push({ layer: layerForeground2, layerId: this.getTileLayerId(layerForeground2.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthForeground })
+      }
+
+      return layers;
+    };
+
+    let layers = [] as { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[];
+
+    this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
+      layers = layers.concat(fnAddVisibleLayerstoArray(subMapData));
+    }, this);
+
+    this.spawnSubMapQueue.forEach((subMapData: SW_SubMapData) => {
+      layers = layers.concat(fnAddVisibleLayerstoArray(subMapData));
+    }, this);
+
+    return layers;
   }
 
   private trySpawnSubMap(
