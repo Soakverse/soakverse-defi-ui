@@ -2,14 +2,14 @@ import SW_GameScene from "../scenes/SW_GameScene";
 import { SW_MapManager } from "./SW_MapManager";
 
 declare type SW_TileAnimationData = {
-    /** Global gid offset to apply to all gid we will use. This is necessary if we use different tileset for a single Tiled map */
-    startGid: number;
-
     /** All the tiles to animate per texture */
     animList: Record<string, SW_TileTextureData>;
 }
 
 declare type SW_TileTextureData = {
+    /** Global gid offset to apply to all gid we will use with this texture. It will be helpful if we use a few tilesets for a single Tiled map */
+    startGid: number;
+
     /** Global default frame rate to apply on all tiles if they don't have a specific one */
     frameRate: number;
 
@@ -91,7 +91,7 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
 
         for (const animConfig of tileTextureData.animConfigs) {
             const frameRate = animConfig.frameRate ?? tileTextureData.frameRate;
-            const gid = this.tileAnimationData.startGid + animConfig.gid;
+            const gid = tileTextureData.startGid + animConfig.gid;
             this.scene.anims.create({ key: `${tileTexture}${gid}`,
                 frames: this.scene.anims.generateFrameNumbers(`${tileTexture}`, { frames: animConfig.frames }),
                 frameRate: frameRate,
@@ -128,7 +128,7 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
             for (const tileTexture in this.tileAnimationData.animList) {
                 const tileTextureData = this.tileAnimationData.animList[tileTexture];
                 for (const animConfig of tileTextureData.animConfigs) {
-                    this.scene.anims.remove(`${tileTexture}${this.tileAnimationData.startGid + animConfig.gid}`);
+                    this.scene.anims.remove(`${tileTexture}${tileTextureData.startGid + animConfig.gid}`);
                 }
                 this.scene.textures.remove(tileTexture);
             }
@@ -156,7 +156,7 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
             const animDelay = Phaser.Math.Between(0, 2000);
 
             for (const animConfig of tileTextureData.animConfigs) {
-                const gid = this.tileAnimationData.startGid + animConfig.gid;
+                const gid = tileTextureData.startGid + animConfig.gid;
                 const animatedTiles = layer.createFromTiles(gid, -1, { key: tileTexture }, this.scene);
                 for (const animatedTile of animatedTiles) {
                     animatedTile.setOrigin(0, 0);
