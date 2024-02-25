@@ -3,14 +3,10 @@
     <h4>Please connect your wallet.</h4>
   </div>
   <div v-else-if="props.blockchain.chainId != currentChain" class="col-12">
-    <h4>You are on the wrong chain.</h4>
+    <h4>You are on the wrong chain. {{ network }}</h4>
     <button
       class="btn btn-success ms-1"
-      @click="
-        switchNetwork({
-          chainId: props.blockchain.chainId,
-        })
-      "
+      @click="blockchainStore.switchCurrentNetwork(props.blockchain.chainId)"
     >
       Switch to {{ props.blockchain.name }}
     </button>
@@ -21,15 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import { switchNetwork } from "@wagmi/core";
 import { BlockchainDefinition } from "~~/types/blockchain/BlockchainTypes";
-const { currentAccount, currentChain } = useWeb3WalletState();
-
 const props = defineProps<{
   blockchain: BlockchainDefinition;
 }>();
 
-const state = reactive({
-  currentAccount: currentAccount.value,
-});
+const { blockchainStore, currentAccount, currentChain } =
+  await useWeb3WalletState();
 </script>

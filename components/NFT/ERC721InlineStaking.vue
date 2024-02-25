@@ -87,7 +87,7 @@ const nftLevels = [
 
 const levelToShareRegistry = [4, 5, 6, 8, 10];
 
-const { currentAccount } = useWeb3WalletState();
+const { currentAccount } = await useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
@@ -186,7 +186,7 @@ async function stakeNft(tokenId: number) {
     if (currentAccount) {
       showLoader();
 
-      const migrationCCIPFee: any[] = await readContract({
+      const migrationCCIPFee: any = await readContract({
         address: soakverseDAOPassSmartContract.address as `0x${string}`,
         abi: soakverseDAOPassSmartContract.abi,
         functionName: "estimateStakeFee",
@@ -256,7 +256,7 @@ async function unstakeNft(tokenId: number) {
   try {
     if (currentAccount) {
       showLoader();
-      const migrationCCIPFee: any[] = await readContract({
+      const migrationCCIPFee: any = await readContract({
         address: soakverseDAOPassSmartContract.address as `0x${string}`,
         abi: soakverseDAOPassSmartContract.abi,
         functionName: "estimateStakeFee",

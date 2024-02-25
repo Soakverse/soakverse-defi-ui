@@ -1,35 +1,14 @@
-const currentAccount: any = -1;
-const currentChain: any = 0;
+import { storeToRefs } from "pinia";
+import { useBlockchainStore } from "~/stores/blockchain/useBlockchainStore";
 
-const state = reactive({
-  currentAccount,
-  currentChain,
-});
+const useWeb3WalletState = async () => {
+  const blockchainStore = useBlockchainStore();
+  await blockchainStore.initBlockchainStore();
 
-const useWeb3WalletState = () => {
-  const { $getAccount, $getNetwork, $watchAccount, $watchNetwork } =
-    useNuxtApp();
-  const currentAccount = computed(() => state.currentAccount);
-  const currentChain = computed(() => state.currentChain);
-  if (typeof $getAccount == "function") {
-    const initialAccount = $getAccount();
-    const initialNetwork = $getNetwork();
-
-    state.currentAccount = initialAccount.address
-      ? initialAccount.address
-      : null;
-    state.currentChain = initialNetwork.chain ? initialNetwork.chain.id : null;
-
-    const accountWatch = $watchAccount(
-      (account) =>
-        (state.currentAccount = account.address ? account.address : null)
-    );
-    const chainWatch = $watchNetwork((network) => {
-      state.currentChain = network.chain ? network.chain.id : null;
-    });
-  }
+  const { currentAccount, currentChain } = storeToRefs(blockchainStore);
 
   return {
+    blockchainStore,
     currentAccount,
     currentChain,
   };

@@ -4,6 +4,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 const production = process.env.NODE_ENV === "production";
 
 export default defineNuxtConfig({
+  ssr: false,
   runtimeConfig: {
     public: {
       infuraProjectId: process.env.INFURA_PROJECT_ID,

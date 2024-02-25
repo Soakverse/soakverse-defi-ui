@@ -1,12 +1,20 @@
 // nuxt.d.ts
 import Vue from "vue";
-import Swal from "sweetalert2";
+import Swal, { SweetAlert2 } from "sweetalert2";
+import { GetAccountResult, GetNetworkResult, PublicClient } from "@wagmi/core";
 
-// If `$swal` is a customized version or wrapper, define its interface accordingly
-interface MySwalInterface {
-  fire: (options: Swal.SweetAlertOptions) => Promise<Swal.SweetAlertResult>;
+declare function useNuxtApp(): NuxtApp;
+
+declare module "#app" {
+  interface NuxtApp {
+    $swal: SweetAlert2;
+    $publicClient: PublicClient;
+    $getAccount: Function;
+    $getNetwork: Function;
+    $watchAccount: Function;
+    $watchNetwork: Function;
+  }
 }
-
 declare module "@nuxt/types" {
   interface NuxtApp {
     $swal: MySwalInterface;
