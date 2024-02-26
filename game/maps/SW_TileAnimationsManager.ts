@@ -75,7 +75,7 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
             }
             else {
                 this.scene.load.once(`${Phaser.Loader.Events.FILE_KEY_COMPLETE}spritesheet-${tileTexture}`, this.onTileTextureLoaded, this);
-                this.scene.load.spritesheet(tileTexture, `/game/assets/maps/${this.worldName}/tileAnimations/${tileTexture}.png`, { frameWidth: 32, frameHeight: 32 });
+                this.scene.load.spritesheet(tileTexture, `/game/assets/maps/${this.worldName}/tileAnimations/${tileTexture}.png`, { frameWidth: 32, frameHeight: 32, margin: 1, spacing: 2 });
             }
         }
         this.scene.load.start();
