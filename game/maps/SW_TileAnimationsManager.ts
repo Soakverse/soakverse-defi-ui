@@ -110,7 +110,6 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
         this.mapManager.on("layerCleared", this.onLayersCleared, this);
 
         const visibleLayersData = this.mapManager.getVisibleMapLayersData();
-        console.log(visibleLayersData)
         for (const data of visibleLayersData) {
             this.onLayerSpawned(data.layer, data.layerId, data.layerDepth);
         }
