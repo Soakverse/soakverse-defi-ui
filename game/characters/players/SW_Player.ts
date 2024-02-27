@@ -4,27 +4,18 @@ import { SW_Character } from "~/game/characters/SW_Character";
 import { SW_DIRECTIONS, SW_DIRECTIONS_NO_DIAGONALE} from "~/game/characters/SW_CharacterMovementComponent";
 import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
 import { SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
-
-declare type SW_PlayerKeys = {
-  up: Phaser.Input.Keyboard.Key;
-  down: Phaser.Input.Keyboard.Key;
-  left: Phaser.Input.Keyboard.Key;
-  right: Phaser.Input.Keyboard.Key;
-  run: Phaser.Input.Keyboard.Key;
-  interact: Phaser.Input.Keyboard.Key;
-};
+import { SW_PlayerInputComponent } from "./SW_PlayerInputComponent";
 
 export class SW_Player extends SW_Character {
-  /** Keys to control the player */
-  protected declare keys: SW_PlayerKeys;
-
-  public declare body: Phaser.Physics.Arcade.Body;
+  declare public body: Phaser.Physics.Arcade.Body;
 
   /** How far a player can interact with entities around them */
   protected interactionRange: number = 30;
 
   /** Component used to interact with interactable entities */
-  protected declare interactableComp: SW_InteractionComponent;
+  declare protected interactableComp: SW_InteractionComponent;
+
+  declare protected inputComp: SW_PlayerInputComponent;
 
   /** Whether the player can be controlled. The control could be locked while interacting with something or during a dialogue */
   protected isControlLocked: boolean = false;
@@ -57,11 +48,11 @@ export class SW_Player extends SW_Character {
 
     this.isControlLocked = false;
 
-    this.initIniteractableComp();
-    this.initKeys();
+    this.initIniteractableComponent();
+    this.initInputComponent();
   }
 
-  protected initIniteractableComp(): void {
+  protected initIniteractableComponent(): void {
     this.interactableComp = new SW_InteractionComponent(
       this,
       this.x,
@@ -72,32 +63,16 @@ export class SW_Player extends SW_Character {
     this.interactableComp.body.setAllowGravity(false);
   }
 
+  protected initInputComponent(): void {
+    this.inputComp = new SW_PlayerInputComponent(this);
+  }
+
   public getInteractableComp(): SW_InteractionComponent {
     return this.interactableComp;
   }
 
   public getInteractionRange(): number {
     return this.interactionRange;
-  }
-
-  protected initKeys(): void {
-    if (this.scene.input.keyboard) {
-      this.keys = this.scene.input.keyboard.addKeys(
-        {
-          up: Phaser.Input.Keyboard.KeyCodes.W,
-          run: Phaser.Input.Keyboard.KeyCodes.SHIFT,
-          down: Phaser.Input.Keyboard.KeyCodes.S,
-          left: Phaser.Input.Keyboard.KeyCodes.A,
-          right: Phaser.Input.Keyboard.KeyCodes.D,
-          interact: Phaser.Input.Keyboard.KeyCodes.SPACE,
-        },
-        false
-      ) as SW_PlayerKeys;
-
-      this.keys.run.on("down", this.startRunning, this);
-      this.keys.run.on("up", this.stopRunning, this);
-      this.keys.interact.on("down", this.interact, this);
-    }
   }
 
   protected initAnimations(texture: string): void {
@@ -176,29 +151,7 @@ export class SW_Player extends SW_Character {
       return;
     }
 
-    if (this.keys.up.isDown) {
-      if (this.keys.right.isDown) {
-        this.walkUpRight();
-      } else if (this.keys.left.isDown) {
-        this.walkUpLeft();
-      } else {
-        this.walkUp();
-      }
-    } else if (this.keys.down.isDown) {
-      if (this.keys.right.isDown) {
-        this.walkDownRight();
-      } else if (this.keys.left.isDown) {
-        this.walkDownLeft();
-      } else {
-        this.walkDown();
-      }
-    } else if (this.keys.right.isDown) {
-      this.walkOnRight();
-    } else if (this.keys.left.isDown) {
-      this.walkOnLeft();
-    } else {
-      this.stopWalking();
-    }
+    this.emit("update");
   }
 
   protected updateAnimations(): void {
@@ -213,7 +166,7 @@ export class SW_Player extends SW_Character {
     }
   }
 
-  protected interact(): void {
+  public interact(): void {
     if (!this.isControlLocked) {
       this.interactableComp.interact();
     }

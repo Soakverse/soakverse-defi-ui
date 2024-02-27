@@ -7,6 +7,8 @@ import {
 import { SW_CST } from "../SW_CST";
 
 export class SW_Character extends Phaser.Physics.Arcade.Sprite {
+  declare public scene: SW_BaseScene;
+
   /** Whether this character is walking */
   protected isWalking: boolean = false;
 
@@ -126,11 +128,11 @@ export class SW_Character extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  protected startRunning(): void {
+  public startRunning(): void {
     this.wantsToRun = true;
   }
 
-  protected stopRunning(): void {
+  public stopRunning(): void {
     this.wantsToRun = false;
   }
 }
