@@ -203,16 +203,11 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   private setupUI(): void {
-    this.UIScene.addUniqueListener(
-      "inventoryObjectClicked",
-      this.inventoryObjectClicked,
-      this
-    );
-    this.UIScene.addUniqueListener(
-      "menuVisibilityChanged",
-      this.onMenuVisibilityChanged,
-      this
-    );
+    this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked, this);
+    this.UIScene.addUniqueListener("menuVisibilityChanged", this.onMenuVisibilityChanged, this);
+    this.UIScene.addUniqueListener("playerRequestStartRunning", this.onPlayerRequestStartRunning, this);
+    this.UIScene.addUniqueListener("playerRequestStopRunning", this.onPlayerRequestStopRunning, this);
+    this.UIScene.addUniqueListener("playerRequestInteract", this.onPlayerRequestInteract, this);
   }
 
   // Update
@@ -303,5 +298,17 @@ export default class SW_GameScene extends SW_BaseScene {
 
   public requestDialogue(dialogue: string): void {
     this.UIScene.requestDialogue(dialogue);
+  }
+
+  protected onPlayerRequestStartRunning(): void {
+    this.player.startRunning();
+  }
+
+  protected onPlayerRequestStopRunning(): void {
+    this.player.stopRunning();
+  }
+
+  protected onPlayerRequestInteract(): void {
+    this.player.interact();
   }
 }

@@ -32,9 +32,15 @@ import menuBackground from "@/game/assets/ui/menus/menuBackground.png";
 import menuButtonNormal from "@/game/assets/ui/menus/menuButtonNormal.png";
 import menuButtonPressed from "@/game/assets/ui/menus/menuButtonPressed.png";
 
+// Mobile
+import runButtonMobile from "@/game/assets/ui/mobile/runButton.png";
+import interactButtonMobile from "@/game/assets/ui/mobile/interactButton.png";
+
 export default class SW_BootScene extends SW_BaseScene {
   constructor() {
     super({ key: SW_CST.SCENES.BOOT });
+
+    SW_CST.GAME.IS_MOBILE = !this.sys.game.device.os.desktop;
   }
 
   // Preload
@@ -42,6 +48,10 @@ export default class SW_BootScene extends SW_BaseScene {
 
   public preload(): void {
     this.preloadMenuAssets();
+
+    if (SW_CST.GAME.IS_MOBILE) {
+      this.preloadMobileAssets();
+    }
 
     this.load.audio("thud", [thudMp3, thudOgg]);
 
@@ -74,6 +84,11 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image("menuBackground", menuBackground);
     this.load.image("menuButtonNormal", menuButtonNormal);
     this.load.image("menuButtonPressed", menuButtonPressed);
+  }
+
+  private preloadMobileAssets(): void {
+    this.load.image("runButtonMobile", runButtonMobile);
+    this.load.image("interactButtonMobile", interactButtonMobile);
   }
 
   // Create

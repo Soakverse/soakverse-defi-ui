@@ -31,11 +31,11 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
         this.player = player;
         this.scene = player.scene;
 
-        if (this.scene.sys.game.device.os.desktop) {
-            this.createDesktopInputs();
+        if (SW_CST.GAME.IS_MOBILE) {
+            this.createJoystickInput();
         }
         else {
-            this.createJoystickInput();
+            this.createDesktopInputs();
         }
     }
 
