@@ -34,6 +34,7 @@ import menuButtonPressed from "@/game/assets/ui/menus/menuButtonPressed.png";
 
 // Mobile
 import runButtonMobile from "@/game/assets/ui/mobile/runButton.png";
+import walkButtonMobile from "@/game/assets/ui/mobile/walkButton.png";
 import interactButtonMobile from "@/game/assets/ui/mobile/interactButton.png";
 
 export default class SW_BootScene extends SW_BaseScene {
@@ -88,6 +89,7 @@ export default class SW_BootScene extends SW_BaseScene {
 
   private preloadMobileAssets(): void {
     this.load.image("runButtonMobile", runButtonMobile);
+    this.load.image("walkButtonMobile", walkButtonMobile);
     this.load.image("interactButtonMobile", interactButtonMobile);
   }
 

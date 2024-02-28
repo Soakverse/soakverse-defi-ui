@@ -88,6 +88,8 @@ export default class SW_GameScene extends SW_BaseScene {
       runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED,
     } as SW_SpawnData);
 
+    this.player.on("runStateChanged", this.onPlayerRunStateChanged, this);
+
     this.mapManager = new SW_MapManager(
       this.player,
       this.worldName,
@@ -205,8 +207,7 @@ export default class SW_GameScene extends SW_BaseScene {
   private setupUI(): void {
     this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked, this);
     this.UIScene.addUniqueListener("menuVisibilityChanged", this.onMenuVisibilityChanged, this);
-    this.UIScene.addUniqueListener("playerRequestStartRunning", this.onPlayerRequestStartRunning, this);
-    this.UIScene.addUniqueListener("playerRequestStopRunning", this.onPlayerRequestStopRunning, this);
+    this.UIScene.addUniqueListener("playerRequestToggleRunState", this.onPlayerRequestToggleRunState, this);
     this.UIScene.addUniqueListener("playerRequestInteract", this.onPlayerRequestInteract, this);
   }
 
@@ -300,12 +301,12 @@ export default class SW_GameScene extends SW_BaseScene {
     this.UIScene.requestDialogue(dialogue);
   }
 
-  protected onPlayerRequestStartRunning(): void {
-    this.player.startRunning();
+  protected onPlayerRequestToggleRunState(): void {
+    this.player.toggleRunState();
   }
 
-  protected onPlayerRequestStopRunning(): void {
-    this.player.stopRunning();
+  protected onPlayerRunStateChanged(isPlayerRunning: boolean): void {
+    this.UIScene.onPlayerRunStateChanged(isPlayerRunning);
   }
 
   protected onPlayerRequestInteract(): void {

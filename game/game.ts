@@ -22,6 +22,9 @@ function launch(containerId: string) {
         debug: SW_CST.DEBUG.PHYSIC,
       },
     },
+    input: {
+      activePointers: 3
+    },
     scene: [SW_BootScene],
     plugins: {
       scene: [{ key: "rexUI", plugin: UIPlugin, mapping: "rexUI" }],

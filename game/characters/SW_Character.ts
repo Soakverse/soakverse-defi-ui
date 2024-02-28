@@ -13,7 +13,7 @@ export class SW_Character extends Phaser.Physics.Arcade.Sprite {
   protected isWalking: boolean = false;
 
   /** Whether this character wants to run */
-  public wantsToRun: boolean = false;
+  protected _wantsToRun: boolean = false;
 
   /** The component that handle the movements of this character */
   protected characterMovementComponent: SW_CharacterMovementComponent;
@@ -128,11 +128,23 @@ export class SW_Character extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  public wantsToRun(): boolean {
+    return this._wantsToRun;
+  }
+
+  protected setRunState(value: boolean): void {
+    this._wantsToRun = value;
+  }
+
   public startRunning(): void {
-    this.wantsToRun = true;
+    this.setRunState(true);
   }
 
   public stopRunning(): void {
-    this.wantsToRun = false;
+    this.setRunState(false);
+  }
+
+  public toggleRunState(): void {
+    this.setRunState(!this.wantsToRun());
   }
 }

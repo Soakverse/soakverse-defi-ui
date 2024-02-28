@@ -14,7 +14,7 @@ export class SW_PlayerActionsContainer extends Phaser.GameObjects.Container {
         this.width = SW_CST.GAME.WIDTH;
         this.height = SW_CST.GAME.HEIGHT;
 
-        this.runButton = this.scene.add.image(this.width * 0.5 - 24, this.height * 0.5 - 24, "runButtonMobile").setOrigin(1, 1);
+        this.runButton = this.scene.add.image(this.width * 0.5 - 24, this.height * 0.5 - 24, "walkButtonMobile").setOrigin(1, 1);
         this.runButton.setInteractive();
         this.runButton.on(Phaser.Input.Events.POINTER_DOWN, this.onRunButtonPressed, this);
         this.runButton.on(Phaser.Input.Events.POINTER_UP, this.onRunButtonReleased, this);
@@ -36,5 +36,9 @@ export class SW_PlayerActionsContainer extends Phaser.GameObjects.Container {
 
     private onInteractButtonPressed(): void {
         this.emit("interactButtonPressed");
+    }
+
+    public onPlayerRunStateChanged(isPlayerRunning: boolean): void {
+        this.runButton.setTexture(isPlayerRunning ? "runButtonMobile": "walkButtonMobile")
     }
 }

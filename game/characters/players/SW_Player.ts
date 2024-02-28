@@ -156,7 +156,7 @@ export class SW_Player extends SW_Character {
 
   protected updateAnimations(): void {
     if (this.isWalking) {
-      if (this.wantsToRun) {
+      if (this.wantsToRun()) {
         this.anims.play(`Run${this.currentDirection}`, true);
       } else {
         this.anims.play(`Walk${this.currentDirection}`, true);
@@ -170,5 +170,10 @@ export class SW_Player extends SW_Character {
     if (!this.isControlLocked) {
       this.interactableComp.interact();
     }
+  }
+
+  protected setRunState(value: boolean): void {
+    super.setRunState(value);
+    this.emit("runStateChanged", value);
   }
 }

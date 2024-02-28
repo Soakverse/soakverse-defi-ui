@@ -31,7 +31,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     declare private wizhMenu: SW_WizhMenu;
 
-    declare private playerActionsContainer: SW_PlayerActionsContainer;
+    declare private playerActionsContainer: SW_PlayerActionsContainer | undefined;
 
     constructor() {
       super({ key: SW_CST.SCENES.GAME_UI });
@@ -270,13 +270,16 @@ export default class SW_GameUIScene extends SW_BaseScene {
         this.playerActionsContainer = new SW_PlayerActionsContainer(this, SW_CST.GAME.WIDTH * 0.5, SW_CST.GAME.HEIGHT * 0.5);
 
         this.playerActionsContainer.on("runButtonPressed", () => {
-            this.events.emit("playerRequestStartRunning");
-        }, this);
-        this.playerActionsContainer.on("runButtonReleased", () => {
-            this.events.emit("playerRequestStopRunning");
+            this.events.emit("playerRequestToggleRunState");
         }, this);
         this.playerActionsContainer.on("interactButtonPressed", () => {
             this.events.emit("playerRequestInteract");
         }, this);
+    }
+
+    public onPlayerRunStateChanged(isPlayerRunning: boolean): void {
+        if (this.playerActionsContainer) {
+            this.playerActionsContainer.onPlayerRunStateChanged(isPlayerRunning);
+        }
     }
 };
