@@ -15,6 +15,7 @@ export class SW_DialogTextBox extends TextBox {
         const background = scene.rexUI.add.roundRectangle(0, 0, config.width - (config.space.left as number) - (config.space.right as number), config.height - (config.space.top as number) - (config.space.bottom as number), 3, SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.BLACK), 0.7);
         background.strokeColor = SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.BLACK);
         background.lineWidth = 0;
+        background.setInteractive();
 
         config.background = background;
         // config.separator = scene.rexUI.add.roundRectangle(0, 0, 10, 1, 0, SW_Utils.hexColorToNumber(CST.STYLE.COLOR.BLUE));
@@ -28,6 +29,9 @@ export class SW_DialogTextBox extends TextBox {
         
         super(scene, config);
         scene.add.existing(this);
+
+        background.on(Phaser.Input.Events.POINTER_DOWN, this.onPointerDown, this);
+        background.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
 
         this.setOrigin(0.5, 0.5);
         this.layout();
@@ -48,5 +52,13 @@ export class SW_DialogTextBox extends TextBox {
 
     public closeDialogue(): void {
         this.stop();
+    }
+
+    protected onPointerDown(pointer: Phaser.Input.Pointer, currentlyOver: Phaser.GameObjects.GameObject[]): void {
+        this.emit(Phaser.Input.Events.POINTER_DOWN, pointer, currentlyOver);
+    }
+
+    protected onPointerUp(pointer: Phaser.Input.Pointer, currentlyOver: Phaser.GameObjects.GameObject[]): void {
+        this.emit(Phaser.Input.Events.POINTER_UP, pointer, currentlyOver);
     }
 }

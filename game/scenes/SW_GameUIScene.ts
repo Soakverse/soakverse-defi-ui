@@ -254,6 +254,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
             page: { maxLines: 3, pageBreak: "\n" }
         });
 
+        this.dialogTextBox.on(Phaser.Input.Events.POINTER_DOWN, this.onNextPageButtonDown, this);
+
         this.dialogTextBox.setOrigin(0.5, 1);
         this.dialogTextBox.layout();
     }
