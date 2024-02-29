@@ -1,9 +1,12 @@
-import Phaser from "phaser";
-import SW_BaseScene from "~/game/scenes/SW_BaseScene";
-import { SW_Character } from "~/game/characters/SW_Character";
-import { SW_DIRECTIONS, SW_DIRECTIONS_NO_DIAGONALE} from "~/game/characters/SW_CharacterMovementComponent";
-import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
-import { SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
+import Phaser from 'phaser';
+import SW_BaseScene from '~/game/scenes/SW_BaseScene';
+import { SW_Character } from '~/game/characters/SW_Character';
+import {
+  SW_DIRECTIONS,
+  SW_DIRECTIONS_NO_DIAGONALE,
+} from '~/game/characters/SW_CharacterMovementComponent';
+import { SW_SpawnData } from '~/game/characters/SW_CharacterSpawner';
+import { SW_InteractionComponent } from '~/game/characters/players/SW_InteractionComponent';
 
 declare type SW_PlayerKeys = {
   up: Phaser.Input.Keyboard.Key;
@@ -12,6 +15,7 @@ declare type SW_PlayerKeys = {
   right: Phaser.Input.Keyboard.Key;
   run: Phaser.Input.Keyboard.Key;
   interact: Phaser.Input.Keyboard.Key;
+  fullscreen: Phaser.Input.Keyboard.Key;
 };
 
 export class SW_Player extends SW_Character {
@@ -41,7 +45,7 @@ export class SW_Player extends SW_Character {
     this.initAnimations(
       spawnData.characterTexture.length > 0
         ? spawnData.characterTexture
-        : "player"
+        : 'player'
     );
     this.setDirection(spawnData.startDirection);
 
@@ -90,13 +94,15 @@ export class SW_Player extends SW_Character {
           left: Phaser.Input.Keyboard.KeyCodes.A,
           right: Phaser.Input.Keyboard.KeyCodes.D,
           interact: Phaser.Input.Keyboard.KeyCodes.SPACE,
+          fullscreen: Phaser.Input.Keyboard.KeyCodes.Y,
         },
         false
       ) as SW_PlayerKeys;
 
-      this.keys.run.on("down", this.startRunning, this);
-      this.keys.run.on("up", this.stopRunning, this);
-      this.keys.interact.on("down", this.interact, this);
+      this.keys.run.on('down', this.startRunning, this);
+      this.keys.run.on('up', this.stopRunning, this);
+      this.keys.interact.on('down', this.interact, this);
+      this.keys.fullscreen.on('down', this.toggleFullScreen, this);
     }
   }
 
@@ -216,6 +222,14 @@ export class SW_Player extends SW_Character {
   protected interact(): void {
     if (!this.isControlLocked) {
       this.interactableComp.interact();
+    }
+  }
+
+  protected toggleFullScreen(): void {
+    if (this.scene.scale.isFullscreen) {
+      this.scene.scale.stopFullscreen();
+    } else {
+      this.scene.scale.startFullscreen();
     }
   }
 }
