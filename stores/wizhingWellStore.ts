@@ -1,10 +1,10 @@
-import { defineStore } from "pinia";
-import { showLoader, hideLoader } from "~~/utils/helpers";
+import { defineStore } from 'pinia';
+import { showLoader, hideLoader } from '~~/utils/helpers';
 
 export const useWizhingWellStore = defineStore({
-  id: "WizhingWellStore",
+  id: 'WizhingWellStore',
   state: () => ({
-    name: "test",
+    name: 'test',
   }),
   actions: {
     async triggerAction1() {
@@ -15,18 +15,19 @@ export const useWizhingWellStore = defineStore({
       return this.name;
     },
     triggerAction2() {
-      useNuxtApp().$swal.fire({
-        title: "Success",
-        text: "Minting successful",
-        icon: "success",
+      const nuxtApp = useNuxtApp();
+      nuxtApp.$swal.fire({
+        title: 'Success',
+        text: 'Minting successful',
+        icon: 'success',
         buttonsStyling: false,
         customClass: {
-          confirmButton: "btn btn-success btn-fill",
+          confirmButton: 'btn btn-success btn-fill',
         },
       });
     },
     triggerAction3() {
-      console.log("ACTION 3");
+      console.log('ACTION 3');
     },
     triggerAction4(newName: string) {
       this.name = newName;
