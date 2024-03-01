@@ -39,10 +39,10 @@
 </template>
 
 <script setup>
-import OpenSea from "~~/components/Soakverse/Utils/OpenSea.vue";
-import { showLoader, hideLoader } from "~~/utils/helpers";
+import OpenSea from '~~/components/Soakverse/Utils/OpenSea.vue';
+import { showLoader, hideLoader } from '~~/utils/helpers';
 
-const { currentAccount } = useWeb3WalletState();
+const { currentAccount, currentChain } = await useWeb3WalletState();
 
 const config = useRuntimeConfig();
 

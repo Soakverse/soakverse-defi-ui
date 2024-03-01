@@ -4,7 +4,7 @@ import { SW_CST } from './SW_CST';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
 
-function launch(containerId: string, width: integer, height: integer) {
+function launch(containerId: string) {
   return new Phaser.Game({
     type: Phaser.AUTO,
     mode: Phaser.Scale.FIT,

@@ -88,21 +88,21 @@
 import {
   eggzSmartContract,
   soakverseOGsSmartContract,
-} from "~~/utils/contracts";
+} from '~~/utils/contracts';
 import {
   showLoader,
   hideLoader,
   filterArrayOfObjects,
   formatDaysSinceDate,
-} from "~~/utils/helpers";
+} from '~~/utils/helpers';
 import {
   prepareWriteContract,
   writeContract,
   waitForTransaction,
-} from "@wagmi/core";
-import { formatEther } from "viem";
+} from '@wagmi/core';
+import { formatEther } from 'viem';
 
-const { currentChain, currentAccount } = useWeb3WalletState();
+const { currentChain, currentAccount } = await useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
@@ -155,7 +155,7 @@ watch(currentChain, () => {
 });
 
 async function getEcosystemBalance() {
-  if (process.client && currentAccount.value && currentChain.value == "1") {
+  if (process.client && currentAccount.value && currentChain.value == '1') {
     showLoader();
     state.canStake = true;
     state.ownedStaches = [];
@@ -191,7 +191,7 @@ async function getEcosystemBalance() {
     const url = `${baseURL}/getNFTs/?owner=${currentAccount.value}&contractAddresses[]=${soakverseOGsSmartContract.address}`;
 
     const staches = await $fetch(url);
-    const nftList = staches["ownedNfts"];
+    const nftList = staches['ownedNfts'];
 
     let highestOwnedStache = null;
     for (let nft of nftList) {
@@ -222,12 +222,12 @@ async function stakeNft(tokenId) {
   const singleOwnedEggz = filterArrayOfObjects(state.ownedEggz, tokenId);
   if (!singleOwnedEggz) {
     $swal.fire({
-      title: "Error",
+      title: 'Error',
       text: "You don't own that Eggz",
-      icon: "error",
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
     return;
@@ -238,7 +238,7 @@ async function stakeNft(tokenId) {
       const { request } = await prepareWriteContract({
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
-        functionName: "stake",
+        functionName: 'stake',
         args: [tokenId],
       });
 
@@ -249,19 +249,19 @@ async function stakeNft(tokenId) {
         hash,
       });
 
-      if (data.status == "success") {
+      if (data.status == 'success') {
         state.stakedEggz.push(tokenId);
         state.unstakedEggz = state.unstakedEggz.filter(
           (item) => item !== tokenId
         );
         hideLoader();
         $swal.fire({
-          title: "Success",
-          text: "Staking successful",
-          icon: "success",
+          title: 'Success',
+          text: 'Staking successful',
+          icon: 'success',
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
+            confirmButton: 'btn btn-success btn-fill',
           },
         });
       }
@@ -269,12 +269,12 @@ async function stakeNft(tokenId) {
   } catch (error) {
     hideLoader();
     $swal.fire({
-      title: "Error",
-      text: error.message.split("\n")[0],
-      icon: "error",
+      title: 'Error',
+      text: error.message.split('\n')[0],
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
   }
@@ -284,12 +284,12 @@ async function unstakeNft(tokenId) {
   const singleOwnedEggz = filterArrayOfObjects(state.ownedEggz, tokenId);
   if (!singleOwnedEggz) {
     $swal.fire({
-      title: "Error",
+      title: 'Error',
       text: "You don't own that Eggz",
-      icon: "error",
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
     return;
@@ -300,7 +300,7 @@ async function unstakeNft(tokenId) {
       const { request } = await prepareWriteContract({
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
-        functionName: "unstake",
+        functionName: 'unstake',
         args: [tokenId],
       });
 
@@ -311,17 +311,17 @@ async function unstakeNft(tokenId) {
         hash,
       });
 
-      if (data.status == "success") {
+      if (data.status == 'success') {
         state.unstakedEggz.push(tokenId);
         state.stakedEggz = state.stakedEggz.filter((item) => item !== tokenId);
         hideLoader();
         $swal.fire({
-          title: "Success",
-          text: "Unstaking successful",
-          icon: "success",
+          title: 'Success',
+          text: 'Unstaking successful',
+          icon: 'success',
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
+            confirmButton: 'btn btn-success btn-fill',
           },
         });
       }
@@ -329,12 +329,12 @@ async function unstakeNft(tokenId) {
   } catch (error) {
     hideLoader();
     $swal.fire({
-      title: "Error",
-      text: error.message.split("\n")[0],
-      icon: "error",
+      title: 'Error',
+      text: error.message.split('\n')[0],
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
   }
@@ -344,12 +344,12 @@ async function stakeAllNfts() {
   const currentlyUnstakedEggz = state.unstakedEggz;
   if (!(currentlyUnstakedEggz.length > 0)) {
     $swal.fire({
-      title: "Error",
+      title: 'Error',
       text: "You don't have Eggz to stake",
-      icon: "error",
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
     return;
@@ -360,7 +360,7 @@ async function stakeAllNfts() {
       const { request } = await prepareWriteContract({
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
-        functionName: "setTokensStakeStatus",
+        functionName: 'setTokensStakeStatus',
         args: [state.unstakedEggz, true],
       });
 
@@ -371,17 +371,17 @@ async function stakeAllNfts() {
         hash,
       });
 
-      if (data.status == "success") {
+      if (data.status == 'success') {
         state.stakedEggz = state.stakedEggz.concat(currentlyUnstakedEggz);
         state.unstakedEggz = [];
         hideLoader();
         $swal.fire({
-          title: "Success",
-          text: "Staking successful",
-          icon: "success",
+          title: 'Success',
+          text: 'Staking successful',
+          icon: 'success',
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
+            confirmButton: 'btn btn-success btn-fill',
           },
         });
       }
@@ -389,12 +389,12 @@ async function stakeAllNfts() {
   } catch (error) {
     hideLoader();
     $swal.fire({
-      title: "Error",
-      text: error.message.split("\n")[0],
-      icon: "error",
+      title: 'Error',
+      text: error.message.split('\n')[0],
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
   }
@@ -404,12 +404,12 @@ async function unstakeAllNfts() {
   const currentlyStakedEggz = state.stakedEggz;
   if (!(currentlyStakedEggz.length > 0)) {
     $swal.fire({
-      title: "Error",
+      title: 'Error',
       text: "You don't have Eggz to stake",
-      icon: "error",
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
     return;
@@ -420,7 +420,7 @@ async function unstakeAllNfts() {
       const { request } = await prepareWriteContract({
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
-        functionName: "setTokensStakeStatus",
+        functionName: 'setTokensStakeStatus',
         args: [state.stakedEggz, false],
       });
 
@@ -431,17 +431,17 @@ async function unstakeAllNfts() {
         hash,
       });
 
-      if (data.status == "success") {
+      if (data.status == 'success') {
         state.unstakedEggz = state.unstakedEggz.concat(currentlyStakedEggz);
         state.stakedEggz = [];
         hideLoader();
         $swal.fire({
-          title: "Success",
-          text: "Staking successful",
-          icon: "success",
+          title: 'Success',
+          text: 'Staking successful',
+          icon: 'success',
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
+            confirmButton: 'btn btn-success btn-fill',
           },
         });
       }
@@ -449,31 +449,31 @@ async function unstakeAllNfts() {
   } catch (error) {
     hideLoader();
     $swal.fire({
-      title: "Error",
-      text: error.message.split("\n")[0],
-      icon: "error",
+      title: 'Error',
+      text: error.message.split('\n')[0],
+      icon: 'error',
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
+        confirmButton: 'btn btn-danger btn-fill',
       },
     });
   }
 }
 
 function comingSoon(id) {
-  let text = "";
+  let text = '';
   if (id === 1) {
-    text = "Assigning your hero OG is coming soon!";
+    text = 'Assigning your hero OG is coming soon!';
   } else if (id === 2) {
-    text = "Assigning a Wizh Stone to an Eggz is coming soon!";
+    text = 'Assigning a Wizh Stone to an Eggz is coming soon!';
   }
   $swal.fire({
-    title: "Coming Soon!",
+    title: 'Coming Soon!',
     text: text,
-    icon: "warning",
+    icon: 'warning',
     buttonsStyling: false,
     customClass: {
-      confirmButton: "btn btn-danger btn-fill",
+      confirmButton: 'btn btn-danger btn-fill',
     },
   });
 }
