@@ -1,7 +1,7 @@
-import { SW_CST } from "~/game/SW_CST";
-import SW_BaseScene from "~/game/scenes/SW_BaseScene";
-import { SW_TextButton } from "~/game/UI/buttons/SW_TextButton";
-import { useWizhingWellStore } from "@/stores/wizhingWellStore";
+import { SW_CST } from '~/game/SW_CST';
+import SW_BaseScene from '~/game/scenes/SW_BaseScene';
+import { SW_TextButton } from '~/game/UI/buttons/SW_TextButton';
+import { useWizhingWellStore } from '@/stores/wizhingWellStore';
 
 const wizhingWellStore = useWizhingWellStore();
 
@@ -17,7 +17,7 @@ export class SW_WizhMenu extends Phaser.GameObjects.Container {
     this.scene.add.existing(this);
 
     this.background = this.scene.add
-      .image(0, 0, "menuBackground")
+      .image(0, 0, 'menuBackground')
       .setOrigin(0.5);
     this.add(this.background);
 
@@ -25,16 +25,16 @@ export class SW_WizhMenu extends Phaser.GameObjects.Container {
     this.height = this.background.height;
 
     this.header = this.scene.add
-      .image(0, -this.height * 0.5 + 8, "menuHeader")
+      .image(0, -this.height * 0.5 + 8, 'menuHeader')
       .setOrigin(0.5);
     this.add(this.header);
 
     this.headerText = this.scene.add
-      .text(this.header.x, this.header.y - 8, "Wizhes".toUpperCase(), {
+      .text(this.header.x, this.header.y - 8, 'Wizhes'.toUpperCase(), {
         color: SW_CST.STYLE.COLOR.WHITE,
         strokeThickness: 3,
         stroke: SW_CST.STYLE.COLOR.BLACK,
-        fontSize: "23px",
+        fontSize: '23px',
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
       })
       .setOrigin(0.5);
@@ -44,12 +44,12 @@ export class SW_WizhMenu extends Phaser.GameObjects.Container {
       .text(
         this.header.x,
         this.header.y + this.header.height * 0.5 + 20,
-        "You found the magic fountain",
+        'You found the magic fountain',
         {
           color: SW_CST.STYLE.COLOR.WHITE,
           strokeThickness: 3,
           stroke: SW_CST.STYLE.COLOR.BLACK,
-          fontSize: "21px",
+          fontSize: '21px',
           fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
         }
       )
@@ -60,7 +60,7 @@ export class SW_WizhMenu extends Phaser.GameObjects.Container {
       this.scene,
       makeAWizhText.x,
       makeAWizhText.y + makeAWizhText.height + 76,
-      "Make a Wizh",
+      'Make a Wizh',
       {}
     );
     this.add(makeAWizhButton);
@@ -69,16 +69,16 @@ export class SW_WizhMenu extends Phaser.GameObjects.Container {
     const self = this;
 
     wizhingWellStore.$onAction(function (element) {
-      if (element.name == "triggerAction1") {
+      if (element.name == 'triggerAction1') {
         console.log(element);
-        self.emit("wizhingWellResult", ["jackpot"]);
+        self.emit('wizhingWellResult', ['jackpot']);
       }
     }, true);
   }
 
   protected async onMakeAWizhButtonClicked(): Promise<void> {
-    this.emit("makeAWizhButtonClicked");
+    this.emit('makeAWizhButtonClicked');
     const name = await wizhingWellStore.triggerAction1();
-    console.log("PLAYER NAME:" + name);
+    console.log('PLAYER NAME:' + name);
   }
 }
