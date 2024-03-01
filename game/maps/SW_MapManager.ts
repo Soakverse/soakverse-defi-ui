@@ -8,10 +8,8 @@ import SW_GameScene from "~/game/scenes/SW_GameScene";
 import { SW_Player } from "~/game/characters/players/SW_Player";
 import SW_Entrance from "~/game/gameObjects/SW_Entrance";
 import { SW_TiledObjectProperties } from "~/game/SW_Utils";
-import {
-  SW_DIRECTIONS,
-  SW_DIRECTION,
-} from "~/game/characters/SW_CharacterMovementComponent";
+import { SW_DIRECTIONS, SW_DIRECTION } from "~/game/characters/SW_CharacterMovementComponent";
+import { SW_TileAnimationsManager } from "./SW_TileAnimationsManager";
 
 const depthBackground = 1;
 const depthPlayer = 2;
@@ -53,9 +51,11 @@ export declare type SW_SubMapData = {
 export class SW_MapManager extends Phaser.Events.EventEmitter {
   private scene: SW_GameScene;
 
+  declare private tileAnimationsManager: SW_TileAnimationsManager;
+
   private player: SW_Player;
 
-  /** All the submaps that are spawned and visible for the target. This map is dynamically updated with the target position changes*/
+  /** All the submaps that are fully spawned and visible for the target. This map is dynamically updated with the target position changes*/
   private spawnedSubMapDataMap: Map<string, SW_SubMapData>;
 
   /** All the submaps that are ready to be spawned but in the queue. Each update will spawn a part of the submpas until they are fully spawned.
@@ -112,6 +112,14 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     this.initWorld();
   }
 
+  public getScene(): SW_GameScene {
+    return this.scene;
+  }
+
+  public getWorldName(): string {
+    return this.worldName;
+  }
+
   public isInitialized(): boolean {
     return this._isInitialized;
   }
@@ -151,6 +159,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   private createWorld(): void {
     const isWorldValid = this.setupWorldMaps();
     if (isWorldValid) {
+      this.tileAnimationsManager = new SW_TileAnimationsManager(this);
       this.once("playerPositionInitialized", this.onPlayerPositionInitialized);
       this.initPlayerPosition(this.previousWorldName, this.spawnPositionName);
     }
@@ -406,6 +415,55 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     return `${subMapX}_${subMapY}`;
   }
 
+  private getTileLayerId(layerName: string, subMapX: number, subMapY: number): string {
+    return `${layerName}_${subMapX}_${subMapY}`;
+  }
+
+  public getVisibleMapLayersData(): { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[] {
+    const fnAddVisibleLayerstoArray = (subMapData: SW_SubMapData): { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[] => {
+      let layers = [] as { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[];
+
+      if (subMapData.layerGround) {
+        const layerGround = subMapData.layerGround;
+        layers.push({ layer: layerGround, layerId: this.getTileLayerId(layerGround.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthBackground })
+      }
+      
+      if (subMapData.layerBackground1) {
+        const layerBackground1 = subMapData.layerBackground1;
+        layers.push({ layer: layerBackground1, layerId: this.getTileLayerId(layerBackground1.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthBackground })
+      }
+      
+      if (subMapData.layerBackground2) {
+        const layerBackground2 = subMapData.layerBackground2;
+        layers.push({ layer: layerBackground2, layerId: this.getTileLayerId(layerBackground2.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthBackground })
+      }
+      
+      if (subMapData.layerForeground1) {
+        const layerForeground1 = subMapData.layerForeground1;
+        layers.push({ layer: layerForeground1, layerId: this.getTileLayerId(layerForeground1.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthForeground })
+      }
+      
+      if (subMapData.layerForeground2) {
+        const layerForeground2 = subMapData.layerForeground2;
+        layers.push({ layer: layerForeground2, layerId: this.getTileLayerId(layerForeground2.layer.name, subMapData.subMapX, subMapData.subMapY), layerDepth: depthForeground })
+      }
+
+      return layers;
+    };
+
+    let layers = [] as { layer: Phaser.Tilemaps.TilemapLayer, layerId: string, layerDepth: number }[];
+
+    this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
+      layers = layers.concat(fnAddVisibleLayerstoArray(subMapData));
+    }, this);
+
+    this.spawnSubMapQueue.forEach((subMapData: SW_SubMapData) => {
+      layers = layers.concat(fnAddVisibleLayerstoArray(subMapData));
+    }, this);
+
+    return layers;
+  }
+
   private trySpawnSubMap(
     subMapX: number,
     subMapY: number,
@@ -596,6 +654,10 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
       offsetY
     ) as Phaser.Tilemaps.TilemapLayer;
     layer.setDepth(layerDepth);
+
+    const layerId = this.getTileLayerId(layer.layer.name, subMapData.subMapX, subMapData.subMapY);
+    this.emit("layerSpawned", layer, layerId, layerDepth);
+
     return layer;
   }
 
@@ -702,11 +764,30 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
     const subMapName = this.getSubMapName(subMapX, subMapY);
     if (subMapName) {
-      const tilemapData = this.scene.cache.tilemap.get(subMapName);
-      const tilesets = tilemapData ? tilemapData.tilesets : undefined;
+      const tilemap = this.scene.cache.tilemap.get(subMapName);
+      const tilemapData = tilemap ? tilemap.data : undefined;
 
-      if (tilesets && tilesets.length() > 0) {
-        this.scene.textures.remove(tilemapData.tilesets[0].name);
+      if (tilemapData) {
+        const tilesets = tilemapData.tilesets as Phaser.Tilemaps.Tileset[];
+
+        if (tilesets) {
+          for (const tileset of tilesets) {
+            // TODO: We can't remove the texture images right away because they could be used by another submap
+            // Either store the tileset image name and check if it used somewhere else before removing it
+            // or simply keep track of the images and only remove them when we leave the world. 
+            // The later solution might be a good  one if we assume that all/most of the maps use the same tileset images
+            // this.scene.textures.remove(tileset.name);
+          }
+        }
+
+        const layers = tilemapData.layers as {name: string}[];
+        if (layers) {
+          let layerIds = [] as string[];
+          for (const layer of layers) {
+            layerIds.push(this.getTileLayerId(layer.name, subMapX, subMapY));
+          }
+          this.emit("layerCleared", layerIds);
+        }
       }
       this.scene.cache.tilemap.remove(subMapName);
     }
@@ -837,7 +918,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   }
 
   public clear(): void {
-    this.removeAllListeners();
     this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
 
     this.spawnSubMapQueue = [];
@@ -848,6 +928,9 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     }, this);
     this.spawnedSubMapDataMap.clear();
     this.subMapNamesMap.clear();
+
+    this.emit("cleared");
+    this.removeAllListeners();
   }
 
   private createEntrances(

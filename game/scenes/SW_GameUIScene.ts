@@ -7,6 +7,7 @@ import { SW_DialogQuest } from "../dialogues/SW_DialogQuest";
 import { SW_WizhMenu } from "../UI/Menus/WizhMenu/SW_WizhMenu";
 import { SW_MenuManager } from "../UI/Menus/SW_MenuManager";
 import { SW_DialogTextBox } from "../dialogues/SW_DialogTextBox";
+import { SW_PlayerActionsContainer } from "../UI/mobile/SW_PlayerActionsContainer";
 
 declare type SW_UIKeys = {
     escape: Phaser.Input.Keyboard.Key;
@@ -30,6 +31,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     declare private wizhMenu: SW_WizhMenu;
 
+    declare private playerActionsContainer: SW_PlayerActionsContainer | undefined;
+
     constructor() {
       super({ key: SW_CST.SCENES.GAME_UI });
     }
@@ -43,6 +46,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
         this.createKeys();
         this.createDialogQuest();
+
+        if (SW_CST.GAME.IS_MOBILE) {
+            this.createMobileWidgets();
+        }
 
         this.playerInventoryWidget = new SW_PlayerInventoryWidget(this, this.scale.displaySize.width * 0.25, 240);
         this.playerInventoryWidget.on("moveObject", this.onMovePlayerInventoryMoveObject, this);
@@ -247,6 +254,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
             page: { maxLines: 3, pageBreak: "\n" }
         });
 
+        this.dialogTextBox.on(Phaser.Input.Events.POINTER_DOWN, this.onNextPageButtonDown, this);
+
         this.dialogTextBox.setOrigin(0.5, 1);
         this.dialogTextBox.layout();
     }
@@ -255,5 +264,22 @@ export default class SW_GameUIScene extends SW_BaseScene {
         // this.dialogQuest.start();
         this.menuManager.showMenu(this.dialogTextBox);
         this.dialogTextBox.showMessage(dialogue);
+    }
+
+    protected createMobileWidgets(): void {
+        this.playerActionsContainer = new SW_PlayerActionsContainer(this, SW_CST.GAME.WIDTH * 0.5, SW_CST.GAME.HEIGHT * 0.5);
+
+        this.playerActionsContainer.on("runButtonPressed", () => {
+            this.events.emit("playerRequestToggleRunState");
+        }, this);
+        this.playerActionsContainer.on("interactButtonPressed", () => {
+            this.events.emit("playerRequestInteract");
+        }, this);
+    }
+
+    public onPlayerRunStateChanged(isPlayerRunning: boolean): void {
+        if (this.playerActionsContainer) {
+            this.playerActionsContainer.onPlayerRunStateChanged(isPlayerRunning);
+        }
     }
 };

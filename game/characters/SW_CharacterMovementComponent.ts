@@ -56,63 +56,63 @@ export class SW_CharacterMovementComponent {
 
     /** Move the character to the top */
     public walkUp(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(0, -speed);
         this.owner.setDirection(SW_DIRECTIONS.Up);
     }
 
     /** Move the character to the bottom */
     public walkDown(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(0, speed);
         this.owner.setDirection(SW_DIRECTIONS.Down);
     }
 
     /** Move the character to the left */
     public walkOnLeft(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(-speed, 0);
         this.owner.setDirection(SW_DIRECTIONS.Left);
     }
 
     /** Move the character to the right */
     public walkOnRight(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(speed, 0);
         this.owner.setDirection(SW_DIRECTIONS.Right);
     }
 
     /** Move the character to the top left */
     public walkUpLeft(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(-speed, -speed);
         this.owner.setDirection(SW_DIRECTIONS.UpLeft);
     }
 
     /** Move the character to the top right */
     public walkUpRight(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(speed, -speed);
         this.owner.setDirection(SW_DIRECTIONS.UpRight);
     }
 
      /** Move the character to the bottom left */
     public walkDownLeft(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(-speed, speed);
         this.owner.setDirection(SW_DIRECTIONS.DownLeft);
     }
 
     /** Move the character to the bottom right */
     public walkDownRight(): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.walk(speed, speed);
         this.owner.setDirection(SW_DIRECTIONS.DownRight);
     }
 
     /** Move the character giving a XY-velocity */
     public walk(x: number, y: number): void {
-        const speed = this.owner.wantsToRun ? this.runSpeed : this.walkSpeed;
+        const speed = this.owner.wantsToRun() ? this.runSpeed : this.walkSpeed;
         this.owner.setVelocity(x,y);
         this.ownerBody.velocity.normalize().scale(speed);
     }
@@ -123,10 +123,10 @@ export class SW_CharacterMovementComponent {
     }
 
     protected startRunning(): void {
-        this.owner.wantsToRun = true;
+        this.owner.startRunning();
     }
 
     protected stopRunning(): void {
-        this.owner.wantsToRun = false;
+        this.owner.stopRunning();
     }
 }

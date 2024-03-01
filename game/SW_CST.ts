@@ -9,6 +9,7 @@ export const SW_CST = {
     WIDTH: 800,
     HEIGHT: 500,
     ZOOM: 1,
+    IS_MOBILE: false,
     PLAYER: {
       WALK_SPEED: 130,
       RUN_SPEED: 400,

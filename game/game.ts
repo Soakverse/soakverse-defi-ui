@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
-import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import SW_BootScene from '~/game/scenes/SW_BootScene';
 import { SW_CST } from './SW_CST';
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
 
 function launch(containerId: string, width: integer, height: integer) {
   return new Phaser.Game({
@@ -23,9 +24,19 @@ function launch(containerId: string, width: integer, height: integer) {
         debug: SW_CST.DEBUG.PHYSIC,
       },
     },
+    input: {
+      activePointers: 3,
+    },
     scene: [SW_BootScene],
     plugins: {
       scene: [{ key: 'rexUI', plugin: UIPlugin, mapping: 'rexUI' }],
+      global: [
+        {
+          key: 'rexVirtualJoystick',
+          plugin: VirtualJoystickPlugin,
+          start: true,
+        },
+      ],
     },
   });
 }
