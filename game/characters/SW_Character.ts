@@ -1,13 +1,13 @@
-import SW_BaseScene from "~/game/scenes/SW_BaseScene";
+import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 import {
   SW_CharacterMovementComponent,
   SW_DIRECTION,
   SW_DIRECTIONS,
-} from "./SW_CharacterMovementComponent";
-import { SW_CST } from "../SW_CST";
+} from './SW_CharacterMovementComponent';
+import { SW_CST } from '../SW_CST';
 
 export class SW_Character extends Phaser.Physics.Arcade.Sprite {
-  declare public scene: SW_BaseScene;
+  public declare scene: SW_BaseScene;
 
   /** Whether this character is walking */
   protected isWalking: boolean = false;
@@ -22,7 +22,7 @@ export class SW_Character extends Phaser.Physics.Arcade.Sprite {
   protected currentDirection: SW_DIRECTION = SW_DIRECTIONS.Down;
 
   constructor(scene: SW_BaseScene, x: number, y: number) {
-    super(scene, x, y, "__MISSING");
+    super(scene, x, y, '__MISSING');
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
