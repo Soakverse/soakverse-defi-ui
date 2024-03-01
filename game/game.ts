@@ -1,34 +1,42 @@
-import Phaser from "phaser";
-import SW_BootScene from "~/game/scenes/SW_BootScene";
-import { SW_CST } from "./SW_CST";
-import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
+import Phaser from 'phaser';
+import SW_BootScene from '~/game/scenes/SW_BootScene';
+import { SW_CST } from './SW_CST';
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
 
-function launch(containerId: string) {
+function launch(containerId: string, width: integer, height: integer) {
   return new Phaser.Game({
     type: Phaser.AUTO,
+    mode: Phaser.Scale.FIT,
     scale: {
       mode: Phaser.Scale.FIT,
-      parent: "phaser-game-holder",
-      //autoCenter: Phaser.Scale.CENTER_BOTH,
+      parent: containerId,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
       width: SW_CST.GAME.WIDTH,
       height: SW_CST.GAME.HEIGHT,
     },
     parent: containerId,
+    fullscreenTarget: containerId,
     physics: {
-      default: "arcade",
+      default: 'arcade',
       arcade: {
         gravity: { y: 300 },
         debug: SW_CST.DEBUG.PHYSIC,
       },
     },
     input: {
-      activePointers: 3
+      activePointers: 3,
     },
     scene: [SW_BootScene],
     plugins: {
-      scene: [{ key: "rexUI", plugin: UIPlugin, mapping: "rexUI" }],
-      global: [{ key: 'rexVirtualJoystick', plugin: VirtualJoystickPlugin, start: true}]
+      scene: [{ key: 'rexUI', plugin: UIPlugin, mapping: 'rexUI' }],
+      global: [
+        {
+          key: 'rexVirtualJoystick',
+          plugin: VirtualJoystickPlugin,
+          start: true,
+        },
+      ],
     },
   });
 }

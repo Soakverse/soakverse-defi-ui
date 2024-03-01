@@ -1,23 +1,23 @@
-import { SW_CST } from "~/game/SW_CST";
-import SW_BaseScene from "~/game/scenes/SW_BaseScene";
-import SW_GameUIScene from "~/game/scenes/SW_GameUIScene";
+import { SW_CST } from '~/game/SW_CST';
+import SW_BaseScene from '~/game/scenes/SW_BaseScene';
+import SW_GameUIScene from '~/game/scenes/SW_GameUIScene';
 
-import { usePlayerStore } from "@/stores/game/player";
-import { SW_InventoryObject } from "~/game/inventory/SW_Inventory";
-import { SW_Player } from "~/game/characters/players/SW_Player";
-import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
+import { usePlayerStore } from '@/stores/game/player';
+import { SW_InventoryObject } from '~/game/inventory/SW_Inventory';
+import { SW_Player } from '~/game/characters/players/SW_Player';
+import { SW_SpawnData } from '~/game/characters/SW_CharacterSpawner';
 import {
   FocusType,
   SW_InteractionComponent,
-} from "~/game/characters/players/SW_InteractionComponent";
+} from '~/game/characters/players/SW_InteractionComponent';
 
-import SW_Entrance from "~/game/gameObjects/SW_Entrance";
-import SW_PlayerComputer from "~/game/gameObjects/SW_PlayerComputer";
-import SW_Incubator from "~/game/gameObjects/SW_Incubator";
-import SW_DialogueEntity from "~/game/gameObjects/SW_DialogueEntity";
-import { SW_SubMapData, SW_MapManager } from "~/game/maps/SW_MapManager";
-import { SW_DIRECTIONS } from "../characters/SW_CharacterMovementComponent";
-import SW_WizhWell from "../gameObjects/SW_WizhWell";
+import SW_Entrance from '~/game/gameObjects/SW_Entrance';
+import SW_PlayerComputer from '~/game/gameObjects/SW_PlayerComputer';
+import SW_Incubator from '~/game/gameObjects/SW_Incubator';
+import SW_DialogueEntity from '~/game/gameObjects/SW_DialogueEntity';
+import { SW_SubMapData, SW_MapManager } from '~/game/maps/SW_MapManager';
+import { SW_DIRECTIONS } from '../characters/SW_CharacterMovementComponent';
+import SW_WizhWell from '../gameObjects/SW_WizhWell';
 
 const playerStore = usePlayerStore();
 
@@ -81,14 +81,14 @@ export default class SW_GameScene extends SW_BaseScene {
 
     this.player = new SW_Player(this, 0, 0);
     this.player.init({
-      name: "player",
-      characterTexture: "player",
+      name: 'player',
+      characterTexture: 'player',
       startDirection: SW_DIRECTIONS.Down,
       walkSpeed: SW_CST.GAME.PLAYER.WALK_SPEED,
       runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED,
     } as SW_SpawnData);
 
-    this.player.on("runStateChanged", this.onPlayerRunStateChanged, this);
+    this.player.on('runStateChanged', this.onPlayerRunStateChanged, this);
 
     this.mapManager = new SW_MapManager(
       this.player,
@@ -100,7 +100,7 @@ export default class SW_GameScene extends SW_BaseScene {
     if (this.mapManager.isInitialized()) {
       this.onMapManagerInitialized();
     } else {
-      this.mapManager.once("initialized", this.onMapManagerInitialized, this);
+      this.mapManager.once('initialized', this.onMapManagerInitialized, this);
     }
 
     this.nameText = this.add.text(0, 0, playerStore.name);
@@ -133,21 +133,23 @@ export default class SW_GameScene extends SW_BaseScene {
     // TODO - Just have an InteractableZone class that triggers a gameplay event
     // These events could then be handle on GameplayEventManager
     this.addUniqueListener(
-      "wizhWellRequested",
-      () => { this.UIScene.showWizhWellMenu(); },
+      'wizhWellRequested',
+      () => {
+        this.UIScene.showWizhWellMenu();
+      },
       this
     );
 
     const objectTypeData = [
-      { name: "PlayerComputer", isZone: true, classType: SW_PlayerComputer },
-      { name: "Incubator", isZone: true, classType: SW_Incubator },
-      { name: "DialogueEntity", isZone: true, classType: SW_DialogueEntity },
-      { name: "WizhWell", isZone: true, classType: SW_WizhWell },
+      { name: 'PlayerComputer', isZone: true, classType: SW_PlayerComputer },
+      { name: 'Incubator', isZone: true, classType: SW_Incubator },
+      { name: 'DialogueEntity', isZone: true, classType: SW_DialogueEntity },
+      { name: 'WizhWell', isZone: true, classType: SW_WizhWell },
     ];
 
     for (const objectData of objectTypeData) {
       const interactableObjects = subMapData.subMap.createFromObjects(
-        "Objects",
+        'Objects',
         {
           name: objectData.name,
           classType: objectData.isZone
@@ -205,10 +207,26 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   private setupUI(): void {
-    this.UIScene.addUniqueListener("inventoryObjectClicked", this.inventoryObjectClicked, this);
-    this.UIScene.addUniqueListener("menuVisibilityChanged", this.onMenuVisibilityChanged, this);
-    this.UIScene.addUniqueListener("playerRequestToggleRunState", this.onPlayerRequestToggleRunState, this);
-    this.UIScene.addUniqueListener("playerRequestInteract", this.onPlayerRequestInteract, this);
+    this.UIScene.addUniqueListener(
+      'inventoryObjectClicked',
+      this.inventoryObjectClicked,
+      this
+    );
+    this.UIScene.addUniqueListener(
+      'menuVisibilityChanged',
+      this.onMenuVisibilityChanged,
+      this
+    );
+    this.UIScene.addUniqueListener(
+      'playerRequestToggleRunState',
+      this.onPlayerRequestToggleRunState,
+      this
+    );
+    this.UIScene.addUniqueListener(
+      'playerRequestInteract',
+      this.onPlayerRequestInteract,
+      this
+    );
   }
 
   // Update
@@ -273,7 +291,7 @@ export default class SW_GameScene extends SW_BaseScene {
     this.scene.restart({
       worldName: entrance.worldName,
       previousWorldName: this.worldName,
-      spawnPositionName: entrance.spawnPositionName
+      spawnPositionName: entrance.spawnPositionName,
     });
   }
 
@@ -287,8 +305,7 @@ export default class SW_GameScene extends SW_BaseScene {
   protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
     if (hasVisibleMenu) {
       this.player.lockControls();
-    }
-    else {
+    } else {
       this.player.unlockControls();
     }
   }

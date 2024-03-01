@@ -1,4 +1,4 @@
-@import "colors.scss";
+@import 'colors.scss';
 $headerHeight: 64px;
 
 a {
@@ -96,6 +96,8 @@ h6 {
     }
   }
   ul.sidebar-menu {
+    height: calc(100% - 64px);
+    overflow-y: auto;
     overflow-x: hidden;
     white-space: nowrap;
     padding: 16px;
@@ -196,7 +198,7 @@ h6 {
       font-size: 15px;
     }
     &:not(:last-child):after {
-      content: ":";
+      content: ':';
       width: 6px;
       font-size: 32px;
       font-weight: 900;
@@ -223,7 +225,7 @@ h6 {
         font-size: 12px;
       }
       &:not(:last-child):after {
-        content: ":";
+        content: ':';
         width: 6px;
         font-size: 20px;
         font-weight: 900;
@@ -251,7 +253,7 @@ h6 {
         font-size: 9px;
       }
       &:not(:last-child):after {
-        content: ":";
+        content: ':';
         width: 6px;
         font-size: 14px;
         font-weight: 900;

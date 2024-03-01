@@ -1,21 +1,24 @@
-import Phaser from "phaser";
-import SW_BaseScene from "~/game/scenes/SW_BaseScene";
-import { SW_Character } from "~/game/characters/SW_Character";
-import { SW_DIRECTIONS, SW_DIRECTIONS_NO_DIAGONALE} from "~/game/characters/SW_CharacterMovementComponent";
-import { SW_SpawnData } from "~/game/characters/SW_CharacterSpawner";
-import { SW_InteractionComponent } from "~/game/characters/players/SW_InteractionComponent";
-import { SW_PlayerInputComponent } from "./SW_PlayerInputComponent";
+import Phaser from 'phaser';
+import SW_BaseScene from '~/game/scenes/SW_BaseScene';
+import { SW_Character } from '~/game/characters/SW_Character';
+import {
+  SW_DIRECTIONS,
+  SW_DIRECTIONS_NO_DIAGONALE,
+} from '~/game/characters/SW_CharacterMovementComponent';
+import { SW_SpawnData } from '~/game/characters/SW_CharacterSpawner';
+import { SW_InteractionComponent } from '~/game/characters/players/SW_InteractionComponent';
+import { SW_PlayerInputComponent } from './SW_PlayerInputComponent';
 
 export class SW_Player extends SW_Character {
-  declare public body: Phaser.Physics.Arcade.Body;
+  public declare body: Phaser.Physics.Arcade.Body;
 
   /** How far a player can interact with entities around them */
   protected interactionRange: number = 30;
 
   /** Component used to interact with interactable entities */
-  declare protected interactableComp: SW_InteractionComponent;
+  protected declare interactableComp: SW_InteractionComponent;
 
-  declare protected inputComp: SW_PlayerInputComponent;
+  protected declare inputComp: SW_PlayerInputComponent;
 
   /** Whether the player can be controlled. The control could be locked while interacting with something or during a dialogue */
   protected isControlLocked: boolean = false;
@@ -32,7 +35,7 @@ export class SW_Player extends SW_Character {
     this.initAnimations(
       spawnData.characterTexture.length > 0
         ? spawnData.characterTexture
-        : "player"
+        : 'player'
     );
     this.setDirection(spawnData.startDirection);
 
@@ -151,7 +154,7 @@ export class SW_Player extends SW_Character {
       return;
     }
 
-    this.emit("update");
+    this.emit('update');
   }
 
   protected updateAnimations(): void {
@@ -172,8 +175,16 @@ export class SW_Player extends SW_Character {
     }
   }
 
+  public toggleFullScreen(): void {
+    if (this.scene.scale.isFullscreen) {
+      this.scene.scale.stopFullscreen();
+    } else {
+      this.scene.scale.startFullscreen();
+    }
+  }
+
   protected setRunState(value: boolean): void {
     super.setRunState(value);
-    this.emit("runStateChanged", value);
+    this.emit('runStateChanged', value);
   }
 }
