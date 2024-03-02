@@ -12,7 +12,7 @@ export const SW_CST = {
     IS_MOBILE: false,
     PLAYER: {
       WALK_SPEED: 130,
-      RUN_SPEED: 400,
+      RUN_SPEED: 800,
     },
   },
   MAP: {
@@ -31,5 +31,6 @@ export const SW_CST = {
   },
   DEBUG: {
     PHYSIC: false,
+    GAME: true,
   },
 };

@@ -96,6 +96,8 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
   private _isInitialized: boolean = false;
 
+  private debugText: Phaser.GameObjects.Text | undefined;
+
   constructor(
     player: SW_Player,
     worldName: string,
@@ -118,6 +120,18 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     this.spawnSubMapQueue = [];
 
     this.initWorld();
+
+    if (SW_CST.DEBUG.GAME) {
+      this.debugText = this.scene.add.text(24, 24, 'DebugText', {
+        fontSize: '18px',
+        color: 'white',
+        stroke: 'black',
+        strokeThickness: 3,
+        // backgroundColor '#FFFFFF',
+      });
+      this.debugText.setDepth(999999999);
+      this.debugText.setScrollFactor(0);
+    }
   }
 
   public getScene(): SW_GameScene {
@@ -745,13 +759,13 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
       subMapData.layerCollision
     );
 
-    if (SW_CST.DEBUG.PHYSIC) {
+    if (SW_CST.DEBUG.GAME) {
       subMapData.layerCollision.setVisible(true);
       subMapData.layerCollision.setAlpha(0.5);
       subMapData.layerCollision.setDepth(10000);
     } else {
       subMapData.layerCollision.setVisible(false);
-      subMapData.layerCollision.setDepth(-9999);
+      subMapData.layerCollision.setDepth(-1);
     }
   }
 
@@ -1195,5 +1209,40 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     } else if (this.shouldClearSubMapOnTop()) {
       this.clearSubMapOnTop();
     }
+
+    if (SW_CST.DEBUG.GAME) {
+      this.showDebug();
+    }
+  }
+
+  protected showDebug(): void {
+    let debugMessage = '';
+    debugMessage += `Map Position: ${this.currentSubMapX},${this.currentSubMapY}`;
+    debugMessage += `\nLocal Percent: ${this.currentLocalPercentMapX.toFixed(
+      3
+    )},${this.currentLocalPercentMapY.toFixed(3)}`;
+
+    // Spawned maps
+    debugMessage += '\nSpawned Maps:';
+    this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
+      debugMessage += `(${subMapData.subMapX},${subMapData.subMapY}),`;
+    });
+    debugMessage = debugMessage.slice(0, -1);
+
+    // Queue maps
+    debugMessage += '\nQueue Maps: ';
+    this.spawnSubMapQueue.forEach((subMapData: SW_SubMapData) => {
+      debugMessage += `(${subMapData.subMapX},${subMapData.subMapY}),`;
+    });
+    debugMessage = debugMessage.slice(0, -1);
+
+    // // Preloading maps
+    debugMessage += '\nPreloading Maps: ';
+    this.preloadingSubMaps.forEach((subMapData: string) => {
+      debugMessage += `(${subMapData}),`;
+    });
+    debugMessage = debugMessage.slice(0, -1);
+
+    this.debugText?.setText(debugMessage);
   }
 }
