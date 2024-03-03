@@ -11,6 +11,8 @@ import { SW_WizhMenu } from '../UI/Menus/WizhMenu/SW_WizhMenu';
 import { SW_MenuManager } from '../UI/Menus/SW_MenuManager';
 import { SW_DialogTextBox } from '../dialogues/SW_DialogTextBox';
 import { SW_PlayerActionsContainer } from '../UI/mobile/SW_PlayerActionsContainer';
+import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputComponent';
+import { SW_Player } from '../characters/players/SW_Player';
 
 declare type SW_UIKeys = {
   escape: Phaser.Input.Keyboard.Key;
@@ -401,6 +403,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
       SW_CST.GAME.WIDTH * 0.5,
       SW_CST.GAME.HEIGHT * 0.5
     );
+    this.playerActionsContainer.setDepth(1);
 
     this.playerActionsContainer.on(
       'runButtonPressed',
@@ -416,6 +419,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
       },
       this
     );
+  }
+
+  public createInputPlayerComponent(player: SW_Player): void {
+    new SW_PlayerInputComponent(player, this);
   }
 
   public onPlayerRunStateChanged(isPlayerRunning: boolean): void {

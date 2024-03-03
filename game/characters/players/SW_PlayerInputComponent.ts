@@ -26,11 +26,11 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
   private joystick: SW_Joystick | undefined;
   private inputJoystick: SW_DirectionKeys | undefined;
 
-  constructor(player: SW_Player) {
+  constructor(player: SW_Player, scene: SW_BaseScene) {
     super();
 
     this.player = player;
-    this.scene = player.scene;
+    this.scene = scene;
 
     if (SW_CST.GAME.IS_MOBILE) {
       this.createJoystickInput();

@@ -79,16 +79,7 @@ export default class SW_GameScene extends SW_BaseScene {
       this
     );
 
-    this.player = new SW_Player(this, 0, 0);
-    this.player.init({
-      name: 'player',
-      characterTexture: 'player',
-      startDirection: SW_DIRECTIONS.Down,
-      walkSpeed: SW_CST.GAME.PLAYER.WALK_SPEED,
-      runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED,
-    } as SW_SpawnData);
-
-    this.player.on('runStateChanged', this.onPlayerRunStateChanged, this);
+    this.createPlayer();
 
     this.mapManager = new SW_MapManager(
       this.player,
@@ -121,6 +112,19 @@ export default class SW_GameScene extends SW_BaseScene {
     this.setupCamera();
     this.setupUI();
     this.UIScene.hideLoadingScreen();
+  }
+
+  public createPlayer(): void {
+    this.player = new SW_Player(this, 0, 0);
+    this.player.init({
+      name: 'player',
+      characterTexture: 'player',
+      startDirection: SW_DIRECTIONS.Down,
+      walkSpeed: SW_CST.GAME.PLAYER.WALK_SPEED,
+      runSpeed: SW_CST.GAME.PLAYER.RUN_SPEED,
+    } as SW_SpawnData);
+
+    this.player.on('runStateChanged', this.onPlayerRunStateChanged, this);
   }
 
   public createInteractableObjects(
@@ -227,6 +231,8 @@ export default class SW_GameScene extends SW_BaseScene {
       this.onPlayerRequestInteract,
       this
     );
+
+    this.UIScene.createInputPlayerComponent(this.player);
   }
 
   // Update

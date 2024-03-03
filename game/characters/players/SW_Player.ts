@@ -7,7 +7,7 @@ import {
 } from '~/game/characters/SW_CharacterMovementComponent';
 import { SW_SpawnData } from '~/game/characters/SW_CharacterSpawner';
 import { SW_InteractionComponent } from '~/game/characters/players/SW_InteractionComponent';
-import { SW_PlayerInputComponent } from './SW_PlayerInputComponent';
+import { SW_CST } from '~/game/SW_CST';
 
 export class SW_Player extends SW_Character {
   public declare body: Phaser.Physics.Arcade.Body;
@@ -17,8 +17,6 @@ export class SW_Player extends SW_Character {
 
   /** Component used to interact with interactable entities */
   protected declare interactableComp: SW_InteractionComponent;
-
-  protected declare inputComp: SW_PlayerInputComponent;
 
   /** Whether the player can be controlled. The control could be locked while interacting with something or during a dialogue */
   protected isControlLocked: boolean = false;
@@ -52,7 +50,6 @@ export class SW_Player extends SW_Character {
     this.isControlLocked = false;
 
     this.initIniteractableComponent();
-    this.initInputComponent();
   }
 
   protected initIniteractableComponent(): void {
@@ -64,10 +61,6 @@ export class SW_Player extends SW_Character {
       this.interactionRange
     );
     this.interactableComp.body.setAllowGravity(false);
-  }
-
-  protected initInputComponent(): void {
-    this.inputComp = new SW_PlayerInputComponent(this);
   }
 
   public getInteractableComp(): SW_InteractionComponent {

@@ -9,11 +9,11 @@ export const SW_CST = {
   GAME: {
     WIDTH: 800,
     HEIGHT: 500,
-    ZOOM: 1,
+    ZOOM: 1.5,
     IS_MOBILE: false,
     PLAYER: {
       WALK_SPEED: 130,
-      RUN_SPEED: 800,
+      RUN_SPEED: 300,
     },
   },
   MAP: {

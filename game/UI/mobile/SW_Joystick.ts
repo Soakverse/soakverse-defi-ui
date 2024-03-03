@@ -7,6 +7,13 @@ export class SW_Joystick extends VirtualJoyStick {
   protected joystickZone: Phaser.GameObjects.Zone;
 
   constructor(scene: SW_BaseScene, x: number, y: number) {
+    const joystick = scene.add.zone(
+      0,
+      0,
+      scene.game.canvas.width,
+      scene.game.canvas.height
+    );
+
     super(scene, {
       x: x,
       y: y,
@@ -15,8 +22,8 @@ export class SW_Joystick extends VirtualJoyStick {
       forceMin: 14,
       fixed: true,
       enable: true,
-      base: scene.add.circle(0, 0, 44, 0xbbbbbb, 0.42).setDepth(99999),
-      thumb: scene.add.circle(0, 0, 16, 0xdddddd, 0.6).setDepth(99999),
+      base: scene.add.circle(0, 0, 44, 0xbbbbbb, 0.42),
+      thumb: scene.add.circle(0, 0, 16, 0xdddddd, 0.6),
     });
 
     this.on(
@@ -27,12 +34,7 @@ export class SW_Joystick extends VirtualJoyStick {
       this
     );
 
-    this.joystickZone = this.scene.add.zone(
-      0,
-      0,
-      this.scene.game.canvas.width,
-      this.scene.game.canvas.height
-    );
+    this.joystickZone = joystick;
     this.joystickZone.setOrigin(0, 0);
     this.joystickZone.setScrollFactor(0);
     this.joystickZone.setInteractive();
@@ -40,6 +42,8 @@ export class SW_Joystick extends VirtualJoyStick {
     this.joystickZone.on(
       Phaser.Input.Events.POINTER_DOWN,
       (pointer: Phaser.Input.Pointer) => {
+        console.log(pointer.x, pointer.y);
+        console.log(pointer.worldX, pointer.worldY);
         this.setPosition(pointer.x, pointer.y);
         this.setVisible(true);
       },
