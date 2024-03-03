@@ -969,10 +969,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   }
 
   private shouldSpawnSubMapOnRight(): boolean {
-    return (
-      this.isPlayerNearSubMapRight() &&
-      this.prevLocalPercentMapX <= 1 - this.subMapThreshold
-    );
+    return this.isPlayerNearSubMapRight();
   }
 
   private shouldClearSubMapOnRight(): boolean {
@@ -983,10 +980,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   }
 
   private shouldSpawnSubMapOnLeft(): boolean {
-    return (
-      this.isPlayerNearSubMapLeft() &&
-      this.prevLocalPercentMapX >= this.subMapThreshold
-    );
+    return this.isPlayerNearSubMapLeft();
   }
 
   private shouldClearSubMapOnLeft(): boolean {
@@ -997,10 +991,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   }
 
   private shouldSpawnSubMapOnBottom(): boolean {
-    return (
-      this.isPlayerNearSubMapBottom() &&
-      this.prevLocalPercentMapY <= 1 - this.subMapThreshold
-    );
+    return this.isPlayerNearSubMapBottom();
   }
 
   private shouldClearSubMapOnBottom(): boolean {
@@ -1011,10 +1002,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   }
 
   private shouldSpawnSubMapOnTop(): boolean {
-    return (
-      this.isPlayerNearSubMapTop() &&
-      this.prevLocalPercentMapY >= this.subMapThreshold
-    );
+    return this.isPlayerNearSubMapTop();
   }
 
   private shouldClearSubMapOnTop(): boolean {
