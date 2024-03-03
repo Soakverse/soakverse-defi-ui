@@ -42,8 +42,6 @@ export class SW_Joystick extends VirtualJoyStick {
     this.joystickZone.on(
       Phaser.Input.Events.POINTER_DOWN,
       (pointer: Phaser.Input.Pointer) => {
-        console.log(pointer.x, pointer.y);
-        console.log(pointer.worldX, pointer.worldY);
         this.setPosition(pointer.x, pointer.y);
         this.setVisible(true);
       },
