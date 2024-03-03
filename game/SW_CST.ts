@@ -4,6 +4,7 @@ export const SW_CST = {
     BOOT: 'BOOT',
     GAME: 'GAME',
     GAME_UI: 'GAME_UI',
+    DEBUG: 'DEBUG',
   },
   GAME: {
     WIDTH: 800,

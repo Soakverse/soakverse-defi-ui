@@ -13,6 +13,7 @@ import {
   SW_DIRECTION,
 } from '~/game/characters/SW_CharacterMovementComponent';
 import { SW_TileAnimationsManager } from './SW_TileAnimationsManager';
+import SW_SceneDebug from '../scenes/SW_SceneDebug';
 
 const depthBackground = 1;
 const depthPlayer = 2;
@@ -96,8 +97,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
   private _isInitialized: boolean = false;
 
-  private debugText: Phaser.GameObjects.Text | undefined;
-
   constructor(
     player: SW_Player,
     worldName: string,
@@ -120,18 +119,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     this.spawnSubMapQueue = [];
 
     this.initWorld();
-
-    if (SW_CST.DEBUG.GAME) {
-      this.debugText = this.scene.add.text(24, 24, 'DebugText', {
-        fontSize: '18px',
-        color: 'white',
-        stroke: 'black',
-        strokeThickness: 3,
-        // backgroundColor '#FFFFFF',
-      });
-      this.debugText.setDepth(999999999);
-      this.debugText.setScrollFactor(0);
-    }
   }
 
   public getScene(): SW_GameScene {
@@ -1216,6 +1203,14 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   }
 
   protected showDebug(): void {
+    const sceneDebug = this.scene.scene.get(
+      SW_CST.SCENES.DEBUG
+    ) as SW_SceneDebug;
+
+    if (!sceneDebug) {
+      return;
+    }
+
     let debugMessage = '';
     debugMessage += `Map Position: ${this.currentSubMapX},${this.currentSubMapY}`;
     debugMessage += `\nLocal Percent: ${this.currentLocalPercentMapX.toFixed(
@@ -1236,13 +1231,13 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     });
     debugMessage = debugMessage.slice(0, -1);
 
-    // // Preloading maps
+    // Preloading maps
     debugMessage += '\nPreloading Maps: ';
     this.preloadingSubMaps.forEach((subMapData: string) => {
       debugMessage += `(${subMapData}),`;
     });
     debugMessage = debugMessage.slice(0, -1);
 
-    this.debugText?.setText(debugMessage);
+    sceneDebug.updateDebugMapManager(debugMessage);
   }
 }

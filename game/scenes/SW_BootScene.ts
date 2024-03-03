@@ -36,6 +36,7 @@ import menuButtonPressed from '@/game/assets/ui/menus/menuButtonPressed.png';
 import runButtonMobile from '@/game/assets/ui/mobile/runButton.png';
 import walkButtonMobile from '@/game/assets/ui/mobile/walkButton.png';
 import interactButtonMobile from '@/game/assets/ui/mobile/interactButton.png';
+import SW_SceneDebug from './SW_SceneDebug';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor() {
@@ -114,6 +115,15 @@ export default class SW_BootScene extends SW_BaseScene {
       spawnPositionName: 'Starter',
     });
     sceneUI.scene.bringToTop();
+
+    if (SW_CST.DEBUG.GAME) {
+      const sceneDebug = this.scene.add(
+        SW_CST.SCENES.DEBUG,
+        SW_SceneDebug,
+        true
+      ) as Phaser.Scene;
+      sceneDebug.scene.bringToTop();
+    }
 
     this.scene.remove(SW_CST.SCENES.BOOT);
   }
