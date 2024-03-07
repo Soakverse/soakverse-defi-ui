@@ -21,6 +21,9 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
   protected scene: SW_BaseScene;
   protected player: SW_Player;
 
+  /** Whether the player can be controlled. The control could be locked while interacting with something or during a dialogue */
+  protected isPlayerControlLocked: boolean = false;
+
   protected inputKeyboard: SW_PlayerKeys | undefined;
 
   private joystick: SW_Joystick | undefined;
@@ -62,7 +65,15 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
 
     this.inputKeyboard.run.on('down', this.player.startRunning, this.player);
     this.inputKeyboard.run.on('up', this.player.stopRunning, this.player);
-    this.inputKeyboard.interact.on('down', this.player.interact, this.player);
+    this.inputKeyboard.interact.on(
+      'down',
+      () => {
+        if (!this.isPlayerControlLocked) {
+          this.player.interact();
+        }
+      },
+      this.player
+    );
     this.inputKeyboard.fullscreen.on(
       'down',
       this.player.toggleFullScreen,
@@ -82,6 +93,10 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
   }
 
   protected updateKeyboardInput(): void {
+    if (this.isPlayerControlLocked) {
+      return;
+    }
+
     if (!this.inputKeyboard) {
       console.warn(
         'SW_PlayerInputComponent::updateKeyboardInput - InputKeyboard is invalid'
@@ -93,6 +108,10 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
   }
 
   protected updateJoystickInput(): void {
+    if (this.isPlayerControlLocked) {
+      return;
+    }
+
     if (!this.inputJoystick) {
       console.warn(
         'SW_PlayerInputComponent::updateJoystickInput - InputJoystick is invalid'
@@ -127,5 +146,23 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
     } else {
       this.player.stopWalking();
     }
+  }
+
+  public lockControls(): void {
+    this.player.stopWalking();
+    this.isPlayerControlLocked = true;
+  }
+
+  public unlockControls(): void {
+    // Hack to prevent player action to be triggered right away if a player key has been used to unlock the control
+    // At the moment I write this comment, this happens with interact as the player use space to open a dialogue, but we also use it to continue.
+    this.scene.time.delayedCall(
+      1,
+      () => {
+        this.isPlayerControlLocked = false;
+      },
+      undefined,
+      this
+    );
   }
 }

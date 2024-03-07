@@ -125,7 +125,7 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone {
     }
 
     this.setPosition(compX, compY);
-    const interactableCompBody = this.body as Phaser.Physics.Arcade.Body;
+    const interactableCompBody = this.body;
     interactableCompBody.setSize(compWidth, compHeight);
   }
 

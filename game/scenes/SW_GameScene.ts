@@ -310,9 +310,9 @@ export default class SW_GameScene extends SW_BaseScene {
 
   protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
     if (hasVisibleMenu) {
-      this.player.lockControls();
+      this.UIScene.lockPlayerControls();
     } else {
-      this.player.unlockControls();
+      this.UIScene.unlockPlayerControls();
     }
   }
 

@@ -38,6 +38,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
   private declare playerActionsContainer: SW_PlayerActionsContainer | undefined;
 
+  private declare playerInputComponent: SW_PlayerInputComponent;
+
   constructor() {
     super({ key: SW_CST.SCENES.GAME_UI });
   }
@@ -221,6 +223,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
       ) as SW_UIKeys;
 
       this.keys.escape.on('down', this.onEscapeButtonDown, this);
+      this.keys.space.on('down', this.onSpaceButtonDown, this);
       this.keys.nextPage.on('down', this.onNextPageButtonDown, this);
     }
   }
@@ -240,6 +243,14 @@ export default class SW_GameUIScene extends SW_BaseScene {
       },
       callbackScope: this,
     });
+  }
+
+  public lockPlayerControls(): void {
+    this.playerInputComponent.lockControls();
+  }
+
+  public unlockPlayerControls(): void {
+    this.playerInputComponent.unlockControls();
   }
 
   protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
@@ -284,6 +295,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
     } else {
       this.menuManager.showDefaultMenu();
     }
+  }
+
+  protected onSpaceButtonDown(): void {
+    this.onNextPageButtonDown();
   }
 
   protected onNextPageButtonDown(): void {
@@ -422,7 +437,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
   }
 
   public createInputPlayerComponent(player: SW_Player): void {
-    new SW_PlayerInputComponent(player, this);
+    this.playerInputComponent = new SW_PlayerInputComponent(player, this);
   }
 
   public onPlayerRunStateChanged(isPlayerRunning: boolean): void {
