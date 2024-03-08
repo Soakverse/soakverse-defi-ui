@@ -57,6 +57,16 @@ export class SW_Joystick extends VirtualJoyStick {
     );
   }
 
+  public setEnable(enable?: boolean | undefined): this {
+    if (enable) {
+      this.joystickZone.setInteractive();
+    } else {
+      this.joystickZone.disableInteractive();
+    }
+    super.setEnable(enable);
+    return this;
+  }
+
   public destroy(): void {
     if (this.joystickZone) {
       this.joystickZone.destroy();

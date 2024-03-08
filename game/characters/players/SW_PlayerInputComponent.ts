@@ -90,6 +90,11 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
     this.joystick.setVisible(false);
 
     this.player.on('update', this.updateJoystickInput, this);
+    this.scene.game.events.on(
+      Phaser.Core.Events.BLUR,
+      this.onGameBlurred,
+      this
+    );
   }
 
   protected updateKeyboardInput(): void {
@@ -148,9 +153,16 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
     }
   }
 
+  protected onGameBlurred(): void {
+    this.joystick?.setVisible(false);
+  }
+
   public lockControls(): void {
     this.player.stopWalking();
     this.isPlayerControlLocked = true;
+
+    this.joystick?.setEnable(false);
+    this.joystick?.setVisible(false);
   }
 
   public unlockControls(): void {
@@ -160,6 +172,7 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
       1,
       () => {
         this.isPlayerControlLocked = false;
+        this.joystick?.setEnable(true);
       },
       undefined,
       this
