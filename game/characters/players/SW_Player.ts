@@ -149,14 +149,6 @@ export class SW_Player extends SW_Character {
     this.interactableComp.interact();
   }
 
-  public toggleFullScreen(): void {
-    if (this.scene.scale.isFullscreen) {
-      this.scene.scale.stopFullscreen();
-    } else {
-      this.scene.scale.startFullscreen();
-    }
-  }
-
   protected setRunState(value: boolean): void {
     super.setRunState(value);
     this.emit('runStateChanged', value);

@@ -6,6 +6,7 @@ export class SW_PlayerActionsContainer extends Phaser.GameObjects.Container {
 
   protected runButton: Phaser.GameObjects.Image;
   protected interactButton: Phaser.GameObjects.Image;
+  protected menuButton: Phaser.GameObjects.Image;
 
   constructor(scene: SW_BaseScene, x: number, y: number) {
     super(scene, x, y);
@@ -14,9 +15,14 @@ export class SW_PlayerActionsContainer extends Phaser.GameObjects.Container {
     this.width = SW_CST.GAME.WIDTH;
     this.height = SW_CST.GAME.HEIGHT;
 
-    this.runButton = this.scene.add
-      .image(this.width * 0.5 - 24, this.height * 0.5 - 24, 'walkButtonMobile')
-      .setOrigin(1, 1);
+    const padding = 24;
+
+    this.runButton = this.scene.add.image(
+      this.width * 0.5 - padding,
+      this.height * 0.5 - padding,
+      'walkButtonMobile'
+    );
+    this.runButton.setOrigin(1, 1);
     this.runButton.setInteractive();
     this.runButton.on(
       Phaser.Input.Events.POINTER_DOWN,
@@ -30,13 +36,12 @@ export class SW_PlayerActionsContainer extends Phaser.GameObjects.Container {
     );
     this.add(this.runButton);
 
-    this.interactButton = this.scene.add
-      .image(
-        this.runButton.x - this.runButton.width - 16,
-        this.height * 0.5 - 24,
-        'interactButtonMobile'
-      )
-      .setOrigin(1, 1);
+    this.interactButton = this.scene.add.image(
+      this.runButton.x - this.runButton.width - 16,
+      this.height * 0.5 - padding,
+      'interactButtonMobile'
+    );
+    this.interactButton.setOrigin(1, 1);
     this.interactButton.setInteractive();
     this.interactButton.on(
       Phaser.Input.Events.POINTER_DOWN,
@@ -44,6 +49,24 @@ export class SW_PlayerActionsContainer extends Phaser.GameObjects.Container {
       this
     );
     this.add(this.interactButton);
+
+    this.menuButton = this.scene.add.image(
+      this.width * 0.5 - padding,
+      -this.height * 0.5 + padding,
+      'menuButtonMobile'
+    );
+    this.menuButton.setOrigin(1, 0);
+    this.menuButton.setInteractive();
+    this.menuButton.on(
+      Phaser.Input.Events.POINTER_DOWN,
+      this.onMenuButtonPressed,
+      this
+    );
+    this.add(this.menuButton);
+  }
+
+  private onMenuButtonPressed(): void {
+    this.emit('menuButtonPressed');
   }
 
   private onRunButtonPressed(): void {

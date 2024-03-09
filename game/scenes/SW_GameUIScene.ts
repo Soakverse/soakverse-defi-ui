@@ -11,8 +11,10 @@ import { SW_WizhMenu } from '../UI/Menus/WizhMenu/SW_WizhMenu';
 import { SW_MenuManager } from '../UI/Menus/SW_MenuManager';
 import { SW_DialogTextBox } from '../dialogues/SW_DialogTextBox';
 import { SW_PlayerActionsContainer } from '../UI/mobile/SW_PlayerActionsContainer';
+import { SW_InGameMenu } from '../UI/Menus/InGameMenu/SW_InGameMenu';
 import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputComponent';
 import { SW_Player } from '../characters/players/SW_Player';
+import { SW_SettingsMenu } from '../UI/Menus/InGameMenu/SW_SettingsMenu';
 
 declare type SW_UIKeys = {
   escape: Phaser.Input.Keyboard.Key;
@@ -26,6 +28,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
   private declare menuManager: SW_MenuManager;
 
+  private declare inGameMenu: SW_InGameMenu;
+  private declare settingsMenu: SW_SettingsMenu;
+  private declare wizhMenu: SW_WizhMenu;
+
   private declare dialogQuest: SW_DialogQuest;
   private declare dialogTextBox: SW_DialogTextBox;
 
@@ -33,8 +39,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
   private declare chestInventoryWidget: SW_ChestInventoryWidget;
 
   private declare loadingScreen: Phaser.GameObjects.Graphics;
-
-  private declare wizhMenu: SW_WizhMenu;
 
   private declare playerActionsContainer: SW_PlayerActionsContainer | undefined;
 
@@ -62,6 +66,37 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this.createMobileWidgets();
     }
 
+    this.inGameMenu = new SW_InGameMenu(
+      this,
+      this.game.canvas.width * 0.5,
+      this.game.canvas.height * 0.5
+    );
+    this.inGameMenu.on('resumeButtonClicked', this.onResumeButtonClicked, this);
+    this.inGameMenu.on('backButtonClicked', this.onResumeButtonClicked, this);
+    this.inGameMenu.on(
+      'settingsButtonClicked',
+      this.onSettingsButtonClicked,
+      this
+    );
+
+    this.menuManager.setDefaultMenu(this.inGameMenu);
+    this.menuManager.hideMenu(this.inGameMenu);
+
+    this.settingsMenu = new SW_SettingsMenu(
+      this,
+      this.game.canvas.width * 0.5,
+      this.game.canvas.height * 0.5
+    );
+    this.settingsMenu.on(
+      'backButtonClicked',
+      () => {
+        this.menuManager.hideMenu(this.settingsMenu);
+      },
+      this
+    );
+
+    this.menuManager.hideMenu(this.settingsMenu);
+
     this.playerInventoryWidget = new SW_PlayerInventoryWidget(
       this,
       this.scale.displaySize.width * 0.25,
@@ -72,7 +107,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this.onMovePlayerInventoryMoveObject,
       this
     );
-    this.menuManager.setDefaultMenu(this.playerInventoryWidget);
     this.menuManager.hideMenu(this.playerInventoryWidget);
 
     this.chestInventoryWidget = new SW_ChestInventoryWidget(this, 0, 240);
@@ -257,6 +291,14 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.events.emit('menuVisibilityChanged', hasVisibleMenu);
   }
 
+  protected onResumeButtonClicked(): void {
+    this.menuManager.hideMenu(this.inGameMenu);
+  }
+
+  protected onSettingsButtonClicked(): void {
+    this.menuManager.showMenu(this.settingsMenu);
+  }
+
   protected onMovePlayerInventoryMoveObject(
     inventoryObjectData: SW_InventoryObject,
     quantity: number
@@ -431,6 +473,13 @@ export default class SW_GameUIScene extends SW_BaseScene {
       'interactButtonPressed',
       () => {
         this.events.emit('playerRequestInteract');
+      },
+      this
+    );
+    this.playerActionsContainer.on(
+      'menuButtonPressed',
+      () => {
+        this.menuManager.showMenu(this.inGameMenu);
       },
       this
     );

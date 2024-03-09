@@ -333,6 +333,6 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   protected onPlayerRequestInteract(): void {
-    this.player.toggleFullScreen();
+    this.player.interact();
   }
 }

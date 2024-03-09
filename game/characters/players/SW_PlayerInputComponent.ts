@@ -14,7 +14,6 @@ declare type SW_DirectionKeys = {
 declare type SW_PlayerKeys = SW_DirectionKeys & {
   run: Phaser.Input.Keyboard.Key;
   interact: Phaser.Input.Keyboard.Key;
-  fullscreen: Phaser.Input.Keyboard.Key;
 };
 
 export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
@@ -58,7 +57,6 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
         left: Phaser.Input.Keyboard.KeyCodes.A,
         right: Phaser.Input.Keyboard.KeyCodes.D,
         interact: Phaser.Input.Keyboard.KeyCodes.SPACE,
-        fullscreen: Phaser.Input.Keyboard.KeyCodes.Y,
       },
       false
     ) as SW_PlayerKeys;
@@ -72,11 +70,6 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
           this.player.interact();
         }
       },
-      this.player
-    );
-    this.inputKeyboard.fullscreen.on(
-      'down',
-      this.player.toggleFullScreen,
       this.player
     );
 
