@@ -1106,7 +1106,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             offsetY,
             depthBackground
           );
-        } else if (!subMapData.layerForeground1) {
           subMapData.layerForeground1 = this.spawnVisualLayer(
             subMapData,
             'Layer4',
@@ -1122,7 +1121,6 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             offsetY,
             depthForeground
           );
-        } else if (!subMapData.entrances) {
           subMapData.entrances = this.createEntrances(
             subMapData,
             offsetX,
@@ -1137,7 +1135,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             this.scene.canPlayerEnter,
             this.scene
           );
-        } else if (!subMapData.interactableObjects) {
+
           subMapData.interactableObjects = this.scene.createInteractableObjects(
             subMapData,
             offsetX,
