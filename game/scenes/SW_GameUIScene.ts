@@ -68,12 +68,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.createDialogQuest();
 
     this.inGameMenu = new SW_InGameMenu(
-      this,
+      this.menuManager,
       this.game.canvas.width * 0.5,
       this.game.canvas.height * 0.5
     );
-    this.inGameMenu.on('resumeButtonClicked', this.onResumeButtonClicked, this);
-    this.inGameMenu.on('backButtonClicked', this.onResumeButtonClicked, this);
     this.inGameMenu.on(
       'settingsButtonClicked',
       this.onSettingsButtonClicked,
@@ -84,16 +82,9 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.menuManager.hideMenu(this.inGameMenu);
 
     this.settingsMenu = new SW_SettingsMenu(
-      this,
+      this.menuManager,
       this.game.canvas.width * 0.5,
       this.game.canvas.height * 0.5
-    );
-    this.settingsMenu.on(
-      'backButtonClicked',
-      () => {
-        this.menuManager.hideMenu(this.settingsMenu);
-      },
-      this
     );
 
     this.menuManager.hideMenu(this.settingsMenu);
@@ -290,10 +281,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
   protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
     this.events.emit('menuVisibilityChanged', hasVisibleMenu);
-  }
-
-  protected onResumeButtonClicked(): void {
-    this.menuManager.hideMenu(this.inGameMenu);
   }
 
   protected onSettingsButtonClicked(): void {

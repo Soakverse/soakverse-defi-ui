@@ -1,20 +1,16 @@
-import { SW_CST } from '~/game/SW_CST';
-import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 import { SW_TextButton } from '~/game/UI/buttons/SW_TextButton';
+import { SW_BaseMenu } from '../SW_BaseMenu';
+import { SW_MenuManager } from '../SW_MenuManager';
 
-// TODO - Make a base menu file
-export class SW_InGameMenu extends Phaser.GameObjects.Container {
-  public declare scene: SW_BaseScene;
-
+export class SW_InGameMenu extends SW_BaseMenu {
   protected background: Phaser.GameObjects.Image;
 
-  constructor(scene: SW_BaseScene, x: number, y: number) {
-    super(scene, x, y);
+  constructor(menuManager: SW_MenuManager, x: number, y: number) {
+    super(menuManager, x, y);
     this.scene.add.existing(this);
 
-    this.background = this.scene.add
-      .image(0, 0, 'menuBackground')
-      .setOrigin(0.5);
+    this.background = this.scene.add.image(0, 0, 'menuBackground');
+    this.background.setOrigin(0.5);
     this.add(this.background);
 
     this.width = this.background.width;
@@ -47,6 +43,6 @@ export class SW_InGameMenu extends Phaser.GameObjects.Container {
   }
 
   protected onBackButtonClicked(): void {
-    this.emit('backButtonClicked');
+    this.menuManager.hideMenu(this);
   }
 }

@@ -1,14 +1,15 @@
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 import { SW_TextButton } from '~/game/UI/buttons/SW_TextButton';
+import { SW_BaseMenu } from '../SW_BaseMenu';
+import { SW_MenuManager } from '../SW_MenuManager';
 
-// TODO - Make a base menu file
-export class SW_SettingsMenu extends Phaser.GameObjects.Container {
+export class SW_SettingsMenu extends SW_BaseMenu {
   public declare scene: SW_BaseScene;
 
   protected background: Phaser.GameObjects.Image;
 
-  constructor(scene: SW_BaseScene, x: number, y: number) {
-    super(scene, x, y);
+  constructor(menuManager: SW_MenuManager, x: number, y: number) {
+    super(menuManager, x, y);
     this.scene.add.existing(this);
 
     this.background = this.scene.add
@@ -54,7 +55,7 @@ export class SW_SettingsMenu extends Phaser.GameObjects.Container {
   protected onToggleSoundButtonClicked(): void {}
 
   protected onBackButtonClicked(): void {
-    this.emit('backButtonClicked');
+    this.menuManager.hideMenu(this);
   }
 
   protected onFullscreenButtonClicked(): void {
