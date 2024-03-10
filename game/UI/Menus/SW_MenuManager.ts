@@ -1,3 +1,6 @@
+import { SW_CST } from '~/game/SW_CST';
+import SW_BaseScene from '~/game/scenes/SW_BaseScene';
+
 declare type SW_MenuType = Phaser.GameObjects.Components.Depth &
   Phaser.GameObjects.Components.Visible;
 
@@ -10,10 +13,20 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
 
   protected defaultMenu: SW_MenuType | undefined;
 
-  constructor() {
+  protected background: Phaser.GameObjects.Graphics;
+
+  constructor(scene: SW_BaseScene) {
     super();
 
     this.menus = [];
+    this.background = scene.add.graphics();
+    this.background.fillStyle(0x000000, 0.5);
+    this.background.fillRect(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT);
+    this.background.setInteractive(
+      new Phaser.Geom.Rectangle(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT),
+      Phaser.Geom.Rectangle.Contains
+    );
+    this.background.setVisible(false);
   }
 
   public setDefaultMenu(menu: SW_MenuType): void {
@@ -50,6 +63,8 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
     this.menus.push(menu);
     menu.setDepth(this.menus.length);
     menu.setVisible(true);
+
+    this.background.setVisible(true);
     this.emit('menuVisibilityChanged', true);
   }
 
@@ -64,6 +79,8 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
   public hideMenu(menu: SW_MenuType): void {
     menu.setVisible(false);
     Phaser.Utils.Array.Remove(this.menus, menu);
+
+    this.background.setVisible(this.hasVisibleMenu());
     this.emit('menuVisibilityChanged', this.hasVisibleMenu());
   }
 
@@ -71,6 +88,8 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
     const removedMenu = this.menus.pop();
     if (removedMenu) {
       removedMenu.setVisible(false);
+
+      this.background.setVisible(this.hasVisibleMenu());
       this.emit('menuVisibilityChanged', this.hasVisibleMenu());
     }
   }

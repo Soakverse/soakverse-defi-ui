@@ -52,7 +52,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
-    this.menuManager = new SW_MenuManager();
+    this.menuManager = new SW_MenuManager(this);
     this.menuManager.on(
       'menuVisibilityChanged',
       this.onMenuVisibilityChanged,
