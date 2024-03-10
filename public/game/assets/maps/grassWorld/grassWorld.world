@@ -1,109 +1,67 @@
 {
     "maps": [
         {
-            "fileName": "soakverseMain (3rd copy).json",
+            "fileName": "soakverseMain_01-01.json",
+            "height": 576,
+            "width": 960,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "fileName": "soakverseMain_01-02.json",
             "height": 576,
             "width": 960,
             "x": 960,
             "y": 0
         },
         {
-            "fileName": "soakverseMain (4th copy).json",
+            "fileName": "soakverseMain_01-03.json",
             "height": 576,
             "width": 960,
             "x": 1920,
             "y": 0
         },
         {
-            "fileName": "soakverseMain (5th copy).json",
-            "height": 576,
-            "width": 960,
-            "x": 2880,
-            "y": 0
-        },
-        {
-            "fileName": "soakverseMain (6th copy).json",
-            "height": 576,
-            "width": 960,
-            "x": 3840,
-            "y": 0
-        },
-        {
-            "fileName": "soakverseMain (7th copy).json",
+            "fileName": "soakverseMain_02-01.json",
             "height": 576,
             "width": 960,
             "x": 0,
             "y": 576
         },
         {
-            "fileName": "soakverseMain (8th copy).json",
+            "fileName": "soakverseMain_02-02.json",
             "height": 576,
             "width": 960,
             "x": 960,
             "y": 576
         },
         {
-            "fileName": "soakverseMain (9th copy).json",
+            "fileName": "soakverseMain_02-03.json",
             "height": 576,
             "width": 960,
             "x": 1920,
             "y": 576
         },
         {
-            "fileName": "soakverseMain (10th copy).json",
-            "height": 576,
-            "width": 960,
-            "x": 2880,
-            "y": 576
-        },
-        {
-            "fileName": "soakverseMain (11th copy).json",
-            "height": 576,
-            "width": 960,
-            "x": 3840,
-            "y": 576
-        },
-        {
-            "fileName": "soakverseMain (12th copy).json",
+            "fileName": "soakverseMain_03-01.json",
             "height": 576,
             "width": 960,
             "x": 0,
             "y": 1152
         },
         {
-            "fileName": "soakverseMain (13th copy).json",
+            "fileName": "soakverseMain_03-02.json",
             "height": 576,
             "width": 960,
             "x": 960,
             "y": 1152
         },
         {
-            "fileName": "soakverseMain (14th copy).json",
+            "fileName": "soakverseMain_03-03.json",
             "height": 576,
             "width": 960,
             "x": 1920,
             "y": 1152
-        },
-        {
-            "fileName": "soakverseMain (15th copy).json",
-            "height": 576,
-            "width": 960,
-            "x": 2880,
-            "y": 1152
-        },
-        {
-            "fileName": "soakverseMain (16th copy).json",
-            "height": 576,
-            "width": 960,
-            "x": 3840,
-            "y": 1152
-        },
-        {
-            "fileName": "soakverseMain (copy).json",
-            "height": 576,
-            "width": 960,
-            "x": 0,
-            "y": 0
         }
     ],
     "onlyShowAdjacentMaps": false,
