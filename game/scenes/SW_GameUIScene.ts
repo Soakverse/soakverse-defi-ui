@@ -52,6 +52,12 @@ export default class SW_GameUIScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
+    if (SW_CST.GAME.IS_MOBILE) {
+      this.createMobileWidgets();
+    }
+
+    this.createKeys();
+
     this.menuManager = new SW_MenuManager(this);
     this.menuManager.on(
       'menuVisibilityChanged',
@@ -59,12 +65,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this
     );
 
-    this.createKeys();
     this.createDialogQuest();
-
-    if (SW_CST.GAME.IS_MOBILE) {
-      this.createMobileWidgets();
-    }
 
     this.inGameMenu = new SW_InGameMenu(
       this,
@@ -460,7 +461,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
       SW_CST.GAME.WIDTH * 0.5,
       SW_CST.GAME.HEIGHT * 0.5
     );
-    this.playerActionsContainer.setDepth(1);
 
     this.playerActionsContainer.on(
       'runButtonPressed',
