@@ -23,26 +23,32 @@ h6 {
   bottom: 0;
   z-index: 1000;
   width: 72px;
+
   @media all and (max-width: 576px) {
     left: -72px;
   }
+
   .label {
     display: none;
     opacity: 0;
     transition: 1s all;
   }
+
   .brand-logo {
     max-height: 48px;
     height: 100%;
   }
+
   &.toggled {
     transition: 0.4s all;
     width: 250px;
+
     .label {
       display: inline-block;
       opacity: 1;
       transition: 1s all;
     }
+
     @media all and (max-width: 576px) {
       left: 0px;
 
@@ -50,24 +56,29 @@ h6 {
         right: -16px !important;
       }
     }
+
     .sidebar-header {
       padding: 6px 24px;
     }
   }
+
   a {
     transition: 1s all;
     display: block;
   }
+
   .sidebar-header {
     height: $headerHeight;
     background-color: $medium-grey;
     padding: 12px;
     display: flex;
     position: relative;
+
     img {
       max-width: 100%;
       margin: auto;
     }
+
     .toggle-menu {
       position: absolute;
       width: 32px;
@@ -81,42 +92,51 @@ h6 {
       box-shadow: 0px 4px 8px #00000029;
       text-align: center;
       transition: 0.4s all;
+
       i {
         color: $gold;
         font-size: 24px;
         line-height: 32px;
       }
+
       @media all and (max-width: 576px) {
         right: -40px;
         background-color: $gold;
+
         i {
           color: $white;
         }
       }
     }
   }
+
   ul.sidebar-menu {
     height: calc(100% - 64px);
     overflow-y: auto;
     overflow-x: hidden;
     white-space: nowrap;
     padding: 16px;
+
     @media all and (max-width: 576px) {
       padding: 6px;
     }
+
     li {
       a {
         color: $text-grey;
         padding: 8px;
         transition: 0.4s all;
+
         i {
           color: $icon-grey;
           width: 24px;
         }
+
         &.router-link-exact-active {
           border-radius: 8px;
           background-color: $medium-grey;
           color: white;
+
           i {
             color: white;
           }
@@ -138,9 +158,11 @@ h6 {
   box-shadow: 0px 8px 16px #00000029;
   border-radius: 16px;
   padding: 16px;
+
   &.grey {
     background: $light-grey 0% 0% no-repeat padding-box;
   }
+
   &.no-shadow {
     box-shadow: none;
     border: 1px solid #00000029;
@@ -151,6 +173,7 @@ h6 {
   background-color: $dark-grey;
   border-color: 2px solid $light-blue-rgba;
   color: white;
+
   &:hover,
   &:active,
   &:focus {
@@ -173,6 +196,7 @@ h6 {
   .row.full {
     width: 98%;
   }
+
   .btn {
     font-size: 12px;
     padding: 0.275rem 0.475rem;
@@ -187,16 +211,19 @@ h6 {
     width: 24%;
     height: auto;
     color: $dark-grey;
+
     font: {
       size: 48px;
       weight: 500;
     }
+
     span {
       display: block;
       margin-top: -4px;
       color: $dark-gold;
       font-size: 15px;
     }
+
     &:not(:last-child):after {
       content: ':';
       width: 6px;
@@ -213,17 +240,20 @@ h6 {
       top: 25%;
     }
   }
+
   @media all and (max-width: 767px) {
     div {
       font: {
         size: 28px;
         weight: 500;
       }
+
       span {
         display: block;
         margin-top: 0px;
         font-size: 12px;
       }
+
       &:not(:last-child):after {
         content: ':';
         width: 6px;
@@ -241,17 +271,20 @@ h6 {
       }
     }
   }
+
   @media all and (max-width: 500px) {
     div {
       font: {
         size: 22px;
         weight: 500;
       }
+
       span {
         display: block;
         margin-top: 4px;
         font-size: 9px;
       }
+
       &:not(:last-child):after {
         content: ':';
         width: 6px;
@@ -281,20 +314,181 @@ h6 {
   background-color: rgba(4, 32, 33, 0.8);
   z-index: 99999;
   text-align: center;
+
   &.show {
     display: flex;
   }
+
   img {
     max-width: 320px;
     display: block;
     margin: 0 auto;
   }
+
   .loader-holder {
     margin: auto;
   }
+
   @media all and (max-width: 540px) {
     img {
       max-width: 220px;
+    }
+  }
+}
+
+
+/////////////////////////////////////////////////// SIDEBAR SECOND ////////////////////////////////////////////
+
+#second-sidebar {
+  transition: 0.4s all;
+  display: block;
+  background-color: #06262D;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  width: 72px;
+
+  hr {
+    background-color: #48828f;
+    height: 1px;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  @media all and (max-width: 576px) {
+    left: -72px;
+  }
+
+  .label {
+    display: none;
+    opacity: 0;
+    transition: 1s all;
+  }
+
+  .brand-logo {
+    max-height: 48px;
+    height: 100%;
+  }
+
+  &.toggled {
+    transition: 0.4s all;
+    width: 250px;
+
+    .label {
+      display: inline-block;
+      opacity: 1;
+      transition: 1s all;
+    }
+
+    @media all and (max-width: 576px) {
+      left: 0px;
+
+      .toggle-menu {
+        right: -16px !important;
+      }
+    }
+
+    .sidebar-header {
+      padding: 6px 24px;
+    }
+  }
+
+  a {
+    transition: 1s all;
+    display: block;
+  }
+
+  .sidebar-header {
+    height: $headerHeight;
+    background-color: #06262D;
+    padding: 12px;
+    display: flex;
+    position: relative;
+
+    img {
+      max-width: 100%;
+      margin: auto;
+    }
+
+    .toggle-menu {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      top: 0;
+      bottom: 0;
+      right: -12px;
+      margin: auto;
+      border-radius: 50%;
+      background-color: #143138;
+      box-shadow: 0px 4px 8px #00000029;
+      text-align: center;
+      transition: 0.4s all;
+
+      i {
+        color: $gold;
+        font-size: 14px;
+        line-height: 24px;
+      }
+
+      @media all and (max-width: 576px) {
+        right: -40px;
+        background-color: $gold;
+
+        i {
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .sidebar-menu {
+    img {
+      background-color: #143138;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+    }
+
+    h4 {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  ul.sidebar-menu {
+    height: calc(100% - 64px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: nowrap;
+    padding: 16px;
+
+    @media all and (max-width: 576px) {
+      padding: 6px;
+    }
+
+    li {
+      a {
+        color: $text-grey;
+        padding: 8px;
+        transition: 0.4s all;
+
+        i {
+          color: $icon-grey;
+          width: 24px;
+        }
+
+        &.router-link-exact-active {
+          border-radius: 8px;
+          background-color: $medium-grey;
+          color: white;
+
+          i {
+            color: white;
+          }
+        }
+      }
     }
   }
 }

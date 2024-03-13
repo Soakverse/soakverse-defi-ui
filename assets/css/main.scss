@@ -21,6 +21,7 @@ w3m-text {
   flex-direction: column;
   margin-left: 72px;
   width: calc(100% - 72px);
+
   @media all and (max-width: 576px) {
     margin-left: 0px;
     width: 100%;
@@ -62,9 +63,11 @@ w3m-text {
   max-width: 1000px;
   min-height: 100%;
   overflow: hidden;
+
   .game-sublayout {
     overflow: auto;
   }
+
   h1,
   h2,
   h3,
@@ -86,24 +89,47 @@ w3m-text {
     color: white;
     font-size: 14px;
   }
+
   .card {
     background-color: rgba(6, 38, 45, 0.8);
+
     &.location-card {
       padding: 8px;
       background-color: rgba(6, 38, 45, 1);
       border-radius: 8px;
+
       &:hover {
         background-color: black;
         border: 1px solid white;
       }
+
       img {
         border: 3px solid white;
         border-radius: 8px;
       }
+
       p {
         margin-top: 2px;
         margin-bottom: 0;
       }
     }
   }
+}
+
+
+///////////////////////////////////////////// GAME PLATFORM /////////////////////////////////////////////////////
+
+#main-content-gp {
+  width: 100%;
+  background-color: $light-grey;
+  background-image: url('/images/game-platform/soakverse-bg.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 90% 90%;
+  flex-grow: 1;
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  overflow-y: auto;
+  z-index: -200;
 }
