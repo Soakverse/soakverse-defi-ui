@@ -9,7 +9,7 @@
     <hr>
     <ul class="sidebar-menu">
       <li>
-        <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+        <nuxt-link to="/game-platform" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/games.svg" class="p-2"><span class="label ms-3">Games</span>
         </nuxt-link>
       </li>
@@ -19,7 +19,7 @@
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/play" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+        <nuxt-link to="/game-platform/rewards/my-reward" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/rewards.svg" class="p-2"><span class="label ms-3">Rewards</span>
         </nuxt-link>
       </li>

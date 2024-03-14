@@ -131,5 +131,281 @@ w3m-text {
   padding-top: 20px;
   padding-bottom: 20px;
   overflow-y: auto;
-  z-index: -200;
+}
+
+.main-div {
+  border-radius: 24px;
+  border: 1px solid #06262D;
+  overflow: hidden;
+  box-shadow: 0px 12px 24px #0000003D;
+
+  p {
+    font-size: 14px;
+    color: #AAB5B7;
+  }
+
+  h4 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    padding-bottom: 0 !important;
+  }
+
+  button {
+    cursor: pointer !important;
+    border-radius: 8px;
+    font-size: 14px;
+
+    &#btn-l {
+      background-color: #E1B67E;
+      color: #06262D;
+      font-weight: 600;
+    }
+
+    &#btn-r {
+      background-color: #143138;
+      color: #fff;
+    }
+  }
+
+  h5 {
+    color: #E1B67E;
+    font-size: 14px;
+  }
+
+  .left-content {
+    width: 320px;
+  }
+
+  .left-div {
+    background-image: url('/images/game-platform/feature-games.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 40px;
+
+
+    h2 {
+      color: #FFFFFF;
+      font-weight: bold;
+    }
+
+  }
+
+  .right-div {
+    background-color: #06262D;
+
+    h5 {
+      padding-top: 40px;
+      padding-left: 30px;
+    }
+
+    img {
+      width: 56px;
+      height: 56px;
+      justify-content: center;
+    }
+
+    ul li {
+      border-radius: 8px;
+      align-items: center;
+      padding: 5px;
+    }
+
+    ul li div {
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    ul li:nth-child(1) {
+      background-color: #143138;
+    }
+  }
+}
+
+.main-title {
+  h2 {
+    color: #fff;
+    font-size: 32px;
+  }
+
+  p {
+    color: #AAB5B7;
+  }
+
+  span {
+    font-weight: bold;
+  }
+}
+
+.main-container {
+  background-color: #06262D;
+  border-radius: 24px;
+
+  .right-side {
+    p {
+      color: #E1B67E;
+    }
+
+    .top-right-side {
+      button {
+        background-color: #143138;
+        width: 24px;
+        height: 24px;
+        position: relative;
+
+        i {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #AAB5B7;
+          font-size: 8px;
+          line-height: 12px;
+        }
+      }
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 64px;
+      font-weight: bold;
+    }
+
+    .small-text {
+      font-size: 12px;
+      color: #AAB5B7;
+    }
+
+    .small-div {
+      background-color: #143138;
+      border-radius: 12px;
+
+      p {
+        font-size: 28px;
+        font-weight: bold;
+        color: #fff;
+      }
+
+      img {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #1C3D45;
+      }
+    }
+
+    .bid-right-side {
+
+      .ethereum-label {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: #143138;
+        border-radius: 8px;
+
+        input {
+          background-color: #143138;
+          color: #586E72;
+          border: none;
+          height: 40px;
+          font-size: 14px;
+          padding-left: 30px;
+          border-radius: 8px;
+        }
+
+        img {
+          position: absolute;
+          left: 8px;
+        }
+      }
+
+
+      button {
+        height: 40px;
+        width: 100%;
+        background-color: #E1B67E;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+    }
+
+    .img-text {
+      .sk-logo {
+        width: 24px;
+        height: 24px;
+        background-color: #1C3D45;
+        border-radius: 4px;
+        padding: 6px;
+      }
+
+      .img-text-p {
+        color: #fff;
+        font-size: 14px;
+      }
+    }
+
+    hr {
+      background-color: #48828f;
+      height: 1px;
+      margin: 0 auto;
+    }
+
+    .end-right-side {
+      a {
+        color: #E1B67E;
+        font-size: 12px;
+      }
+    }
+  }
+
+}
+
+.middle-text {
+  h2 {
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  hr {
+    background-color: #48828f;
+    height: 2px;
+  }
+}
+
+.card {
+  background-color: #06262D;
+  height: 310px;
+
+  h5 {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 11px;
+
+    span {
+      color: #AAB5B7;
+    }
+  }
+
+  button {
+    background-color: #143138;
+    padding: 6px 8px 6px 8px;
+    color: #E1B67E;
+    font-size: 14px;
+  }
+
+  .cat {
+    background-color: #143138;
+    display: inline-block;
+    padding: 6px 8px 6px 8px;
+    border-radius: 14px;
+  }
 }

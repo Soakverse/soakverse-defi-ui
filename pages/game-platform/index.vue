@@ -11,7 +11,7 @@
                         <div class="mt-4">
                             <button type="button" id="btn-l" class="btn me-2">
                                 <img class="pe-2" src="/images/game-platform/games-1.svg">
-                                Play now!
+                                Play now !
                             </button>
                             <button type="button" id="btn-r" class="btn">
                                 <img class="pe-2" src="/images/game-platform/star.svg">
@@ -57,10 +57,10 @@
         </div>
         <div class="row container-fluid full m-auto mt-5 middle-text">
             <div class="col-4">
-                <h2><span class="font-weight-bold">GAMES</span> OF THE MOMENT</h2>
+                <h2 class="text-white"><span class="font-weight-bold">GAMES</span> OF THE MOMENT</h2>
             </div>
             <div class="col-8">
-                <hr>
+                <hr class="w-100">
             </div>
         </div>
         <div class="row container-fluid mt-5 full m-auto">
@@ -68,7 +68,7 @@
                 <div class="card px-0 py-0">
                     <img class="card-img-top" :src=(cards.img) alt="Card image cap">
                     <div class="card-body">
-                        <h5 class="card-title">{{ cards.title }}</h5>
+                        <h5 class="card-title text-white">{{ cards.title }}</h5>
                         <p class="card-text">{{ cards.text }}</p>
                         <p class="cat">{{ cards.cat }}</p>
                     </div>
@@ -131,131 +131,13 @@ const card = [
 </script>
 
 <style scoped lang="scss">
-.main-div {
-    border-radius: 24px;
-    border: 1px solid #06262D;
-    overflow: hidden;
-    box-shadow: 0px 12px 24px #0000003D;
-
-    p {
-        font-size: 14px;
-        color: #AAB5B7;
-    }
-
-    h4 {
-        font-size: 20px;
-        font-weight: bold;
-        color: #fff;
-        padding-bottom: 0 !important;
-    }
-
-    button {
-        cursor: pointer !important;
-        border-radius: 8px;
-        font-size: 14px;
-
-        &#btn-l {
-            background-color: #E1B67E;
-            color: #06262D;
-        }
-
-        &#btn-r {
-            background-color: #143138;
-            color: #fff;
-        }
-    }
-
-    h5 {
-        color: #E1B67E;
-        font-size: 14px;
-    }
-
-    .left-content {
-        width: 320px;
-    }
-
-    .left-div {
-        background-image: url('/images/game-platform/feature-games.webp');
-        background-repeat: no-repeat;
-        background-size: cover;
-        padding: 40px;
-
-
-        h2 {
-            color: #FFFFFF;
-            font-weight: bold;
-        }
-
-    }
-
-    .right-div {
-        background-color: #06262D;
-
-        h5 {
-            padding-top: 40px;
-            padding-left: 30px;
-        }
-
-        img {
-            width: 56px;
-            height: 56px;
-            justify-content: center;
-        }
-
-        ul li {
-            border-radius: 8px;
-            align-items: center;
-            padding: 5px;
-        }
-
-        ul li div {
-            p {
-                margin-bottom: 0;
-            }
-        }
-
-        ul li:nth-child(1) {
-            background-color: #143138;
-        }
-    }
-}
-
-.middle-text {
-    h2 {
-        color: #fff;
-
-        span {
-            font-weight: bold;
-        }
-    }
-
-    hr {
-        background-color: #48828f;
-        height: 2px;
-        width: 100%;
-    }
-}
 
 .card {
-    background-color: #06262D;
-    height: 300px;
-    
-    h5 {
-        font-weight: bold;
-        color: #fff;
-        font-size: 16px;
-    }
+    height: 290px;
 
     p {
         font-size: 12px;
         color: #AAB5B7;
-    }
-
-    .cat {
-        background-color: #143138;
-        display: inline-block;
-        padding: 6px 8px 6px 8px;
-        border-radius: 14px;
     }
 }
 </style>

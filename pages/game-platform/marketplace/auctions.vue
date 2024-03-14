@@ -1,11 +1,11 @@
 <template>
     <div class="container-fluid">
         <div class="full mx-auto row">
-            <div class="main-title mt-5">
+            <div class="main-title mt-0">
                 <h2 class="d-inline-block">MAIN <span>AUCTION</span></h2>
                 <p class="d-inline-block ms-3">Powered by <span>SOAKPORT</span></p>
             </div>
-            <div class="row full mx-auto mt-5 main-container">
+            <div class="row full mx-auto mt-0 main-container">
                 <div class="col-4 my-4">
                     <img class="rounded" src="/images/game-platform/auctino.png">
                 </div>
@@ -48,15 +48,51 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row img-text">
-                        <div class="col d-flex">
-                            <img class="p-1" src="/images/game-platform/soakverse-logo.png" alt="">
-                            <p>soakmont.eth</p>
+                    <div class="row mt-4 img-text">
+                        <div class="col">
+                            <p class="small-text mb-1">Latest bid</p>
+                            <div class="d-flex">
+                                <img class="sk-logo" src="/images/game-platform/soakverse-logo.png" alt="">
+                                <p class="ms-2 img-text-p">UserName1234</p>
+                            </div>
                         </div>
-                        <div class="col d-flex">
-                            <img class="p-1" src="/images/game-platform/ethereum-logo.png" alt="">
-                            <p>0.01</p>
-                            <a><img class="p-1" src="/images/game-platform/new-tab.png" alt=""></a>
+                        <div class="col mt-4 ">
+                            <div class="d-flex justify-content-end">
+                                <img class="p-1" style="width: 20px; height: 26px;"
+                                    src="/images/game-platform/ethereum-logo.png" alt="">
+                                <p class="mx-2 img-text-p">0.01</p>
+                                <a><img class="p-1" src="/images/game-platform/new-tab.png" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="w-100">
+                    <div class="row mt-1 end-right-side">
+                        <div class="col">
+                            <NuxtLink>Help mint the next SoakVerse</NuxtLink>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <NuxtLink>View all bids</NuxtLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row container-fluid m-auto mt-0 middle-text">
+                <div class="col-3">
+                    <h2 class="text-white"><span class="font-weight-bold">OTHER</span> AUCTIONS</h2>
+                </div>
+                <div class="col-9">
+                    <hr class="w-100">
+                </div>
+            </div>
+            <div class="row mt-0 container-fluid m-auto">
+                <div class="col-2" v-for="(cards, index) in cardAuction" :key="cards.title">
+                    <div class="card px-0 py-0">
+                        <img class="card-img-top" :src=(cards.img) alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title text-white">{{ cards.title }}</h5>
+                            <p class="card-text text-white"><span>Current bid : </span>{{ cards.bid }}</p>
+                            <p class="card-text text-white"><span>Auction ends in : </span>{{ cards.auction }}</p>
+                            <button class="btn w-100 rounded-lg">{{ cards.btn }}</button>
                         </div>
                     </div>
                 </div>
@@ -75,125 +111,61 @@ useHead({
 definePageMeta({
     layout: "game-platform",
 });
+
 </script>
 
-<style lang="scss" scoped>
-.main-title {
-    h2 {
-        color: #fff;
-        font-size: 32px;
-    }
+<script>
+export default {
 
-    p {
-        color: #AAB5B7;
-    }
+    methods: {
 
-    span {
-        font-weight: bold;
     }
 }
+const cardAuction = [
+    {
+        img: "/images/game-platform/games-moment-1.png",
+        title: "Soakverse1233",
+        bid: "0,01",
+        auction: "21h 50m 3s",
+        btn: "Place bid"
+    },
+    {
+        img: "/images/game-platform/games-moment-1.png",
+        title: "Soakverse1233",
+        bid: "0,01",
+        auction: "21h 50m 3s",
+        btn: "Place bid"
+    },
+    {
+        img: "/images/game-platform/games-moment-1.png",
+        title: "Soakverse1233",
+        bid: "0,01",
+        auction: "21h 50m 3s",
+        btn: "Place bid"
+    },
+    {
+        img: "/images/game-platform/games-moment-1.png",
+        title: "Soakverse1233",
+        bid: "0,01",
+        auction: "21h 50m 3s",
+        btn: "Place bid"
+    },
+    {
+        img: "/images/game-platform/games-moment-1.png",
+        title: "Soakverse1233",
+        bid: "0,01",
+        auction: "21h 50m 3s",
+        btn: "Place bid"
+    },
+    {
+        img: "/images/game-platform/games-moment-1.png",
+        title: "Soakverse1233",
+        bid: "0,01",
+        auction: "21h 50m 3s",
+        btn: "Place bid"
+    },
+]
 
-.main-container {
-    background-color: #06262D;
-    border-radius: 24px;
+</script>
 
-    .right-side {
-        p {
-            color: #E1B67E;
-        }
-
-        .top-right-side {
-            button {
-                background-color: #143138;
-                width: 24px;
-                height: 24px;
-                position: relative;
-
-                i {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    color: #AAB5B7;
-                    font-size: 8px;
-                    line-height: 12px;
-                }
-            }
-        }
-
-        h1 {
-            color: #fff;
-            font-size: 64px;
-            font-weight: bold;
-        }
-
-        .small-text {
-            font-size: 12px;
-            color: #AAB5B7;
-        }
-
-        .small-div {
-            background-color: #143138;
-            border-radius: 12px;
-
-            p {
-                font-size: 28px;
-                font-weight: bold;
-                color: #fff;
-            }
-
-            img {
-                width: 48px;
-                height: 48px;
-                border-radius: 8px;
-                background-color: #1C3D45;
-            }
-        }
-
-        .bid-right-side {
-
-            .ethereum-label {
-                position: relative;
-                display: flex;
-                align-items: center;
-                background-color: #143138;
-                border-radius: 8px;
-
-                input {
-                    background-color: #143138;
-                    color: #586E72;
-                    border: none;
-                    height: 40px;
-                    font-size: 14px;
-                    padding-left: 30px;
-                    border-radius: 8px;
-                }
-
-                img {
-                    position: absolute;
-                    left: 8px;
-                }
-            }
-
-
-            button {
-                height: 40px;
-                width: 100%;
-                background-color: #E1B67E;
-                border-radius: 8px;
-                border: none;
-                font-size: 16px;
-                font-weight: 600;
-            }
-
-        }
-
-        .img-text {
-            img {
-                width: 24px;
-                height: 24px;
-            }
-        }
-    }
-}
-</style>
+<style lang="scss" scoped></style>

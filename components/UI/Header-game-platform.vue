@@ -57,6 +57,12 @@ input {
 button {
   color: #AAB5B7;
   background-color: #143138;
+  transition: all 0.4s;
+  &:hover {
+    color: #E1B67E;
+    border: 1px solid #E1B67E;
+    background-color: #0d2125;
+  }
 }
 
 .search-label {
