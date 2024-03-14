@@ -13,7 +13,7 @@
           <img src="/images/game-platform/games.svg" class="p-2"><span class="label ms-3">Games</span>
         </nuxt-link>
       </li>
-      <li>
+      <!-- <li>
         <nuxt-link to="/game-platform/marketplace/auctions" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/marketplace.svg" class="p-2"><span class="label ms-3">Marketplace</span>
         </nuxt-link>
@@ -22,15 +22,16 @@
         <nuxt-link to="/game-platform/rewards/my-reward" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/rewards.svg" class="p-2"><span class="label ms-3">Rewards</span>
         </nuxt-link>
-      </li>
+      </li> -->
       <hr class="my-3">
       <h4 :class="{ 'd-none': !isSidebarOpen }">Featured games</h4>
       <li>
-        <nuxt-link to="/phaser/game" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+        <nuxt-link to="/game-platform/games/soakverse-chronicles" class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/game-icon-1.png"><span class="label ms-2">Soakverse Chronicles</span>
         </nuxt-link>
       </li>
-      <li>
+      <!-- <li>
         <nuxt-link to="/crypto/swap" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/game-icon-2.png"><span class="label ms-2">Dreadside</span>
         </nuxt-link>
@@ -59,7 +60,7 @@
         <nuxt-link to="/soakverse/backpack" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/game-icon-7.png"><span class="label ms-2">Dragoncore</span>
         </nuxt-link>
-      </li>
+      </li> -->
       <hr class="my-3">
       <li>
         <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">

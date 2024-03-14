@@ -2,17 +2,18 @@
     <div class="container-fluid">
         <div class="container-fluid mt-5 d-flex">
             <div class="main-div px-0 row m-auto full">
-                <div class="left-div col-8">
+                <div class="left-div col-xl-8 col-md- col-12">
                     <div class="left-content">
                         <h5>Featured games</h5>
                         <h2 class="mt-5">Play Soakverse Chronicles</h2>
                         <p>Experience a retro-inspired world of wonders, filled with creatures, traps, perils, and
                             treasures!</p>
                         <div class="mt-4">
-                            <button type="button" id="btn-l" class="btn me-2">
+                            <NuxtLink type="button" to="/game-platform/games/soakverse-chronicles" id="btn-l"
+                                class="btn me-2">
                                 <img class="pe-2" src="/images/game-platform/games-1.svg">
                                 Play now !
-                            </button>
+                            </NuxtLink>
                             <button type="button" id="btn-r" class="btn">
                                 <img class="pe-2" src="/images/game-platform/star.svg">
                                 Follow
@@ -20,9 +21,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="right-div col-4">
-                    <h5 class="pb-2">Latest News</h5>
-                    <ul>
+                <div class="right-div col-xl-4 col-12">
+                    <h5 class="pb-2 ps-2">Trending games</h5>
+                    <ul class="p-0">
                         <li class="d-flex my-1">
                             <img src="/images/game-platform/latest-news-1.png" alt="">
                             <div class="ms-3">
@@ -33,15 +34,15 @@
                         <li class="d-flex my-1">
                             <img src="/images/game-platform/latest-news-2.png" alt="">
                             <div class="ms-3">
-                                <h4>African Llama Adventures</h4>
-                                <p>Episode 1 available right now!</p>
+                                <h4>African Llama </h4>
+                                <p>Episode 1 available </p>
                             </div>
                         </li>
                         <li class="d-flex my-1">
                             <img src="/images/game-platform/latest-news-3.png" alt="">
                             <div class="ms-3">
-                                <h4>Special Order & Revenge Quest</h4>
-                                <p>From the makes of African Llama Adventures</p>
+                                <h4>Special Order </h4>
+                                <p>From the makes of African </p>
                             </div>
                         </li>
                         <li class="d-flex">
@@ -55,24 +56,30 @@
                 </div>
             </div>
         </div>
-        <div class="row container-fluid full m-auto mt-5 middle-text">
-            <div class="col-4">
-                <h2 class="text-white"><span class="font-weight-bold">GAMES</span> OF THE MOMENT</h2>
-            </div>
-            <div class="col-8">
-                <hr class="w-100">
+        <div class="container-fluid  mx-auto mt-5 middle-text">
+            <div class="row full mx-auto">
+                <div class="col-4">
+                    <h2 class="text-white"><span class="font-weight-bold">GAMES</span> OF THE MOMENT</h2>
+                </div>
+                <div class="col-8">
+                    <hr class="w-100">
+                </div>
             </div>
         </div>
-        <div class="row container-fluid mt-5 full m-auto">
-            <div class="col-2" v-for="(cards, index) in card" :key="cards.title">
-                <div class="card px-0 py-0">
-                    <img class="card-img-top" :src=(cards.img) alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title text-white">{{ cards.title }}</h5>
-                        <p class="card-text">{{ cards.text }}</p>
-                        <p class="cat">{{ cards.cat }}</p>
+        <div class="container-fluid mt-5 m-auto">
+            <div class="row full mx-auto">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-4 col-xxl-2 mb-4" v-for="(cards, index) in card" :key="cards.title"
+                    :class="{ 'not-first-card': index !== 0 }">
+                    <div class="card px-0 py-0">
+                        <img class="card-img-top" :src=(cards.img) alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title text-white">{{ cards.title }}</h5>
+                            <p class="card-text">{{ cards.text }}</p>
+                            <p class="cat">{{ cards.cat }}</p>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -131,13 +138,50 @@ const card = [
 </script>
 
 <style scoped lang="scss">
-
 .card {
-    height: 290px;
+    position: relative;
 
     p {
         font-size: 12px;
         color: #AAB5B7;
     }
+}
+
+ul li {
+    position: relative;
+    width: 100%;
+}
+
+ul li:not(:first-child)::before {
+    content: 'Coming soon';
+    position: absolute;
+    font-size: 18px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(20px);
+    color: #fff;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.not-first-card .card::before {
+    content: 'Coming soon';
+    position: absolute;
+    font-size: 22px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(80px);
+    color: #fff;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

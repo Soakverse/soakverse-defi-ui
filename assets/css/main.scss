@@ -9,6 +9,7 @@ body,
   width: 100% !important;
   font-family: 'Poppins';
   position: relative;
+  overflow-y: hidden;
 }
 
 w3m-text {
@@ -151,7 +152,8 @@ w3m-text {
     padding-bottom: 0 !important;
   }
 
-  button {
+  button,
+  a {
     cursor: pointer !important;
     border-radius: 8px;
     font-size: 14px;
@@ -209,6 +211,8 @@ w3m-text {
       border-radius: 8px;
       align-items: center;
       padding: 5px;
+      width: 100%;
+      height: auto;
     }
 
     ul li div {
@@ -380,7 +384,7 @@ w3m-text {
 
 .card {
   background-color: #06262D;
-  height: 310px;
+  height: 100%;
 
   h5 {
     font-weight: bold;
