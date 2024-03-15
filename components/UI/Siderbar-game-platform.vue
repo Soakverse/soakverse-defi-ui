@@ -1,56 +1,87 @@
 <template>
   <div id="second-sidebar" class="sidebar" :class="{ toggled: isSidebarOpen }">
     <div class="sidebar-header">
-      <img class="brand-logo" :src="isSidebarOpen ? logo : icon" alt="Logo Soakverse" />
+      <img
+        class="brand-logo"
+        :src="isSidebarOpen ? logo : icon"
+        alt="Logo Soakverse"
+      />
       <a href="javascript:void(0)" class="toggle-menu" @click="toggleSidebar()">
-        <i class="fa-solid" :class="{ 'fa-chevron-right': !isSidebarOpen, 'fa-chevron-left': isSidebarOpen, }"></i>
+        <i
+          class="fa-solid"
+          :class="{
+            'fa-chevron-right': !isSidebarOpen,
+            'fa-chevron-left': isSidebarOpen,
+          }"
+        ></i>
       </a>
     </div>
-    <hr>
     <ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" href="#">Active</a>
-  </li>
-  <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" href="#">Action</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">Something else here</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">Separated link</a>
-    </div>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#">Disabled</a>
-  </li>
-</ul>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Active</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          data-bs-toggle="dropdown"
+          href="#"
+          role="button"
+          aria-expanded="false"
+          >Dropdown</a
+        >
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#">Separated link</a></li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"
+          >Disabled</a
+        >
+      </li>
+    </ul>
+    <hr />
     <ul class="sidebar-menu">
       <li>
-        <nuxt-link to="/game-platform" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
-          <img src="/images/game-platform/games.svg" class="p-2"><span class="label ms-3">Games</span>
+        <nuxt-link
+          to="/game-platform"
+          class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
+        >
+          <img src="/images/game-platform/games.svg" class="p-2" /><span
+            class="label ms-3"
+            >Games</span
+          >
         </nuxt-link>
       </li>
       <!-- <li>
         <nuxt-link to="/game-platform/marketplace/auctions" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/marketplace.svg" class="p-2"><span class="label ms-3">Marketplace</span>
         </nuxt-link>
-      </li>-->
+      </li>
       <li>
-        <nuxt-link to="/game-platform/rewards/rewards-drop" class="sidebar-link"
-          :class="{ 'text-center w-auto': !isSidebarOpen }">
+        <nuxt-link to="/game-platform/rewards/my-reward" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/rewards.svg" class="p-2"><span class="label ms-3">Rewards</span>
         </nuxt-link>
-      </li>
-      <hr class="my-3">
+      </li> -->
+      <hr class="my-3" />
       <h4 :class="{ 'd-none': !isSidebarOpen }">Featured games</h4>
       <li>
-        <nuxt-link to="/game-platform/games/soakverse-chronicles" class="sidebar-link"
-          :class="{ 'text-center w-auto': !isSidebarOpen }">
-          <img src="/images/game-platform/game-icon-1.png"><span class="label ms-2">Soakverse Chronicles</span>
+        <nuxt-link
+          to="/game-platform/games/soakverse-chronicles"
+          class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
+        >
+          <img src="/images/game-platform/game-icon-1.png" /><span
+            class="label ms-2"
+            >Soakverse Chronicles</span
+          >
         </nuxt-link>
       </li>
       <!-- <li>
@@ -83,15 +114,29 @@
           <img src="/images/game-platform/game-icon-7.png"><span class="label ms-2">Dragoncore</span>
         </nuxt-link>
       </li> -->
-      <hr class="my-3">
+      <hr class="my-3" />
       <li>
-        <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
-          <img src="/images/game-platform/x.svg" class="p-2"><span class="label ms-3">Follow us</span>
+        <nuxt-link
+          to="/"
+          class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
+        >
+          <img src="/images/game-platform/x.svg" class="p-2" /><span
+            class="label ms-3"
+            >Follow us</span
+          >
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
-          <img src="/images/game-platform/discord.svg" class="p-2"><span class="label ms-3">Join the Discord</span>
+        <nuxt-link
+          to="/"
+          class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
+        >
+          <img src="/images/game-platform/discord.svg" class="p-2" /><span
+            class="label ms-3"
+            >Join the Discord</span
+          >
         </nuxt-link>
       </li>
       <!-- <li>
@@ -129,8 +174,8 @@
 </template>
 
 <script setup>
-import icon from "@/assets/img/soakverse-icon-square.png";
-import logo from "/images/game-platform/soakverse-logo.svg";
+import icon from '@/assets/img/soakverse-icon-square.png';
+import logo from '/images/game-platform/soakverse-logo.svg';
 const { isSidebarOpen, toggleSidebar, closeSidebar } = useUiState();
 </script>
 
@@ -139,13 +184,13 @@ const { closeSidebar } = useUiState();
 
 export default {
   mounted() {
-    var mainPanelDiv = document.querySelector("#main");
-    var sidebarLinks = document.querySelectorAll(".sidebar-link");
-    mainPanelDiv.addEventListener("click", function (event) {
+    var mainPanelDiv = document.querySelector('#main');
+    var sidebarLinks = document.querySelectorAll('.sidebar-link');
+    mainPanelDiv.addEventListener('click', function (event) {
       closeSidebar();
     });
     sidebarLinks.forEach((element) => {
-      element.addEventListener("click", (e) => {
+      element.addEventListener('click', (e) => {
         closeSidebar();
       });
     });

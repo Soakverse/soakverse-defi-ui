@@ -161,8 +161,8 @@
 </template>
 
 <script setup>
-import icon from "@/assets/img/soakverse-icon-square.png";
-import logo from "@/assets/img/soakverse-logo.png";
+import icon from '@/assets/img/soakverse-icon-square.png';
+import logo from '@/assets/img/soakverse-logo.png';
 const { isSidebarOpen, toggleSidebar, closeSidebar } = useUiState();
 </script>
 
@@ -171,13 +171,13 @@ const { closeSidebar } = useUiState();
 
 export default {
   mounted() {
-    var mainPanelDiv = document.querySelector("#main");
-    var sidebarLinks = document.querySelectorAll(".sidebar-link");
-    mainPanelDiv.addEventListener("click", function (event) {
+    var mainPanelDiv = document.querySelector('#main');
+    var sidebarLinks = document.querySelectorAll('.sidebar-link');
+    mainPanelDiv.addEventListener('click', function (event) {
       closeSidebar();
     });
     sidebarLinks.forEach((element) => {
-      element.addEventListener("click", (e) => {
+      element.addEventListener('click', (e) => {
         closeSidebar();
       });
     });

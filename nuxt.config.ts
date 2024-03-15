@@ -49,6 +49,7 @@ export default defineNuxtConfig({
           crossorigin: 'anonymous',
         },
       ],
+
       link: [
         {
           rel: 'apple-touch-icon',
