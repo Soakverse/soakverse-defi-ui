@@ -7,6 +7,27 @@
       </a>
     </div>
     <hr>
+    <ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Active</a>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Separated link</a>
+    </div>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#">Disabled</a>
+  </li>
+</ul>
     <ul class="sidebar-menu">
       <li>
         <nuxt-link to="/game-platform" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
@@ -17,12 +38,13 @@
         <nuxt-link to="/game-platform/marketplace/auctions" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/marketplace.svg" class="p-2"><span class="label ms-3">Marketplace</span>
         </nuxt-link>
-      </li>
+      </li>-->
       <li>
-        <nuxt-link to="/game-platform/rewards/my-reward" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+        <nuxt-link to="/game-platform/rewards/rewards-drop" class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/rewards.svg" class="p-2"><span class="label ms-3">Rewards</span>
         </nuxt-link>
-      </li> -->
+      </li>
       <hr class="my-3">
       <h4 :class="{ 'd-none': !isSidebarOpen }">Featured games</h4>
       <li>

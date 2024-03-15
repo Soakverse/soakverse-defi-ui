@@ -86,7 +86,7 @@
             </div>
             <div class="row mt-0 container-fluid m-auto">
                 <div class="col-2" v-for="(cards, index) in cardAuction" :key="cards.title">
-                    <div class="card px-0 py-0">
+                    <div class="card card-game-platform  px-0 py-0">
                         <img class="card-img-top" :src=(cards.img) alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title text-white">{{ cards.title }}</h5>

@@ -39,6 +39,9 @@ export default defineNuxtConfig({
       ],
       script: [
         {
+          src: 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js',
+        },
+        {
           src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js',
         },
         {

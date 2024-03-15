@@ -374,7 +374,7 @@ w3m-text {
   }
 }
 
-.card {
+.card-game-platform {
   background-color: #06262d;
   height: 100%;
 
@@ -404,4 +404,13 @@ w3m-text {
     padding: 6px 8px 6px 8px;
     border-radius: 14px;
   }
+}
+
+.cat-p {
+  background-color: #143138;
+  display: inline-block;
+  padding: 6px 8px 6px 8px;
+  border-radius: 14px;
+  font-size: 12px;
+  color: #aab5b7 !important;
 }

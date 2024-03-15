@@ -68,9 +68,9 @@
         </div>
         <div class="container-fluid mt-5 m-auto">
             <div class="row full mx-auto">
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-4 col-xxl-2 mb-4" v-for="(cards, index) in card" :key="cards.title"
-                    :class="{ 'not-first-card': index !== 0 }">
-                    <div class="card px-0 py-0">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-4 col-xxl-2 mb-4" v-for="(cards, index) in card"
+                    :key="cards.title" :class="{ 'not-first-card': index !== 0 }">
+                    <div class="card card-game-platform px-0 py-0">
                         <img class="card-img-top" :src=(cards.img) alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title text-white">{{ cards.title }}</h5>

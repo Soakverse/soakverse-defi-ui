@@ -46,6 +46,7 @@ useHead({
 
   #phaser-game-holder {
     max-width: 1000px;
+
     canvas {
       border-radius: 10px;
       border: 2px solid #455d62;
