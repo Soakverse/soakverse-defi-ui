@@ -12,9 +12,7 @@
 </template>
 
 <script setup>
-import PlaySound from "~~/components/UI/PlaySound.vue";
-import Siderbar from "~~/components/UI/Siderbar.vue";
-import Header from "~~/components/UI/Header.vue";
-import HeaderGamePlatform from "~/components/UI/Header-game-platform.vue";
-import SiderbarGamePlatform from "~/components/UI/Siderbar-game-platform.vue";
+import PlaySound from '~~/components/UI/PlaySound.vue';
+import HeaderGamePlatform from '~/components/UI/Header-game-platform.vue';
+import SiderbarGamePlatform from '~/components/UI/Siderbar-game-platform.vue';
 </script>

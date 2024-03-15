@@ -13,8 +13,8 @@
 <style></style>
 
 <script setup>
-import SoakverseDashboard from "../components/SoakverseDashboard.vue";
+import SoakverseDashboard from '../components/SoakverseDashboard.vue';
 useHead({
-  title: "Dashboard - Soakverse DeFI Platform",
+  title: 'Dashboard - Soakverse DeFI Platform',
 });
 </script>

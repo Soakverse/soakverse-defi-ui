@@ -117,7 +117,6 @@ w3m-text {
   }
 }
 
-
 ///////////////////////////////////////////// GAME PLATFORM /////////////////////////////////////////////////////
 
 #main-content-gp {
@@ -136,13 +135,13 @@ w3m-text {
 
 .main-div {
   border-radius: 24px;
-  border: 1px solid #06262D;
+  border: 1px solid #06262d;
   overflow: hidden;
-  box-shadow: 0px 12px 24px #0000003D;
+  box-shadow: 0px 12px 24px #0000003d;
 
   p {
     font-size: 14px;
-    color: #AAB5B7;
+    color: #aab5b7;
   }
 
   h4 {
@@ -159,8 +158,8 @@ w3m-text {
     font-size: 14px;
 
     &#btn-l {
-      background-color: #E1B67E;
-      color: #06262D;
+      background-color: #e1b67e;
+      color: #06262d;
       font-weight: 600;
     }
 
@@ -171,7 +170,7 @@ w3m-text {
   }
 
   h5 {
-    color: #E1B67E;
+    color: #e1b67e;
     font-size: 14px;
   }
 
@@ -185,16 +184,14 @@ w3m-text {
     background-size: cover;
     padding: 40px;
 
-
     h2 {
-      color: #FFFFFF;
+      color: #ffffff;
       font-weight: bold;
     }
-
   }
 
   .right-div {
-    background-color: #06262D;
+    background-color: #06262d;
 
     h5 {
       padding-top: 40px;
@@ -234,7 +231,7 @@ w3m-text {
   }
 
   p {
-    color: #AAB5B7;
+    color: #aab5b7;
   }
 
   span {
@@ -243,12 +240,12 @@ w3m-text {
 }
 
 .main-container {
-  background-color: #06262D;
+  background-color: #06262d;
   border-radius: 24px;
 
   .right-side {
     p {
-      color: #E1B67E;
+      color: #e1b67e;
     }
 
     .top-right-side {
@@ -263,7 +260,7 @@ w3m-text {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          color: #AAB5B7;
+          color: #aab5b7;
           font-size: 8px;
           line-height: 12px;
         }
@@ -278,7 +275,7 @@ w3m-text {
 
     .small-text {
       font-size: 12px;
-      color: #AAB5B7;
+      color: #aab5b7;
     }
 
     .small-div {
@@ -295,12 +292,11 @@ w3m-text {
         width: 48px;
         height: 48px;
         border-radius: 8px;
-        background-color: #1C3D45;
+        background-color: #1c3d45;
       }
     }
 
     .bid-right-side {
-
       .ethereum-label {
         position: relative;
         display: flex;
@@ -310,7 +306,7 @@ w3m-text {
 
         input {
           background-color: #143138;
-          color: #586E72;
+          color: #586e72;
           border: none;
           height: 40px;
           font-size: 14px;
@@ -324,24 +320,22 @@ w3m-text {
         }
       }
 
-
       button {
         height: 40px;
         width: 100%;
-        background-color: #E1B67E;
+        background-color: #e1b67e;
         border-radius: 8px;
         border: none;
         font-size: 16px;
         font-weight: 600;
       }
-
     }
 
     .img-text {
       .sk-logo {
         width: 24px;
         height: 24px;
-        background-color: #1C3D45;
+        background-color: #1c3d45;
         border-radius: 4px;
         padding: 6px;
       }
@@ -360,17 +354,15 @@ w3m-text {
 
     .end-right-side {
       a {
-        color: #E1B67E;
+        color: #e1b67e;
         font-size: 12px;
       }
     }
   }
-
 }
 
 .middle-text {
   h2 {
-
     span {
       font-weight: bold;
     }
@@ -383,7 +375,7 @@ w3m-text {
 }
 
 .card {
-  background-color: #06262D;
+  background-color: #06262d;
   height: 100%;
 
   h5 {
@@ -395,14 +387,14 @@ w3m-text {
     font-size: 11px;
 
     span {
-      color: #AAB5B7;
+      color: #aab5b7;
     }
   }
 
   button {
     background-color: #143138;
     padding: 6px 8px 6px 8px;
-    color: #E1B67E;
+    color: #e1b67e;
     font-size: 14px;
   }
 

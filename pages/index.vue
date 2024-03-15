@@ -32,26 +32,26 @@
 <script setup>
 const socials = [
   {
-    name: "DAO Dashboard",
-    color: "#f24578",
-    link: "/dao",
-    icon: "fas fa-scale-balanced",
+    name: 'DAO Dashboard',
+    color: '#f24578',
+    link: '/dao',
+    icon: 'fas fa-scale-balanced',
   },
   {
-    name: "SKMT Staking",
-    color: "#00b8ff",
-    link: "/skmt/staking",
-    icon: "fas fa-coins",
+    name: 'SKMT Staking',
+    color: '#00b8ff',
+    link: '/skmt/staking',
+    icon: 'fas fa-coins',
   },
   {
-    name: "Soak Links",
-    color: "#071d28",
-    link: "/soak-links",
-    icon: "fas fa-info-circle",
+    name: 'Soak Links',
+    color: '#071d28',
+    link: '/soak-links',
+    icon: 'fas fa-info-circle',
   },
 ];
 useHead({
-  title: "Home - Soakverse DeFI Platform",
+  title: 'Home - Soakverse DeFI Platform',
 });
 </script>
 <style lang="scss">

@@ -1,15 +1,19 @@
 <template>
-  <div class="container-fluid contain-game p-0">
-    <div class="mt-5 d-flex">
-      <h1 class="text-white mx-auto">Soakverse Chronicles</h1>
-    </div>
-    <div class="container-fluid d-flex p-0 h-100" id="phaser-game-holder">
-      <Suspense>
-        <PhaserContainer />
-        <template #fallback>
-          <div class="placeholder">Downloading ...</div>
-        </template>
-      </Suspense>
+  <div class="container-fluid d-flex contain-game p-0">
+    <div class="row w-100 m-auto">
+      <div class="col-12">
+        <div class="mb-0 d-flex">
+          <h1 class="text-white mx-auto">Soakverse Chronicles</h1>
+        </div>
+        <div class="container-fluid d-flex p-0 h-100" id="phaser-game-holder">
+          <Suspense>
+            <PhaserContainer />
+            <template #fallback>
+              <div class="placeholder">Downloading ...</div>
+            </template>
+          </Suspense>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,7 +28,7 @@ const playerStore = usePlayerStore();
 const { name } = storeToRefs(usePlayerStore());
 
 definePageMeta({
-  layout: "game-platform",
+  layout: 'p2e-layout',
 });
 
 useHead({
@@ -41,17 +45,12 @@ useHead({
   }
 
   #phaser-game-holder {
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 500px !important;
-    width: 800px;
-    border-radius: 10px;
-    border: 2px solid #455D62;
-    box-shadow: 2px 2px 30px 2px rgb(0, 0, 0);
+    max-width: 1000px;
+    canvas {
+      border-radius: 10px;
+      border: 2px solid #455d62;
+      box-shadow: 2px 2px 30px 2px rgb(0, 0, 0);
+    }
   }
-
 }
 </style>
