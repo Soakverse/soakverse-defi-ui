@@ -28,7 +28,7 @@ const playerStore = usePlayerStore();
 const { name } = storeToRefs(usePlayerStore());
 
 definePageMeta({
-  layout: 'p2e-layout',
+  layout: 'game-platform',
 });
 
 useHead({
