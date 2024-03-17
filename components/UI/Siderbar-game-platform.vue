@@ -70,6 +70,18 @@
           <img src="/images/game-platform/rewards.svg" class="p-2"><span class="label ms-3">Rewards</span>
         </nuxt-link>
       </li> -->
+      <li>
+        <nuxt-link
+          to="/game-platform/rewards/rewards-drop"
+          class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }"
+        >
+          <img src="/images/game-platform/rewards.svg" class="p-2" /><span
+            class="label ms-3"
+            >Rewards</span
+          >
+        </nuxt-link>
+      </li>
       <hr class="my-3" />
       <h4 :class="{ 'd-none': !isSidebarOpen }">Featured games</h4>
       <li>
