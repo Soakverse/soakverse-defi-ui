@@ -22,24 +22,24 @@
 </template>
 
 <script setup>
-import ERC721InlineStaking from "~~/components/NFT/ERC721InlineStaking.vue";
-import { soakverseDAOPassSmartContract } from "~~/utils/contracts";
-import { blockchainDefinitions } from "~~/utils/blockchain";
+import ERC721InlineStaking from '~~/components/Blockchain/NFT/ERC721InlineStaking.vue';
+import { soakverseDAOPassSmartContract } from '~~/utils/contracts';
+import { blockchainDefinitions } from '~~/utils/blockchain';
 
 definePageMeta({
-  layout: "p2e-layout",
+  layout: 'p2e-layout',
 });
 
 useHead({
-  title: "Soakverse DAO Pass Staking - Soakverse DeFI Platform",
+  title: 'Soakverse DAO Pass Staking - Soakverse DeFI Platform',
 });
 
-const targetBlockchain = blockchainDefinitions["1"];
+const targetBlockchain = blockchainDefinitions['1'];
 </script>
 
 <style lang="scss">
 #dao-staking-layout {
-  background-image: url("/images/dao-staking.webp");
+  background-image: url('/images/dao-staking.webp');
   background-size: cover;
   background-position: center center;
 }

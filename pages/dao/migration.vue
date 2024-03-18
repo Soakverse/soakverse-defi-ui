@@ -23,23 +23,23 @@
 </template>
 
 <script setup>
-import ERC721Migration from "~/components/NFT/ERC721Migration.vue";
+import ERC721Migration from '~/components/Blockchain/NFT/ERC721Migration.vue';
 import {
   soakverseDAOPassSmartContract,
   soakverseOGsSmartContract,
-} from "~~/utils/contracts";
+} from '~~/utils/contracts';
 definePageMeta({
-  layout: "p2e-layout",
+  layout: 'p2e-layout',
 });
 
 useHead({
-  title: "Soakverse DAO Pass Migration - Soakverse",
+  title: 'Soakverse DAO Pass Migration - Soakverse',
 });
 </script>
 
 <style lang="scss">
 #migration-layout {
-  background-image: url("/images/dao-migration.webp");
+  background-image: url('/images/dao-migration.webp');
   background-size: cover;
   background-position: center center;
 }
