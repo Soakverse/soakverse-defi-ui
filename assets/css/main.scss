@@ -133,49 +133,46 @@ w3m-text {
   overflow-y: auto;
 }
 
-.main-div {
-  border-radius: 24px;
-  border: 1px solid #06262d;
-  overflow: hidden;
-  box-shadow: 0px 12px 24px #0000003d;
+.card-game-plat {
 
-  p {
-    font-size: 14px;
-    color: #aab5b7;
-  }
+  .card {
+    background-color: $light-green;
 
-  h4 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #fff;
-    padding-bottom: 0 !important;
-  }
+    h2 {
+      font-size: 64px;
+    }
 
-  button,
-  a {
-    cursor: pointer !important;
-    border-radius: 8px;
-    font-size: 14px;
+    .main-text {
+      font-size: 14px;
+    }
 
-    &#btn-l {
-      background-color: #e1b67e;
-      color: #06262d;
+    .btn-gold {
+      background-color: $gold !important;
+      font-size: 16px;
       font-weight: 600;
     }
 
-    &#btn-r {
-      background-color: #143138;
-      color: #fff;
+    .div-bg-light-green {
+      background-color: $light-green-2;
+    }
+
+    .img-bg-light-green {
+      background-color: $light-green-3;
+    }
+
+    .btn-green {
+      background-color: $light-green-2;
+      font-size: 16px;
     }
   }
 
-  h5 {
-    color: #e1b67e;
-    font-size: 14px;
+  .bg-gradient {
+    background-image: linear-gradient(180deg, #A872FE 0%, #6ED0FF 100%) !important;
   }
 
-  .left-content {
-    width: 320px;
+  hr {
+    background-color: $light-green-4;
+    height: 2px;
   }
 
   .left-div {
@@ -183,20 +180,9 @@ w3m-text {
     background-repeat: no-repeat;
     background-size: cover;
     padding: 40px;
-
-    h2 {
-      color: #ffffff;
-      font-weight: bold;
-    }
   }
 
   .right-div {
-    background-color: #06262d;
-
-    h5 {
-      padding-top: 40px;
-      padding-left: 30px;
-    }
 
     img {
       width: 56px;
@@ -219,198 +205,170 @@ w3m-text {
     }
 
     ul li:nth-child(1) {
-      background-color: #143138;
+      background-color: $light-green-2;
     }
   }
 }
 
-.main-title {
-  h2 {
-    color: #fff;
-    font-size: 32px;
-  }
+.sub-card {
+  .card {
+    background-color: $light-green;
 
-  p {
-    color: #aab5b7;
-  }
-
-  span {
-    font-weight: bold;
-  }
-}
-
-.main-container {
-  background-color: #06262d;
-  border-radius: 24px;
-
-  .right-side {
-    p {
-      color: #e1b67e;
-    }
-
-    .top-right-side {
-      button {
-        background-color: #143138;
-        width: 24px;
-        height: 24px;
-        position: relative;
-
-        i {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: #aab5b7;
-          font-size: 8px;
-          line-height: 12px;
-        }
-      }
-    }
-
-    h1 {
-      color: #fff;
-      font-size: 64px;
-      font-weight: bold;
-    }
-
-    .small-text {
-      font-size: 12px;
-      color: #aab5b7;
-    }
-
-    .small-div {
-      background-color: #143138;
-      border-radius: 12px;
-
-      p {
-        font-size: 28px;
-        font-weight: bold;
-        color: #fff;
-      }
-
-      img {
-        width: 48px;
-        height: 48px;
-        border-radius: 8px;
-        background-color: #1c3d45;
-      }
-    }
-
-    .bid-right-side {
-      .ethereum-label {
-        position: relative;
-        display: flex;
-        align-items: center;
-        background-color: #143138;
-        border-radius: 8px;
-
-        input {
-          background-color: #143138;
-          color: #586e72;
-          border: none;
-          height: 40px;
-          font-size: 14px;
-          padding-left: 30px;
-          border-radius: 8px;
-        }
-
-        img {
-          position: absolute;
-          left: 8px;
-        }
-      }
-
-      button {
-        height: 40px;
-        width: 100%;
-        background-color: #e1b67e;
-        border-radius: 8px;
-        border: none;
-        font-size: 16px;
-        font-weight: 600;
-      }
-    }
-
-    .img-text {
-      .sk-logo {
-        width: 24px;
-        height: 24px;
-        background-color: #1c3d45;
-        border-radius: 4px;
-        padding: 6px;
-      }
-
-      .img-text-p {
-        color: #fff;
-        font-size: 14px;
-      }
-    }
-
-    hr {
-      background-color: #48828f;
-      height: 1px;
-      margin: 0 auto;
-    }
-
-    .end-right-side {
-      a {
-        color: #e1b67e;
-        font-size: 12px;
-      }
+    a {
+      background-color: $light-green-2;
+      color: $gold;
+      width: 100%;
+      font-size: 14px;
     }
   }
 }
 
-.middle-text {
-  h2 {
-    span {
-      font-weight: bold;
-    }
-  }
-
-  hr {
-    background-color: #48828f;
-    height: 2px;
-  }
+.p-gold {
+  color: $gold !important;
+  font-weight: 600;
+  font-size: 14px !important;
 }
 
-.card-game-platform {
-  background-color: #06262d;
-  height: 100%;
+.text-grey {
+  color: $text-grey !important;
+}
 
-  h5 {
-    font-weight: bold;
-    font-size: 16px;
-  }
+.small-text {
+  font-size: 12px;
+}
 
-  p {
-    font-size: 11px;
+.br-8 {
+  border-radius: 8px;
+}
 
-    span {
-      color: #aab5b7;
-    }
-  }
-
-  button {
-    background-color: #143138;
-    padding: 6px 8px 6px 8px;
-    color: #e1b67e;
-    font-size: 14px;
-  }
-
-  .cat {
-    background-color: #143138;
-    display: inline-block;
-    padding: 6px 8px 6px 8px;
-    border-radius: 14px;
-  }
+.br-12 {
+  border-radius: 12px;
 }
 
 .cat-p {
-  background-color: #143138;
+  background-color: $light-green-2;
   display: inline-block;
   padding: 6px 8px 6px 8px;
+  font-size: 12px !important;
   border-radius: 14px;
-  font-size: 12px;
-  color: #aab5b7 !important;
+  color: $text-grey !important;
 }
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-container {
+    background-color: $light-green-2;
+    width: 880px;
+    height: auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+
+    .btn-close-modal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: $light-green-2 !important;
+      color: $gold !important;
+    }
+
+    .text-red {
+      font-size: 12px;
+      color: #DB3E32 !important;
+    }
+
+    .text-green {
+      font-size: 12px;
+      color: #34A853 !important;
+    }
+
+    hr {
+      height: 1px;
+      background-color: $light-green-4;
+    }
+
+    p {
+      font-size: 14px;
+
+      span {
+        color: $text-grey;
+        font-size: 12px;
+      }
+    }
+
+
+    button {
+      background-color: $gold;
+      color: $light-green;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btn-complete {
+      background-color: #143138 !important;
+      color: $gold !important;
+      font-weight: 400 !important;
+    }
+
+    .progress {
+      background-color: $light-green;
+      height: 6px;
+      padding: 0;
+
+      .progress-bar {
+        background-color: $gold;
+      }
+    }
+
+    .cat-p {
+      background-color: $light-green-3 !important;
+      font-size: 12px !important;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    .ul-div-friend {
+      background-color: $light-green-3;
+      border-radius: 12px;
+
+      button {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .card-game-plat {
+    h2 {
+      font-size: 35px;
+    }
+  }
+}
+
+// @media (min-width: 1200px) {
+//   .xl-img-fluid {
+//     max-width: 100%;
+//     height: auto;
+//   }
+// }
