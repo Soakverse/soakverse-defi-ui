@@ -92,7 +92,7 @@ export default defineNuxtConfig({
   ],
   plugins: [{ src: 'node_modules/nuxtjs-phaser', mode: 'client' }],
   typescript: {
-    strict: true,
+    shim: false,
   },
   vite: {
     plugins: [

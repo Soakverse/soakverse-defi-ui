@@ -7,7 +7,6 @@
       "./node_modules/phaser/types",
       "./types"
     ],
-    "strict": true,
     "types": ["phaser"]
   }
 }
