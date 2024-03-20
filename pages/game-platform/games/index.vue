@@ -15,6 +15,8 @@
       </div>
     </div>
   </div>
+
+
 </template>
 
 <script setup>
@@ -30,29 +32,4 @@ definePageMeta({
 import GamesListCards from '@/components/GamePlatform/GamesListCards.vue';
 </script>
 
-<style>
-input {
-  background-color: #143138;
-  color: #586e72;
-  width: 100%;
-  border-radius: 6px;
-  border: none;
-  height: 40px;
-  font-size: 14px;
-}
 
-.search-label {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.search-label svg {
-  position: absolute;
-  left: 20px;
-}
-
-.search-label input {
-  padding-left: 35px;
-}
-</style>

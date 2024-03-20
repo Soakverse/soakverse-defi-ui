@@ -17,25 +17,13 @@
                       creatures, traps, perils, and treasures!
                     </p>
                     <div class="mt-4">
-                      <NuxtLink
-                        type="button"
-                        to="/game-platform/games/soakverse-chronicles"
-                        class="btn me-2 btn-gold br-8"
-                      >
-                        <img
-                          class="pe-2"
-                          src="/images/game-platform/games-1.svg"
-                        />
+                      <NuxtLink type="button" to="/game-platform/games/play/soakverse-chronicles"
+                        class="btn me-2 btn-gold br-8">
+                        <img class="pe-2" src="/images/game-platform/games-1.svg" />
                         Play now !
                       </NuxtLink>
-                      <button
-                        type="button"
-                        class="btn btn-green text-white br-8"
-                      >
-                        <img
-                          class="pe-2"
-                          src="/images/game-platform/star.svg"
-                        />
+                      <button type="button" class="btn btn-green text-white br-8">
+                        <img class="pe-2" src="/images/game-platform/star.svg" />
                         Follow
                       </button>
                     </div>
@@ -48,10 +36,7 @@
                     <h5 class="pb-2 ps-4 ps-lg-2 p-gold">Trending games</h5>
                     <ul class="p-0">
                       <li class="d-flex my-1">
-                        <img
-                          src="/images/game-platform/latest-news-1.png"
-                          alt=""
-                        />
+                        <img src="/images/game-platform/latest-news-1.png" alt="" />
                         <div class="ms-3">
                           <h4 class="text-white fw-bold fs-5">
                             Play Soakverse Chronicles
@@ -60,20 +45,14 @@
                         </div>
                       </li>
                       <li class="d-flex my-1">
-                        <img
-                          src="/images/game-platform/latest-news-2.png"
-                          alt=""
-                        />
+                        <img src="/images/game-platform/latest-news-2.png" alt="" />
                         <div class="ms-3">
                           <h4 class="text-white fw-bold fs-5">African Llama</h4>
                           <p class="text-grey fs-6">Episode 1 available</p>
                         </div>
                       </li>
                       <li class="d-flex my-1">
-                        <img
-                          src="/images/game-platform/latest-news-3.png"
-                          alt=""
-                        />
+                        <img src="/images/game-platform/latest-news-3.png" alt="" />
                         <div class="ms-3">
                           <h4 class="text-white fw-bold fs-5">Special Order</h4>
                           <p class="text-grey fs-6">
@@ -82,10 +61,7 @@
                         </div>
                       </li>
                       <li class="d-flex">
-                        <img
-                          src="/images/game-platform/latest-news-4.png"
-                          alt=""
-                        />
+                        <img src="/images/game-platform/latest-news-4.png" alt="" />
                         <div class="ms-3">
                           <h4 class="text-white fw-bold fs-5">
                             More Blastercraze News
@@ -111,7 +87,7 @@
             </h2>
           </div>
           <div class="col-8 d-none d-md-block">
-            <hr class="w-100" />
+            <hr class="w-100 hr-game-plat" />
           </div>
         </div>
       </div>
@@ -119,12 +95,8 @@
     <div class="row mt-5 sub-card">
       <div class="col-xl-10 offset-xl-1">
         <div class="row">
-          <div
-            class="col-12 col-sm-6 col-lg-4 col-xl-4 col-xxl-2 mb-4"
-            v-for="(game, index) in games"
-            :key="game.title"
-            :class="{ 'not-first-card': index !== 0 }"
-          >
+          <div class="col-12 col-sm-6 col-lg-4 col-xl-4 col-xxl-2 mb-4" v-for="(game, index) in games" :key="game.title"
+            :class="{ 'not-first-card': index !== 0 }">
             <GameCard :gameDefinition="game" />
           </div>
         </div>

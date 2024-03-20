@@ -78,7 +78,7 @@
       <h4 :class="{ 'd-none': !isSidebarOpen }">Featured games</h4>
       <li>
         <nuxt-link
-          to="/game-platform/games/soakverse-chronicles"
+          to="/game-platform/games/play/soakverse-chronicles"
           class="sidebar-link"
           :class="{ 'text-center w-auto': !isSidebarOpen }"
         >
