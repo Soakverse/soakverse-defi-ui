@@ -270,9 +270,11 @@ w3m-text {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2000;
+  padding: 20px;
 
   .modal-wrapper {
-    width: 100%;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -280,7 +282,7 @@ w3m-text {
 
   .modal-container {
     background-color: $light-green-2;
-    width: 880px;
+    width: auto;
     height: auto;
     padding: 20px;
     border-radius: 20px;

@@ -1,23 +1,24 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid game-detail">
     <div class="row mt-5">
-      <div class="col-xl-8 mx-auto">
+      <div class="col-xxl-9 mx-auto">
         <div class="row">
           <div class="col-xl-5">
             <div class="row">
-              <div class="col-xl-3">
-                <img width="120px" height="120px" src="/images/game-platform/game-01-zoom.png" alt=""
+              <div class="col-xl-3 d-flex justify-content-center justify-content-xl-start">
+                <img width="120px" height="120px" class="img-fluid" src="/images/game-platform/game-01-zoom.png" alt=""
                   style="border-radius: 8px;" />
               </div>
-              <div class="col-xl-4 d-flex align-items-center">
-                <img src="/images/game-platform/title-soakverse.png" alt="" />
+              <div
+                class="col-xl-9 d-flex justify-content-center justify-content-xl-start mt-3 mt-xl-0 align-items-center">
+                <img src="/images/game-platform/title-soakverse.png" class="img-fluid" alt="" />
               </div>
             </div>
           </div>
-          <div class="col-xl-7 justify-content-end d-flex mt-auto">
-            <div class="row ">
-              <div class="col-6">
-                <div class="d-flex justify-content-around">
+          <div class="col-12 col-xl-7 justify-content-xl-end mt-auto">
+            <div class="row mt-3 mt-xl-0">
+              <div class="col-xl-6 d-flex">
+                <div class="d-flex mx-auto justify-content-xl-around">
                   <NuxtLink type="button" to="/game-platform/games/play/soakverse-chronicles"
                     class="btn me-2 btn-gold br-8">
                     <img class="pe-2" src="/images/game-platform/games-1.svg" />
@@ -29,18 +30,19 @@
                   </button>
                 </div>
               </div>
-              <div class="col-3">
+              <div class="d-flex col-6 col-xl-3 mt-3 mt-xl-0">
                 <div class="d-flex justify-content-around">
-                  <a class="p-2 br-8"><img src="/images/game-platform/share.png" alt=""></a>
-                  <a class="p-2 br-8"><img src="/images/game-platform/website.png" alt=""></a>
-                  <a class="p-2 br-8"><img src="/images/game-platform/x.png" alt=""></a>
+                  <a class="p-2 me-xl-2 me-3 br-8"><img src="/images/game-platform/share.png" alt=""></a>
+                  <a class="p-2 me-xl-2 me-3 br-8"><img src="/images/game-platform/website.png" alt=""></a>
+                  <a class="p-2 me-xl-2 me-3 br-8"><img src="/images/game-platform/x.png" alt=""></a>
                   <a class="p-2 br-8"><img src="/images/game-platform/discord.png" alt=""></a>
                 </div>
               </div>
-              <div class="col-3">
-                <div class="d-flex">
-                  <NuxtLink class="p-2 br-8 text-grey"><img src="/images/game-platform/arrow-back.png" class="pe-3"
-                      alt="">Games</NuxtLink>
+              <div class="col-6 col-xl-3 mt-3 mt-xl-0">
+                <div class="d-flex justify-content-end">
+                  <NuxtLink class="p-2 br-8 text-grey" to="/game-platform/games">
+                    <img src="/images/game-platform/arrow-back.png" class="pe-3" alt="">Games
+                  </NuxtLink>
                 </div>
               </div>
             </div>
@@ -49,7 +51,7 @@
       </div>
     </div>
     <div class="row mt-4 card-game-plat">
-      <div class="col-xl-8 mx-auto">
+      <div class="col-xxl-9 mx-auto">
         <div class="card">
           <div class="row">
             <div class="col-lg-8 col-12">
@@ -60,7 +62,7 @@
               </div>
               <div class="card" style="background-color: #143138;">
                 <div id="carouselExampleIndicators" class="carousel slide h-100 w-100" data-bs-ride="carousel">
-                  <div class="carousel-inner br-8">
+                  <div class="carousel-inner ratio ratio-16x9 br-8">
                     <div class="carousel-item active">
                       <img src="/images/game-platform/soakverse-video.webp" class="d-block w-100 h-100" alt="..." />
                     </div>
@@ -71,7 +73,7 @@
                       <img src="/images/game-platform/lake.webp" class="d-block w-100 h-100" alt="..." />
                     </div>
                     <div class="carousel-item">
-                      <img src="/images/game-platform/village.webp" class="d-block w-100 h-100 img-fluid" alt="..." />
+                      <img src="/images/game-platform/village.webp" class="d-block w-100 h-100" alt="..." />
                     </div>
                   </div>
                   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -184,26 +186,36 @@ const gameInfoDetail = [
   background-repeat: no-repeat;
 }
 
-a {
-  background-color: #143138;
-  cursor: pointer;
-}
+.game-detail {
+  a {
+    background-color: #143138;
+    cursor: pointer;
+  }
 
-.carousel-indicators button.thumbnail {
-  width: 100px;
-}
+  .carousel-indicators button.thumbnail {
+    width: 100px;
+    height: auto;
+  }
 
-.carousel-indicators button.thumbnail:not(.active) {
-  opacity: 0.5;
-}
+  .carousel-indicators button.thumbnail:not(.active) {
+    opacity: 0.5;
+  }
 
-.carousel-indicators {
-  position: static;
-}
+  .carousel-indicators {
+    position: static;
+  }
 
-@media screen and (min-width: 992px) {
-  .carousel {
-    margin: 0 auto;
+  @media screen and (min-width: 992px) {
+    .carousel {
+      margin: 0 auto;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .img-game-soak {
+      max-width: 100%;
+      height: auto;
+    }
   }
 }
 </style>
