@@ -2,40 +2,27 @@
   <div id="second-sidebar" class="sidebar" :class="{ toggled: isSidebarOpen }">
     <div class="sidebar-header">
       <nuxt-link to="/game-platform">
-        <img
-          class="brand-logo"
-          :src="isSidebarOpen ? logo : icon"
-          alt="Logo Soakverse"
-        />
+        <img class="brand-logo" :src="isSidebarOpen ? logo : icon" alt="Logo Soakverse" />
       </nuxt-link>
       <a href="javascript:void(0)" class="toggle-menu" @click="toggleSidebar()">
-        <i
-          class="fa-solid"
-          :class="{
-            'fa-chevron-right': !isSidebarOpen,
-            'fa-chevron-left': isSidebarOpen,
-          }"
-        ></i>
+        <i class="fa-solid" :class="{
+    'fa-chevron-right': !isSidebarOpen,
+    'fa-chevron-left': isSidebarOpen,
+  }"></i>
       </a>
     </div>
     <ul class="sidebar-menu">
       <li>
-        <nuxt-link
-          to="/game-platform/games"
-          class="sidebar-link"
-          :class="{ 'text-center w-auto': !isSidebarOpen }"
-        >
-          <img src="/images/game-platform/games.svg" class="p-2" /><span
-            class="label ms-3"
-            >Games</span
-          >
+        <nuxt-link to="/game-platform/games" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+          <img src="/images/game-platform/games.svg" class="p-2" /><span class="label ms-3">Games</span>
         </nuxt-link>
       </li>
-      <!-- <li>
-        <nuxt-link to="/game-platform/marketplace/auctions" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+      <li>
+        <nuxt-link to="/game-platform/marketplace" class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }">
           <img src="/images/game-platform/marketplace.svg" class="p-2"><span class="label ms-3">Marketplace</span>
         </nuxt-link>
-      </li> -->
+      </li>
       <!-- <li>
         <nuxt-link to="/game-platform/rewards/rewards-drop" class="sidebar-link"
           :class="{ 'text-center w-auto': !isSidebarOpen }">
@@ -45,31 +32,15 @@
 
       <ul class="nav">
         <li class="nav-item dropdown">
-          <nuxt-link
-            class="nav-link dropdown-toggle px-0 sidebar-link"
-            data-bs-toggle="dropdown"
-            :class="{ 'text-center w-auto': !isSidebarOpen }"
-            role="button"
-            aria-expanded="false"
-            ><img src="/images/game-platform/rewards.svg" class="p-2" /><span
-              class="label ms-3"
-              >Rewards</span
-            ></nuxt-link
-          >
+          <nuxt-link class="nav-link dropdown-toggle px-0 sidebar-link" data-bs-toggle="dropdown"
+            :class="{ 'text-center w-auto': !isSidebarOpen }" role="button" aria-expanded="false"><img
+              src="/images/game-platform/rewards.svg" class="p-2" /><span class="label ms-3">Rewards</span></nuxt-link>
           <ul class="dropdown-menu" style="background-color: #06262d">
             <li>
-              <nuxt-link
-                class="dropdown-item"
-                to="/game-platform/rewards/my-reward"
-                >My Rewards</nuxt-link
-              >
+              <nuxt-link class="dropdown-item" to="/game-platform/rewards/my-reward">My Rewards</nuxt-link>
             </li>
             <li>
-              <nuxt-link
-                class="dropdown-item"
-                to="/game-platform/rewards/rewards-drop"
-                >Rewards Drops</nuxt-link
-              >
+              <nuxt-link class="dropdown-item" to="/game-platform/rewards/rewards-drop">Rewards Drops</nuxt-link>
             </li>
           </ul>
         </li>
@@ -77,15 +48,9 @@
       <hr class="my-3" />
       <h4 :class="{ 'd-none': !isSidebarOpen }">Featured games</h4>
       <li>
-        <nuxt-link
-          to="/game-platform/games/play/soakverse-chronicles"
-          class="sidebar-link"
-          :class="{ 'text-center w-auto': !isSidebarOpen }"
-        >
-          <img src="/images/game-platform/game-icon-1.png" /><span
-            class="label ms-2"
-            >Soakverse Chronicles</span
-          >
+        <nuxt-link to="/game-platform/games/play/soakverse-chronicles" class="sidebar-link"
+          :class="{ 'text-center w-auto': !isSidebarOpen }">
+          <img src="/images/game-platform/game-icon-1.png" /><span class="label ms-2">Soakverse Chronicles</span>
         </nuxt-link>
       </li>
       <!-- <li>
@@ -120,27 +85,13 @@
       </li> -->
       <hr class="my-3" />
       <li>
-        <nuxt-link
-          to="/"
-          class="sidebar-link"
-          :class="{ 'text-center w-auto': !isSidebarOpen }"
-        >
-          <img src="/images/game-platform/x.svg" class="p-2" /><span
-            class="label ms-3"
-            >Follow us</span
-          >
+        <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+          <img src="/images/game-platform/x.svg" class="p-2" /><span class="label ms-3">Follow us</span>
         </nuxt-link>
       </li>
       <li>
-        <nuxt-link
-          to="/"
-          class="sidebar-link"
-          :class="{ 'text-center w-auto': !isSidebarOpen }"
-        >
-          <img src="/images/game-platform/discord.svg" class="p-2" /><span
-            class="label ms-3"
-            >Join the Discord</span
-          >
+        <nuxt-link to="/" class="sidebar-link" :class="{ 'text-center w-auto': !isSidebarOpen }">
+          <img src="/images/game-platform/discord.svg" class="p-2" /><span class="label ms-3">Join the Discord</span>
         </nuxt-link>
       </li>
       <!-- <li>

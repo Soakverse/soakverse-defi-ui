@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid d-flex contain-game p-0">
     <div class="row w-100 m-auto">
-      <div class="col-12">
-        <div class="mb-0 d-flex">
-          <h1 class="text-white mx-auto">Soakverse Chronicles</h1>
+      <div class="col-12 text-center">
+        <div class="mb-0 mx-auto d-flex">
+          <img src="/images/game-platform/title-soakverse.png" class="mx-auto" alt="">
         </div>
         <div class="container-fluid d-flex p-0 h-100" id="phaser-game-holder">
           <Suspense>

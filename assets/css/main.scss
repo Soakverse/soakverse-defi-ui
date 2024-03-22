@@ -196,6 +196,35 @@ w3m-text {
       background-color: $light-green-2;
     }
   }
+
+  .label-open {
+    margin-left: 170px;
+  }
+
+  input {
+    background-color: #143138;
+    color: #586e72;
+    width: 100%;
+    border-radius: 6px;
+    border: none;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .search-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-label img {
+    position: absolute;
+    left: 8px;
+  }
+
+  .search-label input {
+    padding-left: 35px;
+  }
 }
 
 .sub-card {
@@ -211,8 +240,16 @@ w3m-text {
   }
 }
 
-.btn-green {
+a {
+  cursor: pointer;
+}
+
+.logo-bg-green-light {
   background-color: $light-green-2;
+}
+
+.btn-green {
+  background-color: $light-green-2 !important;
   font-size: 16px;
 }
 

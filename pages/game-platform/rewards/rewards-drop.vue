@@ -148,9 +148,9 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-10 d-flex mx-auto justify-content-around">
-                  <p class="cat-p">NFT Project</p>
-                  <p class="cat-p">Token Project</p>
+                <div class="col-10 d-flex">
+                  <p class="cat-p me-2">NFT Project</p>
+                  <p class="cat-p me-2">Token Project</p>
                   <p class="cat-p">Web3 Community</p>
                 </div>
               </div>
@@ -172,8 +172,8 @@
                   <ul class="px-0">
                     <li>
                       <div class="row">
-                        <div class="col-12 d-flex ul-div-friend align-items-center justify-content-between">
-                          <div class="d-flex align-items-center">
+                        <div class="col-12 d-sm-flex ul-div-friend align-items-center justify-content-between">
+                          <div class="d-flex align-items-center justify-content-center justify-content-sm-start">
                             <img class="my-2" src="/images/game-platform/badge-1.png"
                               style="width: 48px; height: 48px" />
                             <div class="ms-3">
@@ -181,7 +181,7 @@
                               <p class="my-0 sub-text text-green">Completed!</p>
                             </div>
                           </div>
-                          <div>
+                          <div class="d-flex my-2 mb-sm-0 justify-content-center justify-content-sm-start">
                             <button class="me-2 p-2 btn btn-complete" style="opacity: 0.25">
                               Complete quest
                             </button>
@@ -192,8 +192,8 @@
                     </li>
                     <li class="mt-2">
                       <div class="row">
-                        <div class="col-12 d-flex ul-div-friend align-items-center justify-content-between">
-                          <div class="d-flex align-items-center">
+                        <div class="col-12 d-sm-flex ul-div-friend align-items-center justify-content-between">
+                          <div class="d-flex align-items-center justify-content-center justify-content-sm-start">
                             <img class="my-2" src="/images/game-platform/question-mark.png"
                               style="width: 48px; height: 48px" />
                             <div class="ms-3">
@@ -202,7 +202,7 @@
                             </div>
                           </div>
                           <div class="">
-                            <div class="">
+                            <div class="d-flex my-2 mb-sm-0 justify-content-center justify-content-sm-start">
                               <button class="me-2 p-2 btn btn-complete">
                                 Complete quest
                               </button>
@@ -216,8 +216,8 @@
                     </li>
                     <li class="mt-2">
                       <div class="row">
-                        <div class="col-12 d-flex ul-div-friend align-items-center justify-content-between">
-                          <div class="d-flex align-items-center">
+                        <div class="col-12 d-sm-flex ul-div-friend align-items-center justify-content-between">
+                          <div class="d-flex align-items-center justify-content-center justify-content-sm-start">
                             <img class="my-2" src="/images/game-platform/question-mark.png"
                               style="width: 48px; height: 48px" />
                             <div class="ms-3">
@@ -226,7 +226,7 @@
                             </div>
                           </div>
                           <div class="">
-                            <div class="">
+                            <div class="d-flex my-2 mb-sm-0 justify-content-center justify-content-sm-start">
                               <button class="btn me-2 p-2 btn-complete">
                                 Complete quest
                               </button>
