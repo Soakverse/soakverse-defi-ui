@@ -217,11 +217,6 @@ export default class SW_GameScene extends SW_BaseScene {
       this
     );
     this.UIScene.addUniqueListener(
-      'menuVisibilityChanged',
-      this.onMenuVisibilityChanged,
-      this
-    );
-    this.UIScene.addUniqueListener(
       'playerRequestToggleRunState',
       this.onPlayerRequestToggleRunState,
       this
@@ -306,14 +301,6 @@ export default class SW_GameScene extends SW_BaseScene {
     interactable: FocusType
   ): void {
     interactionComponent.onInteractableOverlapped(interactable);
-  }
-
-  protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
-    if (hasVisibleMenu) {
-      this.UIScene.lockPlayerControls();
-    } else {
-      this.UIScene.unlockPlayerControls();
-    }
   }
 
   public onWizhWellRequested(): void {
