@@ -78,6 +78,7 @@ export class SW_PlayerInputComponent extends Phaser.Events.EventEmitter {
 
   protected createJoystickInput(): void {
     this.joystick = new SW_Joystick(this.scene, 0, 0);
+    this.joystick.setDepth(-1);
 
     this.inputJoystick = this.joystick.createCursorKeys();
     this.joystick.setVisible(false);

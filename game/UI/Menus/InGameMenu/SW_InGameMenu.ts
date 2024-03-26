@@ -1,52 +1,150 @@
-import { SW_CST } from '~/game/SW_CST';
-import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import { SW_TextButton } from '~/game/UI/buttons/SW_TextButton';
+import { SW_BaseMenu } from '../SW_BaseMenu';
+import { SW_MenuManager } from '../SW_MenuManager';
+import { SW_CharacterMenuContent } from './Contents/SW_CharacterMenuContent';
+import { SW_InGameMenuContent } from './Contents/SW_InGameMenuContent';
+import { SW_MonstersMenuContent } from './Contents/SW_MonstersMenuContent';
+import { SW_SettingsMenuContent } from './Contents/SW_SettingsMenuContent';
+import { SW_MenuHeader } from './Header/SW_MenuHeader';
 
-// TODO - Make a base menu file
-export class SW_InGameMenu extends Phaser.GameObjects.Container {
-  public declare scene: SW_BaseScene;
-
+export class SW_InGameMenu extends SW_BaseMenu {
+  protected declare headerBar: SW_MenuHeader;
   protected background: Phaser.GameObjects.Image;
 
-  constructor(scene: SW_BaseScene, x: number, y: number) {
-    super(scene, x, y);
+  protected defaultContent: SW_InGameMenuContent | undefined;
+  protected defaultSelectedButtonId: string | undefined;
+
+  protected currentContent: SW_InGameMenuContent | undefined;
+  protected declare characterContent: SW_CharacterMenuContent;
+  protected declare monstersContent: SW_MonstersMenuContent;
+  protected declare settingsContent: SW_SettingsMenuContent;
+
+  constructor(menuManager: SW_MenuManager, x: number, y: number) {
+    super(menuManager, x, y);
     this.scene.add.existing(this);
 
-    this.background = this.scene.add
-      .image(0, 0, 'menuBackground')
-      .setOrigin(0.5);
+    this.background = this.scene.add.image(0, 0, 'inGameMenuBackground');
+    this.background.setOrigin(0.5);
     this.add(this.background);
 
-    this.width = this.background.width;
-    this.height = this.background.height;
+    this.width = this.scene.game.canvas.width;
+    this.height = this.scene.game.canvas.height;
 
-    const settingsButton = new SW_TextButton(this.scene, 0, 0, 'Settings', {});
-    this.add(settingsButton);
-    settingsButton.onClicked(this.onSettingButtonClicked, this);
+    this.createHeaderBar();
+    this.createMenuContents();
+  }
 
-    const backButton = new SW_TextButton(this.scene, 0, 0, 'Back', {});
-    this.add(backButton);
-    backButton.onClicked(this.onBackButtonClicked, this);
+  protected createHeaderBar() {
+    const headerHeight = 56;
 
-    const mainButtons = this.scene.rexUI.add.sizer({
-      orientation: 'top-to-bottom',
-      space: { top: 0, item: 10 },
-      x: 0,
-      y: 0,
+    this.headerBar = new SW_MenuHeader(this.scene, -this.x, -this.y, {
+      height: headerHeight,
+      leftButtonsData: [
+        {
+          id: 'Character',
+          icon: 'characterButton',
+          text: 'Character',
+          height: headerHeight,
+          isSelectable: true,
+          action: this.onCharacterButtonClicked,
+          actionContext: this,
+        },
+        {
+          id: 'Monsters',
+          icon: 'eggzButton',
+          text: 'Monsters',
+          height: headerHeight,
+          isSelectable: true,
+          action: this.onMonstersButtonClicked,
+          actionContext: this,
+        },
+      ],
+      rightButtonsData: [
+        {
+          id: 'Settings',
+          icon: 'settingsButton',
+          text: 'Settings',
+          height: headerHeight,
+          isSelectable: true,
+          action: this.onSettingButtonClicked,
+          actionContext: this,
+        },
+        {
+          id: 'Back',
+          icon: 'backButton',
+          text: 'Back',
+          height: headerHeight,
+          isSelectable: false,
+          action: this.onBackButtonClicked,
+          actionContext: this,
+        },
+      ],
     });
-    mainButtons.setOrigin(0.5);
+    this.add(this.headerBar);
 
-    this.add(mainButtons);
-    mainButtons.add(settingsButton);
-    mainButtons.add(backButton);
-    mainButtons.layout();
+    this.defaultSelectedButtonId = 'Settings';
+  }
+
+  protected createMenuContents() {
+    this.settingsContent = new SW_SettingsMenuContent(this.scene, 0, 0, {
+      width: this.width,
+      height: this.height,
+    });
+    this.settingsContent.setVisible(false);
+    this.add(this.settingsContent);
+
+    this.defaultContent = this.settingsContent;
+
+    this.monstersContent = new SW_MonstersMenuContent(this.scene, 0, 0, {
+      width: this.width,
+      height: this.height,
+    });
+    this.monstersContent.setVisible(false);
+    this.add(this.monstersContent);
+
+    this.characterContent = new SW_CharacterMenuContent(this.scene, 0, 0, {
+      width: this.width,
+      height: this.height,
+    });
+    this.characterContent.setVisible(false);
+    this.add(this.characterContent);
+  }
+
+  public setVisible(value: boolean): this {
+    this.showDefaultContent();
+
+    return super.setVisible(value);
+  }
+
+  public showDefaultContent(): void {
+    this.showContent(this.defaultContent);
+    this.headerBar.selectButtonById(this.defaultSelectedButtonId);
+  }
+
+  public showContent(content: SW_InGameMenuContent | undefined): void {
+    if (this.currentContent) {
+      this.currentContent.setVisible(false);
+    }
+
+    this.currentContent = content;
+
+    if (this.currentContent) {
+      this.currentContent.setVisible(true);
+    }
+  }
+
+  protected onCharacterButtonClicked(): void {
+    this.showContent(this.characterContent);
+  }
+
+  protected onMonstersButtonClicked(): void {
+    this.showContent(this.monstersContent);
   }
 
   protected onSettingButtonClicked(): void {
-    this.emit('settingsButtonClicked');
+    this.showContent(this.settingsContent);
   }
 
   protected onBackButtonClicked(): void {
-    this.emit('backButtonClicked');
+    this.menuManager.hideMenu(this);
   }
 }

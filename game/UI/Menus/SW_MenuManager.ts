@@ -5,18 +5,26 @@ declare type SW_MenuType = Phaser.GameObjects.Components.Depth &
   Phaser.GameObjects.Components.Visible;
 
 export class SW_MenuManager extends Phaser.Events.EventEmitter {
+  protected _scene: SW_BaseScene;
+
   /**
    * All the visible menus this manager handles. The order of the array determines the Z-order of the menus.
    * The first menu from this array will be displayed behind the others. The last menu from this array will be displayed on top of the others
    */
   protected menus: SW_MenuType[];
 
+  /**
+   * Default menu to display/hide if required
+   */
   protected defaultMenu: SW_MenuType | undefined;
 
+  /** Background behind the focused menu to prevent interactions anywhere else */
   protected background: Phaser.GameObjects.Graphics;
 
   constructor(scene: SW_BaseScene) {
     super();
+
+    this._scene = scene;
 
     this.menus = [];
     this.background = scene.add.graphics();
@@ -27,6 +35,10 @@ export class SW_MenuManager extends Phaser.Events.EventEmitter {
       Phaser.Geom.Rectangle.Contains
     );
     this.background.setVisible(false);
+  }
+
+  public get scene(): SW_BaseScene {
+    return this._scene;
   }
 
   public setDefaultMenu(menu: SW_MenuType): void {

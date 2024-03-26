@@ -32,6 +32,14 @@ import menuBackground from '@/game/assets/ui/menus/menuBackground.png';
 import menuButtonNormal from '@/game/assets/ui/menus/menuButtonNormal.png';
 import menuButtonPressed from '@/game/assets/ui/menus/menuButtonPressed.png';
 
+import backButton from '@/game/assets/ui/menus/backButton.png';
+import characterButton from '@/game/assets/ui/menus/characterButton.png';
+import eggzButton from '@/game/assets/ui/menus/eggzButton.png';
+import settingsButton from '@/game/assets/ui/menus/settingsButton.png';
+
+import inGameMenuBackground from '@/game/assets/ui/menus/inGameMenuBackground.png';
+import inGameMenuTab from '@/game/assets/ui/menus/inGameMenuTab.png';
+
 // Mobile
 import menuButtonMobile from '@/game/assets/ui/mobile/menuButton.png';
 import runButtonMobile from '@/game/assets/ui/mobile/runButton.png';
@@ -86,6 +94,14 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('menuBackground', menuBackground);
     this.load.image('menuButtonNormal', menuButtonNormal);
     this.load.image('menuButtonPressed', menuButtonPressed);
+
+    this.load.image('inGameMenuBackground', inGameMenuBackground);
+    this.load.image('inGameMenuTab', inGameMenuTab);
+
+    this.load.image('backButton', backButton);
+    this.load.image('characterButton', characterButton);
+    this.load.image('eggzButton', eggzButton);
+    this.load.image('settingsButton', settingsButton);
   }
 
   private preloadMobileAssets(): void {

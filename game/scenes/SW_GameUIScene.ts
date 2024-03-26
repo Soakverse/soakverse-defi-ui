@@ -1,9 +1,7 @@
 import { SW_CST } from '~/game/SW_CST';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import {
-  SW_ENUM_IVENTORY_OBJECT,
-  SW_InventoryObject,
-} from '~/game/inventory/SW_Inventory';
+import { SW_ENUM_IVENTORY_OBJECT } from '~/game/inventory/SW_Inventory';
+import { SW_InventoryObject } from '~/game/inventory/SW_Inventory';
 import { SW_PlayerInventoryWidget } from '~/game/inventory/SW_PlayerInventoryWidget';
 import { SW_ChestInventoryWidget } from '~/game/inventory/SW_ChestInventoryWidget';
 import { SW_DialogQuest } from '../dialogues/SW_DialogQuest';
@@ -14,7 +12,6 @@ import { SW_PlayerActionsContainer } from '../UI/mobile/SW_PlayerActionsContaine
 import { SW_InGameMenu } from '../UI/Menus/InGameMenu/SW_InGameMenu';
 import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputComponent';
 import { SW_Player } from '../characters/players/SW_Player';
-import { SW_SettingsMenu } from '../UI/Menus/InGameMenu/SW_SettingsMenu';
 
 declare type SW_UIKeys = {
   escape: Phaser.Input.Keyboard.Key;
@@ -29,7 +26,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
   private declare menuManager: SW_MenuManager;
 
   private declare inGameMenu: SW_InGameMenu;
-  private declare settingsMenu: SW_SettingsMenu;
   private declare wizhMenu: SW_WizhMenu;
 
   private declare dialogQuest: SW_DialogQuest;
@@ -52,6 +48,12 @@ export default class SW_GameUIScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
+    if (SW_CST.GAME.IS_MOBILE) {
+      this.createMobileWidgets();
+    }
+
+    this.createKeys();
+
     this.menuManager = new SW_MenuManager(this);
     this.menuManager.on(
       'menuVisibilityChanged',
@@ -59,43 +61,16 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this
     );
 
-    this.createKeys();
     this.createDialogQuest();
 
-    if (SW_CST.GAME.IS_MOBILE) {
-      this.createMobileWidgets();
-    }
-
     this.inGameMenu = new SW_InGameMenu(
-      this,
+      this.menuManager,
       this.game.canvas.width * 0.5,
-      this.game.canvas.height * 0.5
-    );
-    this.inGameMenu.on('resumeButtonClicked', this.onResumeButtonClicked, this);
-    this.inGameMenu.on('backButtonClicked', this.onResumeButtonClicked, this);
-    this.inGameMenu.on(
-      'settingsButtonClicked',
-      this.onSettingsButtonClicked,
-      this
+      this.game.canvas.height * 0.6
     );
 
     this.menuManager.setDefaultMenu(this.inGameMenu);
     this.menuManager.hideMenu(this.inGameMenu);
-
-    this.settingsMenu = new SW_SettingsMenu(
-      this,
-      this.game.canvas.width * 0.5,
-      this.game.canvas.height * 0.5
-    );
-    this.settingsMenu.on(
-      'backButtonClicked',
-      () => {
-        this.menuManager.hideMenu(this.settingsMenu);
-      },
-      this
-    );
-
-    this.menuManager.hideMenu(this.settingsMenu);
 
     this.playerInventoryWidget = new SW_PlayerInventoryWidget(
       this,
@@ -280,23 +255,21 @@ export default class SW_GameUIScene extends SW_BaseScene {
   }
 
   public lockPlayerControls(): void {
-    this.playerInputComponent.lockControls();
+    this.playerInputComponent?.lockControls();
   }
 
   public unlockPlayerControls(): void {
-    this.playerInputComponent.unlockControls();
+    this.playerInputComponent?.unlockControls();
   }
 
   protected onMenuVisibilityChanged(hasVisibleMenu: boolean): void {
-    this.events.emit('menuVisibilityChanged', hasVisibleMenu);
-  }
+    if (hasVisibleMenu) {
+      this.lockPlayerControls();
+    } else {
+      this.unlockPlayerControls();
+    }
 
-  protected onResumeButtonClicked(): void {
-    this.menuManager.hideMenu(this.inGameMenu);
-  }
-
-  protected onSettingsButtonClicked(): void {
-    this.menuManager.showMenu(this.settingsMenu);
+    this.playerActionsContainer?.setVisible(!hasVisibleMenu);
   }
 
   protected onMovePlayerInventoryMoveObject(
@@ -460,7 +433,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
       SW_CST.GAME.WIDTH * 0.5,
       SW_CST.GAME.HEIGHT * 0.5
     );
-    this.playerActionsContainer.setDepth(1);
 
     this.playerActionsContainer.on(
       'runButtonPressed',
