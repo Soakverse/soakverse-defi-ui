@@ -121,10 +121,4 @@ const cardReward = [
 </script>
 
 <style lang="scss" scoped>
-// .card {
-
-//     p {
-//         color: #AAB5B7;
-//         font-size: 12px;
-//     }
-// }</style>
+</style>

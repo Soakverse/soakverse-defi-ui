@@ -132,7 +132,8 @@
                                         Auction ends in:
                                         <span class="text-white"> {{ cards.auction }}</span>
                                     </p>
-                                    <NuxtLink to="/game-platform/marketplace/auctions/auction" class="btn">{{ cards.btn }}</NuxtLink>
+                                    <NuxtLink to="/game-platform/marketplace/auctions/auction" class="btn btn-green">{{
+                                            cards.btn }}</NuxtLink>
                                 </div>
                             </div>
                         </div>
@@ -160,8 +161,10 @@
                                     <ul class="px-0">
                                         <li>
                                             <div class="row">
-                                                <div class="col-12 align-items-center d-sm-flex  justify-content-between">
-                                                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start">
+                                                <div
+                                                    class="col-12 align-items-center d-sm-flex  justify-content-between">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-center justify-content-sm-start">
                                                         <img class="my-2" src="/images/game-platform/game-icon-4.png"
                                                             style="width: 48px; height: 48px" />
                                                         <div class="ms-3">
@@ -169,7 +172,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="">
-                                                        <div class="d-flex my-2 mb-sm-0 justify-content-center justify-content-sm-start">
+                                                        <div
+                                                            class="d-flex my-2 mb-sm-0 justify-content-center justify-content-sm-start">
                                                             <p class="small-text my-0 text-grey">Mar 13, 2024, 6:19 AM
                                                             </p>
                                                             <img src="/images/game-platform/ethereum-logo.svg"
@@ -358,8 +362,6 @@ const cardAuction = [
 </script>
 
 <style lang="scss" scoped>
-
-
 @media screen and (max-width: 900px) {
     .card-game-plat {
         h2 {

@@ -7,7 +7,7 @@
         </div>
       </div>
     </div>
-    <div class="col-6 col-xl-4 col-xxl-2 order-xxl-2 order-1 mb-5 mb-xxl-0 mx-auto card-game-plat">
+    <div class="col-8 col-md-6 col-xl-4 col-xxl-2 order-xxl-2 order-1 mb-5 mb-xxl-0 mx-auto card-game-plat">
       <div class="card">
         <div class="d-flex justify-content-between">
           <p class="p-gold">Filters</p>
@@ -113,5 +113,4 @@ input {
   color: #AAB5B7;
   border: none;
   font-size: 14px;
-}
-</style>
+}</style>

@@ -92,7 +92,7 @@
                     Soakverse Reward Campaign Ends:
                     <span class="text-white"> {{ cards.text }}</span>
                   </p>
-                  <NuxtLink class="btn">{{ cards.btn }}</NuxtLink>
+                  <NuxtLink class="btn btn-green">{{ cards.btn }}</NuxtLink>
                 </div>
               </div>
             </div>

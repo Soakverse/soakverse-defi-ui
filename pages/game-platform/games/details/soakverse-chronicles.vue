@@ -32,15 +32,15 @@
               </div>
               <div class="d-flex col-6 col-xl-3 mt-3 mt-xl-0">
                 <div class="d-flex justify-content-around">
-                  <a class="p-2 me-xl-2 me-3 br-8"><img src="/images/game-platform/share.png" alt=""></a>
-                  <a class="p-2 me-xl-2 me-3 br-8"><img src="/images/game-platform/website.png" alt=""></a>
-                  <a class="p-2 me-xl-2 me-3 br-8"><img src="/images/game-platform/x.png" alt=""></a>
+                  <a class="p-2 me-xl-2 me-3 link-details br-8"><img src="/images/game-platform/share.png" alt=""></a>
+                  <a class="p-2 me-xl-2 me-3 link-details br-8"><img src="/images/game-platform/website.png" alt=""></a>
+                  <a class="p-2 me-xl-2 me-3 link-details br-8"><img src="/images/game-platform/x.png" alt=""></a>
                   <a class="p-2 br-8"><img src="/images/game-platform/discord.png" alt=""></a>
                 </div>
               </div>
               <div class="col-6 col-xl-3 mt-3 mt-xl-0">
                 <div class="d-flex justify-content-end">
-                  <NuxtLink class="p-2 br-8 text-grey" to="/game-platform/games">
+                  <NuxtLink class="p-2 br-8 text-grey link-details" to="/game-platform/games">
                     <img src="/images/game-platform/arrow-back.png" class="pe-3" alt="">Games
                   </NuxtLink>
                 </div>
@@ -186,36 +186,5 @@ const gameInfoDetail = [
   background-repeat: no-repeat;
 }
 
-.game-detail {
-  a {
-    background-color: #143138;
-    cursor: pointer;
-  }
 
-  .carousel-indicators button.thumbnail {
-    width: 100px;
-    height: auto;
-  }
-
-  .carousel-indicators button.thumbnail:not(.active) {
-    opacity: 0.5;
-  }
-
-  .carousel-indicators {
-    position: static;
-  }
-
-  @media screen and (min-width: 992px) {
-    .carousel {
-      margin: 0 auto;
-    }
-  }
-
-  @media screen and (max-width: 600px) {
-    .img-game-soak {
-      max-width: 100%;
-      height: auto;
-    }
-  }
-}
 </style>

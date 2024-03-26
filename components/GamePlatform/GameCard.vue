@@ -1,40 +1,24 @@
 <template>
-  <div
-    class="card h-100 card-game-platform px-0 py-0"
-    :class="gameDefinition.comingSoon ? 'coming-soon' : ''"
-  >
-    <img
-      class="card-img-top"
-      :src="gameDefinition.image"
-      alt="Card image cap"
-    />
+  <div class="card h-100 card-game-platform px-0 py-0" :class="gameDefinition.comingSoon ? 'coming-soon' : ''">
+    <img class="card-img-top" :src="gameDefinition.image" alt="Card image cap" />
     <div class="card-body d-flex flex-column">
       <span>
-        <p
-          v-for="(category, index) in gameDefinition.categories"
-          class="cat-p me-1"
-        >
+        <p v-for="(category, index) in gameDefinition.categories" class="cat-p me-1">
           {{ category }}
-        </p></span
-      >
+        </p>
+      </span>
       <h5 class="card-title fw-bold text-white">{{ gameDefinition.title }}</h5>
       <p class="card-text text-grey small-text">
         {{ gameDefinition.summary }}
       </p>
       <div class="row align-items-end mt-auto">
         <div class="col-6">
-          <NuxtLink
-            class="btn"
-            :to="`/game-platform/games/play/${gameDefinition.gameIdentifier}`"
-            >Play</NuxtLink
-          >
+          <NuxtLink class="btn btn-green" :to="`/game-platform/games/play/${gameDefinition.gameIdentifier}`">Play
+          </NuxtLink>
         </div>
         <div class="col-6">
-          <NuxtLink
-            class="btn"
-            :to="`/game-platform/games/details/${gameDefinition.gameIdentifier}`"
-            >Details</NuxtLink
-          >
+          <NuxtLink class="btn btn-green" :to="`/game-platform/games/details/${gameDefinition.gameIdentifier}`">Details
+          </NuxtLink>
         </div>
       </div>
     </div>
