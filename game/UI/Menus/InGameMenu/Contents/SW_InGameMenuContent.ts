@@ -19,5 +19,9 @@ export class SW_InGameMenuContent extends Phaser.GameObjects.Container {
       this.width = config.width ?? 0;
       this.height = config.height ?? 0;
     }
+
+    // Make sure that the content dimensions are even number to prevent image from being off pixels when layed out
+    this.width = this.width + (this.width % 2);
+    this.height = this.height + (this.height % 2);
   }
 }

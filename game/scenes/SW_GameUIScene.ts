@@ -66,7 +66,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.inGameMenu = new SW_InGameMenu(
       this.menuManager,
       this.game.canvas.width * 0.5,
-      this.game.canvas.height * 0.6
+      this.game.canvas.height * 0.57
     );
 
     this.menuManager.setDefaultMenu(this.inGameMenu);

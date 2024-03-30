@@ -26,7 +26,7 @@ import dialogueImage_YB from '@/game/assets/dialogueImage_YB.png';
 import GPADJK_d2_1 from '@/game/assets/GPADJK_d2_1.png';
 import Scribb from '@/game/assets/Scribb.png';
 
-// Menus
+////// Menus
 import menuHeader from '@/game/assets/ui/menus/menuHeader.png';
 import menuBackground from '@/game/assets/ui/menus/menuBackground.png';
 import menuButtonNormal from '@/game/assets/ui/menus/menuButtonNormal.png';
@@ -39,6 +39,18 @@ import settingsButton from '@/game/assets/ui/menus/settingsButton.png';
 
 import inGameMenuBackground from '@/game/assets/ui/menus/inGameMenuBackground.png';
 import inGameMenuTab from '@/game/assets/ui/menus/inGameMenuTab.png';
+
+// Monsters
+import photoStrap from '@/game/assets/ui/menus/photoStrap.png';
+import monsterProfil_prototype from '@/game/assets/ui/monsters/monsterProfil_prototype.png';
+
+// Stats
+import statAccuracyIcon from '@/game/assets/ui/stats/statAccuracy.png';
+import statAttackIcon from '@/game/assets/ui/stats/statAttack.png';
+import statDefenseIcon from '@/game/assets/ui/stats/statDefense.png';
+import statLuckIcon from '@/game/assets/ui/stats/statLuck.png';
+import statMagicIcon from '@/game/assets/ui/stats/statMagic.png';
+import statSpeedIcon from '@/game/assets/ui/stats/statSpeed.png';
 
 // Mobile
 import menuButtonMobile from '@/game/assets/ui/mobile/menuButton.png';
@@ -56,7 +68,7 @@ export default class SW_BootScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public preload(): void {
-    SW_CST.GAME.IS_MOBILE = !this.sys.game.device.os.desktop;
+    SW_CST.GAME.IS_MOBILE = true; // !this.sys.game.device.os.desktop;
     this.preloadMenuAssets();
 
     if (SW_CST.GAME.IS_MOBILE) {
@@ -98,10 +110,20 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('inGameMenuBackground', inGameMenuBackground);
     this.load.image('inGameMenuTab', inGameMenuTab);
 
+    this.load.image('photoStrap', photoStrap);
+    this.load.image('monsterProfil_prototype', monsterProfil_prototype);
+
     this.load.image('backButton', backButton);
     this.load.image('characterButton', characterButton);
     this.load.image('eggzButton', eggzButton);
     this.load.image('settingsButton', settingsButton);
+
+    this.load.image('statAccuracyIcon', statAccuracyIcon);
+    this.load.image('statAttackIcon', statAttackIcon);
+    this.load.image('statDefenseIcon', statDefenseIcon);
+    this.load.image('statLuckIcon', statLuckIcon);
+    this.load.image('statMagicIcon', statMagicIcon);
+    this.load.image('statSpeedIcon', statSpeedIcon);
   }
 
   private preloadMobileAssets(): void {

@@ -2,7 +2,7 @@ import { SW_BaseMenu } from '../SW_BaseMenu';
 import { SW_MenuManager } from '../SW_MenuManager';
 import { SW_CharacterMenuContent } from './Contents/SW_CharacterMenuContent';
 import { SW_InGameMenuContent } from './Contents/SW_InGameMenuContent';
-import { SW_MonstersMenuContent } from './Contents/SW_MonstersMenuContent';
+import { SW_MonstersMenuContent } from './Contents/MonstersContent/SW_MonstersMenuContent';
 import { SW_SettingsMenuContent } from './Contents/SW_SettingsMenuContent';
 import { SW_MenuHeader } from './Header/SW_MenuHeader';
 
@@ -86,8 +86,8 @@ export class SW_InGameMenu extends SW_BaseMenu {
 
   protected createMenuContents() {
     this.settingsContent = new SW_SettingsMenuContent(this.scene, 0, 0, {
-      width: this.width,
-      height: this.height,
+      width: this.background.width,
+      height: this.background.height,
     });
     this.settingsContent.setVisible(false);
     this.add(this.settingsContent);
@@ -95,15 +95,15 @@ export class SW_InGameMenu extends SW_BaseMenu {
     this.defaultContent = this.settingsContent;
 
     this.monstersContent = new SW_MonstersMenuContent(this.scene, 0, 0, {
-      width: this.width,
-      height: this.height,
+      width: this.background.width,
+      height: this.background.height,
     });
     this.monstersContent.setVisible(false);
     this.add(this.monstersContent);
 
     this.characterContent = new SW_CharacterMenuContent(this.scene, 0, 0, {
-      width: this.width,
-      height: this.height,
+      width: this.background.width,
+      height: this.background.height,
     });
     this.characterContent.setVisible(false);
     this.add(this.characterContent);

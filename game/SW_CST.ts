@@ -33,5 +33,6 @@ export const SW_CST = {
   DEBUG: {
     PHYSIC: false,
     GAME: false,
+    UI: false,
   },
 };
