@@ -118,7 +118,7 @@
                   <p class="text-grey fs-6">Free to play</p>
                 </div>
               </div>
-              <p class="text-grey">
+              <p class="text-grey" style="line-height: 1.25;">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor,
                 dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula
                 massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie.

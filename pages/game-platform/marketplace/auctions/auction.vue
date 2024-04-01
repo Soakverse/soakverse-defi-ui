@@ -29,7 +29,7 @@
                                 </div>
                                 <h2 class="text-white fw-bold">Soakverse1234</h2>
                                 <div class="row">
-                                    <div class="col-12 col-xl-6">
+                                    <div class="col-12 mt-3 mt-xl-0 col-xl-6">
                                         <p class="text-grey small-text mb-1">Current Bid</p>
                                         <div class="d-flex div-bg-light-green py-1 align-items-center br-12">
                                             <img class="p-2 ms-1 img-bg-light-green br-8"
@@ -37,7 +37,7 @@
                                             <p class="ms-4 my-0 text-white h2 fw-bold">0.01</p>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-xl-6">
+                                    <div class="col-12 mt-3 mt-xl-0 col-xl-6">
                                         <p class="text-grey small-text mb-1">Auction ends in</p>
                                         <div class="d-flex div-bg-light-green py-1 align-items-center br-12">
                                             <img class="p-2 ms-1 img-bg-light-green br-8"
@@ -67,11 +67,11 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-6">
-                                        <p class="text-grey small-text my-0">Latest bid</p>
+                                        <p class="text-grey small-text mb-1">Latest bid</p>
                                         <div class="d-flex">
                                             <img src="/images/game-platform/soakverse-logo.png"
                                                 class="logo-bg-green-light p-2 rounded me-2" alt="">
-                                            <p class="text-white my-0">UserName1234</p>
+                                            <p class="text-white my-auto">UserName1234</p>
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex align-items-center justify-content-end">
@@ -85,7 +85,7 @@
                                 </div>
                                 <hr class="hr-game-plat">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-6 text-start">
                                         <a class="p-gold">Help mint the next SoakVerse</a>
                                     </div>
                                     <div class="col-6 d-flex justify-content-end">

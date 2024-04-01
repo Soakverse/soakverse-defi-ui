@@ -10,6 +10,7 @@ body,
   font-family: 'Poppins';
   position: relative;
   overflow-y: hidden;
+  line-height: 1;
 }
 
 w3m-text {
@@ -375,8 +376,6 @@ a {
   padding: 20px;
 
   .modal-wrapper {
-
-    display: flex;
     align-items: center;
     justify-content: center;
   }
