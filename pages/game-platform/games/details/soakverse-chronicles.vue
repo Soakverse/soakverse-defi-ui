@@ -35,7 +35,7 @@
                   <a class="p-2 me-xl-2 me-3 link-details br-8"><img src="/images/game-platform/share.png" alt=""></a>
                   <a class="p-2 me-xl-2 me-3 link-details br-8"><img src="/images/game-platform/website.png" alt=""></a>
                   <a class="p-2 me-xl-2 me-3 link-details br-8"><img src="/images/game-platform/x.png" alt=""></a>
-                  <a class="p-2 br-8"><img src="/images/game-platform/discord.png" alt=""></a>
+                  <a class="p-2 br-8 link-details"><img src="/images/game-platform/discord.png" alt=""></a>
                 </div>
               </div>
               <div class="col-6 col-xl-3 mt-3 mt-xl-0">
@@ -185,6 +185,4 @@ const gameInfoDetail = [
   background-size: cover;
   background-repeat: no-repeat;
 }
-
-
 </style>

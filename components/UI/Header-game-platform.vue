@@ -20,8 +20,8 @@
             </div>
             <div class="col-lg-8 d-flex justify-content-end align-items-center">
               <div v-if="!isloggedIn" id="wallet-holder">
-                <button class="btn me-2" @click="authStore.login()">Login</button>
-                <button class="btn">Register</button>
+                <button class="btn btn-green text-grey me-2" @click="authStore.login()">Login</button>
+                <button class="btn btn-green text-grey">Register</button>
                 <!-- <Web3Wallet /> -->
               </div>
               <div v-else id="wallet-holder" class="d-flex justify-content-end">
@@ -100,7 +100,7 @@
                     Logout
                   </NuxtLink>
                 </div>
-                <div class="col-sm-9 p-3" v-if="currentPage === 'page1'">
+                <div class="col-sm-9 p-3 page-content" v-if="currentPage === 'page1'">
                   <div class="row">
                     <div class="col-lg-4">
                       <img class="rounded img-fluid mb-3 mb-lg-0 p-xl-0" style="width: 120px; height: 120px"
@@ -199,7 +199,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-9 p-3" v-else>
+                <div class="col-sm-9 p-3 page-content" v-else-if="currentPage === 'page2'">
                   <p class="p-gold">24 friends</p>
                   <div class="row">
                     <div class="col">
@@ -396,4 +396,10 @@ input {
 .search-label input {
   padding-left: 35px;
 }
+
+// .modal-container {
+//   width: 800px;
+//   height: 100%;
+// }
+
 </style>
