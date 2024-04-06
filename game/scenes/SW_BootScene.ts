@@ -42,7 +42,8 @@ import inGameMenuTab from '@/game/assets/ui/menus/inGameMenuTab.png';
 
 // Monsters
 import photoStrap from '@/game/assets/ui/menus/photoStrap.png';
-import monsterProfil_prototype from '@/game/assets/ui/monsters/monsterProfil_prototype.png';
+import monsterProfil_prototype1 from '@/game/assets/ui/monsters/monsterProfil_prototype1.png';
+import monsterProfil_prototype2 from '@/game/assets/ui/monsters/monsterProfil_prototype2.png';
 
 // Stats
 import statAccuracyIcon from '@/game/assets/ui/stats/statAccuracy.png';
@@ -111,7 +112,8 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('inGameMenuTab', inGameMenuTab);
 
     this.load.image('photoStrap', photoStrap);
-    this.load.image('monsterProfil_prototype', monsterProfil_prototype);
+    this.load.image('monsterProfil_prototype1', monsterProfil_prototype1);
+    this.load.image('monsterProfil_prototype2', monsterProfil_prototype2);
 
     this.load.image('backButton', backButton);
     this.load.image('characterButton', characterButton);

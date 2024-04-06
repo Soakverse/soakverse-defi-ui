@@ -4,11 +4,12 @@ import { SW_InGameMenuContentConfig } from '../SW_InGameMenuContent';
 import { SW_CST } from '~/game/SW_CST';
 import { SW_MonsterSpecialEffectWidget } from './SW_MonsterSpecialEffectWidget';
 import { SW_MonsterStatWidget } from './SW_MonsterStatWidget';
+import { SW_MonsterCard } from './MonstersCard/SW_MonsterCard';
 
 export class SW_MonstersMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;
 
-  protected declare monsterProfilImage: Phaser.GameObjects.Image;
+  protected declare monsterCard: SW_MonsterCard;
   protected declare monsterNameTitle: Phaser.GameObjects.Text;
   protected declare monsterSpecialEffectWidgets: SW_MonsterSpecialEffectWidget[];
   protected declare monsterStatWidgets: Map<string, SW_MonsterStatWidget>;
@@ -51,6 +52,13 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     this.updateLevel(Phaser.Math.Between(1, 100));
   }
 
+  public setVisible(value: boolean): this {
+    if (this.monsterCard) {
+      this.monsterCard.setVisible(value);
+    }
+    return super.setVisible(value);
+  }
+
   protected createMonsterTabs(): void {}
 
   protected createMonsterHeaderTitle(): void {
@@ -83,69 +91,24 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
   }
 
   protected createMonsterProfilImage(): void {
-    this.monsterProfilImage = this.scene.add.image(
-      -this.width * 0.5 + 64,
-      -8,
-      'monsterProfil_prototype'
+    this.monsterCard = new SW_MonsterCard(
+      this.scene,
+      this.scene.game.canvas.width * 0.5 - this.width * 0.25 + 24,
+      this.scene.game.canvas.height * 0.57 - 4,
+      '',
+      '',
+      300
     );
-    this.monsterProfilImage.setScale(0.75);
-    this.monsterProfilImage.setOrigin(0, 0.5);
-    this.add(this.monsterProfilImage);
 
-    const strapOffsetX = 14;
-    const strapOffsetY = 14;
-
-    const leftTopStrap = this.scene.add.image(
-      this.monsterProfilImage.x + strapOffsetX,
-      this.monsterProfilImage.y -
-        this.monsterProfilImage.height * 0.5 * this.monsterProfilImage.scaleY +
-        strapOffsetY,
-      'photoStrap'
+    this.monsterCard.updateFrontCard(
+      `monsterProfil_prototype${Phaser.Math.Between(1, 2)}`
     );
-    leftTopStrap.setOrigin(0.5);
-    leftTopStrap.setFlipX(true);
-    leftTopStrap.setScale(this.monsterProfilImage.scale);
-    this.add(leftTopStrap);
 
-    const rightTopStrap = this.scene.add.image(
-      this.monsterProfilImage.x -
-        strapOffsetX +
-        this.monsterProfilImage.width * this.monsterProfilImage.scaleX,
-      this.monsterProfilImage.y -
-        this.monsterProfilImage.height * 0.5 * this.monsterProfilImage.scaleY +
-        strapOffsetY,
-      'photoStrap'
-    );
-    rightTopStrap.setOrigin(0.5);
-    rightTopStrap.setScale(this.monsterProfilImage.scale);
-    this.add(rightTopStrap);
+    this.monsterCard.setDepth(1);
 
-    const leftBottomStrap = this.scene.add.image(
-      this.monsterProfilImage.x + strapOffsetX,
-      this.monsterProfilImage.y +
-        this.monsterProfilImage.height * 0.5 * this.monsterProfilImage.scaleY -
-        strapOffsetY,
-      'photoStrap'
-    );
-    leftBottomStrap.setOrigin(0.5);
-    leftBottomStrap.setFlipX(true);
-    leftBottomStrap.setFlipY(true);
-    leftBottomStrap.setScale(this.monsterProfilImage.scale);
-    this.add(leftBottomStrap);
-
-    const rightBottomStrap = this.scene.add.image(
-      this.monsterProfilImage.x -
-        strapOffsetX +
-        this.monsterProfilImage.width * this.monsterProfilImage.scaleX,
-      this.monsterProfilImage.y +
-        this.monsterProfilImage.height * 0.5 * this.monsterProfilImage.scaleY -
-        strapOffsetY,
-      'photoStrap'
-    );
-    rightBottomStrap.setOrigin(0.5);
-    rightBottomStrap.setFlipY(true);
-    rightBottomStrap.setScale(this.monsterProfilImage.scale);
-    this.add(rightBottomStrap);
+    this.monsterCard.onClick(() => {
+      this.monsterCard.flipCard();
+    });
   }
 
   protected createMonsterSpecialEffectWidgets(): void {

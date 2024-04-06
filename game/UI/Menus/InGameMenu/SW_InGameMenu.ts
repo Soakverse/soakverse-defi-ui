@@ -92,8 +92,6 @@ export class SW_InGameMenu extends SW_BaseMenu {
     this.settingsContent.setVisible(false);
     this.add(this.settingsContent);
 
-    this.defaultContent = this.settingsContent;
-
     this.monstersContent = new SW_MonstersMenuContent(this.scene, 0, 0, {
       width: this.background.width,
       height: this.background.height,
@@ -107,10 +105,17 @@ export class SW_InGameMenu extends SW_BaseMenu {
     });
     this.characterContent.setVisible(false);
     this.add(this.characterContent);
+
+    this.defaultContent = this.settingsContent;
   }
 
   public setVisible(value: boolean): this {
-    this.showDefaultContent();
+    if (value) {
+      this.showDefaultContent();
+    } else {
+      this.currentContent?.setVisible(false);
+      this.currentContent = undefined;
+    }
 
     return super.setVisible(value);
   }
