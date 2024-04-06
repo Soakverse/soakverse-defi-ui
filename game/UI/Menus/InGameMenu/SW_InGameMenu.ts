@@ -30,10 +30,11 @@ export class SW_InGameMenu extends SW_BaseMenu {
     this.height = this.scene.game.canvas.height;
 
     this.createHeaderBar();
+    this.createMiddleDelimiter();
     this.createMenuContents();
   }
 
-  protected createHeaderBar() {
+  protected createHeaderBar(): void {
     const headerHeight = 56;
 
     this.headerBar = new SW_MenuHeader(this.scene, -this.x, -this.y, {
@@ -84,7 +85,14 @@ export class SW_InGameMenu extends SW_BaseMenu {
     this.defaultSelectedButtonId = 'Settings';
   }
 
-  protected createMenuContents() {
+  protected createMiddleDelimiter(): void {
+    const middleDelimiter = this.scene.add.line(0, -4, 0, 0, 0, 300);
+    middleDelimiter.setStrokeStyle(1, 0xd9cbb8, 1);
+    middleDelimiter.setOrigin(0.5, 0.5);
+    this.add(middleDelimiter);
+  }
+
+  protected createMenuContents(): void {
     this.settingsContent = new SW_SettingsMenuContent(this.scene, 0, 0, {
       width: this.background.width,
       height: this.background.height,

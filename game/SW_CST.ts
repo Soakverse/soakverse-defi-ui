@@ -28,6 +28,7 @@ export const SW_CST = {
       BLACK: '#000000',
       WHITE: '#f9f9f9',
       LIGHT_GREY: '#dcdcdc',
+      TEXT: '#4D2B1D',
     },
   },
   DEBUG: {

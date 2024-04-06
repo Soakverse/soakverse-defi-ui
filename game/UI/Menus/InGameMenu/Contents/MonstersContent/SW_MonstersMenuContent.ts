@@ -69,7 +69,7 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
       {
         fontSize: '24px',
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        color: '#4D2B1D',
+        color: SW_CST.STYLE.COLOR.TEXT,
         fontStyle: 'bold',
       }
     );
