@@ -2,7 +2,9 @@ import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 import { SW_InGameMenuContent } from './SW_InGameMenuContent';
 import { SW_InGameMenuContentConfig } from './SW_InGameMenuContent';
 import { SW_CST } from '~/game/SW_CST';
-import { SW_TextButton } from '~/game/UI/buttons/SW_TextButton';
+import { SW_TextButton } from '~/game/UI/Widgets/buttons/SW_TextButton';
+import { SW_Slider } from '~/game/UI/Widgets/SW_Slider';
+import { Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
 
 export class SW_SettingsMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;
@@ -23,6 +25,8 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     const leftX = Math.floor(-this.width * 0.5 + 64);
     const rightX = -32;
     const delimiterSpacing = 8;
+    const sliderHeight = 4;
+    const sliderTrackHeight = 4;
 
     const sectionStyle = {
       fontSize: '16px',
@@ -148,6 +152,24 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     musicText.setOrigin(0, 0);
     this.add(musicText);
 
+    const sliderMusicWidth =
+      Math.abs(rightX - leftX) - musicText.width - delimiterSpacing;
+    const sliderMusic = new SW_Slider(
+      this.scene,
+      Math.floor(musicText.x + musicText.width + 12),
+      Math.floor(musicText.y + musicText.height * 0.5),
+      {
+        width: sliderMusicWidth,
+        height: sliderHeight,
+        trackHeight: sliderTrackHeight,
+        input: 'drag',
+        valuechangeCallback: (newValue: number, oldValue: number) => {},
+      }
+    );
+    sliderMusic.setOrigin(0, 0);
+    sliderMusic.layout();
+    this.add(sliderMusic);
+
     const soundEffectsText = this.scene.add.text(
       leftX,
       musicText.y + musicText.height + 16,
@@ -156,6 +178,26 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     );
     soundEffectsText.setOrigin(0, 0);
     this.add(soundEffectsText);
+
+    const sliderSoundEffectsWidth =
+      Math.abs(rightX - leftX) - soundEffectsText.width - delimiterSpacing;
+    const sliderSoundEffects = new SW_Slider(
+      this.scene,
+      Math.floor(soundEffectsText.x + soundEffectsText.width + 12),
+      Math.floor(soundEffectsText.y + soundEffectsText.height * 0.5),
+      {
+        width: sliderSoundEffectsWidth,
+        height: sliderHeight,
+        trackHeight: sliderTrackHeight,
+        min: 0,
+        max: 1,
+        input: 'drag',
+        valuechangeCallback: (newValue: number, oldValue: number) => {},
+      }
+    );
+    sliderSoundEffects.setOrigin(0, 0);
+    sliderSoundEffects.layout();
+    this.add(sliderSoundEffects);
   }
 
   protected createRightPage(): void {

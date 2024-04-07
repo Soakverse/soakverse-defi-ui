@@ -1,6 +1,6 @@
 import { SW_CST } from '~/game/SW_CST';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import { SW_TextButton } from '~/game/UI/buttons/SW_TextButton';
+import { SW_TextButton } from '~/game/UI/Widgets/buttons/SW_TextButton';
 import { useWizhingWellStore } from '@/stores/wizhingWellStore';
 
 const wizhingWellStore = useWizhingWellStore();
