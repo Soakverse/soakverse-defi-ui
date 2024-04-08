@@ -1,6 +1,7 @@
 import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { SW_CST } from '~/game/SW_CST';
 import { SW_Utils } from '~/game/SW_Utils';
+import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 
 enum SW_ButtonState {
@@ -120,6 +121,7 @@ export class SW_MenuHeaderButton extends Phaser.GameObjects.Container {
     this.sizer.on(
       Phaser.Input.Events.POINTER_DOWN,
       () => {
+        SW_AudioManager.playSoundEffect('soundButtonPressed');
         this.emit(Phaser.Input.Events.POINTER_DOWN);
         this.setButtonState(SW_ButtonState.Pressed);
       },
@@ -129,6 +131,7 @@ export class SW_MenuHeaderButton extends Phaser.GameObjects.Container {
     this.sizer.on(
       Phaser.Input.Events.POINTER_OVER,
       () => {
+        SW_AudioManager.playSoundEffect('soundButtonHovered');
         this.setButtonState(SW_ButtonState.Hovered);
         this.emit(Phaser.Input.Events.POINTER_OVER);
       },

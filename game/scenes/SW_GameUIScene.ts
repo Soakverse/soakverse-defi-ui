@@ -12,6 +12,7 @@ import { SW_PlayerActionsContainer } from '../UI/mobile/SW_PlayerActionsContaine
 import { SW_InGameMenu } from '../UI/Menus/InGameMenu/SW_InGameMenu';
 import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputComponent';
 import { SW_Player } from '../characters/players/SW_Player';
+import { SW_AudioManager } from '../audio/SW_AudioManager';
 
 declare type SW_UIKeys = {
   escape: Phaser.Input.Keyboard.Key;
@@ -318,6 +319,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
   protected onNextPageButtonDown(): void {
     if (this.dialogTextBox.visible) {
+      SW_AudioManager.playSoundEffect('soundDialogue');
       if (this.dialogTextBox.isTyping) {
         this.dialogTextBox.stop(true);
       } else if (this.dialogTextBox.isLastPage) {

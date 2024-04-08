@@ -3,6 +3,7 @@ import { PerspectiveCard } from 'phaser3-rex-plugins/templates/ui/ui-components.
 import { SW_CST } from '~/game/SW_CST';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 import { SW_MonsterFrontCard } from './SW_MonsterFrontCard';
+import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 
 export class SW_MonsterCard extends PerspectiveCard {
   public declare scene: SW_BaseScene;
@@ -91,17 +92,10 @@ export class SW_MonsterCard extends PerspectiveCard {
 
     this.layout();
     this.scene.add.existing(this);
-  }
 
-  public onClicked(fn: Function, context?: any): this {
-    this.on(
-      'clicked',
-      (card: SW_MonsterCard) => {
-        fn(card);
-      },
-      context
-    );
-    return this;
+    this.onClick(() => {
+      SW_AudioManager.playSoundEffect('soundButtonPressed');
+    }, this);
   }
 
   public flipCard(

@@ -196,7 +196,10 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
         min: 0,
         max: 1,
         input: 'drag',
-        valuechangeCallback: (newValue: number, oldValue: number) => {},
+        value: SW_AudioManager.getSoundEffectsVolume(),
+        valuechangeCallback: (newValue: number, oldValue: number) => {
+          SW_AudioManager.setSoundEffectsVolume(newValue);
+        },
       }
     );
     sliderSoundEffects.setOrigin(0, 0);

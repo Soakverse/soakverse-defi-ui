@@ -1,6 +1,7 @@
 import BaseSizer from 'phaser3-rex-plugins/templates/ui/basesizer/BaseSizer';
 import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 
 declare type SW_SliderValueChangeCallbackType = (
@@ -159,6 +160,7 @@ export class SW_Slider extends Slider {
 
   protected onPointerOverInternal(): void {
     this._isHovered = true;
+    SW_AudioManager.playSoundEffect('soundButtonHovered');
     this.updateStyle();
   }
 
@@ -177,6 +179,7 @@ export class SW_Slider extends Slider {
 
   protected onPointerDownInternal(): void {
     this._isPressed = true;
+    SW_AudioManager.playSoundEffect('soundButtonPressed');
     this.updateStyle();
   }
 

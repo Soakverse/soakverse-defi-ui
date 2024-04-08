@@ -105,6 +105,16 @@ export default class SW_BootScene extends SW_BaseScene {
 
   private preloadAudioAssets(): void {
     this.load.audio('audioWaterfall', '/game/assets/audio/SV_Waterfall.m4a');
+    this.load.audio(
+      'soundButtonHovered',
+      '/game/assets/audio/soundButtonHovered.m4a'
+    );
+    this.load.audio(
+      'soundButtonPressed',
+      '/game/assets/audio/soundButtonPressed.m4a'
+    );
+    this.load.audio('soundInteract', '/game/assets/audio/soundInteract.m4a');
+    this.load.audio('soundDialogue', '/game/assets/audio/soundDialogue.m4a');
 
     SW_AudioManager.init(this.sound);
   }

@@ -1,4 +1,5 @@
 import { SW_CST } from '~/game/SW_CST';
+import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 
 export declare type SW_TextButtonStyle = {
   texturePressed?: string;
@@ -106,6 +107,7 @@ export class SW_TextButton extends Phaser.GameObjects.Container {
           this.isHovered = true;
           this.isPressed = false;
 
+          SW_AudioManager.playSoundEffect('soundButtonHovered');
           this.buttonImage.setTexture(this.textureHovered);
           this.updateTextPosition();
         }
@@ -134,6 +136,7 @@ export class SW_TextButton extends Phaser.GameObjects.Container {
           this.isPressed = true;
           this.isHovered = false;
 
+          SW_AudioManager.playSoundEffect('soundButtonPressed');
           this.buttonImage.setTexture(this.texturePressed);
           this.updateTextPosition();
         }

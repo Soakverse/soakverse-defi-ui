@@ -1,4 +1,5 @@
 import { SW_IInteractable } from '~/game/Interactable/Interactable';
+import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 import { SW_DIRECTIONS } from '~/game/characters/SW_CharacterMovementComponent';
 import { SW_Player } from '~/game/characters/players/SW_Player';
 
@@ -147,6 +148,7 @@ export class SW_InteractionComponent extends Phaser.GameObjects.Zone {
   public interact(): void {
     if (this.currentFocus) {
       this.currentFocus.onInteract(this._owner);
+      SW_AudioManager.playSoundEffect('soundInteract');
     }
   }
 
