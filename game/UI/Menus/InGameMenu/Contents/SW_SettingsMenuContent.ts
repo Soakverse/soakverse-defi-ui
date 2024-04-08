@@ -5,6 +5,7 @@ import { SW_CST } from '~/game/SW_CST';
 import { SW_TextButton } from '~/game/UI/Widgets/buttons/SW_TextButton';
 import { SW_Slider } from '~/game/UI/Widgets/SW_Slider';
 import { Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 
 export class SW_SettingsMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;
@@ -163,7 +164,10 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
         height: sliderHeight,
         trackHeight: sliderTrackHeight,
         input: 'drag',
-        valuechangeCallback: (newValue: number, oldValue: number) => {},
+        value: SW_AudioManager.getMusicVolume(),
+        valuechangeCallback: (newValue: number, oldValue: number) => {
+          SW_AudioManager.setMusicVolume(newValue);
+        },
       }
     );
     sliderMusic.setOrigin(0, 0);

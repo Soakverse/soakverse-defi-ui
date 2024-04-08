@@ -3,9 +3,6 @@ import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 import SW_GameScene from '~/game/scenes/SW_GameScene';
 import SW_GameUIScene from '~/game/scenes/SW_GameUIScene';
 
-import thudMp3 from '@/game/assets/thud.mp3';
-import thudOgg from '@/game/assets/thud.ogg';
-
 import objectCounterBackground from '@/game/assets/inventory/objectCounterBackground.png';
 import objectCounterMinusButton from '@/game/assets/inventory/objectCounterMinusButton.png';
 import objectCounterPlusButton from '@/game/assets/inventory/objectCounterPlusButton.png';
@@ -61,6 +58,7 @@ import runButtonMobile from '@/game/assets/ui/mobile/runButton.png';
 import walkButtonMobile from '@/game/assets/ui/mobile/walkButton.png';
 import interactButtonMobile from '@/game/assets/ui/mobile/interactButton.png';
 import SW_SceneDebug from './SW_SceneDebug';
+import { SW_AudioManager } from '../audio/SW_AudioManager';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor() {
@@ -71,14 +69,15 @@ export default class SW_BootScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public preload(): void {
-    SW_CST.GAME.IS_MOBILE = true; // !this.sys.game.device.os.desktop;
+    SW_CST.GAME.IS_MOBILE = !this.sys.game.device.os.desktop;
+
+    this.preloadAudioAssets();
+
     this.preloadMenuAssets();
 
     if (SW_CST.GAME.IS_MOBILE) {
       this.preloadMobileAssets();
     }
-
-    this.load.audio('thud', [thudMp3, thudOgg]);
 
     this.load.image('objectCounterBackground', objectCounterBackground);
     this.load.image('objectCounterMinusButton', objectCounterMinusButton);
@@ -102,6 +101,12 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('dialogueImage_YB', dialogueImage_YB);
     this.load.image('GPADJK_d2_1', GPADJK_d2_1);
     this.load.image('Scribb', Scribb);
+  }
+
+  private preloadAudioAssets(): void {
+    this.load.audio('audioWaterfall', '/game/assets/audio/SV_Waterfall.m4a');
+
+    SW_AudioManager.init(this.sound);
   }
 
   private preloadMenuAssets(): void {

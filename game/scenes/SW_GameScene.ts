@@ -18,6 +18,7 @@ import SW_DialogueEntity from '~/game/gameObjects/SW_DialogueEntity';
 import { SW_SubMapData, SW_MapManager } from '~/game/maps/SW_MapManager';
 import { SW_DIRECTIONS } from '../characters/SW_CharacterMovementComponent';
 import SW_WizhWell from '../gameObjects/SW_WizhWell';
+import { SW_AudioManager } from '../audio/SW_AudioManager';
 
 const playerStore = usePlayerStore();
 
@@ -112,6 +113,8 @@ export default class SW_GameScene extends SW_BaseScene {
     this.setupCamera();
     this.setupUI();
     this.UIScene.hideLoadingScreen();
+
+    SW_AudioManager.playMusic('audioWaterfall', true);
   }
 
   public createPlayer(): void {
