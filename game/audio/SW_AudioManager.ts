@@ -10,8 +10,8 @@ declare type SW_SoundTypes =
 
 export class SW_AudioManager extends Phaser.Events.EventEmitter {
   protected static phaserSoundManager: SW_SoundManagerTypes;
-  protected static volumeMusics: number = 0.05;
-  protected static volumeSoundEffects: number = 0.1;
+  protected static volumeMusics: number = 0.1;
+  protected static volumeSoundEffects: number = 0.2;
 
   protected static loopingMusics: SW_SoundTypes[];
   protected static loopingSoundEffects: SW_SoundTypes[];

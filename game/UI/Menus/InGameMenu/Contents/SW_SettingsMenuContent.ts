@@ -45,6 +45,14 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       align: 'left',
     };
 
+    const valueStyle = {
+      fontSize: '13px',
+      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+      fontStyle: 'bold',
+      color: SW_CST.STYLE.COLOR.TEXT,
+      align: 'left',
+    };
+
     const settingsIcon = this.scene.add.image(
       leftX,
       Math.floor(-this.height * 0.5) + 72,
@@ -144,29 +152,62 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     delimiterVolumeSection.setLineWidth(2);
     this.add(delimiterVolumeSection);
 
-    const musicText = this.scene.add.text(
+    const musicLabel = this.scene.add.text(
       leftX,
       volumeTitle.y + volumeTitle.height + 14,
       'Music',
       labelStyle
     );
-    musicText.setOrigin(0, 0);
-    this.add(musicText);
+    musicLabel.setOrigin(0, 0);
+    this.add(musicLabel);
 
-    const sliderMusicWidth =
-      Math.abs(rightX - leftX) - musicText.width - delimiterSpacing;
+    const soundEffectsLabel = this.scene.add.text(
+      leftX,
+      musicLabel.y + musicLabel.height + 16,
+      'Sound Effects',
+      labelStyle
+    );
+    soundEffectsLabel.setOrigin(0, 0);
+    this.add(soundEffectsLabel);
+
+    const musicVolumeValueText = this.scene.add.text(
+      Math.floor(soundEffectsLabel.x + soundEffectsLabel.width + 16),
+      Math.floor(musicLabel.y + musicLabel.height * 0.5),
+      '100%',
+      valueStyle
+    );
+    musicVolumeValueText.setOrigin(0, 0.5);
+    this.add(musicVolumeValueText);
+
+    const soundEffectVolumeValueText = this.scene.add.text(
+      musicVolumeValueText.x,
+      Math.floor(soundEffectsLabel.y + soundEffectsLabel.height * 0.5),
+      '100%',
+      valueStyle
+    );
+    soundEffectVolumeValueText.setOrigin(0, 0.5);
+    this.add(soundEffectVolumeValueText);
+
+    const sliderWidth =
+      Math.abs(rightX - soundEffectVolumeValueText.x) -
+      soundEffectVolumeValueText.width -
+      delimiterSpacing;
+
     const sliderMusic = new SW_Slider(
       this.scene,
-      Math.floor(musicText.x + musicText.width + 12),
-      Math.floor(musicText.y + musicText.height * 0.5),
+      Math.floor(
+        musicVolumeValueText.x + musicVolumeValueText.width + delimiterSpacing
+      ),
+      Math.floor(musicLabel.y + musicLabel.height * 0.5),
       {
-        width: sliderMusicWidth,
+        width: sliderWidth,
         height: sliderHeight,
         trackHeight: sliderTrackHeight,
         input: 'drag',
         value: SW_AudioManager.getMusicVolume(),
         valuechangeCallback: (newValue: number, oldValue: number) => {
           SW_AudioManager.setMusicVolume(newValue);
+          musicVolumeValueText.setText(`${(newValue * 100).toFixed(0)}%`);
         },
       }
     );
@@ -174,23 +215,12 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     sliderMusic.layout();
     this.add(sliderMusic);
 
-    const soundEffectsText = this.scene.add.text(
-      leftX,
-      musicText.y + musicText.height + 16,
-      'Sound Effects',
-      labelStyle
-    );
-    soundEffectsText.setOrigin(0, 0);
-    this.add(soundEffectsText);
-
-    const sliderSoundEffectsWidth =
-      Math.abs(rightX - leftX) - soundEffectsText.width - delimiterSpacing;
     const sliderSoundEffects = new SW_Slider(
       this.scene,
-      Math.floor(soundEffectsText.x + soundEffectsText.width + 12),
-      Math.floor(soundEffectsText.y + soundEffectsText.height * 0.5),
+      sliderMusic.x,
+      Math.floor(soundEffectsLabel.y + soundEffectsLabel.height * 0.5),
       {
-        width: sliderSoundEffectsWidth,
+        width: sliderWidth,
         height: sliderHeight,
         trackHeight: sliderTrackHeight,
         min: 0,
@@ -199,6 +229,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
         value: SW_AudioManager.getSoundEffectsVolume(),
         valuechangeCallback: (newValue: number, oldValue: number) => {
           SW_AudioManager.setSoundEffectsVolume(newValue);
+          soundEffectVolumeValueText.setText(`${(newValue * 100).toFixed(0)}%`);
         },
       }
     );
