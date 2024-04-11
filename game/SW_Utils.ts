@@ -39,4 +39,110 @@ export class SW_Utils {
     }
     return 0;
   }
+
+  public static drawDashLineOnX(
+    scene: Phaser.Scene,
+    startX: number,
+    endX: number,
+    y: number,
+    pattern: number[],
+    config: {
+      lineThickness?: number;
+      lineColor?: number;
+      lineAlpha?: number;
+    }
+  ): Phaser.GameObjects.Graphics {
+    if (startX > endX) {
+      const temp = startX;
+      startX = endX;
+      endX = temp;
+    }
+
+    let patternIndex = 0;
+    let currentX = startX;
+    let drawSpace = true;
+
+    const dashedLine = scene.add.graphics({
+      x: 0,
+      y: 0,
+    });
+
+    const lineThickness = config.lineThickness ?? 10;
+    const lineColor = config.lineColor ?? 0x00ff00;
+    const lineAlpha = config.lineAlpha ?? 1;
+
+    dashedLine.lineStyle(lineThickness, lineColor, lineAlpha);
+    dashedLine.beginPath();
+    dashedLine.moveTo(startX, y);
+
+    while (currentX < endX) {
+      const deltaPattern = Math.min(pattern[patternIndex], endX - currentX);
+      if (drawSpace) {
+        dashedLine.moveTo(currentX, y);
+      } else {
+        dashedLine.lineTo(currentX, y);
+      }
+
+      currentX += deltaPattern;
+      patternIndex = (patternIndex + 1) % pattern.length;
+      drawSpace = !drawSpace;
+    }
+    dashedLine.closePath();
+    dashedLine.strokePath();
+
+    return dashedLine;
+  }
+
+  public static drawDashLineOnY(
+    scene: Phaser.Scene,
+    x: number,
+    startY: number,
+    endY: number,
+    pattern: number[],
+    config: {
+      lineThickness?: number;
+      lineColor?: number;
+      lineAlpha?: number;
+    }
+  ): Phaser.GameObjects.Graphics {
+    if (startY > endY) {
+      const temp = startY;
+      startY = endY;
+      endY = temp;
+    }
+
+    let patternIndex = 0;
+    let currentY = startY;
+    let drawSpace = true;
+
+    const dashedLine = scene.add.graphics({
+      x: 0,
+      y: 0,
+    });
+
+    const lineThickness = config.lineThickness ?? 10;
+    const lineColor = config.lineColor ?? 0x00ff00;
+    const lineAlpha = config.lineAlpha ?? 1;
+
+    dashedLine.lineStyle(lineThickness, lineColor, lineAlpha);
+    dashedLine.beginPath();
+    dashedLine.moveTo(x, startY);
+
+    while (currentY < endY) {
+      const deltaPattern = Math.min(pattern[patternIndex], endY - currentY);
+      if (drawSpace) {
+        dashedLine.moveTo(x, currentY);
+      } else {
+        dashedLine.lineTo(x, currentY);
+      }
+
+      currentY += deltaPattern;
+      patternIndex = (patternIndex + 1) % pattern.length;
+      drawSpace = !drawSpace;
+    }
+    dashedLine.closePath();
+    dashedLine.strokePath();
+
+    return dashedLine;
+  }
 }

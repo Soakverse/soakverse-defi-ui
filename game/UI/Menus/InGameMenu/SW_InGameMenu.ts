@@ -5,6 +5,7 @@ import { SW_InGameMenuContent } from './Contents/SW_InGameMenuContent';
 import { SW_MonstersMenuContent } from './Contents/MonstersContent/SW_MonstersMenuContent';
 import { SW_SettingsMenuContent } from './Contents/SW_SettingsMenuContent';
 import { SW_MenuHeader } from './Header/SW_MenuHeader';
+import { SW_Utils } from '~/game/SW_Utils';
 
 export class SW_InGameMenu extends SW_BaseMenu {
   protected declare headerBar: SW_MenuHeader;
@@ -86,9 +87,14 @@ export class SW_InGameMenu extends SW_BaseMenu {
   }
 
   protected createMiddleDelimiter(): void {
-    const middleDelimiter = this.scene.add.line(0, -4, 0, 0, 0, 300);
-    middleDelimiter.setStrokeStyle(1, 0xd9cbb8, 1);
-    middleDelimiter.setOrigin(0.5, 0.5);
+    const middleDelimiter = SW_Utils.drawDashLineOnY(
+      this.scene,
+      -10,
+      -160,
+      154,
+      [4, 4],
+      { lineThickness: 1, lineColor: 0xd9cbb8 }
+    );
     this.add(middleDelimiter);
   }
 

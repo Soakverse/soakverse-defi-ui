@@ -4,7 +4,6 @@ import { SW_InGameMenuContentConfig } from './SW_InGameMenuContent';
 import { SW_CST } from '~/game/SW_CST';
 import { SW_TextButton } from '~/game/UI/Widgets/buttons/SW_TextButton';
 import { SW_Slider } from '~/game/UI/Widgets/SW_Slider';
-import { Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 
 export class SW_SettingsMenuContent extends SW_InGameMenuContent {
