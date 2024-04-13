@@ -5,6 +5,7 @@ import { SW_CST } from '~/game/SW_CST';
 import { SW_TextButton } from '~/game/UI/Widgets/buttons/SW_TextButton';
 import { SW_Slider } from '~/game/UI/Widgets/SW_Slider';
 import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
+import { SW_ToggleSwitch } from '~/game/UI/Widgets/SW_ToggleSwitch';
 
 export class SW_SettingsMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;
@@ -117,15 +118,29 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     fullScreenModeText.setOrigin(1, 0);
     this.add(fullScreenModeText);
 
-    const fullscreenButton = new SW_TextButton(
+    const fullscreenToggle = new SW_ToggleSwitch(
       this.scene,
       windowedModeText.x + windowedModeText.width + 32,
-      -30,
-      ''
+      -30
     );
-    this.add(fullscreenButton);
-    fullscreenButton.onClicked(this.onFullscreenButtonClicked, this);
-    fullscreenButton.setDisplaySize(40, 24);
+    fullscreenToggle.setValue(this.scene.scale.isFullscreen);
+    fullscreenToggle.on('valuechange', this.onFullscreenChanged);
+    this.add(fullscreenToggle);
+
+    this.scene.scale.on(
+      Phaser.Scale.Events.ENTER_FULLSCREEN,
+      () => {
+        fullscreenToggle.setValue(true);
+      },
+      this
+    );
+    this.scene.scale.on(
+      Phaser.Scale.Events.LEAVE_FULLSCREEN,
+      () => {
+        fullscreenToggle.setValue(false);
+      },
+      this
+    );
 
     //////// Volume
     const volumeTitle = this.scene.add.text(
@@ -249,11 +264,11 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
 
   protected onToggleSoundButtonClicked(): void {}
 
-  protected onFullscreenButtonClicked(): void {
-    if (this.scene.scale.isFullscreen) {
-      this.scene.scale.stopFullscreen();
-    } else {
+  protected onFullscreenChanged(value: boolean): void {
+    if (value) {
       this.scene.scale.startFullscreen();
+    } else {
+      this.scene.scale.stopFullscreen();
     }
   }
 }
