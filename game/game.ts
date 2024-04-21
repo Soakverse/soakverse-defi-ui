@@ -3,6 +3,9 @@ import SW_BootScene from '~/game/scenes/SW_BootScene';
 import { SW_CST } from './SW_CST';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
+// @ts-ignore
+import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugin';
+
 function launch(containerId: string) {
   return new Phaser.Game({
     type: Phaser.AUTO,
@@ -19,7 +22,7 @@ function launch(containerId: string) {
     physics: {
       default: 'arcade',
       arcade: {
-        gravity: { y: 300 },
+        gravity: { x: 0, y: 0 },
         debug: SW_CST.DEBUG.PHYSIC,
       },
     },
@@ -29,7 +32,9 @@ function launch(containerId: string) {
     scene: [SW_BootScene],
     plugins: {
       scene: [{ key: 'rexUI', plugin: UIPlugin, mapping: 'rexUI' }],
-      global: [],
+      global: [
+        { key: 'rexWebFontLoader', plugin: WebFontLoaderPlugin, start: true },
+      ],
     },
   });
 }

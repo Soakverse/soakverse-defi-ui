@@ -62,7 +62,22 @@ import { SW_AudioManager } from '../audio/SW_AudioManager';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor() {
-    super({ key: SW_CST.SCENES.BOOT });
+    super({
+      key: SW_CST.SCENES.BOOT,
+      pack: {
+        files: [
+          {
+            type: 'rexWebFont',
+            key: SW_CST.STYLE.TEXT.FONT_FAMILY,
+            config: {
+              google: {
+                families: [SW_CST.STYLE.TEXT.FONT_FAMILY],
+              },
+            },
+          },
+        ],
+      },
+    });
   }
 
   // Preload
