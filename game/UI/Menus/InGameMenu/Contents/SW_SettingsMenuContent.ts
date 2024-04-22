@@ -2,13 +2,17 @@ import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 import { SW_InGameMenuContent } from './SW_InGameMenuContent';
 import { SW_InGameMenuContentConfig } from './SW_InGameMenuContent';
 import { SW_CST } from '~/game/SW_CST';
-import { SW_TextButton } from '~/game/UI/Widgets/buttons/SW_TextButton';
 import { SW_Slider } from '~/game/UI/Widgets/SW_Slider';
 import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 import { SW_ToggleSwitch } from '~/game/UI/Widgets/SW_ToggleSwitch';
+import { SW_ButtonBase } from '~/game/UI/Widgets/buttons/SW_ButtonBase';
 
 export class SW_SettingsMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;
+
+  protected declare fullscreenToggle: SW_ToggleSwitch;
+  protected declare sliderMusic: SW_Slider;
+  protected declare sliderSoundEffects: SW_Slider;
 
   constructor(
     scene: SW_BaseScene,
@@ -20,6 +24,8 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
 
     this.createLeftPage();
     this.createRightPage();
+
+    this.resetSettings();
   }
 
   protected createLeftPage(): void {
@@ -55,7 +61,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
 
     const settingsIcon = this.scene.add.image(
       leftX,
-      Math.floor(-this.height * 0.5) + 72,
+      Math.floor(-this.height * 0.5) + 64,
       'settingsIconTitle'
     );
     settingsIcon.setOrigin(0, 0);
@@ -66,7 +72,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       Math.floor(settingsIcon.y + settingsIcon.height * 0.5),
       'Settings',
       {
-        fontSize: '24px',
+        fontSize: '20px',
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
         fontStyle: 'bold',
         color: SW_CST.STYLE.COLOR.TEXT,
@@ -79,7 +85,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     //////// Screen Size
     const screenSizeTitle = this.scene.add.text(
       leftX,
-      Math.floor(settingsTitle.y + settingsTitle.height * 0.5 + 32),
+      Math.floor(settingsTitle.y + settingsTitle.height * 0.5 + 20),
       'Screen size',
       sectionStyle
     );
@@ -100,44 +106,47 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     delimiterScreenSizeSection.setLineWidth(2);
     this.add(delimiterScreenSizeSection);
 
-    const windowedModeText = this.scene.add.text(
+    const windowedModeLabel = this.scene.add.text(
       leftX,
-      screenSizeTitle.y + screenSizeTitle.height + 14,
+      screenSizeTitle.y + screenSizeTitle.height + 16,
       'Windowed mode',
       labelStyle
     );
-    windowedModeText.setOrigin(0, 0);
-    this.add(windowedModeText);
+    windowedModeLabel.setOrigin(0, 0);
+    this.add(windowedModeLabel);
 
-    const fullScreenModeText = this.scene.add.text(
+    const fullScreenModeLabel = this.scene.add.text(
       rightX,
-      windowedModeText.y,
+      windowedModeLabel.y,
       'Full screen mode',
       labelStyle
     );
-    fullScreenModeText.setOrigin(1, 0);
-    this.add(fullScreenModeText);
+    fullScreenModeLabel.setOrigin(1, 0);
+    this.add(fullScreenModeLabel);
 
-    const fullscreenToggle = new SW_ToggleSwitch(
+    this.fullscreenToggle = new SW_ToggleSwitch(
       this.scene,
-      windowedModeText.x + windowedModeText.width + 32,
-      -30
+      windowedModeLabel.x + windowedModeLabel.width + 32,
+      0
     );
-    fullscreenToggle.setValue(this.scene.scale.isFullscreen);
-    fullscreenToggle.on('valuechange', this.onFullscreenChanged);
-    this.add(fullscreenToggle);
+    this.fullscreenToggle.setY(
+      Math.floor(windowedModeLabel.y + fullScreenModeLabel.height * 0.5)
+    );
+    this.fullscreenToggle.setValue(this.scene.scale.isFullscreen);
+    this.fullscreenToggle.on('valuechange', this.onFullscreenChanged);
+    this.add(this.fullscreenToggle);
 
     this.scene.scale.on(
       Phaser.Scale.Events.ENTER_FULLSCREEN,
       () => {
-        fullscreenToggle.setValue(true);
+        this.fullscreenToggle.setValue(true);
       },
       this
     );
     this.scene.scale.on(
       Phaser.Scale.Events.LEAVE_FULLSCREEN,
       () => {
-        fullscreenToggle.setValue(false);
+        this.fullscreenToggle.setValue(false);
       },
       this
     );
@@ -145,7 +154,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     //////// Volume
     const volumeTitle = this.scene.add.text(
       leftX,
-      Math.floor(windowedModeText.y + windowedModeText.height + 32),
+      Math.floor(windowedModeLabel.y + windowedModeLabel.height + 24),
       'Volume',
       sectionStyle
     );
@@ -207,7 +216,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       soundEffectVolumeValueText.width -
       delimiterSpacing;
 
-    const sliderMusic = new SW_Slider(
+    this.sliderMusic = new SW_Slider(
       this.scene,
       Math.floor(
         musicVolumeValueText.x + musicVolumeValueText.width + delimiterSpacing
@@ -225,13 +234,13 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
         },
       }
     );
-    sliderMusic.setOrigin(0, 0);
-    sliderMusic.layout();
-    this.add(sliderMusic);
+    this.sliderMusic.setOrigin(0, 0);
+    this.sliderMusic.layout();
+    this.add(this.sliderMusic);
 
-    const sliderSoundEffects = new SW_Slider(
+    this.sliderSoundEffects = new SW_Slider(
       this.scene,
-      sliderMusic.x,
+      this.sliderMusic.x,
       Math.floor(soundEffectsLabel.y + soundEffectsLabel.height * 0.5),
       {
         width: sliderWidth,
@@ -247,9 +256,37 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
         },
       }
     );
-    sliderSoundEffects.setOrigin(0, 0);
-    sliderSoundEffects.layout();
-    this.add(sliderSoundEffects);
+    this.sliderSoundEffects.setOrigin(0, 0);
+    this.sliderSoundEffects.layout();
+    this.add(this.sliderSoundEffects);
+
+    const buttonResetSettings = new SW_ButtonBase(
+      this.scene,
+      0,
+      0,
+      'Reset Settings',
+      {
+        width: 120,
+        height: 28,
+        backgroundObject: this.scene.rexUI.add.roundRectangle(0, 0, 1, 1, 4),
+        colorBackgroundNormal: 0xdacbb8,
+        colorBackgroundPressed: 0xc4b6a5,
+        colorBackgroundHovered: 0xddd0bf,
+        textStyle: {},
+      }
+    );
+    buttonResetSettings.onClicked(this.resetSettings, this);
+    this.add(buttonResetSettings);
+
+    buttonResetSettings.setPosition(
+      Math.floor(soundEffectsLabel.x + buttonResetSettings.width * 0.5),
+      Math.floor(
+        soundEffectsLabel.y +
+          soundEffectsLabel.height +
+          buttonResetSettings.height * 0.5 +
+          24
+      )
+    );
   }
 
   protected createRightPage(): void {
@@ -270,5 +307,11 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     } else {
       this.scene.scale.stopFullscreen();
     }
+  }
+
+  protected resetSettings(): void {
+    this.scene.scale.stopFullscreen();
+    this.sliderMusic.setValue(0.1);
+    this.sliderSoundEffects.setValue(0.2);
   }
 }
