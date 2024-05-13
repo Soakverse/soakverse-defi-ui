@@ -24,17 +24,18 @@ import GPADJK_d2_1 from '@/game/assets/GPADJK_d2_1.png';
 import Scribb from '@/game/assets/Scribb.png';
 
 ////// Menus
-import menuHeader from '@/game/assets/ui/menus/menuHeader.png';
 import menuBackground from '@/game/assets/ui/menus/menuBackground.png';
-import menuButtonNormal from '@/game/assets/ui/menus/menuButtonNormal.png';
-import menuButtonPressed from '@/game/assets/ui/menus/menuButtonPressed.png';
+import settingsBackground from '@/game/assets/ui/menus/settingsBackground.png';
+import wizhingWellBackground from '@/game/assets/ui/menus/wizhingWellBackground.png';
 
 import backButton from '@/game/assets/ui/menus/backButton.png';
-import characterButton from '@/game/assets/ui/menus/characterButton.png';
 import eggzButton from '@/game/assets/ui/menus/eggzButton.png';
+import closeButtonNormal from '@/game/assets/ui/menus/closeButtonNormal.png';
+import closeButtonHovered from '@/game/assets/ui/menus/closeButtonHovered.png';
+import closeButtonPressed from '@/game/assets/ui/menus/closeButtonPressed.png';
+import characterButton from '@/game/assets/ui/menus/characterButton.png';
 import settingsButton from '@/game/assets/ui/menus/settingsButton.png';
 import settingsIconTitle from '@/game/assets/ui/menus/settingsIconTitle.png';
-import settingsBackground from '@/game/assets/ui/menus/settingsBackground.png';
 
 import inGameMenuBackground from '@/game/assets/ui/menus/inGameMenuBackground.png';
 import inGameMenuTab from '@/game/assets/ui/menus/inGameMenuTab.png';
@@ -135,10 +136,9 @@ export default class SW_BootScene extends SW_BaseScene {
   }
 
   private preloadMenuAssets(): void {
-    this.load.image('menuHeader', menuHeader);
     this.load.image('menuBackground', menuBackground);
-    this.load.image('menuButtonNormal', menuButtonNormal);
-    this.load.image('menuButtonPressed', menuButtonPressed);
+    this.load.image('settingsBackground', settingsBackground);
+    this.load.image('wizhingWellBackground', wizhingWellBackground);
 
     this.load.image('inGameMenuBackground', inGameMenuBackground);
     this.load.image('inGameMenuTab', inGameMenuTab);
@@ -148,11 +148,13 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('monsterProfil_prototype2', monsterProfil_prototype2);
 
     this.load.image('backButton', backButton);
+    this.load.image('closeButtonNormal', closeButtonNormal);
+    this.load.image('closeButtonHovered', closeButtonHovered);
+    this.load.image('closeButtonPressed', closeButtonPressed);
     this.load.image('characterButton', characterButton);
     this.load.image('eggzButton', eggzButton);
     this.load.image('settingsButton', settingsButton);
     this.load.image('settingsIconTitle', settingsIconTitle);
-    this.load.image('settingsBackground', settingsBackground);
 
     this.load.image('statAccuracyIcon', statAccuracyIcon);
     this.load.image('statAttackIcon', statAttackIcon);

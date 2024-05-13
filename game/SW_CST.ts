@@ -1,3 +1,6 @@
+const FONT_FAMILY = 'Poppins';
+const COLOR_TEXT = '#4D2B1D';
+
 export const SW_CST = {
   INDEX_INVALID: -1,
   SCENES: {
@@ -21,19 +24,40 @@ export const SW_CST = {
   },
   STYLE: {
     TEXT: {
-      FONT_FAMILY: 'Poppins',
+      FONT_FAMILY: FONT_FAMILY,
+      SECTION: {
+        fontSize: '16px',
+        fontFamily: FONT_FAMILY,
+        fontStyle: 'bold',
+        color: COLOR_TEXT,
+        align: 'left',
+      },
+      LABEL: {
+        fontSize: '13px',
+        fontFamily: FONT_FAMILY,
+        // fontStyle: 'bold',
+        color: COLOR_TEXT,
+        align: 'left',
+      },
+      SETTINGS_VALUE: {
+        fontSize: '13px',
+        fontFamily: FONT_FAMILY,
+        fontStyle: 'bold',
+        color: COLOR_TEXT,
+        align: 'left',
+      },
     },
     COLOR: {
       BLUE: '#2c4b7e',
       BLACK: '#000000',
       WHITE: '#f9f9f9',
       LIGHT_GREY: '#dcdcdc',
-      TEXT: '#4D2B1D',
+      TEXT: COLOR_TEXT,
     },
   },
   DEBUG: {
     PHYSIC: false,
     GAME: false,
-    UI: false,
+    UI: true,
   },
 };

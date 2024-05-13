@@ -22,7 +22,7 @@ export default class SW_WizhWell
   }
 
   public getHintName(): string {
-    return 'Wizh Well';
+    return 'The Wizhing Well';
   }
 
   public getHintOffsetY(): number {

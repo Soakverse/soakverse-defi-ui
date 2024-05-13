@@ -35,30 +35,6 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     const sliderHeight = 4;
     const sliderTrackHeight = 4;
 
-    const sectionStyle = {
-      fontSize: '16px',
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      fontStyle: 'bold',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      align: 'left',
-    };
-
-    const labelStyle = {
-      fontSize: '13px',
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      // fontStyle: 'bold',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      align: 'left',
-    };
-
-    const valueStyle = {
-      fontSize: '13px',
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      fontStyle: 'bold',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      align: 'left',
-    };
-
     const settingsIcon = this.scene.add.image(
       leftX,
       Math.floor(-this.height * 0.5) + 64,
@@ -87,7 +63,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       leftX,
       Math.floor(settingsTitle.y + settingsTitle.height * 0.5 + 20),
       'Screen size',
-      sectionStyle
+      SW_CST.STYLE.TEXT.SECTION
     );
     screenSizeTitle.setOrigin(0, 0);
     this.add(screenSizeTitle);
@@ -110,7 +86,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       leftX,
       screenSizeTitle.y + screenSizeTitle.height + 16,
       'Windowed mode',
-      labelStyle
+      SW_CST.STYLE.TEXT.LABEL
     );
     windowedModeLabel.setOrigin(0, 0);
     this.add(windowedModeLabel);
@@ -119,7 +95,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       rightX,
       windowedModeLabel.y,
       'Full screen mode',
-      labelStyle
+      SW_CST.STYLE.TEXT.LABEL
     );
     fullScreenModeLabel.setOrigin(1, 0);
     this.add(fullScreenModeLabel);
@@ -156,7 +132,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       leftX,
       Math.floor(windowedModeLabel.y + windowedModeLabel.height + 24),
       'Volume',
-      sectionStyle
+      SW_CST.STYLE.TEXT.SECTION
     );
     volumeTitle.setOrigin(0, 0);
     this.add(volumeTitle);
@@ -179,7 +155,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       leftX,
       volumeTitle.y + volumeTitle.height + 14,
       'Music',
-      labelStyle
+      SW_CST.STYLE.TEXT.LABEL
     );
     musicLabel.setOrigin(0, 0);
     this.add(musicLabel);
@@ -188,7 +164,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       leftX,
       musicLabel.y + musicLabel.height + 16,
       'Sound Effects',
-      labelStyle
+      SW_CST.STYLE.TEXT.LABEL
     );
     soundEffectsLabel.setOrigin(0, 0);
     this.add(soundEffectsLabel);
@@ -197,7 +173,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       Math.floor(soundEffectsLabel.x + soundEffectsLabel.width + 16),
       Math.floor(musicLabel.y + musicLabel.height * 0.5),
       '100%',
-      valueStyle
+      SW_CST.STYLE.TEXT.SETTINGS_VALUE
     );
     musicVolumeValueText.setOrigin(0, 0.5);
     this.add(musicVolumeValueText);
@@ -206,7 +182,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       musicVolumeValueText.x,
       Math.floor(soundEffectsLabel.y + soundEffectsLabel.height * 0.5),
       '100%',
-      valueStyle
+      SW_CST.STYLE.TEXT.SETTINGS_VALUE
     );
     soundEffectVolumeValueText.setOrigin(0, 0.5);
     this.add(soundEffectVolumeValueText);
@@ -260,21 +236,15 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
     this.sliderSoundEffects.layout();
     this.add(this.sliderSoundEffects);
 
-    const buttonResetSettings = new SW_ButtonBase(
-      this.scene,
-      0,
-      0,
-      'Reset Settings',
-      {
-        width: 120,
-        height: 28,
-        backgroundObject: this.scene.rexUI.add.roundRectangle(0, 0, 1, 1, 4),
-        colorBackgroundNormal: 0xdacbb8,
-        colorBackgroundPressed: 0xc4b6a5,
-        colorBackgroundHovered: 0xddd0bf,
-        textStyle: {},
-      }
-    );
+    const buttonResetSettings = new SW_ButtonBase(this.scene, 0, 0, {
+      width: 120,
+      height: 28,
+      backgroundObject: this.scene.rexUI.add.roundRectangle(0, 0, 1, 1, 4),
+      colorBackgroundNormal: 0xdacbb8,
+      colorBackgroundPressed: 0xc4b6a5,
+      colorBackgroundHovered: 0xddd0bf,
+      text: 'Reset Settings',
+    });
     buttonResetSettings.onClicked(this.resetSettings, this);
     this.add(buttonResetSettings);
 

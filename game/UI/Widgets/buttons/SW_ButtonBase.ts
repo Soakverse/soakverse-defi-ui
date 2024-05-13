@@ -21,7 +21,8 @@ export declare type SW_ButtonStyle = {
   textOffsetPressedY?: number;
   textOffsetDisabledY?: number;
 
-  textStyle: Phaser.Types.GameObjects.Text.TextStyle;
+  text?: string | undefined;
+  textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
 
   colorBackgroundNormal?: number;
   colorBackgroundPressed?: number;
@@ -48,10 +49,10 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
   protected textOffsetPressedY: number;
   protected textOffsetDisabledY: number;
 
-  protected textureNormal: string;
-  protected texturePressed: string;
-  protected textureHovered: string;
-  protected textureDisabled: string;
+  protected textureNormal: string = '';
+  protected texturePressed: string = '';
+  protected textureHovered: string = '';
+  protected textureDisabled: string = '';
 
   protected colorFillBackgroundNormal: number;
   protected colorFillBackgroundPressed: number;
@@ -59,22 +60,16 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
   protected colorFillBackgroundDisabled: number;
 
   protected _backgroundObject: Phaser.GameObjects.Image | RoundRectangle;
-  protected _textObject: Phaser.GameObjects.Text;
+  protected _textObject: Phaser.GameObjects.Text | undefined;
 
   constructor(
     scene: SW_BaseScene,
     x: number,
     y: number,
-    text: string,
     style: SW_ButtonStyle
   ) {
     super(scene, x, y);
     scene.add.existing(this);
-
-    this.textureNormal = style.textureNormal ?? '';
-    this.texturePressed = style.texturePressed ?? this.textureNormal;
-    this.textureHovered = style.textureHovered ?? this.textureNormal;
-    this.textureDisabled = style.textureDisabled ?? this.textureNormal;
 
     this.textOffsetNormalY = style.textOffsetNormalY ?? 0;
     this.textOffsetHoveredY = style.textOffsetHoveredY ?? 0;
@@ -91,21 +86,31 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
     this._backgroundObject.setOrigin(0.5);
     this.add(this._backgroundObject);
 
+    if (this._backgroundObject instanceof Phaser.GameObjects.Image) {
+      this.textureNormal =
+        style.textureNormal ?? this._backgroundObject.texture.key;
+      this.texturePressed = style.texturePressed ?? this.textureNormal;
+      this.textureHovered = style.textureHovered ?? this.textureNormal;
+      this.textureDisabled = style.textureDisabled ?? this.textureNormal;
+    }
+
     this.width = style.width ?? this._backgroundObject.width;
     this.height = style.height ?? this._backgroundObject.height;
 
     this.updateBackgroundSizes();
 
-    const textStyle = style.textStyle;
-    textStyle.fontFamily =
-      textStyle.fontFamily ?? SW_CST.STYLE.TEXT.FONT_FAMILY;
-    textStyle.fontSize = textStyle.fontSize ?? '12px';
-    textStyle.color = textStyle.color ?? SW_CST.STYLE.COLOR.BLACK;
-    textStyle.align = textStyle.align ?? 'center';
+    if (style.text) {
+      const textStyle = style.textStyle ?? {};
+      textStyle.fontFamily =
+        textStyle.fontFamily ?? SW_CST.STYLE.TEXT.FONT_FAMILY;
+      textStyle.fontSize = textStyle.fontSize ?? '12px';
+      textStyle.color = textStyle.color ?? SW_CST.STYLE.COLOR.BLACK;
+      textStyle.align = textStyle.align ?? 'center';
 
-    this._textObject = this.scene.add.text(0, 0, text, textStyle);
-    this._textObject.setOrigin(0.5);
-    this.add(this._textObject);
+      this._textObject = this.scene.add.text(0, 0, style.text, textStyle);
+      this._textObject.setOrigin(0.5);
+      this.add(this._textObject);
+    }
 
     this.setupInteractions(!!style.pixelPerfect);
     this.updateVisual();
@@ -206,7 +211,8 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
     colorFillBackground: number,
     textureBackground: string
   ): void {
-    this._textObject.setY(textOffsetY);
+    this._textObject?.setY(textOffsetY);
+
     if (this._backgroundObject instanceof RoundRectangle) {
       this._backgroundObject.fillColor = colorFillBackground;
     } else {
@@ -269,7 +275,11 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
     return this._backgroundObject;
   }
 
-  public get textObject(): Phaser.GameObjects.Text {
+  public get textObject(): Phaser.GameObjects.Text | undefined {
     return this._textObject;
+  }
+
+  public setText(text: string): void {
+    this._textObject?.setText(text);
   }
 }

@@ -46,12 +46,14 @@ export class SW_Utils {
     endX: number,
     y: number,
     pattern: number[],
-    config: {
+    config?: {
       lineThickness?: number;
       lineColor?: number;
       lineAlpha?: number;
     }
   ): Phaser.GameObjects.Graphics {
+    config = config ?? {};
+
     if (startX > endX) {
       const temp = startX;
       startX = endX;
@@ -67,8 +69,8 @@ export class SW_Utils {
       y: 0,
     });
 
-    const lineThickness = config.lineThickness ?? 10;
-    const lineColor = config.lineColor ?? 0x00ff00;
+    const lineThickness = config.lineThickness ?? 1;
+    const lineColor = config.lineColor ?? 0xd9cbb8;
     const lineAlpha = config.lineAlpha ?? 1;
 
     dashedLine.lineStyle(lineThickness, lineColor, lineAlpha);
@@ -99,12 +101,14 @@ export class SW_Utils {
     startY: number,
     endY: number,
     pattern: number[],
-    config: {
+    config?: {
       lineThickness?: number;
       lineColor?: number;
       lineAlpha?: number;
     }
   ): Phaser.GameObjects.Graphics {
+    config = config ?? {};
+
     if (startY > endY) {
       const temp = startY;
       startY = endY;
@@ -120,8 +124,8 @@ export class SW_Utils {
       y: 0,
     });
 
-    const lineThickness = config.lineThickness ?? 10;
-    const lineColor = config.lineColor ?? 0x00ff00;
+    const lineThickness = config.lineThickness ?? 1;
+    const lineColor = config.lineColor ?? 0xd9cbb8;
     const lineAlpha = config.lineAlpha ?? 1;
 
     dashedLine.lineStyle(lineThickness, lineColor, lineAlpha);

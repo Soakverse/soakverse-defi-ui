@@ -92,8 +92,7 @@ export class SW_InGameMenu extends SW_BaseMenu {
       -10,
       -160,
       154,
-      [4, 4],
-      { lineThickness: 1, lineColor: 0xd9cbb8 }
+      [4, 4]
     );
     this.add(middleDelimiter);
   }

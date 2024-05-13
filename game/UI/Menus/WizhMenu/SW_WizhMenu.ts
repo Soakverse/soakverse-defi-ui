@@ -1,73 +1,119 @@
 import { SW_CST } from '~/game/SW_CST';
-import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import { SW_TextButton } from '~/game/UI/Widgets/buttons/SW_TextButton';
 import { useWizhingWellStore } from '@/stores/wizhingWellStore';
+import { SW_ButtonBase } from '../../Widgets/buttons/SW_ButtonBase';
+import { SW_BaseMenu } from '../SW_BaseMenu';
+import { SW_MenuManager } from '../SW_MenuManager';
+import { SW_Utils } from '~/game/SW_Utils';
 
 const wizhingWellStore = useWizhingWellStore();
 
-export class SW_WizhMenu extends Phaser.GameObjects.Container {
-  public declare scene: SW_BaseScene;
-
-  protected background: Phaser.GameObjects.Image;
-  protected header: Phaser.GameObjects.Image;
-  protected headerText: Phaser.GameObjects.Text;
-
-  constructor(scene: SW_BaseScene, x: number, y: number) {
-    super(scene, x, y);
+export class SW_WizhMenu extends SW_BaseMenu {
+  constructor(menuManager: SW_MenuManager, x: number, y: number) {
+    super(menuManager, x, y);
     this.scene.add.existing(this);
 
-    this.background = this.scene.add
-      .image(0, 0, 'menuBackground')
-      .setOrigin(0.5);
-    this.add(this.background);
+    const background = this.scene.add.image(0, 0, 'menuBackground');
+    background.setOrigin(0.5);
+    this.add(background);
 
-    this.width = this.background.width;
-    this.height = this.background.height;
+    this.width = background.width;
+    this.height = background.height;
 
-    this.header = this.scene.add
-      .image(0, -this.height * 0.5 + 8, 'menuHeader')
-      .setOrigin(0.5);
-    this.add(this.header);
+    const leftX = Math.floor(-this.width * 0.5) + 48;
+    const rightX = Math.floor(this.width * 0.5) - 48;
 
-    this.headerText = this.scene.add
-      .text(this.header.x, this.header.y - 8, 'Wizhes'.toUpperCase(), {
-        color: SW_CST.STYLE.COLOR.WHITE,
-        strokeThickness: 3,
-        stroke: SW_CST.STYLE.COLOR.BLACK,
-        fontSize: '23px',
-        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      })
-      .setOrigin(0.5);
-    this.add(this.headerText);
-
-    const makeAWizhText = this.scene.add
-      .text(
-        this.header.x,
-        this.header.y + this.header.height * 0.5 + 20,
-        'You found the magic fountain',
-        {
-          color: SW_CST.STYLE.COLOR.WHITE,
-          strokeThickness: 3,
-          stroke: SW_CST.STYLE.COLOR.BLACK,
-          fontSize: '21px',
-          fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        }
-      )
-      .setOrigin(0.5, 0);
-    this.add(makeAWizhText);
-
-    const makeAWizhButton = new SW_TextButton(
+    const closeButton = new SW_ButtonBase(
       this.scene,
-      makeAWizhText.x,
-      makeAWizhText.y + makeAWizhText.height + 76,
-      'Make a Wizh',
-      {}
+      rightX,
+      Math.floor(-this.height * 0.5) + 48,
+      {
+        backgroundObject: this.scene.add.image(0, 0, 'closeButton'),
+        textureNormal: 'closeButtonNormal',
+        textureHovered: 'closeButtonHovered',
+        texturePressed: 'closeButtonPressed',
+      }
+    );
+    closeButton.onClicked(this.hideMenu, this);
+    this.add(closeButton);
+
+    const settingsIcon = this.scene.add.image(
+      leftX,
+      Math.floor(-this.height * 0.5) + 56,
+      'settingsIconTitle'
+    );
+    settingsIcon.setOrigin(0, 0);
+    this.add(settingsIcon);
+
+    const settingsTitle = this.scene.add.text(
+      Math.floor(settingsIcon.x + settingsIcon.width + 8),
+      Math.floor(settingsIcon.y + settingsIcon.height * 0.5),
+      'The Wizhing Well',
+      {
+        fontSize: '20px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        fontStyle: 'bold',
+        color: SW_CST.STYLE.COLOR.TEXT,
+        align: 'left',
+      }
+    );
+    settingsTitle.setOrigin(0, 0.5);
+    this.add(settingsTitle);
+
+    const headerDelimiter = SW_Utils.drawDashLineOnX(
+      this.scene,
+      leftX,
+      rightX,
+      settingsTitle.y + settingsTitle.height * 0.5 + 24,
+      [4, 4]
+    );
+    this.add(headerDelimiter);
+
+    const contentText = this.scene.add.text(
+      leftX,
+      10,
+      'You have found the Wizhing Well. It draws from a source of incredible energy.\n\nUse your wizhes to get new treasures.',
+      {
+        color: SW_CST.STYLE.COLOR.BLACK,
+        fontSize: '16px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        align: 'justify',
+      }
+    );
+    contentText.setFixedSize(230, 0);
+    contentText.setWordWrapWidth(contentText.width);
+    contentText.setOrigin(0, 0.5);
+    this.add(contentText);
+
+    const wizhingWellBackground = this.scene.add.image(
+      rightX,
+      36,
+      'wizhingWellBackground'
+    );
+    wizhingWellBackground.setOrigin(1, 0.5);
+    this.add(wizhingWellBackground);
+
+    const wizhButtonWidth = 140;
+    const wizhButtonHeight = 36;
+
+    const makeAWizhButton = new SW_ButtonBase(
+      this.scene,
+      contentText.x + contentText.width * 0.5,
+      this.height * 0.5 - wizhButtonHeight * 0.5 - 36,
+      {
+        width: wizhButtonWidth,
+        height: wizhButtonHeight,
+        backgroundObject: this.scene.rexUI.add.roundRectangle(0, 0, 1, 1, 4),
+        colorBackgroundNormal: 0xdacbb8,
+        colorBackgroundPressed: 0xc4b6a5,
+        colorBackgroundHovered: 0xddd0bf,
+        text: 'Make a Wizh',
+        textStyle: { fontSize: '17px' },
+      }
     );
     this.add(makeAWizhButton);
     makeAWizhButton.onClicked(this.onMakeAWizhButtonClicked, this);
 
     const self = this;
-
     wizhingWellStore.$onAction(function (element) {
       if (element.name == 'triggerAction1') {
         console.log(element);
