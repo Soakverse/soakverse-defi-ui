@@ -149,4 +149,21 @@ export class SW_Utils {
 
     return dashedLine;
   }
+
+  public static getTiledValue(
+    source: SW_TiledObjectProperties[],
+    key: string,
+    defaultValue: any = undefined
+  ): any | undefined {
+    if (Object.keys(source).length <= 0) {
+      return defaultValue;
+    }
+
+    const propertyElement = source.find(
+      (objectProperties: SW_TiledObjectProperties) => {
+        return objectProperties.name == key;
+      }
+    );
+    return propertyElement ? propertyElement.value : defaultValue;
+  }
 }

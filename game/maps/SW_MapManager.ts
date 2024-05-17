@@ -78,8 +78,8 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
   private currentLocalPercentMapX: number = 0;
   private currentLocalPercentMapY: number = 0;
 
-  private currentSubMapX: number = 0;
-  private currentSubMapY: number = 0;
+  private currentSubMapX: number = -1;
+  private currentSubMapY: number = -1;
 
   private subMapWidth: number = 1040;
   private subMapHeight: number = 880;
@@ -438,6 +438,12 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     return `${layerName}_${subMapX}_${subMapY}`;
   }
 
+  public getCurrentSubMap(): Phaser.Tilemaps.Tilemap | undefined {
+    const subMapId = this.getSubMapId(this.currentSubMapX, this.currentSubMapX);
+    const subMapData = this.spawnedSubMapDataMap.get(subMapId);
+    return subMapData ? subMapData.subMap : undefined;
+  }
+
   public getVisibleMapLayersData(): {
     layer: Phaser.Tilemaps.TilemapLayer;
     layerId: string;
@@ -530,13 +536,13 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
       layerDepth: number;
     }[];
 
-    this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
-      layers = layers.concat(fnAddVisibleLayerstoArray(subMapData));
-    }, this);
+    for (const subMapData of this.spawnedSubMapDataMap) {
+      layers = layers.concat(fnAddVisibleLayerstoArray(subMapData[1]));
+    }
 
-    this.spawnSubMapQueue.forEach((subMapData: SW_SubMapData) => {
+    for (const subMapData of this.spawnSubMapQueue) {
       layers = layers.concat(fnAddVisibleLayerstoArray(subMapData));
-    }, this);
+    }
 
     return layers;
   }
@@ -663,70 +669,70 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
     this.spawnCollisionLayer(subMapData, offsetX, offsetY);
 
-    // Special case for empty maps that would only have layer collisions
-    if (subMapData.tilesets.length <= 1) {
-      return;
+    // Special case for empty maps that would only have a collisions layer
+    if (subMapData.tilesets.length > 1) {
+      subMapData.layerGround = this.spawnVisualLayer(
+        subMapData,
+        'Layer1',
+        offsetX,
+        offsetY,
+        depthBackground
+      );
+      subMapData.layerBackground1 = this.spawnVisualLayer(
+        subMapData,
+        'Layer2',
+        offsetX,
+        offsetY,
+        depthBackground
+      );
+      subMapData.layerBackground2 = this.spawnVisualLayer(
+        subMapData,
+        'Layer3',
+        offsetX,
+        offsetY,
+        depthBackground
+      );
+      subMapData.layerForeground1 = this.spawnVisualLayer(
+        subMapData,
+        'Layer4',
+        offsetX,
+        offsetY,
+        depthForeground
+      );
+      subMapData.layerForeground2 = this.spawnVisualLayer(
+        subMapData,
+        'Layer5',
+        offsetX,
+        offsetY,
+        depthForeground
+      );
+
+      subMapData.entrances = this.createEntrances(subMapData, offsetX, offsetY);
+      subMapData.entrances_collider = this.scene.physics.add.overlap(
+        this.player,
+        subMapData.entrances,
+        // @ts-ignore - onPlayerEnter has the right parameter types
+        this.scene.onPlayerEnter,
+        this.scene.canPlayerEnter,
+        this.scene
+      );
+
+      subMapData.interactableObjects = this.scene.createInteractableObjects(
+        subMapData,
+        offsetX,
+        offsetY
+      );
+      subMapData.interactableObjects_collider = this.scene.physics.add.overlap(
+        this.player.getInteractableComp(),
+        subMapData.interactableObjects,
+        // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
+        this.scene.onPlayerOverlapInteractable,
+        undefined,
+        this
+      );
     }
 
-    subMapData.layerGround = this.spawnVisualLayer(
-      subMapData,
-      'Layer1',
-      offsetX,
-      offsetY,
-      depthBackground
-    );
-    subMapData.layerBackground1 = this.spawnVisualLayer(
-      subMapData,
-      'Layer2',
-      offsetX,
-      offsetY,
-      depthBackground
-    );
-    subMapData.layerBackground2 = this.spawnVisualLayer(
-      subMapData,
-      'Layer3',
-      offsetX,
-      offsetY,
-      depthBackground
-    );
-    subMapData.layerForeground1 = this.spawnVisualLayer(
-      subMapData,
-      'Layer4',
-      offsetX,
-      offsetY,
-      depthForeground
-    );
-    subMapData.layerForeground2 = this.spawnVisualLayer(
-      subMapData,
-      'Layer5',
-      offsetX,
-      offsetY,
-      depthForeground
-    );
-
-    subMapData.entrances = this.createEntrances(subMapData, offsetX, offsetY);
-    subMapData.entrances_collider = this.scene.physics.add.overlap(
-      this.player,
-      subMapData.entrances,
-      // @ts-ignore - onPlayerEnter has the right parameter types
-      this.scene.onPlayerEnter,
-      this.scene.canPlayerEnter,
-      this.scene
-    );
-
-    subMapData.interactableObjects = this.scene.createInteractableObjects(
-      subMapData,
-      offsetX,
-      offsetY
-    );
-    subMapData.interactableObjects_collider = this.scene.physics.add.overlap(
-      this.player.getInteractableComp(),
-      subMapData.interactableObjects,
-      // @ts-ignore - onPlayerOverlapInteractable has the right parameter types
-      this.scene.onPlayerOverlapInteractable,
-      undefined,
-      this
-    );
+    this.emit('subMapSpawned', subMapData.subMap);
   }
 
   private spawnCollisionLayer(
@@ -1021,8 +1027,22 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     this.currentLocalPercentMapY =
       (this.player.y % this.subMapHeight) / this.subMapHeight;
 
-    this.currentSubMapX = Math.floor(this.player.x / this.subMapWidth);
-    this.currentSubMapY = Math.floor(this.player.y / this.subMapHeight);
+    const newSubMapX = Math.floor(this.player.x / this.subMapWidth);
+    const newSubMapY = Math.floor(this.player.y / this.subMapHeight);
+
+    if (
+      newSubMapX != this.currentSubMapX ||
+      newSubMapY != this.currentSubMapY
+    ) {
+      const subMapId = this.getSubMapId(newSubMapX, newSubMapY);
+      const subMapData = this.spawnedSubMapDataMap.get(subMapId);
+      if (subMapData) {
+        this.emit('currentSubMapChanged', subMapData.subMap);
+      }
+
+      this.currentSubMapX = newSubMapX;
+      this.currentSubMapY = newSubMapY;
+    }
   }
 
   public clear(): void {
@@ -1031,9 +1051,10 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
     this.spawnSubMapQueue = [];
     this.preloadingSubMaps = [];
 
-    this.spawnedSubMapDataMap.forEach((subMapData: SW_SubMapData) => {
-      this.removeSpawnedSubMap(subMapData);
-    }, this);
+    for (const subMapData of this.spawnedSubMapDataMap) {
+      this.removeSpawnedSubMap(subMapData[1]);
+    }
+
     this.spawnedSubMapDataMap.clear();
     this.subMapNamesMap.clear();
 
@@ -1077,6 +1098,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
           this.spawnCollisionLayer(subMapData, offsetX, offsetY);
         } else {
           this.spawnSubMapQueue.pop();
+          this.emit('subMapSpawned', subMapData.subMap);
           this.updateQueue(); // Try to update the next submap if there is any left
         }
       } else {
@@ -1153,6 +1175,7 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
             );
         } else {
           this.spawnSubMapQueue.pop();
+          this.emit('subMapSpawned', subMapData.subMap);
           this.updateQueue(); // Try to update the next submap if there is any left
         }
       }

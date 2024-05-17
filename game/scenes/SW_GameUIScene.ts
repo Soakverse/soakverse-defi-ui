@@ -13,6 +13,7 @@ import { SW_InGameMenu } from '../UI/Menus/InGameMenu/SW_InGameMenu';
 import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputComponent';
 import { SW_Player } from '../characters/players/SW_Player';
 import { SW_AudioManager } from '../audio/SW_AudioManager';
+import { SW_PlaceNamePanel } from '../UI/SW_PlaceNamePanel';
 
 declare type SW_UIKeys = {
   escape: Phaser.Input.Keyboard.Key;
@@ -31,6 +32,10 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
   private declare dialogQuest: SW_DialogQuest;
   private declare dialogTextBox: SW_DialogTextBox;
+
+  private declare placeNamePanel: SW_PlaceNamePanel;
+  private declare placeNamePanelTween: Phaser.Tweens.Tween | undefined;
+  private currentPlaceName: string = '';
 
   private declare playerInventoryWidget: SW_PlayerInventoryWidget;
   private declare chestInventoryWidget: SW_ChestInventoryWidget;
@@ -55,14 +60,38 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     this.createKeys();
 
+    this.placeNamePanel = new SW_PlaceNamePanel(this, 0, 0);
+    this.placeNamePanel.setVisible(false);
+
+    this.createDialogQuest();
+    this.createMenus();
+    this.createLoadingScreen();
+  }
+
+  protected createKeys(): void {
+    if (this.input.keyboard) {
+      this.keys = this.input.keyboard.addKeys(
+        {
+          escape: Phaser.Input.Keyboard.KeyCodes.ESC,
+          space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+          nextPage: Phaser.Input.Keyboard.KeyCodes.ENTER,
+        },
+        false
+      ) as SW_UIKeys;
+
+      this.keys.escape.on('down', this.onEscapeButtonDown, this);
+      this.keys.space.on('down', this.onSpaceButtonDown, this);
+      this.keys.nextPage.on('down', this.onNextPageButtonDown, this);
+    }
+  }
+
+  public createMenus(): void {
     this.menuManager = new SW_MenuManager(this);
     this.menuManager.on(
       'menuVisibilityChanged',
       this.onMenuVisibilityChanged,
       this
     );
-
-    this.createDialogQuest();
 
     this.inGameMenu = new SW_InGameMenu(
       this.menuManager,
@@ -210,7 +239,9 @@ export default class SW_GameUIScene extends SW_BaseScene {
       this
     );
     this.menuManager.hideMenu(this.wizhMenu);
+  }
 
+  public createLoadingScreen(): void {
     this.loadingScreen = this.add.graphics();
     this.loadingScreen.fillStyle(0x000000, 1.0);
     this.loadingScreen.fillRect(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT);
@@ -219,23 +250,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
       Phaser.Geom.Rectangle.Contains
     );
     this.loadingScreen.setVisible(false);
-  }
-
-  protected createKeys(): void {
-    if (this.input.keyboard) {
-      this.keys = this.input.keyboard.addKeys(
-        {
-          escape: Phaser.Input.Keyboard.KeyCodes.ESC,
-          space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-          nextPage: Phaser.Input.Keyboard.KeyCodes.ENTER,
-        },
-        false
-      ) as SW_UIKeys;
-
-      this.keys.escape.on('down', this.onEscapeButtonDown, this);
-      this.keys.space.on('down', this.onSpaceButtonDown, this);
-      this.keys.nextPage.on('down', this.onNextPageButtonDown, this);
-    }
   }
 
   public showLoadingScreen(): void {
@@ -467,5 +481,48 @@ export default class SW_GameUIScene extends SW_BaseScene {
     if (this.playerActionsContainer) {
       this.playerActionsContainer.onPlayerRunStateChanged(isPlayerRunning);
     }
+  }
+
+  public updatePlaceName(placeName: string): void {
+    if (placeName.length <= 0 || this.currentPlaceName == placeName) {
+      return;
+    }
+
+    const margin = 12;
+    this.currentPlaceName = placeName;
+
+    this.placeNamePanel.setText(placeName);
+    this.placeNamePanel.setPosition(
+      this.placeNamePanel.width * 0.5 + margin,
+      0
+    );
+    this.placeNamePanel.setVisible(true);
+    this.placeNamePanel.setAlpha(0.0);
+
+    if (this.placeNamePanelTween) {
+      this.placeNamePanelTween.destroy();
+    }
+
+    this.placeNamePanelTween = this.tweens.add({
+      targets: this.placeNamePanel,
+      y: this.placeNamePanel.height * 0.5 + margin,
+      duration: 200,
+      alpha: 1.0,
+      onComplete: () => {
+        this.placeNamePanelTween = this.tweens.add({
+          targets: this.placeNamePanel,
+          x: this.placeNamePanel.x - 20,
+          alpha: 0.0,
+          delay: 1600,
+          duration: 700,
+          onComplete: () => {
+            this.placeNamePanel.setVisible(false);
+            this.placeNamePanelTween = undefined;
+          },
+          callbackScope: this,
+        });
+      },
+      callbackScope: this,
+    });
   }
 }

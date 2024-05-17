@@ -201,6 +201,12 @@
  "nextlayerid":9,
  "nextobjectid":6,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"placeName",
+         "type":"string",
+         "value":"Endless sea"
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
  "tileheight":32,

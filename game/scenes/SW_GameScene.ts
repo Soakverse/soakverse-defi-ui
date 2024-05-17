@@ -19,6 +19,7 @@ import { SW_SubMapData, SW_MapManager } from '~/game/maps/SW_MapManager';
 import { SW_DIRECTIONS } from '../characters/SW_CharacterMovementComponent';
 import SW_WizhWell from '../gameObjects/SW_WizhWell';
 import { SW_AudioManager } from '../audio/SW_AudioManager';
+import { SW_TiledObjectProperties, SW_Utils } from '../SW_Utils';
 
 const playerStore = usePlayerStore();
 
@@ -108,6 +109,26 @@ export default class SW_GameScene extends SW_BaseScene {
       Phaser.Scenes.Events.POST_UPDATE,
       this.player.postUpdate,
       this.player
+    );
+
+    this.mapManager.on('subMapSpawned', this.onSubMapSpawned, this);
+    this.mapManager.on(
+      'currentSubMapChanged',
+      this.onCurrentSubMapChanged,
+      this
+    );
+
+    // Wait a little to ensure that the currentMap is valid. Even if the map manager is initialized, the map might still be loading.
+    this.time.delayedCall(
+      1200,
+      () => {
+        const currentMap = this.mapManager.getCurrentSubMap();
+        if (currentMap) {
+          this.onCurrentSubMapChanged(currentMap);
+        }
+      },
+      undefined,
+      this
     );
 
     this.setupCamera();
@@ -324,5 +345,14 @@ export default class SW_GameScene extends SW_BaseScene {
 
   protected onPlayerRequestInteract(): void {
     this.player.interact();
+  }
+
+  protected onSubMapSpawned(submap: Phaser.Tilemaps.Tilemap): void {}
+
+  protected onCurrentSubMapChanged(submap: Phaser.Tilemaps.Tilemap): void {
+    const tilePropertyies = submap.properties as SW_TiledObjectProperties[];
+    const placeName = SW_Utils.getTiledValue(tilePropertyies, 'placeName', '');
+
+    this.UIScene.updatePlaceName(placeName);
   }
 }

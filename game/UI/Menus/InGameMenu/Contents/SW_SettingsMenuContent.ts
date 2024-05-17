@@ -5,7 +5,7 @@ import { SW_CST } from '~/game/SW_CST';
 import { SW_Slider } from '~/game/UI/Widgets/SW_Slider';
 import { SW_AudioManager } from '~/game/audio/SW_AudioManager';
 import { SW_ToggleSwitch } from '~/game/UI/Widgets/SW_ToggleSwitch';
-import { SW_ButtonBase } from '~/game/UI/Widgets/buttons/SW_ButtonBase';
+import { SW_ButtonBase } from '~/game/UI/Widgets/SW_ButtonBase';
 
 export class SW_SettingsMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;

@@ -1,5 +1,5 @@
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import SW_GridTable from '~/game/widgets/SW_GridTable';
+import SW_GridTable from '~/game/UI/Widgets/SW_GridTable';
 import {
   SW_Inventory,
   SW_InventoryObject,

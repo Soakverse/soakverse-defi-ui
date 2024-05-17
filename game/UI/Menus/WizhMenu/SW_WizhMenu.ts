@@ -1,6 +1,6 @@
 import { SW_CST } from '~/game/SW_CST';
 import { useWizhingWellStore } from '@/stores/wizhingWellStore';
-import { SW_ButtonBase } from '../../Widgets/buttons/SW_ButtonBase';
+import { SW_ButtonBase } from '../../Widgets/SW_ButtonBase';
 import { SW_BaseMenu } from '../SW_BaseMenu';
 import { SW_MenuManager } from '../SW_MenuManager';
 import { SW_Utils } from '~/game/SW_Utils';

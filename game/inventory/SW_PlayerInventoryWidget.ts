@@ -1,6 +1,6 @@
 import { SW_BaseInventoryWidget } from '~/game/inventory/SW_BaseInventoryWidget';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import SW_GridTable from '~/game/widgets/SW_GridTable';
+import SW_GridTable from '~/game/UI/Widgets/SW_GridTable';
 import Cell from 'phaser3-rex-plugins/plugins/gameobjects/container/gridtable/table/Cell.js';
 import { Label } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import { SW_InventoryCounterWidget } from '~/game/inventory/SW_InventoryCounterWidget';
