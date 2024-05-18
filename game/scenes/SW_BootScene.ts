@@ -36,6 +36,7 @@ import closeButtonPressed from '@/game/assets/ui/menus/closeButtonPressed.png';
 import characterButton from '@/game/assets/ui/menus/characterButton.png';
 import settingsButton from '@/game/assets/ui/menus/settingsButton.png';
 import settingsIconTitle from '@/game/assets/ui/menus/settingsIconTitle.png';
+import wizhIconTitle from '@/game/assets/ui/menus/wizhIconTitle.png';
 
 import inGameMenuBackground from '@/game/assets/ui/menus/inGameMenuBackground.png';
 import inGameMenuTab from '@/game/assets/ui/menus/inGameMenuTab.png';
@@ -155,6 +156,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('eggzButton', eggzButton);
     this.load.image('settingsButton', settingsButton);
     this.load.image('settingsIconTitle', settingsIconTitle);
+    this.load.image('wizhIconTitle', wizhIconTitle);
 
     this.load.image('statAccuracyIcon', statAccuracyIcon);
     this.load.image('statAttackIcon', statAttackIcon);
