@@ -32,7 +32,7 @@ export class SW_DialogTextBox extends TextBox {
         (config.space.bottom as number),
       3,
       SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.BLACK),
-      0.7
+      0.86
     );
     background.strokeColor = SW_Utils.hexColorToNumber(
       SW_CST.STYLE.COLOR.BLACK
@@ -77,26 +77,18 @@ export class SW_DialogTextBox extends TextBox {
     background.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
 
     this.setOrigin(0.5, 0.5);
+
     this.layout();
-
-    this.setVisible(false);
-  }
-
-  public setVisible(value: boolean): this {
-    this.emit('visibilityChanged', value);
-    return super.setVisible(value);
   }
 
   public showMessage(
     message: string,
     title?: string,
-    iconTexture?: string,
-    iconFrame?: string,
     typingSpeed: number = 30
   ) {
     this.setTitle(title ?? '');
+    this.layout();
     this.start(message, typingSpeed);
-    //this.setIconTexture(iconTexture, iconFrame);
   }
 
   public closeDialogue(): void {

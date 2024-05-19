@@ -332,7 +332,7 @@ export default class SW_GameScene extends SW_BaseScene {
   }
 
   public requestDialogue(dialogue: string): void {
-    this.UIScene.requestDialogue(dialogue);
+    this.UIScene.requestDialog(dialogue);
   }
 
   protected onPlayerRequestToggleRunState(): void {

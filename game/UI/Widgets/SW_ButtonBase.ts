@@ -99,7 +99,7 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
 
     this.updateBackgroundSizes();
 
-    if (style.text) {
+    if (style.text !== undefined) {
       const textStyle = style.textStyle ?? {};
       textStyle.fontFamily =
         textStyle.fontFamily ?? SW_CST.STYLE.TEXT.FONT_FAMILY;

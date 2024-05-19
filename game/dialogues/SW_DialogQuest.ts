@@ -1,5 +1,5 @@
 /** TODO
- * Cleanup the codeand the widgets
+ * Cleanup the code and the widgets
  * Make our own SW_Dialog instead of using rex version. We need more flexibility on the layout
  * Add the entity backgrounds to the SW_Dialog
  * Remove QuestionJSON that was just meant for testing purpose
@@ -8,10 +8,13 @@
  * Add navigation to the dialog choices
  */
 
-import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import DialogQuest from 'phaser3-rex-plugins/templates/dialog-quest/DialogQuest';
-import { SW_Dialog } from './SW_Dialog';
-import { SW_DialogChoiceButton } from './SW_DialogChoiceButton';
+import { SW_BaseMenu } from '../UI/Menus/SW_BaseMenu';
+import { SW_DialogTextBox } from './SW_DialogTextBox';
+import { SW_MenuManager } from '../UI/Menus/SW_MenuManager';
+import Quest from 'phaser3-rex-plugins/plugins/quest.js';
+import { SW_ButtonBase } from '../UI/Widgets/SW_ButtonBase';
+import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { SW_AudioManager } from '../audio/SW_AudioManager';
 
 declare type SW_DialogOption = {
   /** Unique id of this option */
@@ -125,76 +128,160 @@ const QuestionJSON: SW_DialogQuestion[] = [
     backgroundEntityRight: 'Scribb',
     focusSide: SW_DialogFocusSide.All,
     options: [
-      {
-        key: 'o10',
-        text: 'Close',
-      },
+      // {
+      //   key: 'o10',
+      //   text: 'Close',
+      // },
     ],
   },
 ];
 
-export declare type SW_DialogQuestConfig = {
-  x: number;
-  y: number;
-  width: number;
-  originX: number;
-  originY: number;
-};
+export class SW_DialogQuest extends SW_BaseMenu {
+  protected questionManager: Quest;
+  protected currentQuestion: SW_DialogQuestion | undefined;
 
-export class SW_DialogQuest extends DialogQuest {
-  public declare scene: SW_BaseScene;
-  protected dialog: SW_Dialog;
+  protected declare dialogTextBox: SW_DialogTextBox;
 
-  private backgroundEntityLeft: Phaser.GameObjects.Image;
-  private backgroundEntityRight: Phaser.GameObjects.Image;
+  protected declare choiceSizer: Sizer;
+  protected declare dialogChoices: SW_ButtonBase[];
+  protected declare selectedChoice: SW_ButtonBase | undefined;
+  protected declare arrowSelectChoice: Phaser.GameObjects.Image;
 
-  private currentQuestion: SW_DialogQuestion | undefined;
+  protected declare backgroundEntityLeft: Phaser.GameObjects.Image;
+  protected declare backgroundEntityRight: Phaser.GameObjects.Image;
 
-  constructor(scene: SW_BaseScene, config: SW_DialogQuestConfig) {
-    const backgroundEntityLeft = scene.add.image(0, 0, '').setOrigin(0.5, 1);
-    const backgroundEntityRight = scene.add
-      .image(0, 0, '')
-      .setOrigin(0.5, 1)
-      .setFlipX(true);
+  private maxChoiceCount: number = 5;
 
-    const dialog = new SW_Dialog(scene, {
-      x: config.x,
-      y: config.y,
-      width: config.width,
-    });
+  constructor(menuManager: SW_MenuManager, x: number, y: number) {
+    super(menuManager, x, y);
 
-    super({
+    this.width = this.scene.game.canvas.width;
+    this.height = this.scene.game.canvas.height;
+
+    this.questionManager = new Quest({
       questions: QuestionJSON,
-      // @ts-ignore
-      dialog: dialog,
-      choices: [],
+      // format: 'json',
     });
 
-    this.scene = scene;
+    this.createBackgroundEntities();
+    this.createDialogTextBox();
+    this.createDialogChoices();
 
-    this.backgroundEntityLeft = backgroundEntityLeft.setVisible(false);
-    this.backgroundEntityRight = backgroundEntityRight.setVisible(false);
+    // this.on('click-choice', this.onClickChoice, this);
 
-    this.dialog = dialog;
-    this.dialog.setOrigin(config.originX, config.originY);
-    this.dialog.setVisible(false);
-    this.dialog.on('contentTextCompleted', this.updateAllChoices, this);
-
-    this.on('update-dialog', this.onUpdateDialog, this);
-    this.on('click-choice', this.onClickChoice, this);
-
-    this.setPosition(config.x, config.y);
+    this.questionManager.on('quest', this.updateQuestion, this);
   }
 
-  public isQuestActive(): boolean {
-    return this.dialog.visible;
+  protected createBackgroundEntities(): void {
+    this.backgroundEntityLeft = this.scene.add.image(
+      -320,
+      this.height * 0.5,
+      ''
+    );
+    this.backgroundEntityLeft.setOrigin(0.5, 1);
+    this.add(this.backgroundEntityLeft);
+
+    this.backgroundEntityRight = this.scene.add.image(
+      320,
+      this.height * 0.5,
+      ''
+    );
+    this.backgroundEntityRight.setOrigin(0.5, 1);
+    this.backgroundEntityRight.setFlipX(true);
+    this.add(this.backgroundEntityRight);
   }
 
-  protected onUpdateDialog(
-    dialog: SW_Dialog,
-    question: SW_DialogQuestion,
-    quest: SW_DialogQuest
-  ): void {
+  protected createDialogTextBox(): void {
+    this.dialogTextBox = new SW_DialogTextBox(this.scene, {
+      x: 0,
+      y: this.height * 0.5 - 24,
+      width: this.width - 200,
+      height: 80,
+      page: { maxLines: 3, pageBreak: '\n' },
+    });
+    this.dialogTextBox.setOrigin(0.5, 1);
+    this.dialogTextBox.layout();
+
+    this.dialogTextBox.on('complete', this.updateAllChoices, this);
+    this.dialogTextBox.on(
+      Phaser.Input.Events.POINTER_DOWN,
+      this.continueDialog,
+      this
+    );
+
+    this.add(this.dialogTextBox);
+  }
+
+  protected createDialogChoices(): void {
+    this.choiceSizer = this.scene.rexUI.add.sizer({
+      x: 0,
+      y: 0,
+      width: 220,
+      orientation: 'vertical',
+      space: { item: 20 },
+    });
+    this.choiceSizer.layout();
+    this.add(this.choiceSizer);
+
+    this.dialogChoices = [];
+
+    for (let i = 0; i < this.maxChoiceCount; ++i) {
+      const choice = new SW_ButtonBase(this.scene, 0, 0, {
+        width: this.choiceSizer.width,
+        height: 48,
+        backgroundObject: this.scene.rexUI.add.roundRectangle(0, 0, 1, 1, 4),
+        colorBackgroundNormal: 0xdacbb8,
+        text: '',
+        textStyle: { fontSize: '22px' },
+      });
+      choice.onHovered(() => {
+        this.selectChoice(choice);
+      }, this);
+      choice.onClicked(() => {
+        this.onChoiceClicked(choice);
+      }, this);
+
+      this.choiceSizer.add(choice);
+      this.dialogChoices.push(choice);
+    }
+
+    this.arrowSelectChoice = this.scene.add.image(
+      0,
+      0,
+      'arrowSelectDialogueOption'
+    );
+    this.arrowSelectChoice.setOrigin(1, 0.5);
+
+    this.add(this.arrowSelectChoice);
+    this.choiceSizer.layout();
+  }
+
+  public start(dialogID: string): void {
+    this.menuManager.showMenu(this);
+    this.questionManager.startQuest({
+      shuffleQuestions: false,
+      shuffleOptions: false,
+    });
+    this.questionManager.getNextQuestion();
+  }
+
+  protected selectChoice(newChoice: SW_ButtonBase) {
+    if (newChoice != this.selectedChoice) {
+      if (this.selectedChoice) {
+        this.selectedChoice.setX(newChoice.x); // Bring back to its original x-position
+      }
+
+      newChoice.setX(newChoice.x + 8);
+      this.arrowSelectChoice.setX(
+        this.choiceSizer.x - this.choiceSizer.width * 0.5 + newChoice.x - 12
+      );
+      this.arrowSelectChoice.setY(newChoice.y);
+
+      this.selectedChoice = newChoice;
+    }
+  }
+
+  protected updateQuestion(question: SW_DialogQuestion): void {
     this.currentQuestion = question;
 
     this.hideAllChoices();
@@ -203,10 +290,9 @@ export class SW_DialogQuest extends DialogQuest {
       question.backgroundEntityRight,
       question.focusSide
     );
-    dialog.setTitleText(question.title ?? '');
-    dialog.setContentText(question.text);
 
-    dialog.layout();
+    this.dialogTextBox.setVisible(true);
+    this.dialogTextBox.showMessage(question.text, question.title);
   }
 
   protected updateEntityBackgrounds(
@@ -263,7 +349,7 @@ export class SW_DialogQuest extends DialogQuest {
     backgroundsToUnfocus: Phaser.GameObjects.Image[]
   ): void {
     const tintFocused = 0xffffff;
-    const tintUnfocused = 0x333333;
+    const tintUnfocused = 0x444444;
 
     for (const background of backgroundsToFocus) {
       background.setTint(tintFocused);
@@ -275,10 +361,10 @@ export class SW_DialogQuest extends DialogQuest {
   }
 
   protected hideAllChoices(): void {
-    // @ts-ignore
-    this.dialog.forEachChoice((button: SW_DialogChoiceButton) => {
-      button.setVisible(false);
-    });
+    for (const option of this.dialogChoices) {
+      option.setVisible(false);
+    }
+    this.arrowSelectChoice.setVisible(false);
   }
 
   protected updateAllChoices(): void {
@@ -286,99 +372,56 @@ export class SW_DialogQuest extends DialogQuest {
       return;
     }
 
-    const visibleChoiceCount = Math.min(
-      this.dialog.getMaxChoiceCount(),
-      this.currentQuestion.options.length
-    );
+    const optionCount = this.currentQuestion.options.length;
+    const dialogChoiceCount = this.dialogChoices.length;
+    const visibleChoiceCount = Math.min(dialogChoiceCount, optionCount);
+
     for (let i = 0; i < visibleChoiceCount; ++i) {
-      const choice = this.dialog.getChoice(i);
-      if (choice) {
-        this.updateChoice(choice, this.currentQuestion.options[i]);
-        choice.setVisible(true);
-      } else {
-        console.warn('SW_DialogQuest::updateChoice - Invalid choice button');
-      }
+      const choice = this.dialogChoices[i];
+      this.updateChoice(choice, this.currentQuestion.options[i]);
+      choice.setVisible(true);
     }
 
-    for (
-      let i = visibleChoiceCount;
-      i < this.currentQuestion.options.length;
-      ++i
-    ) {
-      const choice = this.dialog.getChoice(i);
-      if (choice) {
-        choice.setVisible(false);
-      } else {
-        console.warn('SW_DialogQuest::updateChoice - Invalid choice button');
-      }
+    for (let i = visibleChoiceCount; i < dialogChoiceCount; ++i) {
+      this.dialogChoices[i].setVisible(false);
     }
+
+    this.selectChoice(this.dialogChoices[0]);
+    this.arrowSelectChoice.setVisible(true);
   }
 
-  protected updateChoice(
-    choice: SW_DialogChoiceButton,
-    option: SW_DialogOption | undefined
-  ): void {
-    if (!choice) {
-      console.warn('SW_DialogQuest::updateChoice - Invalid choice button');
-      return;
-    }
-
-    if (option) {
-      choice.setText(option.text);
-      choice.setData('option', option);
-    } else {
-      console.warn('SW_DialogQuest::updateChoice - Invalid option');
-    }
+  protected updateChoice(choice: SW_ButtonBase, option: SW_DialogOption): void {
+    choice.setText(option.text);
+    choice.setData('option', option);
   }
 
-  protected onClickChoice(
-    choice: SW_DialogChoiceButton,
-    dialog: SW_Dialog,
-    quest: SW_DialogQuest
-  ): void {
-    if (quest.isLast()) {
-      dialog.setVisible(false);
-      this.backgroundEntityLeft.setVisible(false);
-      this.backgroundEntityRight.setVisible(false);
-      quest.clearData();
+  protected onChoiceClicked(choice: SW_ButtonBase): void {
+    if (this.questionManager.isLastQuestion()) {
+      this.closeDialog();
     } else {
-      const nextOption = choice.getData('option') as
-        | SW_DialogOption
-        | undefined;
+      const nextOption = choice.getData('option') as SW_DialogOption;
       const nextKey = nextOption ? nextOption.nextQuestionKey : undefined;
-
-      if (nextKey) {
-        quest.next(nextKey);
-      } else {
-        quest.next();
-      }
+      this.questionManager.getNextQuestion(nextKey);
     }
-  }
-
-  public getDialogWidth(): number {
-    return this.dialog.width;
-  }
-
-  public getDialogHeight(): number {
-    return this.dialog.height;
-  }
-
-  public setPosition(x: number, y: number): void {
-    this.dialog.setPosition(x, y);
-
-    this.backgroundEntityLeft.setPosition(
-      this.dialog.x - this.dialog.width * 0.5,
-      this.dialog.y + 30
-    );
-    this.backgroundEntityRight.setPosition(
-      this.dialog.x + this.dialog.width * 0.5,
-      this.dialog.y + 30
-    );
   }
 
   public continueDialog(): void {
-    if (this.dialog.visible) {
-      this.dialog.continueDialog();
+    if (this.visible) {
+      SW_AudioManager.playSoundEffect('soundDialogue');
+
+      if (this.dialogTextBox.isTyping) {
+        this.dialogTextBox.stop(true);
+      } else if (!this.dialogTextBox.isLastPage) {
+        this.dialogTextBox.typeNextPage();
+      } else if (this.questionManager.isLastQuestion()) {
+        this.closeDialog();
+      }
     }
+  }
+
+  public closeDialog(): void {
+    this.dialogTextBox.stop();
+    this.questionManager.clearData();
+    this.menuManager.hideMenu(this);
   }
 }

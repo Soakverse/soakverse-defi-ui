@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import SW_BootScene from '~/game/scenes/SW_BootScene';
 import { SW_CST } from './SW_CST';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import QuestPlugin from 'phaser3-rex-plugins/plugins/quest-plugin.js';
 
 // @ts-ignore
 import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugin';
@@ -34,6 +35,7 @@ function launch(containerId: string) {
       scene: [{ key: 'rexUI', plugin: UIPlugin, mapping: 'rexUI' }],
       global: [
         { key: 'rexWebFontLoader', plugin: WebFontLoaderPlugin, start: true },
+        { key: 'rexQuest', plugin: QuestPlugin, start: true },
       ],
     },
   });
