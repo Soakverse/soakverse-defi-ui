@@ -397,8 +397,11 @@ export default class SW_GameUIScene extends SW_BaseScene {
   // Dialogue
   ////////////////////////////////////////////////////////////////////////
 
-  public requestDialog(dialogID: string): void {
-    this.dialogQuest.start(dialogID);
+  public requestDialog(
+    dialogID: string,
+    dialogQuestionKey?: string | undefined
+  ): void {
+    this.dialogQuest.startDialog(dialogID, dialogQuestionKey);
   }
 
   protected createMobileWidgets(): void {

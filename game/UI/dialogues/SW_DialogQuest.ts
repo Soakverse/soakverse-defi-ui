@@ -35,7 +35,7 @@ const enum SW_DialogFocusSide {
   All = 'All',
 }
 
-declare type SW_DialogTextPart = {
+declare type SW_DialogStepData = {
   text: string;
   title?: string | undefined;
   backgroundEntityLeft?: string | undefined;
@@ -46,217 +46,10 @@ declare type SW_DialogTextPart = {
 declare type SW_DialogQuestion = {
   key: string;
   title?: string;
-  texts: SW_DialogTextPart[];
+  flow: SW_DialogStepData[];
   options?: SW_DialogOption[] | undefined;
   nextQuestionKey?: string | undefined;
 };
-
-const QuestionJSON: SW_DialogQuestion[] = [
-  {
-    key: 'q0',
-    texts: [
-      {
-        title: 'Argus',
-        text: 'Hello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in?',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-    ],
-    options: [
-      {
-        key: 'o0',
-        text: 'Yes!',
-        nextQuestionKey: 'q2',
-      },
-      {
-        key: 'o1',
-        text: 'No',
-        nextQuestionKey: 'q1',
-      },
-    ],
-  },
-  {
-    key: 'q1',
-    texts: [
-      {
-        title: 'You',
-        text: "Well, to be honest I don't know yet...",
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-      {
-        title: 'Argus',
-        text: 'Oh... really?',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-    ],
-    options: [
-      {
-        key: 'o10',
-        text: 'Of course I am!',
-        nextQuestionKey: 'q2',
-      },
-    ],
-  },
-  {
-    key: 'q2',
-    texts: [
-      {
-        title: 'You',
-        text: 'Of course I am! I have been waiting for so long.',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-      {
-        title: 'Argus',
-        text: 'Wonderful! Please take a tour and let me know if you have any question. We have a lot of time before we start your training.',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-      {
-        title: 'You',
-        text: 'My training?',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-      {
-        title: 'Argus',
-        text: 'Do you really think I will let you wander aimlessly? Monsters are hidden everywhere. They are usually harmless but you must be prepared.',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-      {
-        title: 'You',
-        text: 'Monsters... I see...',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-      {
-        title: 'Argus',
-        text: "Don't worry everything will be ok since I'm here. Are you ready or do you have any question?",
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-    ],
-    options: [
-      {
-        key: 'o12',
-        text: 'I have a question',
-        nextQuestionKey: 'q3',
-      },
-      {
-        key: 'o11',
-        text: 'All good',
-        nextQuestionKey: 'qEnd',
-      },
-    ],
-  },
-  {
-    key: 'q3',
-    texts: [
-      {
-        title: 'Argus',
-        text: 'How can I help you?',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-    ],
-    options: [
-      {
-        key: 'o0',
-        text: 'Who are you?',
-        nextQuestionKey: 'q4',
-      },
-      {
-        key: 'o1',
-        text: 'What is a monster?',
-        nextQuestionKey: 'q5',
-      },
-      {
-        key: 'o3',
-        text: 'All good',
-        nextQuestionKey: 'qEnd',
-      },
-    ],
-  },
-  {
-    key: 'q4',
-    texts: [
-      {
-        title: 'You',
-        text: 'Who are you again?',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-      {
-        title: 'Argus',
-        text: 'You can call me Argus. I am a monster scientist.',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-    ],
-    nextQuestionKey: 'q3',
-  },
-  {
-    key: 'q5',
-    texts: [
-      {
-        title: 'You',
-        text: 'What should I know about monsters?',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-      {
-        title: 'Argus',
-        text: 'A lot of things hahaha. For now, simply avoid them until we start your training.',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-    ],
-    nextQuestionKey: 'q3',
-  },
-  {
-    key: 'qEnd',
-    title: 'FriendlyStranger',
-    texts: [
-      {
-        title: 'You',
-        text: 'I will be right back.',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-      {
-        title: 'Argus',
-        text: 'Enjoy the view!',
-        backgroundEntityLeft: 'dialogueImage_YB',
-        backgroundEntityRight: 'GPADJK_d2_1',
-        focusSide: SW_DialogFocusSide.Right,
-      },
-      {
-        title: 'You',
-        text: "What a funny guy.\nAlright let's see where I can go. I think I saw a river near this house.",
-        backgroundEntityLeft: 'dialogueImage_YB',
-        focusSide: SW_DialogFocusSide.Left,
-      },
-    ],
-  },
-];
 
 export class SW_DialogQuest extends SW_BaseMenu {
   protected questionManager: Quest;
@@ -276,6 +69,9 @@ export class SW_DialogQuest extends SW_BaseMenu {
   protected declare backgroundEntityLeft: Phaser.GameObjects.Image;
   protected declare backgroundEntityRight: Phaser.GameObjects.Image;
 
+  /** Dialog filename in cache, so we don't need to reload the file if used several times */
+  protected declare cacheDialogJson: string;
+
   constructor(menuManager: SW_MenuManager, x: number, y: number) {
     super(menuManager, x, y);
 
@@ -283,7 +79,6 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.height = this.scene.game.canvas.height;
 
     this.questionManager = new Quest({
-      questions: QuestionJSON,
       // format: 'json',
     });
 
@@ -389,13 +184,50 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.choiceSizer.layout();
   }
 
-  public start(dialogID: string): void {
+  public startDialog(
+    dialogID: string,
+    dialogQuestionKey?: string | undefined
+  ): void {
+    const dialogFilename = `dialog${dialogID}`;
+
+    if (this.cacheDialogJson != dialogFilename) {
+      this.scene.cache.json.remove(this.cacheDialogJson);
+    }
+
+    if (this.scene.cache.json.exists(dialogFilename)) {
+      const questions = this.scene.cache.json.get(dialogFilename);
+      this.startDialogInternal(questions, dialogQuestionKey);
+    } else {
+      this.scene.load.once(
+        `${Phaser.Loader.Events.FILE_KEY_COMPLETE}json-${dialogFilename}`,
+        () => {
+          this.cacheDialogJson = dialogFilename;
+          const questions = this.scene.cache.json.get(dialogFilename);
+          this.startDialogInternal(questions, dialogQuestionKey);
+        },
+        this
+      );
+      this.scene.load.json(
+        dialogFilename,
+        `/game/assets/dialogues/${dialogID}.json`
+      );
+      this.scene.load.start();
+    }
+  }
+
+  protected startDialogInternal(
+    questions: SW_DialogQuestion[],
+    dialogQuestionKey?: string | undefined
+  ): void {
+    this.questionManager.removeAll();
+    this.questionManager.add(questions);
+
     this.menuManager.showMenu(this);
     this.questionManager.startQuest({
       shuffleQuestions: false,
       shuffleOptions: false,
     });
-    this.questionManager.getNextQuestion();
+    this.questionManager.getNextQuestion(dialogQuestionKey);
   }
 
   protected selectChoice(newChoice: SW_ButtonBase) {
@@ -426,7 +258,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
   protected updateContent(contentStep: number): void {
     if (this.currentQuestion) {
-      const dialogData = this.currentQuestion.texts[contentStep];
+      const dialogData = this.currentQuestion.flow[contentStep];
       this.dialogTextBox.showMessage(dialogData.text);
 
       const title = dialogData.title ?? this.currentQuestion.title;
@@ -449,7 +281,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
   protected hasRemainingDialogContent(): boolean {
     return (
       this.currentQuestion != undefined &&
-      this.contentStep < this.currentQuestion.texts.length - 1
+      this.contentStep < this.currentQuestion.flow.length - 1
     );
   }
 
@@ -550,7 +382,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
   protected onDialogTextAnimationComplete(): void {
     if (this.currentQuestion) {
-      if (this.contentStep >= this.currentQuestion.texts.length - 1) {
+      if (this.contentStep >= this.currentQuestion.flow.length - 1) {
         this.updateAllChoices();
       }
     }

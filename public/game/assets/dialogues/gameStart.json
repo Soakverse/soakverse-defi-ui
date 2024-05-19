@@ -1,0 +1,205 @@
+[
+  {
+    "key": "q0",
+    "flow": [
+      {
+        "title": "Argus",
+        "text": "Hello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      }
+    ],
+    "options": [
+      {
+        "key": "o0",
+        "text": "Yes!",
+        "nextQuestionKey": "q2"
+      },
+      {
+        "key": "o1",
+        "text": "No",
+        "nextQuestionKey": "q1"
+      }
+    ]
+  },
+  {
+    "key": "q1",
+    "flow": [
+      {
+        "title": "You",
+        "text": "Well, to be honest I don't know yet...",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Left"
+      },
+      {
+        "title": "Argus",
+        "text": "Oh... really?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      }
+    ],
+    "options": [
+      {
+        "key": "o10",
+        "text": "Of course I am!",
+        "nextQuestionKey": "q2"
+      }
+    ]
+  },
+  {
+    "key": "q2",
+    "flow": [
+      {
+        "title": "You",
+        "text": "Of course I am! I have been waiting for so long.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Left"
+      },
+      {
+        "title": "Argus",
+        "text": "Wonderful! Please take a tour and let me know if you have any question. We have a lot of time before we start your training.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      },
+      {
+        "title": "You",
+        "text": "My training?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Left"
+      },
+      {
+        "title": "Argus",
+        "text": "Do you really think I will let you wander aimlessly? Monsters are hidden everywhere. They are usually harmless but you must be prepared.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      },
+      {
+        "title": "You",
+        "text": "Monsters... I see...",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Left"
+      },
+      {
+        "title": "Argus",
+        "text": "Don't worry everything will be ok since I'm here. Are you ready or do you have any question?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      }
+    ],
+    "options": [
+      {
+        "key": "o12",
+        "text": "I have a question",
+        "nextQuestionKey": "q3"
+      },
+      {
+        "key": "o11",
+        "text": "All good",
+        "nextQuestionKey": "qEnd"
+      }
+    ]
+  },
+  {
+    "key": "q3",
+    "flow": [
+      {
+        "title": "Argus",
+        "text": "How can I help you?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      }
+    ],
+    "options": [
+      {
+        "key": "o0",
+        "text": "Who are you?",
+        "nextQuestionKey": "q4"
+      },
+      {
+        "key": "o1",
+        "text": "What is a monster?",
+        "nextQuestionKey": "q5"
+      },
+      {
+        "key": "o3",
+        "text": "All good",
+        "nextQuestionKey": "qEnd"
+      }
+    ]
+  },
+  {
+    "key": "q4",
+    "flow": [
+      {
+        "title": "You",
+        "text": "Who are you again?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Left"
+      },
+      {
+        "title": "Argus",
+        "text": "You can call me Argus. I am a monster scientist.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      }
+    ],
+    "nextQuestionKey": "q3"
+  },
+  {
+    "key": "q5",
+    "flow": [
+      {
+        "title": "You",
+        "text": "What should I know about monsters?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Left"
+      },
+      {
+        "title": "Argus",
+        "text": "A lot of things hahaha. For now, simply avoid them until we start your training.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      }
+    ],
+    "nextQuestionKey": "q3"
+  },
+  {
+    "key": "qEnd",
+    "flow": [
+      {
+        "title": "You",
+        "text": "I will be right back.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Left"
+      },
+      {
+        "title": "Argus",
+        "text": "Enjoy the view!",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "backgroundEntityRight": "GPADJK_d2_1",
+        "focusSide": "Right"
+      },
+      {
+        "title": "You",
+        "text": "What a funny guy.\nAlright let's see where I can go. I think I saw a river near this house.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "focusSide": "Left"
+      }
+    ]
+  }
+]

@@ -17,7 +17,7 @@ export class SW_DialogTitle extends Phaser.GameObjects.Container {
       0,
       0,
       120,
-      36,
+      32,
       3,
       0xc4b6a5,
       1.0

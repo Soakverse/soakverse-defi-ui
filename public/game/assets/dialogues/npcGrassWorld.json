@@ -1,0 +1,43 @@
+[
+  {
+    "key": "panel1_Start",
+    "flow": [
+      {
+        "text": "Welcome to SoakWorld!",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "focusSide": "Left"
+      }
+    ]
+  },
+  {
+    "key": "panel2_Start",
+    "flow": [
+      {
+        "text": "The panel has been damaged. Do you want to read it?",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "focusSide": "None"
+      }
+    ],
+    "options": [
+      {
+        "key": "o1",
+        "text": "Read the panel",
+        "nextQuestionKey": "panel2_End"
+      },
+      {
+        "key": "o2",
+        "text": "Ignore it"
+      }
+    ]
+  },
+  {
+    "key": "panel2_End",
+    "flow": [
+      {
+        "text": "Be aware of monsters. A lot of people have lost their life here.",
+        "backgroundEntityLeft": "dialogueImage_YB",
+        "focusSide": "Left"
+      }
+    ]
+  }
+]

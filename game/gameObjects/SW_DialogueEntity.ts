@@ -9,8 +9,11 @@ export default class SW_DialogueEntity
   public declare scene: SW_GameScene;
   public declare body: Phaser.Physics.Arcade.StaticBody;
 
-  /** The dialogue text to display */
-  public dialogue: string = '';
+  /** The ID to find the right dialogue asset */
+  public dialogueID: string = '';
+
+  /** The key to find the right question to start with */
+  public dialogQuestionKey: string | undefined;
 
   /** The name displayed on top of this entity before trying to interact with it */
   public hintName: string = '';
@@ -30,7 +33,7 @@ export default class SW_DialogueEntity
   }
 
   public onInteract(source: SW_Player): void {
-    this.scene.requestDialogue(this.dialogue);
+    this.scene.requestDialog(this.dialogueID, this.dialogQuestionKey);
   }
 
   public getHintName(): string {

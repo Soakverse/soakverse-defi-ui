@@ -331,8 +331,11 @@ export default class SW_GameScene extends SW_BaseScene {
     this.UIScene.showWizhWellMenu();
   }
 
-  public requestDialogue(dialogue: string): void {
-    this.UIScene.requestDialog(dialogue);
+  public requestDialog(
+    dialogue: string,
+    dialogQuestionKey?: string | undefined
+  ): void {
+    this.UIScene.requestDialog(dialogue, dialogQuestionKey);
   }
 
   protected onPlayerRequestToggleRunState(): void {
