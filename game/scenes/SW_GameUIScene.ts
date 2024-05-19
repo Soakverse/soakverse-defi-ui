@@ -4,7 +4,7 @@ import { SW_ENUM_IVENTORY_OBJECT } from '~/game/inventory/SW_Inventory';
 import { SW_InventoryObject } from '~/game/inventory/SW_Inventory';
 import { SW_PlayerInventoryWidget } from '~/game/inventory/SW_PlayerInventoryWidget';
 import { SW_ChestInventoryWidget } from '~/game/inventory/SW_ChestInventoryWidget';
-import { SW_DialogQuest } from '../dialogues/SW_DialogQuest';
+import { SW_DialogQuest } from '../UI/dialogues/SW_DialogQuest';
 import { SW_WizhMenu } from '../UI/Menus/WizhMenu/SW_WizhMenu';
 import { SW_MenuManager } from '../UI/Menus/SW_MenuManager';
 import { SW_PlayerActionsContainer } from '../UI/mobile/SW_PlayerActionsContainer';

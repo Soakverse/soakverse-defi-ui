@@ -1,9 +1,9 @@
 import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
-import { SW_CST } from '../SW_CST';
-import { SW_Utils } from '../SW_Utils';
-import SW_BaseScene from '../scenes/SW_BaseScene';
+import { SW_CST } from '../../SW_CST';
+import { SW_Utils } from '../../SW_Utils';
+import SW_BaseScene from '../../scenes/SW_BaseScene';
 
-export class SW_PlaceNamePanel extends Phaser.GameObjects.Container {
+export class SW_DialogTitle extends Phaser.GameObjects.Container {
   public declare scene: SW_BaseScene;
 
   protected textObject: Phaser.GameObjects.Text;
@@ -16,8 +16,8 @@ export class SW_PlaceNamePanel extends Phaser.GameObjects.Container {
     this.background = this.scene.rexUI.add.roundRectangle(
       0,
       0,
-      100,
-      30,
+      120,
+      36,
       3,
       0xc4b6a5,
       1.0
@@ -46,7 +46,7 @@ export class SW_PlaceNamePanel extends Phaser.GameObjects.Container {
 
   public setText(text: string): void {
     this.textObject.setText(text);
-    this.background.resize(this.textObject.width + 16, this.background.height);
+    // this.background.resize(this.textObject.width + 16, this.background.height);
 
     this.width = this.background.width;
     this.height = this.background.height;

@@ -10,10 +10,10 @@ export class SW_DialogTextBox extends TextBox {
     config.width = config.width ?? 400;
     config.height = config.height ?? 80;
     config.space = {
-      left: 12,
-      right: 12,
-      top: 12,
-      bottom: 12,
+      left: 16,
+      right: 16,
+      top: 26,
+      bottom: 16,
       icon: 16,
       text: 0,
       separator: 6,
