@@ -46,6 +46,7 @@ declare type SW_DialogQuestion = {
   title?: string;
   texts: SW_DialogTextPart[];
   options?: SW_DialogOption[] | undefined;
+  nextQuestionKey?: string | undefined;
 };
 
 const QuestionJSON: SW_DialogQuestion[] = [
@@ -141,13 +142,14 @@ const QuestionJSON: SW_DialogQuestion[] = [
     ],
     options: [
       {
-        key: 'o11',
-        text: 'All good',
-      },
-      {
         key: 'o12',
         text: 'I have a question',
         nextQuestionKey: 'q3',
+      },
+      {
+        key: 'o11',
+        text: 'All good',
+        nextQuestionKey: 'qEnd',
       },
     ],
   },
@@ -166,14 +168,78 @@ const QuestionJSON: SW_DialogQuestion[] = [
       {
         key: 'o0',
         text: 'Who are you?',
+        nextQuestionKey: 'q4',
       },
       {
         key: 'o1',
         text: 'What is a monster?',
+        nextQuestionKey: 'q5',
       },
       {
         key: 'o3',
         text: 'All good',
+        nextQuestionKey: 'qEnd',
+      },
+    ],
+  },
+  {
+    key: 'q4',
+    title: 'FriendlyStranger',
+    texts: [
+      {
+        text: 'Who are you again?',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Left,
+      },
+      {
+        text: 'You can call me Argus. I am a monster scientist.',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+    ],
+    nextQuestionKey: 'q3',
+  },
+  {
+    key: 'q5',
+    title: 'FriendlyStranger',
+    texts: [
+      {
+        text: 'What should I know about monsters?',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Left,
+      },
+      {
+        text: 'A lot of things hahaha. For now, simply avoid them until we start your training.',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+    ],
+    nextQuestionKey: 'q3',
+  },
+  {
+    key: 'qEnd',
+    title: 'FriendlyStranger',
+    texts: [
+      {
+        text: 'I will be right back.',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Left,
+      },
+      {
+        text: 'Enjoy the view!',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+      {
+        text: "What a funny guy.\nAlright let's see where I can go. I think I saw a river near this house.",
+        backgroundEntityLeft: 'dialogueImage_YB',
+        focusSide: SW_DialogFocusSide.Left,
       },
     ],
   },
@@ -349,6 +415,23 @@ export class SW_DialogQuest extends SW_BaseMenu {
     }
   }
 
+  protected updateNextContent(): void {
+    ++this.contentStep;
+    this.updateContent(this.contentStep);
+  }
+
+  protected hasRemainingDialogContent(): boolean {
+    return (
+      this.currentQuestion != undefined &&
+      this.contentStep < this.currentQuestion.texts.length - 1
+    );
+  }
+
+  protected hasCurrentChoices(): boolean {
+    const options = this.currentQuestion?.options;
+    return !!options && options.length > 0;
+  }
+
   protected updateEntityBackgrounds(
     leftTexture: string | undefined,
     rightTexture: string | undefined,
@@ -462,17 +545,21 @@ export class SW_DialogQuest extends SW_BaseMenu {
   }
 
   protected onChoiceClicked(choice: SW_ButtonBase): void {
-    if (this.questionManager.isLastQuestion()) {
-      this.closeDialog();
-    } else {
-      const nextOption = choice.getData('option') as SW_DialogOption;
-      const nextKey = nextOption ? nextOption.nextQuestionKey : undefined;
+    this.showNextQuestion(choice);
+  }
 
-      if (nextKey) {
-        this.questionManager.getNextQuestion(nextKey);
-      } else {
-        this.closeDialog();
-      }
+  protected showNextQuestion(choice?: SW_ButtonBase | undefined): void {
+    const nextOption = choice?.getData('option') as SW_DialogOption;
+    let nextKey = nextOption?.nextQuestionKey;
+
+    if (!nextKey) {
+      nextKey = this.currentQuestion?.nextQuestionKey;
+    }
+
+    if (nextKey) {
+      this.questionManager.getNextQuestion(nextKey);
+    } else {
+      this.closeDialog();
     }
   }
 
@@ -484,14 +571,10 @@ export class SW_DialogQuest extends SW_BaseMenu {
         this.dialogTextBox.stop(true);
       } else if (!this.dialogTextBox.isLastPage) {
         this.dialogTextBox.typeNextPage();
-      } else if (
-        this.currentQuestion &&
-        this.contentStep < this.currentQuestion?.texts.length - 1
-      ) {
-        ++this.contentStep;
-        this.updateContent(this.contentStep);
-      } else if (this.questionManager.isLastQuestion()) {
-        this.closeDialog();
+      } else if (this.hasRemainingDialogContent()) {
+        this.updateNextContent();
+      } else if (!this.hasCurrentChoices()) {
+        this.showNextQuestion();
       }
     }
   }

@@ -11,7 +11,6 @@ import { SW_PlayerActionsContainer } from '../UI/mobile/SW_PlayerActionsContaine
 import { SW_InGameMenu } from '../UI/Menus/InGameMenu/SW_InGameMenu';
 import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputComponent';
 import { SW_Player } from '../characters/players/SW_Player';
-import { SW_AudioManager } from '../audio/SW_AudioManager';
 import { SW_PlaceNamePanel } from '../UI/SW_PlaceNamePanel';
 
 declare type SW_UIKeys = {
