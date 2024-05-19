@@ -34,13 +34,17 @@ const enum SW_DialogFocusSide {
   All = 'All',
 }
 
-declare type SW_DialogQuestion = {
-  key: string;
-  title?: string;
+declare type SW_DialogTextPart = {
   text: string;
   backgroundEntityLeft?: string | undefined;
   backgroundEntityRight?: string | undefined;
   focusSide?: SW_DialogFocusSide | undefined;
+};
+
+declare type SW_DialogQuestion = {
+  key: string;
+  title?: string;
+  texts: SW_DialogTextPart[];
   options?: SW_DialogOption[] | undefined;
 };
 
@@ -48,19 +52,23 @@ const QuestionJSON: SW_DialogQuestion[] = [
   {
     key: 'q0',
     title: 'FriendlyStranger',
-    text: 'Hello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in?\nHello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in? Hello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in?\nHello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in?\nHello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in?',
-    backgroundEntityLeft: 'dialogueImage_YB',
-    backgroundEntityRight: 'GPADJK_d2_1',
-    focusSide: SW_DialogFocusSide.Left,
+    texts: [
+      {
+        text: 'Hello newcomer. Welcome to the soakworld! Great adventures await you, are you ready to get in?',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+    ],
     options: [
       {
         key: 'o0',
-        text: 'Hell yeah!',
+        text: 'Yes!',
         nextQuestionKey: 'q2',
       },
       {
         key: 'o1',
-        text: "Well, I'm not sure...",
+        text: 'No',
         nextQuestionKey: 'q1',
       },
     ],
@@ -68,14 +76,24 @@ const QuestionJSON: SW_DialogQuestion[] = [
   {
     key: 'q1',
     title: 'You',
-    text: 'Oh... really?',
-    backgroundEntityLeft: 'dialogueImage_YB',
-    backgroundEntityRight: 'GPADJK_d2_1',
-    focusSide: SW_DialogFocusSide.Right,
+    texts: [
+      {
+        text: "Well, to be honest I don't know yet...",
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Left,
+      },
+      {
+        text: 'Oh... really?',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+    ],
     options: [
       {
         key: 'o10',
-        text: 'OF COURSE I AM!',
+        text: 'Of course I am!',
         nextQuestionKey: 'q2',
       },
     ],
@@ -83,19 +101,52 @@ const QuestionJSON: SW_DialogQuestion[] = [
   {
     key: 'q2',
     title: 'FriendlyStranger',
-    text: 'Wonderful! Enjour your time here!',
-    backgroundEntityLeft: 'dialogueImage_YB',
-    backgroundEntityRight: 'GPADJK_d2_1',
-    focusSide: SW_DialogFocusSide.Right,
-    options: [
+    texts: [
       {
-        key: 'o10',
-        text: 'Close',
-        nextQuestionKey: 'q3',
+        text: 'Of course I am! I have been waiting for so long.',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Left,
       },
       {
-        key: 'os10',
-        text: 'Close',
+        text: 'Wonderful! Please take a tour and let me know if you have any question. We have a lot of time before we start your training.',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+      {
+        text: 'My training?',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Left,
+      },
+      {
+        text: 'Do you really think I will let you wander aimlessly? Monsters are hidden everywhere. They are usually harmless but you must be prepared.',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+      {
+        text: 'Monsters... I see...',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Left,
+      },
+      {
+        text: "Don't worry everything will be ok since I'm here. Are you ready or do you have any question?",
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
+      },
+    ],
+    options: [
+      {
+        key: 'o11',
+        text: 'All good',
+      },
+      {
+        key: 'o12',
+        text: 'I have a question',
         nextQuestionKey: 'q3',
       },
     ],
@@ -103,35 +154,23 @@ const QuestionJSON: SW_DialogQuestion[] = [
   {
     key: 'q3',
     title: 'FriendlyStranger',
-    text: 'Wonderful! Enjour your time here!',
-    backgroundEntityLeft: 'dialogueImage_YB',
-    backgroundEntityRight: 'Scribb',
-    focusSide: SW_DialogFocusSide.Left,
-    options: [
+    texts: [
       {
-        key: 'o10',
-        text: 'AAAAAA',
-        nextQuestionKey: 'q4',
-      },
-      {
-        key: 'os10',
-        text: 'BBBBBBBBB',
-        nextQuestionKey: 'q4',
+        text: 'How can I help you?',
+        backgroundEntityLeft: 'dialogueImage_YB',
+        backgroundEntityRight: 'GPADJK_d2_1',
+        focusSide: SW_DialogFocusSide.Right,
       },
     ],
-  },
-  {
-    key: 'q4',
-    title: 'FriendlyStranger',
-    text: 'Wonderful! Enjour your time here!',
-    backgroundEntityLeft: 'dialogueImage_YB',
-    backgroundEntityRight: 'Scribb',
-    focusSide: SW_DialogFocusSide.All,
     options: [
-      // {
-      //   key: 'o10',
-      //   text: 'Close',
-      // },
+      {
+        key: 'o0',
+        text: 'Who are you?',
+      },
+      {
+        key: 'o1',
+        text: 'All good',
+      },
     ],
   },
 ];
@@ -147,10 +186,11 @@ export class SW_DialogQuest extends SW_BaseMenu {
   protected declare selectedChoice: SW_ButtonBase | undefined;
   protected declare arrowSelectChoice: Phaser.GameObjects.Image;
 
+  private contentStep: number = 0;
+  private maxChoiceCount: number = 5;
+
   protected declare backgroundEntityLeft: Phaser.GameObjects.Image;
   protected declare backgroundEntityRight: Phaser.GameObjects.Image;
-
-  private maxChoiceCount: number = 5;
 
   constructor(menuManager: SW_MenuManager, x: number, y: number) {
     super(menuManager, x, y);
@@ -166,8 +206,6 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.createBackgroundEntities();
     this.createDialogTextBox();
     this.createDialogChoices();
-
-    // this.on('click-choice', this.onClickChoice, this);
 
     this.questionManager.on('quest', this.updateQuestion, this);
   }
@@ -202,7 +240,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.dialogTextBox.setOrigin(0.5, 1);
     this.dialogTextBox.layout();
 
-    this.dialogTextBox.on('complete', this.updateAllChoices, this);
+    this.dialogTextBox.on('complete', this.onDialogTextAnimationComplete, this);
     this.dialogTextBox.on(
       Phaser.Input.Events.POINTER_DOWN,
       this.continueDialog,
@@ -286,14 +324,25 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.currentQuestion = question;
 
     this.hideAllChoices();
-    this.updateEntityBackgrounds(
-      question.backgroundEntityLeft,
-      question.backgroundEntityRight,
-      question.focusSide
-    );
-
     this.dialogTextBox.setVisible(true);
-    this.dialogTextBox.showMessage(question.text, question.title);
+
+    this.contentStep = 0;
+    this.updateContent(this.contentStep);
+  }
+
+  protected updateContent(contentStep: number): void {
+    if (this.currentQuestion) {
+      this.dialogTextBox.showMessage(
+        this.currentQuestion.texts[contentStep].text,
+        this.currentQuestion.title
+      );
+
+      this.updateEntityBackgrounds(
+        this.currentQuestion.texts[contentStep].backgroundEntityLeft,
+        this.currentQuestion.texts[contentStep].backgroundEntityRight,
+        this.currentQuestion.texts[contentStep].focusSide
+      );
+    }
   }
 
   protected updateEntityBackgrounds(
@@ -363,6 +412,14 @@ export class SW_DialogQuest extends SW_BaseMenu {
     }
   }
 
+  protected onDialogTextAnimationComplete(): void {
+    if (this.currentQuestion) {
+      if (this.contentStep >= this.currentQuestion.texts.length - 1) {
+        this.updateAllChoices();
+      }
+    }
+  }
+
   protected hideAllChoices(): void {
     for (const option of this.dialogChoices) {
       option.setVisible(false);
@@ -409,7 +466,12 @@ export class SW_DialogQuest extends SW_BaseMenu {
     } else {
       const nextOption = choice.getData('option') as SW_DialogOption;
       const nextKey = nextOption ? nextOption.nextQuestionKey : undefined;
-      this.questionManager.getNextQuestion(nextKey);
+
+      if (nextKey) {
+        this.questionManager.getNextQuestion(nextKey);
+      } else {
+        this.closeDialog();
+      }
     }
   }
 
@@ -421,6 +483,12 @@ export class SW_DialogQuest extends SW_BaseMenu {
         this.dialogTextBox.stop(true);
       } else if (!this.dialogTextBox.isLastPage) {
         this.dialogTextBox.typeNextPage();
+      } else if (
+        this.currentQuestion &&
+        this.contentStep < this.currentQuestion?.texts.length - 1
+      ) {
+        ++this.contentStep;
+        this.updateContent(this.contentStep);
       } else if (this.questionManager.isLastQuestion()) {
         this.closeDialog();
       }
