@@ -217,9 +217,10 @@ export class SW_DialogQuest extends SW_BaseMenu {
       x: 0,
       y: 0,
       width: 220,
-      orientation: 'vertical',
+      orientation: 'top-to-bottom',
       space: { item: 20 },
     });
+    this.choiceSizer.setOrigin(0.5);
     this.choiceSizer.layout();
     this.add(this.choiceSizer);
 
@@ -353,10 +354,12 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
     for (const background of backgroundsToFocus) {
       background.setTint(tintFocused);
+      background.setScale(1.02);
     }
 
     for (const background of backgroundsToUnfocus) {
       background.setTint(tintUnfocused);
+      background.setScale(0.98);
     }
   }
 
@@ -380,11 +383,16 @@ export class SW_DialogQuest extends SW_BaseMenu {
       const choice = this.dialogChoices[i];
       this.updateChoice(choice, this.currentQuestion.options[i]);
       choice.setVisible(true);
+      choice.height = 48;
     }
 
     for (let i = visibleChoiceCount; i < dialogChoiceCount; ++i) {
-      this.dialogChoices[i].setVisible(false);
+      const choice = this.dialogChoices[i];
+      choice.setVisible(false);
+      choice.height = 0;
     }
+
+    this.choiceSizer.layout();
 
     this.selectChoice(this.dialogChoices[0]);
     this.arrowSelectChoice.setVisible(true);
