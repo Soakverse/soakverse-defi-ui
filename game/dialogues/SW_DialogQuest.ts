@@ -169,6 +169,10 @@ const QuestionJSON: SW_DialogQuestion[] = [
       },
       {
         key: 'o1',
+        text: 'What is a monster?',
+      },
+      {
+        key: 'o3',
         text: 'All good',
       },
     ],
@@ -439,14 +443,11 @@ export class SW_DialogQuest extends SW_BaseMenu {
     for (let i = 0; i < visibleChoiceCount; ++i) {
       const choice = this.dialogChoices[i];
       this.updateChoice(choice, this.currentQuestion.options[i]);
-      choice.setVisible(true);
-      choice.height = 48;
+      this.choiceSizer.show(choice);
     }
 
     for (let i = visibleChoiceCount; i < dialogChoiceCount; ++i) {
-      const choice = this.dialogChoices[i];
-      choice.setVisible(false);
-      choice.height = 0;
+      this.choiceSizer.hide(this.dialogChoices[i]);
     }
 
     this.choiceSizer.layout();
