@@ -117,12 +117,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
     );
     this.menuManager.hideMenu(this.dialogQuest);
 
-    // this.dialogTextBox.on(
-    //   Phaser.Input.Events.POINTER_DOWN,
-    //   this.onNextPageButtonDown,
-    //   this
-    // );
-
     this.chestInventoryWidget = new SW_ChestInventoryWidget(this, 0, 240);
     this.chestInventoryWidget.setX(
       this.scale.displaySize.width * 0.66 -
@@ -323,12 +317,9 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
   protected onEscapeButtonDown(): void {
     if (this.dialogQuest.visible) {
-      this.dialogQuest.closeDialog();
-      // TODO: Try close dialog when it's allowed. I feel that there could be situations where we don't want that
-      // if (this.dialogTextBox.visible) {
-      //   this.dialogTextBox.stop(true);
-      //   this.dialogTextBox.closeDialogue();
-      //   this.menuManager.hideMenu(this.dialogTextBox);
+      // TODO: Try close dialog when it's allowed? I feel that there could be situations where we don't want that
+      // TODO: Could be a skip function so we try to close the dialog only if it makes sense
+      // this.dialogQuest.closeDialog();
     } else if (this.menuManager.hasVisibleMenu()) {
       this.menuManager.hideFocusedMenu();
     } else {
