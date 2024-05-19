@@ -1,13 +1,3 @@
-/** TODO
- * Cleanup the code and the widgets
- * Make our own SW_Dialog instead of using rex version. We need more flexibility on the layout
- * Add the entity backgrounds to the SW_Dialog
- * Remove QuestionJSON that was just meant for testing purpose
- * Use json files instead and have a system of ids to know which json and question to start
- * Make possible to change the focused entity and even the actual entities in a single question step.
- * Add navigation to the dialog choices
- */
-
 import { SW_BaseMenu } from '../Menus/SW_BaseMenu';
 import { SW_DialogTextBox } from './SW_DialogTextBox';
 import { SW_MenuManager } from '../Menus/SW_MenuManager';
