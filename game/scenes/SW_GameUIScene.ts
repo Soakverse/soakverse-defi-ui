@@ -12,6 +12,7 @@ import { SW_InGameMenu } from '../UI/Menus/InGameMenu/SW_InGameMenu';
 import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputComponent';
 import { SW_Player } from '../characters/players/SW_Player';
 import { SW_PlaceNamePanel } from '../UI/SW_PlaceNamePanel';
+import { SW_BaseMenu } from '../UI/Menus/SW_BaseMenu';
 
 declare type SW_UIKeys = {
   escape: Phaser.Input.Keyboard.Key;
@@ -34,10 +35,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
   private declare placeNamePanelTween: Phaser.Tweens.Tween | undefined;
   private currentPlaceName: string = '';
 
-  private declare playerInventoryWidget: SW_PlayerInventoryWidget;
-  private declare chestInventoryWidget: SW_ChestInventoryWidget;
-
-  private declare loadingScreen: Phaser.GameObjects.Graphics;
+  private declare loadingScreen: SW_BaseMenu;
 
   private declare playerActionsContainer: SW_PlayerActionsContainer | undefined;
 
@@ -97,138 +95,12 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.menuManager.setDefaultMenu(this.inGameMenu);
     this.menuManager.hideMenu(this.inGameMenu);
 
-    this.playerInventoryWidget = new SW_PlayerInventoryWidget(
-      this,
-      this.scale.displaySize.width * 0.25,
-      240
-    );
-    this.playerInventoryWidget.on(
-      'moveObject',
-      this.onMovePlayerInventoryMoveObject,
-      this
-    );
-    this.menuManager.hideMenu(this.playerInventoryWidget);
-
     this.dialogQuest = new SW_DialogQuest(
       this.menuManager,
       this.game.canvas.width * 0.5,
       this.game.canvas.height * 0.5
     );
     this.menuManager.hideMenu(this.dialogQuest);
-
-    this.chestInventoryWidget = new SW_ChestInventoryWidget(this, 0, 240);
-    this.chestInventoryWidget.setX(
-      this.scale.displaySize.width * 0.66 -
-        this.chestInventoryWidget.width * 0.25
-    );
-    this.chestInventoryWidget.on(
-      'objectClicked',
-      this.onMoveChestInventoryObject,
-      this
-    );
-    this.menuManager.hideMenu(this.chestInventoryWidget);
-
-    this.updatePlayerInventory([
-      {
-        name: 'Red Axe',
-        id: 'object1',
-        description: 'A badass axe!',
-        image: 'axeRed',
-        type: SW_ENUM_IVENTORY_OBJECT.WEAPON,
-        quantity: 1,
-      },
-      {
-        name: 'Blue Sword',
-        id: 'object2',
-        description: 'A nice sword',
-        image: 'swordBlue',
-        type: SW_ENUM_IVENTORY_OBJECT.ITEMS,
-        quantity: 1,
-      },
-      {
-        name: 'Blue Shield',
-        id: 'object3',
-        description: 'A strong shield',
-        image: 'shieldBlue',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 13,
-      },
-      {
-        name: 'Blue Ring',
-        id: 'object4',
-        description: 'Fits your hand well!',
-        image: 'ringBlue',
-        type: SW_ENUM_IVENTORY_OBJECT.WEAPON,
-        quantity: 3,
-      },
-      {
-        name: 'Red Shield',
-        id: 'object5',
-        description: 'This shield is strong like a rock',
-        image: 'shieldRed',
-        type: SW_ENUM_IVENTORY_OBJECT.ITEMS,
-        quantity: 1,
-      },
-      {
-        name: 'Red Sword',
-        id: 'object6',
-        description: 'Fear this sword!',
-        image: 'swordRed',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 10,
-      },
-      {
-        name: 'Red Sword',
-        id: 'object7',
-        description: 'Fear this sword!',
-        image: 'swordRed',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 1,
-      },
-      {
-        name: 'Red Sword',
-        id: 'object8',
-        description: 'Fear this sword!',
-        image: 'swordRed',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 41,
-      },
-      {
-        name: 'Red Sword',
-        id: 'object9',
-        description: 'Fear this sword!',
-        image: 'swordRed',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 1,
-      },
-    ]);
-
-    this.updateChestInventory([
-      {
-        name: 'Red Sword',
-        id: 'object10',
-        description: 'Fear this sword!',
-        image: 'swordBlue',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 1,
-      },
-      {
-        name: 'Red Sword',
-        id: 'object11',
-        description: 'Fear this sword!',
-        image: 'swordRed',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 3,
-      },
-      {
-        name: 'Red Sword',
-        id: 'object12',
-        description: 'Fear this sword!',
-        image: 'swordRed',
-        type: SW_ENUM_IVENTORY_OBJECT.RUNES,
-        quantity: 5,
-      },
-    ]);
 
     this.wizhMenu = new SW_WizhMenu(
       this.menuManager,
@@ -244,13 +116,23 @@ export default class SW_GameUIScene extends SW_BaseScene {
   }
 
   public createLoadingScreen(): void {
-    this.loadingScreen = this.add.graphics();
-    this.loadingScreen.fillStyle(0x000000, 1.0);
-    this.loadingScreen.fillRect(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT);
-    this.loadingScreen.setInteractive(
+    this.loadingScreen = new SW_BaseMenu(this.menuManager, 0, 0);
+    this.loadingScreen.setSize(SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT);
+
+    const loadingScreenBackground = this.add.graphics();
+    loadingScreenBackground.fillStyle(0x000000, 1.0);
+    loadingScreenBackground.fillRect(
+      0,
+      0,
+      this.loadingScreen.width,
+      this.loadingScreen.height
+    );
+    loadingScreenBackground.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT),
       Phaser.Geom.Rectangle.Contains
     );
+
+    this.loadingScreen.add(loadingScreenBackground);
     this.loadingScreen.setVisible(false);
   }
 
@@ -289,27 +171,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.playerActionsContainer?.setVisible(!hasVisibleMenu);
   }
 
-  protected onMovePlayerInventoryMoveObject(
-    inventoryObjectData: SW_InventoryObject,
-    quantity: number
-  ): void {
-    if (this.chestInventoryWidget.visible) {
-      this.playerInventoryWidget.removeObject(inventoryObjectData, quantity);
-      this.chestInventoryWidget.addObject(inventoryObjectData, quantity);
-    }
-  }
-
-  protected onMoveChestInventoryObject(
-    objectIndex: number,
-    inventoryObjectData: SW_InventoryObject
-  ): void {
-    // TODO: Do same logic as player inventory
-    // if (this.chestInventoryWidget.visible) {
-    //     this.chestInventoryWidget.removeObjectAt(objectIndex);
-    //     this.playerInventoryWidget.addObject(inventoryObjectData);
-    // }
-  }
-
   protected onMakeAWizhButtonClicked(): void {
     this.menuManager.hideMenu(this.wizhMenu);
   }
@@ -334,64 +195,11 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.dialogQuest.continueDialog();
   }
 
-  // Menus
+  // Wizh menu
   ////////////////////////////////////////////////////////////////////////
 
   public showWizhWellMenu(): void {
     this.menuManager.showMenu(this.wizhMenu);
-  }
-
-  // Inventory
-  ////////////////////////////////////////////////////////////////////////
-
-  public openPlayerInventory(): void {
-    this.setPlayerInventoryVisibility(true);
-  }
-
-  public toggleInventoryMenus(): void {
-    if (this.playerInventoryWidget.visible) {
-      this.setPlayerInventoryVisibility(false);
-      this.setChestInventoryVisibility(false);
-    } else {
-      this.setPlayerInventoryVisibility(true);
-    }
-  }
-
-  // TODO: Review the visibility functions below with menu manager
-  protected setPlayerInventoryVisibility(isVisible: boolean): void {
-    this.playerInventoryWidget.setX(
-      this.scale.displaySize.width * 0.5 -
-        this.playerInventoryWidget.width * 0.25
-    );
-    this.playerInventoryWidget.setVisible(isVisible);
-  }
-
-  public openChestInventory(): void {
-    this.setPlayerInventoryVisibility(true);
-    this.setChestInventoryVisibility(true);
-  }
-
-  public toggleChestInventory(): void {
-    this.setPlayerInventoryVisibility(!this.playerInventoryWidget.visible);
-  }
-
-  protected setChestInventoryVisibility(isVisible: boolean): void {
-    if (isVisible) {
-      this.playerInventoryWidget.setX(
-        this.scale.displaySize.width * 0.33 -
-          this.playerInventoryWidget.width * 0.25
-      );
-    }
-
-    this.chestInventoryWidget.setVisible(isVisible);
-  }
-
-  public updatePlayerInventory(newInventoryObjects: SW_InventoryObject[]) {
-    this.playerInventoryWidget.updateInventory(newInventoryObjects);
-  }
-
-  public updateChestInventory(newInventoryObjects: SW_InventoryObject[]) {
-    this.chestInventoryWidget.updateInventory(newInventoryObjects);
   }
 
   // Dialogue
