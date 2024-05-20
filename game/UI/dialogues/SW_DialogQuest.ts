@@ -6,6 +6,7 @@ import { SW_ButtonBase } from '../Widgets/SW_ButtonBase';
 import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { SW_AudioManager } from '../../audio/SW_AudioManager';
 import { SW_DialogTitle } from './SW_DialogTitle';
+import { SW_CST } from '~/game/SW_CST';
 
 declare type SW_DialogOption = {
   /** Unique id of this option */
@@ -71,8 +72,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
   constructor(menuManager: SW_MenuManager, x: number, y: number) {
     super(menuManager, x, y);
 
-    this.width = this.scene.game.canvas.width;
-    this.height = this.scene.game.canvas.height;
+    this.width = SW_CST.GAME.WIDTH;
+    this.height = SW_CST.GAME.HEIGHT;
 
     this.questionManager = new Quest({
       // format: 'json',
@@ -144,8 +145,23 @@ export class SW_DialogQuest extends SW_BaseMenu {
       this.continueDialog,
       this
     );
-
     this.add(this.dialogTextBox);
+
+    if (SW_CST.GAME.IS_MOBILE) {
+      const continueTouchZone = this.scene.add.zone(
+        0,
+        0,
+        this.width,
+        this.height
+      );
+      continueTouchZone.setInteractive();
+      continueTouchZone.on(
+        Phaser.Input.Events.POINTER_DOWN,
+        this.continueDialog,
+        this
+      );
+      this.add(continueTouchZone);
+    }
   }
 
   protected createDialogTitle(): void {
