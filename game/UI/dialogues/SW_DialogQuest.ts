@@ -255,12 +255,21 @@ export class SW_DialogQuest extends SW_BaseMenu {
       }
 
       newChoice.setX(newChoice.x + 8);
-      this.arrowSelectChoice.setX(
-        this.choiceSizer.x - this.choiceSizer.width * 0.5 + newChoice.x - 12
-      );
-      this.arrowSelectChoice.setY(newChoice.y);
 
       this.selectedChoice = newChoice;
+      this.updateArrow();
+    }
+  }
+
+  protected updateArrow(): void {
+    if (this.selectedChoice) {
+      this.arrowSelectChoice.setX(
+        this.choiceSizer.x -
+          this.choiceSizer.width * 0.5 +
+          this.selectedChoice.x -
+          12
+      );
+      this.arrowSelectChoice.setY(this.selectedChoice.y);
     }
   }
 
@@ -437,6 +446,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.choiceSizer.layout();
 
     this.selectChoice(this.dialogChoices[0]);
+    this.updateArrow();
     this.arrowSelectChoice.setVisible(true);
   }
 
