@@ -14,16 +14,7 @@ import { SW_Player } from '../characters/players/SW_Player';
 import { SW_PlaceNamePanel } from '../UI/SW_PlaceNamePanel';
 import { SW_BaseMenu } from '../UI/Menus/SW_BaseMenu';
 
-declare type SW_UIKeys = {
-  escape: Phaser.Input.Keyboard.Key;
-  space: Phaser.Input.Keyboard.Key;
-  nextPage: Phaser.Input.Keyboard.Key;
-};
-
 export default class SW_GameUIScene extends SW_BaseScene {
-  /** Keys to handle the menus */
-  protected declare keys: SW_UIKeys;
-
   private declare menuManager: SW_MenuManager;
 
   private declare inGameMenu: SW_InGameMenu;
@@ -56,26 +47,15 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.placeNamePanel = new SW_PlaceNamePanel(this, 0, 0);
     this.placeNamePanel.setVisible(false);
 
-    this.createKeys();
     this.createMenus();
     this.createLoadingScreen();
   }
 
   protected createKeys(): void {
-    if (this.input.keyboard) {
-      this.keys = this.input.keyboard.addKeys(
-        {
-          escape: Phaser.Input.Keyboard.KeyCodes.ESC,
-          space: Phaser.Input.Keyboard.KeyCodes.SPACE,
-          nextPage: Phaser.Input.Keyboard.KeyCodes.ENTER,
-        },
-        false
-      ) as SW_UIKeys;
-
-      this.keys.escape.on('down', this.onEscapeButtonDown, this);
-      this.keys.space.on('down', this.onSpaceButtonDown, this);
-      this.keys.nextPage.on('down', this.onNextPageButtonDown, this);
-    }
+    // if (this.input.keyboard) {
+    //   this.keys.space.on('down', this.onSpaceButtonDown, this);
+    //   this.keys.nextPage.on('down', this.onNextPageButtonDown, this);
+    // }
   }
 
   public createMenus(): void {
@@ -173,18 +153,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
   protected onMakeAWizhButtonClicked(): void {
     this.menuManager.hideMenu(this.wizhMenu);
-  }
-
-  protected onEscapeButtonDown(): void {
-    if (this.dialogQuest.visible) {
-      // TODO: Try close dialog when it's allowed? I feel that there could be situations where we don't want that
-      // TODO: Could be a skip function so we try to close the dialog only if it makes sense
-      // this.dialogQuest.closeDialog();
-    } else if (this.menuManager.hasVisibleMenu()) {
-      this.menuManager.hideFocusedMenu();
-    } else {
-      this.menuManager.showDefaultMenu();
-    }
   }
 
   protected onSpaceButtonDown(): void {

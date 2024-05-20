@@ -55,12 +55,18 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
   private contentStep: number = 0;
   private maxChoiceCount: number = 5;
+  private visibleChoiceCount: number = 0;
 
   protected declare backgroundEntityLeft: Phaser.GameObjects.Image;
   protected declare backgroundEntityRight: Phaser.GameObjects.Image;
 
   /** Dialog filename in cache, so we don't need to reload the file if used several times */
   protected declare cacheDialogJson: string;
+
+  protected declare spaceKey: Phaser.Input.Keyboard.Key | undefined;
+  protected declare enterKey: Phaser.Input.Keyboard.Key | undefined;
+  protected declare upKey: Phaser.Input.Keyboard.Key | undefined;
+  protected declare downKey: Phaser.Input.Keyboard.Key | undefined;
 
   constructor(menuManager: SW_MenuManager, x: number, y: number) {
     super(menuManager, x, y);
@@ -78,6 +84,28 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.createDialogChoices();
 
     this.questionManager.on('quest', this.updateQuestion, this);
+
+    const keyboard = this.scene.input.keyboard;
+    if (keyboard) {
+      this.spaceKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+      this.enterKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+      this.upKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+      this.downKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    }
+  }
+
+  public createKeys(): void {
+    this.spaceKey?.on('down', this.continueDialog, this);
+    this.enterKey?.on('down', this.onEnterButtonDown, this);
+    this.upKey?.on('down', this.navigateUp, this);
+    this.downKey?.on('down', this.navigateDown, this);
+  }
+
+  public clearKeys(): void {
+    this.spaceKey?.off('down', this.continueDialog, this);
+    this.enterKey?.off('down', this.onEnterButtonDown, this);
+    this.upKey?.off('down', this.navigateUp, this);
+    this.downKey?.off('down', this.navigateDown, this);
   }
 
   protected createBackgroundEntities(): void {
@@ -383,6 +411,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
       option.setVisible(false);
     }
     this.arrowSelectChoice.setVisible(false);
+
+    this.visibleChoiceCount = 0;
   }
 
   protected updateAllChoices(): void {
@@ -392,15 +422,15 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
     const optionCount = this.currentQuestion.options.length;
     const dialogChoiceCount = this.dialogChoices.length;
-    const visibleChoiceCount = Math.min(dialogChoiceCount, optionCount);
+    this.visibleChoiceCount = Math.min(dialogChoiceCount, optionCount);
 
-    for (let i = 0; i < visibleChoiceCount; ++i) {
+    for (let i = 0; i < this.visibleChoiceCount; ++i) {
       const choice = this.dialogChoices[i];
       this.updateChoice(choice, this.currentQuestion.options[i]);
       this.choiceSizer.show(choice);
     }
 
-    for (let i = visibleChoiceCount; i < dialogChoiceCount; ++i) {
+    for (let i = this.visibleChoiceCount; i < dialogChoiceCount; ++i) {
       this.choiceSizer.hide(this.dialogChoices[i]);
     }
 
@@ -454,5 +484,52 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.dialogTextBox.stop();
     this.questionManager.clearData();
     this.menuManager.hideMenu(this);
+  }
+
+  protected onEscapeButtonDown(): void {
+    // TODO Handle skippable dialogues. For now, nothing should be skipped
+    //this.menuManager.hideMenu(this);
+  }
+
+  protected onEnterButtonDown(): void {
+    if (this.selectedChoice && this.selectedChoice.visible) {
+      this.onChoiceClicked(this.selectedChoice);
+    }
+  }
+
+  protected navigateUp(): void {
+    this.navigate(-1);
+  }
+  protected navigateDown(): void {
+    this.navigate(1);
+  }
+
+  protected navigate(increment: number): void {
+    if (this.visibleChoiceCount <= 1) {
+      return;
+    }
+
+    if (!this.selectedChoice) {
+      this.selectChoice(this.dialogChoices[0]);
+      return;
+    }
+
+    const index = this.dialogChoices.findIndex(
+      (choice: SW_ButtonBase, index: number, obj: SW_ButtonBase[]) => {
+        return choice == this.selectedChoice;
+      },
+      this
+    );
+
+    if (index < 0) {
+      this.selectChoice(this.dialogChoices[0]);
+    } else {
+      this.selectChoice(
+        this.dialogChoices[
+          (index + increment + this.visibleChoiceCount) %
+            this.visibleChoiceCount
+        ]
+      );
+    }
   }
 }
