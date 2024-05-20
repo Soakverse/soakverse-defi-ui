@@ -492,16 +492,17 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
   public continueDialog(): void {
     if (this.visible) {
-      SW_AudioManager.playSoundEffect('soundDialogue');
-
       if (this.dialogTextBox.isTyping) {
         this.dialogTextBox.stop(true);
       } else if (!this.dialogTextBox.isLastPage) {
         this.dialogTextBox.typeNextPage();
+        SW_AudioManager.playSoundEffect('soundDialogue');
       } else if (this.hasRemainingDialogContent()) {
         this.updateNextContent();
+        SW_AudioManager.playSoundEffect('soundDialogue');
       } else if (!this.hasCurrentChoices()) {
         this.showNextQuestion();
+        SW_AudioManager.playSoundEffect('soundDialogue');
       }
     }
   }
