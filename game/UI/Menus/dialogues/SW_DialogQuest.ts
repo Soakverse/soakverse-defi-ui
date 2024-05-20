@@ -1,10 +1,10 @@
-import { SW_BaseMenu } from '../Menus/SW_BaseMenu';
+import { SW_BaseMenu } from '../SW_BaseMenu';
 import { SW_DialogTextBox } from './SW_DialogTextBox';
-import { SW_MenuManager } from '../Menus/SW_MenuManager';
+import { SW_MenuManager } from '../SW_MenuManager';
 import Quest from 'phaser3-rex-plugins/plugins/quest.js';
-import { SW_ButtonBase } from '../Widgets/SW_ButtonBase';
+import { SW_ButtonBase } from '../../Widgets/SW_ButtonBase';
 import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
-import { SW_AudioManager } from '../../audio/SW_AudioManager';
+import { SW_AudioManager } from '../../../audio/SW_AudioManager';
 import { SW_DialogTitle } from './SW_DialogTitle';
 import { SW_CST } from '~/game/SW_CST';
 

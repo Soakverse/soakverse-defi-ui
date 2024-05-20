@@ -1,7 +1,7 @@
 import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
-import { SW_CST } from '../../SW_CST';
-import { SW_Utils } from '../../SW_Utils';
-import SW_BaseScene from '../../scenes/SW_BaseScene';
+import { SW_CST } from '../../../SW_CST';
+import { SW_Utils } from '../../../SW_Utils';
+import SW_BaseScene from '../../../scenes/SW_BaseScene';
 
 export class SW_DialogTitle extends Phaser.GameObjects.Container {
   public declare scene: SW_BaseScene;
