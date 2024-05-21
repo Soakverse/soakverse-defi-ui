@@ -5,6 +5,19 @@ import { SW_CST } from '~/game/SW_CST';
 import { SW_MonsterSpecialEffectWidget } from './SW_MonsterSpecialEffectWidget';
 import { SW_MonsterStatWidget } from './SW_MonsterStatWidget';
 import { SW_MonsterCard } from './MonstersCard/SW_MonsterCard';
+import { SW_MonsterMenuTab } from './SW_MonsterMenuTab';
+
+declare type SW_MonsterStatData = {
+  name: string;
+  value: integer;
+};
+
+declare type SW_MonsterData = {
+  name: string;
+  level: integer;
+  stats: SW_MonsterStatData[];
+  effects: string[];
+};
 
 export class SW_MonstersMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;
@@ -14,6 +27,12 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
   protected declare monsterSpecialEffectWidgets: SW_MonsterSpecialEffectWidget[];
   protected declare monsterStatWidgets: Map<string, SW_MonsterStatWidget>;
   protected declare levelText: Phaser.GameObjects.Text;
+
+  protected declare tabs: SW_MonsterMenuTab[];
+  protected declare currentTab: SW_MonsterMenuTab | undefined;
+  protected declare currentTabIndex: number;
+
+  protected declare monstersData: SW_MonsterData[];
 
   constructor(
     scene: SW_BaseScene,
@@ -35,21 +54,21 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     }
 
     this.createMonsterTabs();
+
+    const background = this.scene.add.image(0, 0, 'monstersMenuBackground');
+    this.add(background);
+
     this.createMonsterHeaderTitle();
     this.createMonsterProfilImage();
     this.createMonsterSpecialEffectWidgets();
     this.createMonsterStats();
 
-    const randomStats = [
-      { name: 'Magic', value: Phaser.Math.Between(1, 100) },
-      { name: 'Attack', value: Phaser.Math.Between(1, 100) },
-      { name: 'Defense', value: Phaser.Math.Between(1, 100) },
-      { name: 'Speed', value: Phaser.Math.Between(1, 100) },
-      { name: 'Accuracy', value: Phaser.Math.Between(1, 100) },
-      { name: 'Luck', value: Phaser.Math.Between(1, 100) },
-    ];
-    this.updateMonsterStats(randomStats);
-    this.updateLevel(Phaser.Math.Between(1, 100));
+    // TODO: Get monsters data from the server once we are ready
+    const monstersData = this.TEMP_generateMonsterData(
+      Phaser.Math.Between(2, 6)
+    );
+
+    this.updateMonsters(monstersData);
   }
 
   public setVisible(value: boolean): this {
@@ -59,7 +78,63 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     return super.setVisible(value);
   }
 
-  protected createMonsterTabs(): void {}
+  private TEMP_generateMonsterData(monsterCount: number): SW_MonsterData[] {
+    const randomStatsFn = () => {
+      return [
+        { name: 'Magic', value: Phaser.Math.Between(1, 100) },
+        { name: 'Attack', value: Phaser.Math.Between(1, 100) },
+        { name: 'Defense', value: Phaser.Math.Between(1, 100) },
+        { name: 'Speed', value: Phaser.Math.Between(1, 100) },
+        { name: 'Accuracy', value: Phaser.Math.Between(1, 100) },
+        { name: 'Luck', value: Phaser.Math.Between(1, 100) },
+      ];
+    };
+
+    const monstersData: SW_MonsterData[] = [];
+
+    for (let i = 0; i < monsterCount; ++i) {
+      const effectCount = Phaser.Math.Between(1, 2);
+      let effects = [];
+
+      for (let i = 0; i < effectCount; ++i) {
+        effects.push(`Monster Effect ${Phaser.Math.Between(1, 9)}`);
+      }
+
+      monstersData.push({
+        stats: randomStatsFn(),
+        name: `Monster ${Phaser.Math.Between(1, 100)}`,
+        level: Phaser.Math.Between(1, 100),
+        effects: effects,
+      });
+    }
+    return monstersData;
+  }
+
+  protected createMonsterTabs(): void {
+    const monsterTabsSizer = this.scene.rexUI.add.sizer({
+      x: 0,
+      y: -this.height * 0.5 + 24,
+      space: { item: 0 },
+      orientation: 'left-to-right',
+    });
+    this.add(monsterTabsSizer);
+
+    this.tabs = [];
+    const maxMonsterCount = 6;
+    for (let i = 0; i < maxMonsterCount; ++i) {
+      const tab = new SW_MonsterMenuTab(this.scene, 0, 0);
+      tab.onClicked(() => {
+        this.onMonsterTabClicked(tab, i);
+      }, this);
+      monsterTabsSizer.add(tab);
+      this.tabs.push(tab);
+    }
+
+    this.tabs[0].select();
+    this.currentTab = this.tabs[0];
+    this.currentTabIndex = 0;
+    monsterTabsSizer.layout();
+  }
 
   protected createMonsterHeaderTitle(): void {
     this.monsterNameTitle = this.scene.add.text(
@@ -189,7 +264,44 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     }
   }
 
-  protected updateMonsterStats(
+  protected updateMonsters(monstersData: SW_MonsterData[]): void {
+    this.monstersData = monstersData;
+
+    const visibleTabCount = Math.min(
+      this.tabs.length,
+      this.monstersData.length
+    );
+
+    for (let i = 0; i < visibleTabCount; ++i) {
+      const tab = this.tabs[i];
+      tab.setText(monstersData[i].name);
+      tab.setVisible(true);
+    }
+
+    for (let i = visibleTabCount; i < this.tabs.length; ++i) {
+      this.tabs[i].setVisible(false);
+    }
+
+    if (this.currentTabIndex < visibleTabCount) {
+      this.showMonsterAtIndex(this.currentTabIndex);
+    } else {
+      this.onMonsterTabClicked(this.tabs[0], 0);
+    }
+  }
+
+  protected showMonsterAtIndex(monsterIndex: number): void {
+    const monsterData = this.monstersData[monsterIndex];
+
+    this.monsterNameTitle.setText(monsterData.name);
+    this.monsterCard.updateFrontCard(
+      `monsterProfil_prototype${(monsterIndex % 2) + 1}`
+    );
+    this.showMonsterStats(monsterData.stats);
+    this.showLevel(monsterData.level);
+    this.showEffects(monsterData.effects);
+  }
+
+  protected showMonsterStats(
     statsData: { name: string; value: number }[]
   ): void {
     for (const statData of statsData) {
@@ -198,7 +310,42 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     }
   }
 
-  protected updateLevel(level: number): void {
+  protected showLevel(level: number): void {
     this.levelText.setText(`Level ${level}`);
+  }
+
+  protected showEffects(effects: string[]): void {
+    const visibleEffectCount = Math.min(
+      this.monsterSpecialEffectWidgets.length,
+      effects.length
+    );
+
+    for (let i = 0; i < visibleEffectCount; ++i) {
+      const widget = this.monsterSpecialEffectWidgets[i];
+      widget.setText(effects[i]);
+      widget.setVisible(true);
+    }
+
+    for (
+      let i = visibleEffectCount;
+      i < this.monsterSpecialEffectWidgets.length;
+      ++i
+    ) {
+      this.monsterSpecialEffectWidgets[i].setVisible(false);
+    }
+  }
+
+  protected onMonsterTabClicked(
+    tab: SW_MonsterMenuTab,
+    tabIndex: number
+  ): void {
+    if (tab && tab != this.currentTab) {
+      this.currentTab?.unselect();
+      tab.select();
+      this.currentTab = tab;
+      this.currentTabIndex = tabIndex;
+
+      this.showMonsterAtIndex(tabIndex);
+    }
   }
 }

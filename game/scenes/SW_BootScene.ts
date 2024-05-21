@@ -40,7 +40,9 @@ import settingsIconTitle from '@/game/assets/ui/menus/settingsIconTitle.png';
 import wizhIconTitle from '@/game/assets/ui/menus/wizhIconTitle.png';
 
 import inGameMenuBackground from '@/game/assets/ui/menus/inGameMenuBackground.png';
-import inGameMenuTab from '@/game/assets/ui/menus/inGameMenuTab.png';
+import monstersMenuBackground from '@/game/assets/ui/menus/monstersMenuBackground.png';
+import inGameMenuTabNormal from '@/game/assets/ui/menus/inGameMenuTabNormal.png';
+import inGameMenuTabSelected from '@/game/assets/ui/menus/inGameMenuTabSelected.png';
 
 // Monsters
 import photoStrap from '@/game/assets/ui/menus/photoStrap.png';
@@ -144,7 +146,9 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('wizhingWellBackground', wizhingWellBackground);
 
     this.load.image('inGameMenuBackground', inGameMenuBackground);
-    this.load.image('inGameMenuTab', inGameMenuTab);
+    this.load.image('monstersMenuBackground', monstersMenuBackground);
+    this.load.image('inGameMenuTabNormal', inGameMenuTabNormal);
+    this.load.image('inGameMenuTabSelected', inGameMenuTabSelected);
 
     this.load.image('photoStrap', photoStrap);
     this.load.image('monsterProfil_prototype1', monsterProfil_prototype1);
