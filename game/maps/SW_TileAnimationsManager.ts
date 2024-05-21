@@ -199,7 +199,7 @@ export class SW_TileAnimationsManager extends Phaser.Events.EventEmitter {
           this.scene
         );
         for (const animatedTile of animatedTiles) {
-          animatedTile.setOrigin(0, 0);
+          animatedTile.setOrigin(0.5);
           animatedTile.setDepth(layerDepth);
           animatedTile.anims.play({
             key: `${tileTexture}${gid}`,
