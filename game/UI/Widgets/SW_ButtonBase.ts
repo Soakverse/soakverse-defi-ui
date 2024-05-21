@@ -27,6 +27,7 @@ export declare type SW_ButtonConfig = {
 
   text?: string | undefined;
   textStyle?: Phaser.Types.GameObjects.Text.TextStyle;
+  textStyleSelected?: Phaser.Types.GameObjects.Text.TextStyle;
 
   colorBackgroundNormal?: number;
   colorBackgroundPressed?: number;
@@ -73,6 +74,9 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
 
   protected _backgroundObject: Phaser.GameObjects.Image | RoundRectangle;
   protected _textObject: Phaser.GameObjects.Text | undefined;
+
+  protected textStyle: Phaser.Types.GameObjects.Text.TextStyle = {};
+  protected textStyleSelected: Phaser.Types.GameObjects.Text.TextStyle = {};
 
   constructor(
     scene: SW_BaseScene,
@@ -121,14 +125,24 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
     this.updateBackgroundSizes();
 
     if (config.text !== undefined) {
-      const textStyle = config.textStyle ?? {};
-      textStyle.fontFamily =
-        textStyle.fontFamily ?? SW_CST.STYLE.TEXT.FONT_FAMILY;
-      textStyle.fontSize = textStyle.fontSize ?? '12px';
-      textStyle.color = textStyle.color ?? SW_CST.STYLE.COLOR.BLACK;
-      textStyle.align = textStyle.align ?? 'center';
+      this.textStyle = config.textStyle ?? {};
+      this.textStyle.fontFamily =
+        this.textStyle.fontFamily ?? SW_CST.STYLE.TEXT.FONT_FAMILY;
+      this.textStyle.fontSize = this.textStyle.fontSize ?? '12px';
+      this.textStyle.color = this.textStyle.color ?? SW_CST.STYLE.COLOR.BLACK;
+      this.textStyle.align = this.textStyle.align ?? 'center';
 
-      this._textObject = this.scene.add.text(0, 0, config.text, textStyle);
+      this.textStyleSelected = config.textStyleSelected ?? this.textStyle;
+      this.textStyleSelected.fontFamily =
+        this.textStyleSelected.fontFamily ?? this.textStyle.fontFamily;
+      this.textStyleSelected.fontSize =
+        this.textStyleSelected.fontSize ?? this.textStyle.fontSize;
+      this.textStyleSelected.color =
+        this.textStyleSelected.color ?? this.textStyle.color;
+      this.textStyleSelected.align =
+        this.textStyleSelected.align ?? this.textStyle.align;
+
+      this._textObject = this.scene.add.text(0, 0, config.text, this.textStyle);
       this._textObject.setOrigin(0.5);
       this.add(this._textObject);
     }
@@ -208,6 +222,8 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
   }
 
   protected updateVisualSelected(): void {
+    this._textObject?.setStyle(this.textStyleSelected);
+
     if (!this.isEnabled()) {
       this.setVisual(
         this.textOffsetDisabledY,
@@ -235,6 +251,8 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
     }
   }
   protected updateVisualUnselected(): void {
+    this._textObject?.setStyle(this.textStyle);
+
     if (!this.isEnabled()) {
       this.setVisual(
         this.textOffsetDisabledY,
