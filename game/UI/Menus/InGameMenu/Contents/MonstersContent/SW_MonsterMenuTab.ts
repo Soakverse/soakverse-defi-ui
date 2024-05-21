@@ -12,7 +12,12 @@ export class SW_MonsterMenuTab extends SW_ButtonBase {
       textureNormal: 'inGameMenuTabNormal',
       textureNormalSelected: 'inGameMenuTabSelected',
       text: 'Monster 00',
-      textStyle: { fontSize: '14px', color: '#684C3C' },
+      textStyle: { fontSize: '14px', color: '#684C3C', fontStyle: '' },
+      textStyleSelected: {
+        fontSize: '14px',
+        color: '#4D2B1D',
+        fontStyle: 'bold',
+      },
     });
   }
 }
