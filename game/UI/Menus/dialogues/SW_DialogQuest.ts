@@ -51,8 +51,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
   protected declare choiceSizer: Sizer;
   protected declare dialogChoices: SW_ButtonBase[];
-  protected declare selectedChoice: SW_ButtonBase | undefined;
-  protected declare arrowSelectChoice: Phaser.GameObjects.Image;
+  protected declare focusedChoice: SW_ButtonBase | undefined;
+  protected declare arrowFocusedChoice: Phaser.GameObjects.Image;
 
   private contentStep: number = 0;
   private maxChoiceCount: number = 5;
@@ -197,7 +197,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
         textStyle: { fontSize: '22px' },
       });
       choice.onHovered(() => {
-        this.selectChoice(choice);
+        this.focusChoice(choice);
       }, this);
       choice.onClicked(() => {
         this.onChoiceClicked(choice);
@@ -207,14 +207,14 @@ export class SW_DialogQuest extends SW_BaseMenu {
       this.dialogChoices.push(choice);
     }
 
-    this.arrowSelectChoice = this.scene.add.image(
+    this.arrowFocusedChoice = this.scene.add.image(
       0,
       0,
-      'arrowSelectDialogueOption'
+      'arrowFocusDialogueOption'
     );
-    this.arrowSelectChoice.setOrigin(1, 0.5);
+    this.arrowFocusedChoice.setOrigin(1, 0.5);
 
-    this.add(this.arrowSelectChoice);
+    this.add(this.arrowFocusedChoice);
     this.choiceSizer.layout();
   }
 
@@ -264,28 +264,28 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.questionManager.getNextQuestion(dialogQuestionKey);
   }
 
-  protected selectChoice(newChoice: SW_ButtonBase) {
-    if (newChoice != this.selectedChoice) {
-      if (this.selectedChoice) {
-        this.selectedChoice.setX(newChoice.x); // Bring back to its original x-position
+  protected focusChoice(newChoice: SW_ButtonBase) {
+    if (newChoice != this.focusedChoice) {
+      if (this.focusedChoice) {
+        this.focusedChoice.setX(newChoice.x); // Bring back to its original x-position
       }
 
       newChoice.setX(newChoice.x + 8);
 
-      this.selectedChoice = newChoice;
+      this.focusedChoice = newChoice;
       this.updateArrow();
     }
   }
 
   protected updateArrow(): void {
-    if (this.selectedChoice) {
-      this.arrowSelectChoice.setX(
+    if (this.focusedChoice) {
+      this.arrowFocusedChoice.setX(
         this.choiceSizer.x -
           this.choiceSizer.width * 0.5 +
-          this.selectedChoice.x -
+          this.focusedChoice.x -
           12
       );
-      this.arrowSelectChoice.setY(this.selectedChoice.y);
+      this.arrowFocusedChoice.setY(this.focusedChoice.y);
     }
   }
 
@@ -435,7 +435,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
     for (const option of this.dialogChoices) {
       option.setVisible(false);
     }
-    this.arrowSelectChoice.setVisible(false);
+    this.arrowFocusedChoice.setVisible(false);
 
     this.visibleChoiceCount = 0;
   }
@@ -461,9 +461,9 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
     this.choiceSizer.layout();
 
-    this.selectChoice(this.dialogChoices[0]);
+    this.focusChoice(this.dialogChoices[0]);
     this.updateArrow();
-    this.arrowSelectChoice.setVisible(true);
+    this.arrowFocusedChoice.setVisible(true);
   }
 
   protected updateChoice(choice: SW_ButtonBase, option: SW_DialogOption): void {
@@ -519,8 +519,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
   }
 
   protected onEnterButtonDown(): void {
-    if (this.selectedChoice && this.selectedChoice.visible) {
-      this.onChoiceClicked(this.selectedChoice);
+    if (this.focusedChoice && this.focusedChoice.visible) {
+      this.onChoiceClicked(this.focusedChoice);
     }
   }
 
@@ -536,22 +536,22 @@ export class SW_DialogQuest extends SW_BaseMenu {
       return;
     }
 
-    if (!this.selectedChoice) {
-      this.selectChoice(this.dialogChoices[0]);
+    if (!this.focusedChoice) {
+      this.focusChoice(this.dialogChoices[0]);
       return;
     }
 
     const index = this.dialogChoices.findIndex(
       (choice: SW_ButtonBase, index: number, obj: SW_ButtonBase[]) => {
-        return choice == this.selectedChoice;
+        return choice == this.focusedChoice;
       },
       this
     );
 
     if (index < 0) {
-      this.selectChoice(this.dialogChoices[0]);
+      this.focusChoice(this.dialogChoices[0]);
     } else {
-      this.selectChoice(
+      this.focusChoice(
         this.dialogChoices[
           (index + increment + this.visibleChoiceCount) %
             this.visibleChoiceCount

@@ -22,7 +22,7 @@ import player from '@/game/assets/characters/player.png';
 import dialogueImage_YB from '@/game/assets/dialogueImage_YB.png';
 import GPADJK_d2_1 from '@/game/assets/GPADJK_d2_1.png';
 import Scribb from '@/game/assets/Scribb.png';
-import arrowSelectDialogueOption from '@/game/assets/ui/dialogues/arrowSelectDialogueOption.png';
+import arrowFocusDialogueOption from '@/game/assets/ui/dialogues/arrowFocusDialogueOption.png';
 
 ////// Menus
 import menuBackground from '@/game/assets/ui/menus/menuBackground.png';
@@ -121,7 +121,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('dialogueImage_YB', dialogueImage_YB);
     this.load.image('GPADJK_d2_1', GPADJK_d2_1);
     this.load.image('Scribb', Scribb);
-    this.load.image('arrowSelectDialogueOption', arrowSelectDialogueOption);
+    this.load.image('arrowFocusDialogueOption', arrowFocusDialogueOption);
   }
 
   private preloadAudioAssets(): void {
