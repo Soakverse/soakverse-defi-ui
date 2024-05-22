@@ -217,7 +217,7 @@
          "objects":[
                 {
                  "height":0,
-                 "id":1,
+                 "id":10,
                  "name":"Spawner",
                  "point":true,
                  "properties":[
@@ -240,8 +240,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":585,
-                 "y":474
+                 "x":453,
+                 "y":487
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -337,7 +337,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":10,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "properties":[
         {
