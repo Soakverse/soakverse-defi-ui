@@ -36,17 +36,17 @@ export class SW_WizhMenu extends SW_BaseMenu {
     closeButton.onClicked(this.hideMenu, this);
     this.add(closeButton);
 
-    const settingsIcon = this.scene.add.image(
+    const wizhIcon = this.scene.add.image(
       leftX,
       Math.floor(-this.height * 0.5) + 56,
-      'settingsIconTitle'
+      'wizhIconTitle'
     );
-    settingsIcon.setOrigin(0, 0);
-    this.add(settingsIcon);
+    wizhIcon.setOrigin(0, 0);
+    this.add(wizhIcon);
 
-    const settingsTitle = this.scene.add.text(
-      Math.floor(settingsIcon.x + settingsIcon.width + 8),
-      Math.floor(settingsIcon.y + settingsIcon.height * 0.5),
+    const wizhTitle = this.scene.add.text(
+      Math.floor(wizhIcon.x + wizhIcon.width + 8),
+      Math.floor(wizhIcon.y + wizhIcon.height * 0.5),
       'The Wizhing Well',
       {
         fontSize: '20px',
@@ -56,14 +56,14 @@ export class SW_WizhMenu extends SW_BaseMenu {
         align: 'left',
       }
     );
-    settingsTitle.setOrigin(0, 0.5);
-    this.add(settingsTitle);
+    wizhTitle.setOrigin(0, 0.5);
+    this.add(wizhTitle);
 
     const headerDelimiter = SW_Utils.drawDashLineOnX(
       this.scene,
       leftX,
       rightX,
-      settingsTitle.y + settingsTitle.height * 0.5 + 24,
+      wizhTitle.y + wizhTitle.height * 0.5 + 24,
       [4, 4]
     );
     this.add(headerDelimiter);
