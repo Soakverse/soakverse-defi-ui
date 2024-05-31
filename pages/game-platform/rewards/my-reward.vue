@@ -57,7 +57,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold text-white">{{ cards.title }}</h5>
                                     <p class="card-text small-text text-grey">{{ cards.text }}</p>
-                                    <NuxtLink class="btn">{{ cards.btn }}</NuxtLink>
+                                    <NuxtLink class="btn" @click="openModal()">{{ cards.btn }}</NuxtLink>
                                 </div>
                             </div>
                         </div>
@@ -65,10 +65,39 @@
                 </div>
             </div>
         </div>
+        <div class="modal-mask d-flex" v-if="isModalVisible">
+            <div class="row">
+                <div class="col-12 col-lg-9 mx-auto">
+                    <div class="modal-wrapper mx-auto">
+                        <div class="modal-container">
+                            <div class="row">
+                                <div class="col d-flex flex-row text-center">
+                                    <LootBox />
+                                </div>
+                            </div>
+                            <div>
+                                <button @click="closeModal" class="btn btn-close-modal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                        class="bi bi-x-square" viewBox="0 0 16 16">
+                                        <path
+                                            d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                        <path
+                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </template>
 
 <script setup>
+import LootBox from '~/components/GamePlatform/LootBox.vue';
+
 useHead({
     title: "Marketplace - Soakverse",
 });
@@ -79,6 +108,22 @@ definePageMeta({
 </script>
 
 <script>
+export default {
+    data() {
+        return {
+            isModalVisible: false,
+        };
+    },
+    methods: {
+        openModal() {
+            this.isModalVisible = true;
+        },
+        closeModal() {
+            this.isModalVisible = false;
+        },
+    },
+};
+
 const cardReward = [
     {
         img: "/images/game-platform/games-moment-1.png",
@@ -120,5 +165,4 @@ const cardReward = [
 
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
