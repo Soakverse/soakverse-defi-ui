@@ -6,6 +6,7 @@ import { SW_MonsterSpecialEffectWidget } from './SW_MonsterSpecialEffectWidget';
 import { SW_MonsterStatWidget } from './SW_MonsterStatWidget';
 import { SW_MonsterCard } from './MonstersCard/SW_MonsterCard';
 import { SW_MonsterMenuTab } from './SW_MonsterMenuTab';
+import { SW_Utils } from '~/game/SW_Utils';
 
 declare type SW_MonsterStatData = {
   name: string;
@@ -57,6 +58,8 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
 
     const background = this.scene.add.image(0, 0, 'monstersMenuBackground');
     this.add(background);
+
+    this.createMiddleDelimiter();
 
     this.createMonsterHeaderTitle();
     this.createMonsterProfilImage();
@@ -134,6 +137,17 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     this.currentTab = this.tabs[0];
     this.currentTabIndex = 0;
     monsterTabsSizer.layout();
+  }
+
+  protected createMiddleDelimiter(): void {
+    const middleDelimiter = SW_Utils.drawDashLineOnY(
+      this.scene,
+      -10,
+      -160,
+      154,
+      [4, 4]
+    );
+    this.add(middleDelimiter);
   }
 
   protected createMonsterHeaderTitle(): void {
