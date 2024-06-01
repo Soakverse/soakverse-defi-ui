@@ -561,7 +561,9 @@ export class SW_MapManager extends Phaser.Events.EventEmitter {
 
     const subMapName = this.getSubMapName(subMapX, subMapY);
     if (!subMapName) {
-      console.warn('SW_MapManager::trySpawnSubMap - subMapName not found');
+      console.warn(
+        `SW_MapManager::trySpawnSubMap - subMapName ${subMapName} not found`
+      );
       return;
     }
 
