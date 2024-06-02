@@ -9,9 +9,6 @@ import { SW_DialogTitle } from './SW_DialogTitle';
 import { SW_CST } from '~/game/SW_CST';
 
 declare type SW_DialogOption = {
-  /** Unique id of this option */
-  key: string;
-
   /** The text displayed for this option */
   text: string;
 

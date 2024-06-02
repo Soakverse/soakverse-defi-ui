@@ -19,7 +19,7 @@ export class SW_AudioManager extends Phaser.Events.EventEmitter {
   constructor() {
     super();
 
-    console.error('SW_AudioManager should not be instance!');
+    console.error('SW_AudioManager should not be instanciated!');
   }
 
   public static init(phaserSoundManager: SW_SoundManagerTypes): void {

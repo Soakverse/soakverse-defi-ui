@@ -12,14 +12,12 @@
     ],
     "options": [
       {
-        "key": "o0",
         "text": "Yes!",
-        "nextQuestionKey": "q2"
+        "nextQuestionKey": "q2",
       },
       {
-        "key": "o1",
         "text": "No",
-        "nextQuestionKey": "q1"
+        "nextQuestionKey": "q1",
       }
     ]
   },
@@ -43,7 +41,6 @@
     ],
     "options": [
       {
-        "key": "o10",
         "text": "Of course I am!",
         "nextQuestionKey": "q2"
       }
@@ -97,12 +94,10 @@
     ],
     "options": [
       {
-        "key": "o12",
         "text": "I have a question",
         "nextQuestionKey": "q3"
       },
       {
-        "key": "o11",
         "text": "All good",
         "nextQuestionKey": "qEnd"
       }
@@ -121,17 +116,14 @@
     ],
     "options": [
       {
-        "key": "o0",
         "text": "Who are you?",
         "nextQuestionKey": "q4"
       },
       {
-        "key": "o1",
         "text": "What is a monster?",
         "nextQuestionKey": "q5"
       },
       {
-        "key": "o3",
         "text": "All good",
         "nextQuestionKey": "qEnd"
       }
