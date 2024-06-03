@@ -7,6 +7,7 @@ import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { SW_AudioManager } from '../../../audio/SW_AudioManager';
 import { SW_DialogTitle } from './SW_DialogTitle';
 import { SW_CST } from '~/game/SW_CST';
+import { SW_GameEventManager } from '~/game/SW_GameEventManager';
 
 declare type SW_DialogOption = {
   /** The text displayed for this option */
@@ -14,6 +15,9 @@ declare type SW_DialogOption = {
 
   /** The question this option should trigger if selected */
   nextQuestionKey?: string | undefined;
+
+  /** Triggered gameplay event if this option is chosen */
+  gameplayEvent?: string;
 };
 
 const enum SW_DialogFocusSide {
@@ -469,11 +473,20 @@ export class SW_DialogQuest extends SW_BaseMenu {
   }
 
   protected onChoiceClicked(choice: SW_ButtonBase): void {
+    const nextOption = choice?.getData('option') as SW_DialogOption | undefined;
+
+    if (nextOption?.gameplayEvent && nextOption.gameplayEvent.length > 0) {
+      SW_GameEventManager.sendGameplayEvent({
+        key: nextOption.gameplayEvent,
+        source: this,
+      });
+    }
+
     this.showNextQuestion(choice);
   }
 
   protected showNextQuestion(choice?: SW_ButtonBase | undefined): void {
-    const nextOption = choice?.getData('option') as SW_DialogOption;
+    const nextOption = choice?.getData('option') as SW_DialogOption | undefined;
     let nextKey = nextOption?.nextQuestionKey;
 
     if (!nextKey) {

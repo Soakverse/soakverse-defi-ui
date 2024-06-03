@@ -13,11 +13,11 @@
     "options": [
       {
         "text": "Yes!",
-        "nextQuestionKey": "q2",
+        "nextQuestionKey": "q2"
       },
       {
         "text": "No",
-        "nextQuestionKey": "q1",
+        "nextQuestionKey": "q1"
       }
     ]
   },

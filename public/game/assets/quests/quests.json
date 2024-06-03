@@ -1,0 +1,32 @@
+[
+  {
+    "key": "Quest.Tutorial",
+    "name": "Tutorial",
+    "description": "It's time to learn the basis to survive in the Soakverse. This is the final test before starting the great adventure.",
+    "isOgQuest": true,
+    "tasks": [
+      {
+        "key": "Task1",
+        "name": "Let's talk",
+        "description": "Talk to 2 different people",
+        "eventDatas": [
+          {
+            "name": "Event.Tutorial.PeopleTalk",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "key": "Task2",
+        "name": "Wizhing Well",
+        "description": "Go to the wizhing well and feel its great power.",
+        "eventDatas": [
+          {
+            "name": "Event.WizhingWell.Interact",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  }
+]

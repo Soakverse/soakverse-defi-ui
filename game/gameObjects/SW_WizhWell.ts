@@ -1,6 +1,7 @@
 import SW_GameScene from '~/game/scenes/SW_GameScene';
 import { SW_IInteractable } from '~/game/Interactable/Interactable';
 import { SW_Player } from '~/game/characters/players/SW_Player';
+import { SW_GameEventManager } from '../SW_GameEventManager';
 
 export default class SW_WizhWell
   extends Phaser.GameObjects.Zone
@@ -31,5 +32,8 @@ export default class SW_WizhWell
 
   public onInteract(source: SW_Player): void {
     this.scene.events.emit('wizhWellRequested');
+    SW_GameEventManager.sendGameplayEvent({
+      key: 'Event.WizhingWell.Interact',
+    });
   }
 }

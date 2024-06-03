@@ -20,6 +20,7 @@ import { SW_DIRECTIONS } from '../characters/SW_CharacterMovementComponent';
 import SW_WizhWell from '../gameObjects/SW_WizhWell';
 import { SW_AudioManager } from '../audio/SW_AudioManager';
 import { SW_TiledObjectProperties, SW_Utils } from '../SW_Utils';
+import { SW_QuestManager } from '../quests/SW_QuestManager';
 
 const playerStore = usePlayerStore();
 
@@ -82,6 +83,7 @@ export default class SW_GameScene extends SW_BaseScene {
     );
 
     this.createPlayer();
+    this.setupQuestManager();
 
     this.mapManager = new SW_MapManager(
       this.player,
@@ -149,6 +151,10 @@ export default class SW_GameScene extends SW_BaseScene {
     } as SW_SpawnData);
 
     this.player.on('runStateChanged', this.onPlayerRunStateChanged, this);
+  }
+
+  protected setupQuestManager(): void {
+    SW_QuestManager.startQuest('Quest.Tutorial');
   }
 
   public createInteractableObjects(
@@ -280,24 +286,6 @@ export default class SW_GameScene extends SW_BaseScene {
       this.player
     );
     this.mapManager.clear();
-  }
-
-  public openPlayerInventory(): void {
-    this.UIScene.openPlayerInventory();
-  }
-
-  public openChestInventory(): void {
-    this.UIScene.openChestInventory();
-  }
-
-  public updatePlayerInventory(
-    newInventoryObjects: SW_InventoryObject[]
-  ): void {
-    this.UIScene.updatePlayerInventory(newInventoryObjects);
-  }
-
-  public updateChestInventory(newInventoryObjects: SW_InventoryObject[]): void {
-    this.UIScene.updateChestInventory(newInventoryObjects);
   }
 
   protected inventoryObjectClicked(

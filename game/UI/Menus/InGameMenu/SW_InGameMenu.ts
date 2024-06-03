@@ -6,6 +6,7 @@ import { SW_MonstersMenuContent } from './Contents/MonstersContent/SW_MonstersMe
 import { SW_SettingsMenuContent } from './Contents/SW_SettingsMenuContent';
 import { SW_MenuHeader } from './Header/SW_MenuHeader';
 import { SW_Utils } from '~/game/SW_Utils';
+import { SW_QuestsMenuContent } from './Contents/SW_QuestsMenuContent';
 
 export class SW_InGameMenu extends SW_BaseMenu {
   protected declare headerBar: SW_MenuHeader;
@@ -18,6 +19,7 @@ export class SW_InGameMenu extends SW_BaseMenu {
   protected declare characterContent: SW_CharacterMenuContent;
   protected declare monstersContent: SW_MonstersMenuContent;
   protected declare settingsContent: SW_SettingsMenuContent;
+  protected declare questsContent: SW_QuestsMenuContent;
 
   constructor(menuManager: SW_MenuManager, x: number, y: number) {
     super(menuManager, x, y);
@@ -57,6 +59,15 @@ export class SW_InGameMenu extends SW_BaseMenu {
           height: headerHeight,
           isSelectable: true,
           action: this.onMonstersButtonClicked,
+          actionContext: this,
+        },
+        {
+          id: 'Quests',
+          icon: 'eggzButton',
+          text: 'Quests',
+          height: headerHeight,
+          isSelectable: true,
+          action: this.onQuestsButtonClicked,
           actionContext: this,
         },
       ],
@@ -119,6 +130,13 @@ export class SW_InGameMenu extends SW_BaseMenu {
     this.characterContent.setVisible(false);
     this.add(this.characterContent);
 
+    this.questsContent = new SW_QuestsMenuContent(this.scene, 0, 0, {
+      width: this.background.width,
+      height: this.background.height,
+    });
+    this.questsContent.setVisible(false);
+    this.add(this.questsContent);
+
     this.defaultContent = this.settingsContent;
   }
 
@@ -160,6 +178,10 @@ export class SW_InGameMenu extends SW_BaseMenu {
 
   protected onSettingButtonClicked(): void {
     this.showContent(this.settingsContent);
+  }
+
+  protected onQuestsButtonClicked(): void {
+    this.showContent(this.questsContent);
   }
 
   protected onBackButtonClicked(): void {

@@ -1,9 +1,5 @@
 import { SW_CST } from '~/game/SW_CST';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
-import { SW_ENUM_IVENTORY_OBJECT } from '~/game/inventory/SW_Inventory';
-import { SW_InventoryObject } from '~/game/inventory/SW_Inventory';
-import { SW_PlayerInventoryWidget } from '~/game/inventory/SW_PlayerInventoryWidget';
-import { SW_ChestInventoryWidget } from '~/game/inventory/SW_ChestInventoryWidget';
 import { SW_DialogQuest } from '../UI/Menus/dialogues/SW_DialogQuest';
 import { SW_WizhMenu } from '../UI/Menus/WizhMenu/SW_WizhMenu';
 import { SW_MenuManager } from '../UI/Menus/SW_MenuManager';
@@ -49,13 +45,6 @@ export default class SW_GameUIScene extends SW_BaseScene {
 
     this.createMenus();
     this.createLoadingScreen();
-  }
-
-  protected createKeys(): void {
-    // if (this.input.keyboard) {
-    //   this.keys.space.on('down', this.onSpaceButtonDown, this);
-    //   this.keys.nextPage.on('down', this.onNextPageButtonDown, this);
-    // }
   }
 
   public createMenus(): void {

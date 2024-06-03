@@ -64,6 +64,8 @@ import walkButtonMobile from '@/game/assets/ui/mobile/walkButton.png';
 import interactButtonMobile from '@/game/assets/ui/mobile/interactButton.png';
 import SW_SceneDebug from './SW_SceneDebug';
 import { SW_AudioManager } from '../audio/SW_AudioManager';
+import { SW_GameEventManager } from '../SW_GameEventManager';
+import { SW_QuestManager } from '../quests/SW_QuestManager';
 
 export default class SW_BootScene extends SW_BaseScene {
   constructor() {
@@ -89,6 +91,8 @@ export default class SW_BootScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public preload(): void {
+    this.load.json('quests', `/game/assets/quests/quests.json`);
+
     SW_CST.GAME.IS_MOBILE = !this.sys.game.device.os.desktop;
 
     this.preloadAudioAssets();
@@ -183,6 +187,9 @@ export default class SW_BootScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public create(): void {
+    SW_GameEventManager.init();
+    SW_QuestManager.init(this);
+
     this.input.setDefaultCursor(
       'url(/game/assets/cursors/cursorNormal.cur), pointer'
     );
