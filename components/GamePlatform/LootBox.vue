@@ -1,14 +1,14 @@
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col text-center mx-auto">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12 text-center">
                 <div class="box">
                     <h2 class="remove text-white">Loot Box</h2>
                     <p class="my-5 remove p-title">Wizh Stone</p>
                     <i v-for="index in 100" :key="index" class="star fa-solid fa-stairs"></i>
                     <img class="pa-5 mx-auto" id="anim-img" src="/images/game-platform/test-loot-box/chest.svg">
-                    <div class="row">
-                        <div class="col-3 mx-auto" v-for="(imageLoots) in imageLoot">
+                    <div class="row justify-content-center mt-4 row-prize">
+                        <div class="col-6 col-md-4 col-lg-6 mb-3" v-for="(imageLoots, index) in imageLoot" :key="index">
                             <img class="img-fluid prize" :src="imageLoots.img">
                         </div>
                     </div>
@@ -35,26 +35,26 @@ const imageLoot = [
         title: "Eggz 3",
         img: "/images/game-platform/test-loot-box/eggz-3.jpg"
     },
-    // {
-    //     title: "Eggz 4",
-    //     img: "/images/game-platform/test-loot-box/eggz-4.jpg"
-    // },
-    // {
-    //     title: "Eggz 5",
-    //     img: "/images/game-platform/test-loot-box/eggz-5.jpg"
-    // },
-    // {
-    //     title: "Eggz 6",
-    //     img: "/images/game-platform/test-loot-box/eggz-6.jpg"
-    // },
-    // {
-    //     title: "Eggz 7",
-    //     img: "/images/game-platform/test-loot-box/eggz-7.jpg"
-    // },
-    // {
-    //     title: "Eggz 8",
-    //     img: "/images/game-platform/test-loot-box/eggz-8.jpg"
-    // }
+    {
+        title: "Eggz 4",
+        img: "/images/game-platform/test-loot-box/eggz-4.jpg"
+    },
+    {
+        title: "Eggz 5",
+        img: "/images/game-platform/test-loot-box/eggz-5.jpg"
+    },
+    {
+        title: "Eggz 6",
+        img: "/images/game-platform/test-loot-box/eggz-6.jpg"
+    },
+    {
+        title: "Eggz 7",
+        img: "/images/game-platform/test-loot-box/eggz-7.jpg"
+    },
+    {
+        title: "Eggz 8",
+        img: "/images/game-platform/test-loot-box/eggz-8.jpg"
+    }
 ]
 
 const openLoot = () => {
@@ -116,16 +116,6 @@ function selectRandom(array) {
     height: 200px;
 }
 
-// .prize {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     opacity: 0;
-//     height: auto;
-//     width: 200px;
-//     border-radius: 20px;
-// }
 .prize {
     opacity: 0;
     border-radius: 8%;
@@ -145,4 +135,17 @@ function selectRandom(array) {
     color: #e1b77e;
     font-size: 20px !important;
 }
+.box {
+    position: relative;
+    .row-prize {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    button {
+        position: relative;
+        z-index: 10;
+    }
+}
+
 </style>

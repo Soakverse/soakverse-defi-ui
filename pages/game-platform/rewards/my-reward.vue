@@ -57,7 +57,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold text-white">{{ cards.title }}</h5>
                                     <p class="card-text small-text text-grey">{{ cards.text }}</p>
-                                    <NuxtLink class="btn" @click="openModal()">{{ cards.btn }}</NuxtLink>
+                                    <NuxtLink class="btn btn-green" @click="openModal()">{{ cards.btn }}</NuxtLink>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
         <div class="modal-mask d-flex" v-if="isModalVisible">
             <div class="row">
                 <div class="col-12 col-lg-9 mx-auto">
-                    <div class="modal-wrapper mx-auto">
+                    <div class="modal-wrapper mx-auto" style="max-width: 600px;">
                         <div class="modal-container">
                             <div class="row">
                                 <div class="col d-flex flex-row text-center">
