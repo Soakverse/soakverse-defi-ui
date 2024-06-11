@@ -399,6 +399,14 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       'Only show OG quests',
       SW_CST.STYLE.TEXT.LABEL
     );
+    ogCheckboxText.setInteractive();
+    ogCheckboxText.on(
+      Phaser.Input.Events.POINTER_DOWN,
+      () => {
+        this.ogCheckbox.setChecked(!this.ogCheckbox.checked);
+      },
+      this
+    );
     ogCheckboxText.setOrigin(0, 0.5);
     this.add(ogCheckboxText);
   }
