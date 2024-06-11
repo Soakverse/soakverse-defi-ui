@@ -264,10 +264,6 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.createLeftPage();
     this.createRightPage();
 
-    // Afficher toutes les quetes actives et finies dans une liste à gauche puis donner des details a droite
-    // il pourrait y avoir une image des OGs NFT pour les quetes OGs
-    // Ajouter un message "A new quest is available" et "'blabla' quest complete" en haut au centre  --> Notification panel
-
     SW_QuestManager.on('questStarted', this.onQuestStarted, this);
     SW_QuestManager.on('questUpdated', this.onQuestUpdated, this);
     SW_QuestManager.on('questCompleted', this.onQuestCompleted, this);
@@ -288,6 +284,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     }
 
     if (value) {
+      this.questsTable.refresh();
       this.showFirstQuest();
     }
 

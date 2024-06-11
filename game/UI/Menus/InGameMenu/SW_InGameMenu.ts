@@ -140,7 +140,7 @@ export class SW_InGameMenu extends SW_BaseMenu {
     // before laying the grid table out since it can't directly be part of a container
     this.questsContent.init();
 
-    this.defaultContent = this.questsContent;
+    this.defaultContent = this.settingsContent;
   }
 
   public setVisible(value: boolean): this {
