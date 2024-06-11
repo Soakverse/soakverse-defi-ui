@@ -91,8 +91,6 @@ export default class SW_BootScene extends SW_BaseScene {
   ////////////////////////////////////////////////////////////////////////
 
   public preload(): void {
-    this.load.json('quests', `/game/assets/quests/quests.json`);
-
     SW_CST.GAME.IS_MOBILE = !this.sys.game.device.os.desktop;
 
     this.preloadAudioAssets();
@@ -102,6 +100,12 @@ export default class SW_BootScene extends SW_BaseScene {
     if (SW_CST.GAME.IS_MOBILE) {
       this.preloadMobileAssets();
     }
+
+    this.load.json('quests', `/game/assets/quests/quests.json`);
+    this.load.image(
+      'questTaskCheckIcon',
+      `/game/assets/quests/questTaskCheckIcon.png`
+    );
 
     this.load.image('objectCounterBackground', objectCounterBackground);
     this.load.image('objectCounterMinusButton', objectCounterMinusButton);

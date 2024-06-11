@@ -136,8 +136,11 @@ export class SW_InGameMenu extends SW_BaseMenu {
     });
     this.questsContent.setVisible(false);
     this.add(this.questsContent);
+    // I need questsContent to know it's parent container
+    // before laying the grid table out since it can't directly be part of a container
+    this.questsContent.init();
 
-    this.defaultContent = this.settingsContent;
+    this.defaultContent = this.questsContent;
   }
 
   public setVisible(value: boolean): this {

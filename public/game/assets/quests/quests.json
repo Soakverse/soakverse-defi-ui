@@ -3,6 +3,7 @@
     "key": "Quest.Tutorial",
     "name": "Tutorial",
     "description": "It's time to learn the basis to survive in the Soakverse. This is the final test before starting the great adventure.",
+    "imagePreview": "questTutorial",
     "isOgQuest": true,
     "tasks": [
       {
@@ -15,15 +16,55 @@
             "count": 2
           }
         ]
-      },
+      }
+    ]
+  },
+  {
+    "key": "Quest.WizhingWell",
+    "name": "Let's make a wizh",
+    "description": "A great power lies into a mysterious hidden fountain. What kind of treasure will you find there?",
+    "imagePreview": "questWizhinWell",
+    "isOgQuest": true,
+    "tasks": [
       {
-        "key": "Task2",
+        "key": "Task1",
         "name": "Wizhing Well",
-        "description": "Go to the wizhing well and feel its great power.",
+        "description": "Find the wizhing well.",
         "eventDatas": [
           {
             "name": "Event.WizhingWell.Interact",
             "count": 1
+          }
+        ]
+      },
+      {
+        "key": "Task2",
+        "name": "Make a wizh",
+        "description": "Use your wizh stone to make a wizh",
+        "eventDatas": [
+          {
+            "name": "Event.WizhingWell.WizhMade",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "Quest.MonsterCollector",
+    "name": "Monster Collector",
+    "description": "Prove to the soakverse that you are one of the best collector in the world.",
+    "imagePreview": "questMonsterCollector",
+    "isOgQuest": true,
+    "tasks": [
+      {
+        "key": "Task1",
+        "name": "",
+        "description": "Find 50 monsters",
+        "eventDatas": [
+          {
+            "name": "Event.Monster.Caught",
+            "count": 50
           }
         ]
       }

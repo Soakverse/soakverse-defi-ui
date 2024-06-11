@@ -1,9 +1,8 @@
 import { SW_CST } from '~/game/SW_CST';
 import { GridTable } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import Scrollable from 'phaser3-rex-plugins/templates/ui/utils/scrollable/Scrollable';
-import { SW_InventoryObject } from '~/game/inventory/SW_Inventory';
 
-declare type ConfigSlider = {
+declare type SW_ConfigSlider = {
   background?: Phaser.GameObjects.GameObject;
   track?: Phaser.GameObjects.GameObject;
   thumb?: Phaser.GameObjects.GameObject;
@@ -23,20 +22,24 @@ declare type ConfigSlider = {
   };
 };
 
-declare type ConfigScroller = {
+declare type SW_ConfigScroller = {
   threshold?: number;
   slidingDeceleration?: number | false;
   backDeceleration?: number | false;
   dragRate?: number;
 };
 
-declare type ConfigMouseWheel = {
+declare type SW_ConfigMouseWheel = {
   focus?: boolean;
   speed?: number;
 };
 
-export default class SW_GridTable extends GridTable {
-  public declare items: SW_InventoryObject[];
+declare type SW_GridTableItem = { key: string };
+
+export default class SW_GridTable<
+  T extends SW_GridTableItem
+> extends GridTable {
+  public declare items: T[];
 
   constructor(scene: Phaser.Scene, config: GridTable.IConfig) {
     if (config.table == undefined) {
@@ -69,7 +72,7 @@ export default class SW_GridTable extends GridTable {
     this.layout();
   }
 
-  public setItems(items?: SW_InventoryObject[] | undefined): this {
+  public setItems(items?: T[] | undefined): this {
     return super.setItems(items);
   }
 
@@ -77,30 +80,30 @@ export default class SW_GridTable extends GridTable {
     return index >= 0 && index < this.items.length;
   }
 
-  public findObjectIndex(objectId: string): number {
+  public findItemIndex(itemKey: string): number {
     for (let i = 0; i < this.items.length; ++i) {
-      if (this.items[i].id == objectId) {
+      if (this.items[i].key == itemKey) {
         return i;
       }
     }
     return -1;
   }
 
-  public addObject(object: SW_InventoryObject): void {
-    Phaser.Utils.Array.Add(this.items, object);
+  public addItem(item: T): void {
+    Phaser.Utils.Array.Add(this.items, item);
     this.refresh();
   }
 
-  public addObjectAt(object: SW_InventoryObject, index: number): void {
+  public addItemAt(item: T, index: number): void {
     if (this.isValidIndex(index)) {
-      Phaser.Utils.Array.AddAt(this.items, object, index);
+      Phaser.Utils.Array.AddAt(this.items, item, index);
     } else {
-      Phaser.Utils.Array.Add(this.items, object);
+      Phaser.Utils.Array.Add(this.items, item);
     }
     this.refresh();
   }
 
-  public removeObjectAt(index: number) {
+  public removeItemAt(index: number) {
     if (this.isValidIndex(index)) {
       Phaser.Utils.Array.RemoveAt(this.items, index);
       this.refresh();

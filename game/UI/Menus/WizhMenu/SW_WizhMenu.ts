@@ -4,6 +4,7 @@ import { SW_ButtonBase } from '../../Widgets/SW_ButtonBase';
 import { SW_BaseMenu } from '../SW_BaseMenu';
 import { SW_MenuManager } from '../SW_MenuManager';
 import { SW_Utils } from '~/game/SW_Utils';
+import { SW_GameEventManager } from '~/game/SW_GameEventManager';
 
 const wizhingWellStore = useWizhingWellStore();
 
@@ -125,6 +126,9 @@ export class SW_WizhMenu extends SW_BaseMenu {
   protected async onMakeAWizhButtonClicked(): Promise<void> {
     this.emit('makeAWizhButtonClicked');
     const name = await wizhingWellStore.triggerAction1();
+    SW_GameEventManager.sendGameplayEvent({
+      key: 'Event.WizhingWell.WizhMade',
+    });
     console.log('PLAYER NAME:' + name);
   }
 }

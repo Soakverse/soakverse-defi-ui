@@ -155,6 +155,10 @@ export default class SW_GameScene extends SW_BaseScene {
 
   protected setupQuestManager(): void {
     SW_QuestManager.startQuest('Quest.Tutorial');
+
+    SW_QuestManager.startQuest('Quest.MonsterCollector');
+
+    SW_QuestManager.startQuest('Quest.WizhingWell');
   }
 
   public createInteractableObjects(

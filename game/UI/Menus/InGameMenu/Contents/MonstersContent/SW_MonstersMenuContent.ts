@@ -5,8 +5,7 @@ import { SW_CST } from '~/game/SW_CST';
 import { SW_MonsterSpecialEffectWidget } from './SW_MonsterSpecialEffectWidget';
 import { SW_MonsterStatWidget } from './SW_MonsterStatWidget';
 import { SW_MonsterCard } from './MonstersCard/SW_MonsterCard';
-import { SW_MonsterMenuTab } from './SW_MonsterMenuTab';
-import { SW_Utils } from '~/game/SW_Utils';
+import { SW_InGameMenuTab } from '../SW_InGameMenuTab';
 
 declare type SW_MonsterStatData = {
   name: string;
@@ -29,8 +28,8 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
   protected declare monsterStatWidgets: Map<string, SW_MonsterStatWidget>;
   protected declare levelText: Phaser.GameObjects.Text;
 
-  protected declare tabs: SW_MonsterMenuTab[];
-  protected declare currentTab: SW_MonsterMenuTab | undefined;
+  protected declare tabs: SW_InGameMenuTab[];
+  protected declare currentTab: SW_InGameMenuTab | undefined;
   protected declare currentTabIndex: number;
 
   protected declare monstersData: SW_MonsterData[];
@@ -55,12 +54,8 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     }
 
     this.createMonsterTabs();
-
-    const background = this.scene.add.image(0, 0, 'monstersMenuBackground');
-    this.add(background);
-
+    this.add(this.scene.add.image(0, 0, 'monstersMenuBackground'));
     this.createMiddleDelimiter();
-
     this.createMonsterHeaderTitle();
     this.createMonsterProfilImage();
     this.createMonsterSpecialEffectWidgets();
@@ -125,7 +120,7 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     this.tabs = [];
     const maxMonsterCount = 6;
     for (let i = 0; i < maxMonsterCount; ++i) {
-      const tab = new SW_MonsterMenuTab(this.scene, 0, 0);
+      const tab = new SW_InGameMenuTab(this.scene, 0, 0);
       tab.onClicked(() => {
         this.onMonsterTabClicked(tab, i);
       }, this);
@@ -137,17 +132,6 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     this.currentTab = this.tabs[0];
     this.currentTabIndex = 0;
     monsterTabsSizer.layout();
-  }
-
-  protected createMiddleDelimiter(): void {
-    const middleDelimiter = SW_Utils.drawDashLineOnY(
-      this.scene,
-      -10,
-      -160,
-      154,
-      [4, 4]
-    );
-    this.add(middleDelimiter);
   }
 
   protected createMonsterHeaderTitle(): void {
@@ -349,10 +333,7 @@ export class SW_MonstersMenuContent extends SW_InGameMenuContent {
     }
   }
 
-  protected onMonsterTabClicked(
-    tab: SW_MonsterMenuTab,
-    tabIndex: number
-  ): void {
+  protected onMonsterTabClicked(tab: SW_InGameMenuTab, tabIndex: number): void {
     if (tab && tab != this.currentTab) {
       this.currentTab?.unselect();
       tab.select();

@@ -49,16 +49,15 @@ export class SW_QuestTask extends Phaser.Events.EventEmitter {
     }
 
     if (wasUpdated) {
-      this.emit('updated', this);
+      this.checkTaskState();
     }
-
-    this.checkTaskState();
   }
 
   protected checkTaskState(): void {
     for (const eventData of this.eventDatas) {
       // Still at least one event to get so we can stop checking
       if (eventData.count > 0) {
+        this.emit('updated', this);
         return;
       }
     }

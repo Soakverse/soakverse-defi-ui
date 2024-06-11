@@ -4,6 +4,7 @@ import { SW_QuestTask, SW_QuestTaskConfig } from './SW_QuestTask';
 export declare type SW_QuestConfig = {
   key: string;
   name: string;
+  imagePreview: string;
   description: string;
   tasks: SW_QuestTaskConfig[];
   isOgQuest?: boolean;
@@ -13,6 +14,7 @@ export class SW_Quest extends Phaser.Events.EventEmitter {
   protected key: string;
   protected name: string;
   protected description: string;
+  protected imagePreview: string;
   protected isCompleted: boolean = false;
   protected tasks: SW_QuestTask[];
   protected _isOgQuest: boolean;
@@ -23,6 +25,7 @@ export class SW_Quest extends Phaser.Events.EventEmitter {
     this.key = config.key;
     this.name = config.name;
     this.description = config.description;
+    this.imagePreview = config.imagePreview;
     this._isOgQuest = !!config.isOgQuest;
 
     this.tasks = [];
@@ -66,6 +69,8 @@ export class SW_Quest extends Phaser.Events.EventEmitter {
 
     if (this.areAllTasksCompleted()) {
       this.completeQuest();
+    } else {
+      this.emit('updated', this);
     }
   }
 
@@ -88,6 +93,10 @@ export class SW_Quest extends Phaser.Events.EventEmitter {
 
   public getDescription(): string {
     return this.description;
+  }
+
+  public getImagePreview(): string {
+    return this.imagePreview;
   }
 
   public isOgQuest(): boolean {
