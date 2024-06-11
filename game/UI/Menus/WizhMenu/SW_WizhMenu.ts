@@ -117,7 +117,6 @@ export class SW_WizhMenu extends SW_BaseMenu {
     const self = this;
     wizhingWellStore.$onAction(function (element) {
       if (element.name == 'triggerAction1') {
-        console.log(element);
         self.emit('wizhingWellResult', ['jackpot']);
       }
     }, true);
@@ -129,6 +128,5 @@ export class SW_WizhMenu extends SW_BaseMenu {
     SW_GameEventManager.sendGameplayEvent({
       key: 'Event.WizhingWell.WizhMade',
     });
-    console.log('PLAYER NAME:' + name);
   }
 }

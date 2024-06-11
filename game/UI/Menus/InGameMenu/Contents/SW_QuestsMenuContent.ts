@@ -135,10 +135,28 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
         fontSize: '11px',
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
+        maxLines: 1,
+        wordWrap: { useAdvancedWrap: true },
       }
+    );
+    this.descriptionText.setWordWrapWidth(
+      this.width - this.descriptionText.x - 28
     );
     this.descriptionText.setOrigin(0, 0);
     this.add(this.descriptionText);
+
+    const shouldElideDescription = true; // For now let's say it's always true
+
+    if (shouldElideDescription) {
+      const dotText = this.scene.add.text(
+        this.descriptionText.x + this.descriptionText.displayWidth - 2,
+        this.descriptionText.y,
+        '...',
+        this.descriptionText.style
+      );
+      dotText.setOrigin(0, 0);
+      this.add(dotText);
+    }
 
     this.updateQuest(config.questData);
   }
@@ -174,7 +192,6 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
   }
 
   public updateQuest(questData: SW_QuestWidgetData): void {
-    this.descriptionText.setText(questData.description);
     this.setAlpha(questData.isCompleted ? 0.6 : 1);
   }
 }
@@ -443,7 +460,6 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         for (let i = 0; i < questData.tasks.length; ++i) {
           const task = quest.getTasks()[i];
           questData.tasks[i].isCompleted = task.isTaskCompleted();
-          console.log('task', task);
         }
       }
     }
@@ -723,17 +739,14 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   }
 
   protected onQuestStarted(quest: SW_Quest) {
-    console.log('quest started', quest.getKey());
     this.addQuestWidget(quest);
   }
 
   protected onQuestUpdated(quest: SW_Quest) {
-    console.log('quest updated', quest.getKey());
     this.updateQuestWidget(quest);
   }
 
   protected onQuestCompleted(quest: SW_Quest) {
-    console.log('quest completed', quest.getKey());
     this.updateQuestWidget(quest);
     this.refreshQuestList();
   }
