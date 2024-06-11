@@ -24,7 +24,7 @@
     "name": "Let's make a wizh",
     "description": "A great power lies into a mysterious hidden fountain. What kind of treasure will you find there?",
     "imagePreview": "questWizhinWell",
-    "isOgQuest": true,
+    "isOgQuest": false,
     "tasks": [
       {
         "key": "Task1",

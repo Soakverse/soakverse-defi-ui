@@ -7,6 +7,7 @@ import SW_GridTable from '~/game/UI/Widgets/SW_GridTable';
 import Cell from 'phaser3-rex-plugins/plugins/gameobjects/container/gridtable/table/Cell.js';
 import { SW_InGameMenuTab } from './SW_InGameMenuTab';
 import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { Checkbox } from 'phaser3-rex-plugins/templates/ui/ui-components';
 
 declare type SW_QuestTaskWidgetData = {
   key: string;
@@ -113,7 +114,7 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
     this.titleText = this.scene.add.text(
       this.questImage.x + this.questImage.width + 12,
       1,
-      config.questData.name,
+      `${config.questData.name}${config.questData.isOgQuest ? ' [OG]' : ''}`,
       {
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
         fontSize: '13px',
@@ -174,7 +175,6 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
 
   public updateQuest(questData: SW_QuestWidgetData): void {
     this.descriptionText.setText(questData.description);
-    this.titleText.setText(questData.name);
     this.setAlpha(questData.isCompleted ? 0.6 : 1);
   }
 }
@@ -220,7 +220,6 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
 
   public updateTask(taskData: SW_QuestTaskWidgetData): void {
     this.descriptionText.setText(`◆ ${taskData.description}`);
-    console.log('updateTask', taskData);
     this.completedImage.setVisible(taskData.isCompleted);
   }
 }
@@ -245,6 +244,9 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected declare sizerRightPageContent: Sizer;
 
   protected isShowingActiveQuest: boolean = true;
+  protected isShowingOGsOnly: boolean = false;
+
+  protected declare ogCheckbox: Checkbox;
 
   constructor(
     scene: SW_BaseScene,
@@ -270,6 +272,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     SW_QuestManager.on('questUpdated', this.onQuestUpdated, this);
     SW_QuestManager.on('questCompleted', this.onQuestCompleted, this);
 
+    this.setShowOgQuestOnly(false);
     this.showActiveQuestList();
   }
 
@@ -378,6 +381,29 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.add(this.questsTitle);
 
     this.createQuestTable();
+
+    this.ogCheckbox = this.scene.add.rexCheckbox({
+      x: -this.width * 0.5 + 68,
+      y: this.height * 0.5 - 72,
+      width: 20,
+      height: 20,
+      animationDuration: 50,
+      boxLineWidth: 3,
+      color: 0xdacbb8,
+    });
+    this.ogCheckbox.on('valuechange', (value: boolean) => {
+      this.onOgCheckboxChange(value);
+    });
+    this.add(this.ogCheckbox);
+
+    const ogCheckboxText = this.scene.add.text(
+      this.ogCheckbox.x + this.ogCheckbox.width,
+      this.ogCheckbox.y,
+      'Only show OG quests',
+      SW_CST.STYLE.TEXT.LABEL
+    );
+    ogCheckboxText.setOrigin(0, 0.5);
+    this.add(ogCheckboxText);
   }
 
   protected addQuestWidget(quest: SW_Quest): void {
@@ -445,12 +471,12 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.sizerRightPageContent.setOrigin(0);
     this.add(this.sizerRightPageContent);
 
-    this.questDescription = this.scene.add.text(0, 0, 'Quest description', {
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      fontSize: '13px',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      align: 'left',
-    });
+    this.questDescription = this.scene.add.text(
+      0,
+      0,
+      'Quest description',
+      SW_CST.STYLE.TEXT.LABEL
+    );
     this.questDescription.setWordWrapWidth(330);
     this.questDescription.setOrigin(0);
     this.sizerRightPageContent.add(this.questDescription);
@@ -482,7 +508,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     const cellHeight = 44;
     const columns = 1;
     const tableWidth = cellWidth;
-    const tableHeight = 240;
+    const tableHeight = 216;
 
     this.questsTable = new SW_GridTable(this.scene, {
       x: worldTransformMatrix.tx + this.questsIcon.x - 20,
@@ -490,7 +516,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         worldTransformMatrix.ty +
         this.questsIcon.y +
         this.questsIcon.height +
-        12,
+        6,
       width: tableWidth,
       height: tableHeight,
       space: {
@@ -640,7 +666,9 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
 
       if (questIndex >= 0 && questIndex < this.questsTable.items.length) {
         const questData = this.questsTable.items[questIndex];
-        this.questTitle.setText(questData.name);
+        this.questTitle.setText(
+          `${questData.name}${questData.isOgQuest ? ' [OG]' : ''}`
+        );
         this.questDescription.setText(questData.description);
         this.tasksTable?.setItems(questData.tasks);
 
@@ -663,10 +691,13 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     const activeQuestList = [] as SW_QuestWidgetData[];
     for (const questData of this.questDatas) {
       if (!questData.isCompleted) {
-        activeQuestList.push(questData);
+        if (!this.isShowingOGsOnly || questData.isOgQuest) {
+          activeQuestList.push(questData);
+        }
       }
     }
     this.questsTable.setItems(activeQuestList);
+    this.questsTable.refresh();
     this.showFirstQuest();
     this.isShowingActiveQuest = true;
   }
@@ -675,12 +706,15 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     const completedQuestList = [] as SW_QuestWidgetData[];
     for (const questData of this.questDatas) {
       if (questData.isCompleted) {
-        completedQuestList.push(questData);
+        if (!this.isShowingOGsOnly || questData.isOgQuest) {
+          completedQuestList.push(questData);
+        }
       }
     }
     this.questsTable.setItems(completedQuestList);
+    this.questsTable.refresh();
     this.showFirstQuest();
-    this.isShowingActiveQuest = true;
+    this.isShowingActiveQuest = false;
   }
 
   protected onQuestStarted(quest: SW_Quest) {
@@ -696,11 +730,30 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected onQuestCompleted(quest: SW_Quest) {
     console.log('quest completed', quest.getKey());
     this.updateQuestWidget(quest);
+    this.refreshQuestList();
+  }
 
+  protected refreshQuestList(): void {
     if (this.isShowingActiveQuest) {
       this.showActiveQuestList();
     } else {
       this.showCompletedQuestList();
     }
+
+    this.showFirstQuest();
+  }
+
+  protected setShowOgQuestOnly(value: boolean): void {
+    this.isShowingOGsOnly = value;
+
+    if (value != this.ogCheckbox.value) {
+      this.ogCheckbox.setChecked(value);
+    }
+
+    this.refreshQuestList();
+  }
+
+  protected onOgCheckboxChange(value: boolean): void {
+    this.setShowOgQuestOnly(value);
   }
 }

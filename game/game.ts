@@ -3,6 +3,7 @@ import SW_BootScene from '~/game/scenes/SW_BootScene';
 import { SW_CST } from './SW_CST';
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import QuestPlugin from 'phaser3-rex-plugins/plugins/quest-plugin.js';
+import CheckboxPlugin from 'phaser3-rex-plugins/plugins/checkbox-plugin.js';
 import WebFontLoaderPlugin from 'phaser3-rex-plugins/plugins/webfontloader-plugin';
 
 function launch(containerId: string) {
@@ -34,6 +35,7 @@ function launch(containerId: string) {
       global: [
         { key: 'rexWebFontLoader', plugin: WebFontLoaderPlugin, start: true },
         { key: 'rexQuest', plugin: QuestPlugin, start: true },
+        { key: 'rexCheckboxPlugin', plugin: CheckboxPlugin, start: true },
       ],
     },
   });
