@@ -1,9 +1,6 @@
 <template>
   <div class="row text-white">
-    <div v-if="state.initialized == false">
-      <h3>Initializing...</h3>
-    </div>
-    <div v-else-if="!currentAccount" class="col-12">
+    <div v-if="!currentAccount" class="col-12">
       <h4>Please connect your wallet.</h4>
     </div>
     <div v-else-if="props.mintContract.chainId != currentChain" class="col-12">
@@ -18,6 +15,9 @@
       >
         Switch to Base
       </button>
+    </div>
+    <div v-else-if="state.initialized == false">
+      <h3>Initializing...</h3>
     </div>
     <div v-else-if="state.migratingIsActive" class="col-12">
       <h3>{{ props.mintContract.name }} voucher minting</h3>
@@ -102,6 +102,7 @@ const props = defineProps({
 
 const state = reactive({
   currentAccount: currentAccount.value,
+  currentChain: currentChain,
   currentBalance: 0,
   initialized: false,
   migratingIsActive: true,
@@ -110,15 +111,34 @@ const state = reactive({
 });
 
 watch(currentAccount, async () => {
-  if (process.client && currentAccount.value) {
-    state.currentAccount = currentAccount.value;
+  state.currentAccount = currentAccount.value;
+  if (
+    process.client &&
+    currentAccount.value &&
+    props.mintContract.chainId == state.currentChain
+  ) {
+    await fetchOwnerWallet();
+  }
+});
+
+watch(currentChain, async () => {
+  state.currentChain = currentChain;
+  if (
+    process.client &&
+    currentAccount.value &&
+    props.mintContract.chainId == state.currentChain
+  ) {
     await fetchOwnerWallet();
   }
 });
 
 onMounted(async () => {
   try {
-    if (process.client && currentAccount.value) {
+    if (
+      process.client &&
+      currentAccount.value &&
+      props.mintContract.chainId == state.currentChain
+    ) {
       await fetchOwnerWallet();
     }
     state.initialized = true;
