@@ -111,6 +111,7 @@ const state = reactive({
 
 watch(currentAccount, async () => {
   if (process.client && currentAccount.value) {
+    state.currentAccount = currentAccount.value;
     await fetchOwnerWallet();
   }
 });
@@ -127,28 +128,26 @@ onMounted(async () => {
 });
 
 async function fetchOwnerWallet() {
+  state.currentAccountVoucherInfo = null;
+  state.currentAccountVoucherCount = 0;
+  state.currentBalance = 0;
+
   state.currentBalance = parseInt(
     await readContract({
       address: props.mintContract.address,
       abi: props.mintContract.abi,
       functionName: 'balanceOf',
-      args: [currentAccount.value],
+      args: [state.currentAccount],
     })
   );
 
   const data = props.voucherInfo[0];
   const foundValue =
     data[state.currentAccount.toString().toLowerCase()] || null;
-  console.log(foundValue.tokens.length);
 
-  console.log(foundValue);
   if (foundValue) {
     state.currentAccountVoucherInfo = foundValue;
     state.currentAccountVoucherCount = parseInt(foundValue.tokens.length);
-  } else {
-    console.log(foundValue + ' not found');
-    state.currentAccountVoucherInfo = null;
-    state.currentAccountVoucherCount = 0;
   }
 }
 
