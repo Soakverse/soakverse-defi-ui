@@ -9,6 +9,9 @@ import { SW_PlayerInputComponent } from '../characters/players/SW_PlayerInputCom
 import { SW_Player } from '../characters/players/SW_Player';
 import { SW_PlaceNamePanel } from '../UI/SW_PlaceNamePanel';
 import { SW_BaseMenu } from '../UI/Menus/SW_BaseMenu';
+import { SW_NotificationWidget } from '../UI/Widgets/SW_NotificationWidget';
+import { SW_GameEventManager, SW_GameplayEvent } from '../SW_GameEventManager';
+import { SW_Quest, SW_QuestManager } from '../quests/SW_QuestManager';
 
 export default class SW_GameUIScene extends SW_BaseScene {
   private declare menuManager: SW_MenuManager;
@@ -21,6 +24,8 @@ export default class SW_GameUIScene extends SW_BaseScene {
   private declare placeNamePanel: SW_PlaceNamePanel;
   private declare placeNamePanelTween: Phaser.Tweens.Tween | undefined;
   private currentPlaceName: string = '';
+
+  private declare notificationWidget: SW_NotificationWidget;
 
   private declare loadingScreen: SW_BaseMenu;
 
@@ -44,10 +49,11 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.placeNamePanel.setVisible(false);
 
     this.createMenus();
+    this.createNotificationWidget();
     this.createLoadingScreen();
   }
 
-  public createMenus(): void {
+  private createMenus(): void {
     this.menuManager = new SW_MenuManager(this);
     this.menuManager.on(
       'menuVisibilityChanged',
@@ -84,7 +90,26 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.menuManager.hideMenu(this.wizhMenu);
   }
 
-  public createLoadingScreen(): void {
+  private createNotificationWidget(): void {
+    this.notificationWidget = new SW_NotificationWidget(
+      this,
+      SW_CST.GAME.WIDTH * 0.5,
+      12
+    );
+
+    SW_QuestManager.on(
+      'questCompleted',
+      (quest: SW_Quest) => {
+        const notificationMessage = quest.isOgQuest()
+          ? `OG Quest completed, congratulation!`
+          : `Quest completed`;
+        this.notificationWidget.addNotification({ text: notificationMessage });
+      },
+      this
+    );
+  }
+
+  private createLoadingScreen(): void {
     this.loadingScreen = new SW_BaseMenu(this.menuManager, 0, 0);
     this.loadingScreen.setSize(SW_CST.GAME.WIDTH, SW_CST.GAME.HEIGHT);
 
