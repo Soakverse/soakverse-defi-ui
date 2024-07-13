@@ -178,6 +178,12 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('statLuckIcon', statLuckIcon);
     this.load.image('statMagicIcon', statMagicIcon);
     this.load.image('statSpeedIcon', statSpeedIcon);
+
+    this.load.image(
+      'placeNameBackground',
+      '/game/assets/ui/placeNameBackground.png'
+    );
+    this.load.image('compassIcon', '/game/assets/ui/compassIcon.png');
   }
 
   private preloadMobileAssets(): void {
