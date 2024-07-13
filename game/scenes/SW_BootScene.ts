@@ -183,6 +183,10 @@ export default class SW_BootScene extends SW_BaseScene {
       'placeNameBackground',
       '/game/assets/ui/placeNameBackground.png'
     );
+    this.load.image(
+      'notificationBackground',
+      '/game/assets/ui/notificationBackground.png'
+    );
     this.load.image('compassIcon', '/game/assets/ui/compassIcon.png');
   }
 

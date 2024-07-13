@@ -18,34 +18,43 @@ class SW_NotificationElement extends Phaser.GameObjects.Container {
   public declare scene: SW_BaseScene;
 
   protected textObject: BBCodeText;
-  protected background: RoundRectangle;
+  protected background: Phaser.GameObjects.Image;
 
-  constructor(scene: SW_BaseScene, x: number, y: number, width: number, height: number) {
+  constructor(
+    scene: SW_BaseScene,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
     super(scene, x, y);
     this.scene.add.existing(this);
 
-    this.background = this.scene.rexUI.add.roundRectangle(0, 0, width, height - 4, 3, 0xc4b6a5, 1.0);
+    this.background = this.scene.add.image(0, 0, 'notificationBackground');
     this.background.setOrigin(0.5, 0);
-    this.background.setStrokeStyle(2, SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.TEXT), 1.0);
     this.add(this.background);
 
     this.width = this.background.width;
     this.height = this.background.height;
 
-    this.textObject = this.scene.rexUI.add.BBCodeText(0, this.height * 0.5, '', {
-      align: 'center',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      //   fontStyle: 'bold',
-      fontSize: '15px',
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-    });
+    this.textObject = this.scene.rexUI.add.BBCodeText(
+      0,
+      this.height * 0.5,
+      '',
+      {
+        align: 'center',
+        color: SW_CST.STYLE.COLOR.TEXT,
+        // fontStyle: 'bold', Use [b] instead
+        fontSize: '16px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+      }
+    );
     this.textObject.setOrigin(0.5);
     this.add(this.textObject);
   }
 
   public setText(text: string): void {
     this.textObject.setText(text);
-    this.background.resize(this.textObject.width + 16, this.background.height);
 
     this.width = this.background.width;
     this.height = this.background.height;
@@ -70,8 +79,14 @@ export class SW_NotificationWidget extends Phaser.GameObjects.Container {
 
   public addNotification(notificationData: ML_NotificationData): void {
     const notifHeight = 36;
-    const newNotifElement = new SW_NotificationElement(this.scene, 0, 0, 100, notifHeight);
-    newNotifElement.setText(notificationData.text);
+    const newNotifElement = new SW_NotificationElement(
+      this.scene,
+      0,
+      0,
+      100,
+      notifHeight
+    );
+    newNotifElement.setText(`[b]${notificationData.text}[/b]`);
     this.add(newNotifElement);
 
     for (const notifElement of this.visibleNotifications) {
