@@ -12,8 +12,8 @@ import { Checkbox } from 'phaser3-rex-plugins/templates/ui/ui-components';
 declare type SW_QuestTaskWidgetData = {
   key: string;
   name: string;
-  // targetCount: number;
-  // currentCount: number;
+  targetCount: number;
+  currentCount: number;
   description: string;
   isCompleted: boolean;
 };
@@ -201,6 +201,7 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
 
   protected descriptionText: Phaser.GameObjects.Text;
   protected completedImage: Phaser.GameObjects.Image;
+  protected counterText: Phaser.GameObjects.Text;
 
   constructor(scene: SW_BaseScene, config: SW_TaskWidgetConfig) {
     super(scene, config.x, config.y);
@@ -209,20 +210,25 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
     this.width = config.width;
     this.height = config.height;
 
-    this.descriptionText = this.scene.add.text(
-      0,
-      this.height * 0.5,
-      config.taskData.description,
-      {
-        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        fontSize: '14px',
-        color: SW_CST.STYLE.COLOR.TEXT,
-        align: 'left',
-      }
-    );
-    this.descriptionText.setWordWrapWidth(this.width);
+    this.descriptionText = this.scene.add.text(0, this.height * 0.5, '', {
+      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+      fontSize: '14px',
+      color: SW_CST.STYLE.COLOR.TEXT,
+      align: 'left',
+    });
+    this.descriptionText.setWordWrapWidth(this.width - 44);
     this.descriptionText.setOrigin(0, 0.5);
     this.add(this.descriptionText);
+
+    this.counterText = this.scene.add.text(this.width, this.height * 0.5, '', {
+      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+      fontSize: '12px',
+      color: SW_CST.STYLE.COLOR.TEXT,
+      align: 'right',
+      fontStyle: 'bold',
+    });
+    this.counterText.setOrigin(1, 0.5);
+    this.add(this.counterText);
 
     this.completedImage = this.scene.add.image(
       this.width,
@@ -237,6 +243,12 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
 
   public updateTask(taskData: SW_QuestTaskWidgetData): void {
     this.descriptionText.setText(`◆ ${taskData.description}`);
+    this.counterText.setText(
+      `${taskData.currentCount} / ${taskData.targetCount}`
+    );
+    this.counterText.setVisible(
+      taskData.targetCount > 1 && !taskData.isCompleted
+    );
     this.completedImage.setVisible(taskData.isCompleted);
   }
 }
@@ -436,6 +448,8 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         name: task.getName(),
         description: task.getDescription(),
         isCompleted: task.isTaskCompleted(),
+        targetCount: task.getTargetCount(),
+        currentCount: task.getCurrentCount(),
       });
     }
 
@@ -460,6 +474,8 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         for (let i = 0; i < questData.tasks.length; ++i) {
           const task = quest.getTasks()[i];
           questData.tasks[i].isCompleted = task.isTaskCompleted();
+          questData.tasks[i].targetCount = task.getTargetCount();
+          questData.tasks[i].currentCount = task.getCurrentCount();
         }
       }
     }

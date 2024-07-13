@@ -20,6 +20,8 @@ export class SW_QuestTask extends Phaser.Events.EventEmitter {
   protected isCompleted: boolean = false;
 
   protected eventDatas: SW_EventData[] = [];
+  protected targetCount: number;
+  protected currentCount: number;
 
   constructor(config: SW_QuestTaskConfig) {
     super();
@@ -28,6 +30,14 @@ export class SW_QuestTask extends Phaser.Events.EventEmitter {
     this.name = config.name;
     this.description = config.description;
     this.eventDatas = config.eventDatas;
+
+    // For now, just stack all the action into one counter. We will see if that's a problem later
+    this.targetCount = 0;
+    this.currentCount = 0;
+
+    for (const eventData of this.eventDatas) {
+      this.targetCount += eventData.count;
+    }
   }
 
   public startTask(): void {
@@ -44,6 +54,7 @@ export class SW_QuestTask extends Phaser.Events.EventEmitter {
     for (const eventData of this.eventDatas) {
       if (this.eventNamesMatches(eventData, event.key)) {
         --eventData.count;
+        ++this.currentCount;
         wasUpdated = true;
       }
     }
@@ -96,5 +107,13 @@ export class SW_QuestTask extends Phaser.Events.EventEmitter {
 
   public getDescription(): string {
     return this.description;
+  }
+
+  public getTargetCount(): number {
+    return this.targetCount;
+  }
+
+  public getCurrentCount(): number {
+    return this.currentCount;
   }
 }
