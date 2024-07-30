@@ -28,7 +28,7 @@ export class SW_PlaceNamePanel extends Phaser.GameObjects.Container {
     compassIcon.setOrigin(0, 0.5);
     this.add(compassIcon);
 
-    this.textObject = this.scene.add.text(0, 2, '', {
+    this.textObject = this.scene.add.text(compassIcon.width * 0.5, 2, '', {
       align: 'center',
       color: SW_CST.STYLE.COLOR.TEXT,
       fontStyle: 'bold',
