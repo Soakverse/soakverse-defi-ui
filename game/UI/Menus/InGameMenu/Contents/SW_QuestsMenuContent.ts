@@ -274,8 +274,6 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   public declare scene: SW_BaseScene;
 
   protected questDatas: SW_QuestWidgetData[] = [];
-  protected declare questsTitle: Phaser.GameObjects.Text;
-  protected declare questsIcon: Phaser.GameObjects.Image;
   protected declare questsTable: SW_GridTable<SW_QuestWidgetData>;
   protected declare tasksTable: SW_GridTable<SW_QuestTaskWidgetData>;
 
@@ -399,31 +397,6 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   }
 
   protected createLeftPage(): void {
-    const leftX = Math.floor(-this.width * 0.5 + 64);
-
-    this.questsIcon = this.scene.add.image(
-      leftX,
-      Math.floor(-this.height * 0.5) + 64,
-      'settingsIconTitle'
-    );
-    this.questsIcon.setOrigin(0, 0);
-    this.add(this.questsIcon);
-
-    this.questsTitle = this.scene.add.text(
-      Math.floor(this.questsIcon.x + this.questsIcon.width + 8),
-      Math.floor(this.questsIcon.y + this.questsIcon.height * 0.5),
-      'Quests',
-      {
-        fontSize: '20px',
-        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        fontStyle: 'bold',
-        color: SW_CST.STYLE.COLOR.TEXT,
-        align: 'left',
-      }
-    );
-    this.questsTitle.setOrigin(0, 0.5);
-    this.add(this.questsTitle);
-
     this.createQuestTable();
 
     this.ogCheckbox = this.scene.add.rexCheckbox({
@@ -581,12 +554,8 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     const tableHeight = 216;
 
     this.questsTable = new SW_GridTable(this.scene, {
-      x: worldTransformMatrix.tx + this.questsIcon.x - 20,
-      y:
-        worldTransformMatrix.ty +
-        this.questsIcon.y +
-        this.questsIcon.height +
-        6,
+      x: Math.floor(worldTransformMatrix.tx + -this.width * 0.5 + 44),
+      y: Math.floor(worldTransformMatrix.ty - this.height * 0.5 + 56),
       width: tableWidth,
       height: tableHeight,
       space: {
