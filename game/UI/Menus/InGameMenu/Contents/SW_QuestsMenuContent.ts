@@ -114,7 +114,7 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
     this.titleText = this.scene.add.text(
       this.questImage.x + this.questImage.width + 12,
       1,
-      `${config.questData.name}${config.questData.isOgQuest ? ' [OG]' : ''}`,
+      `${config.questData.name}`,
       {
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
         fontSize: '13px',
@@ -125,6 +125,23 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
     );
     this.titleText.setOrigin(0, 0);
     this.add(this.titleText);
+
+    if (config.questData.isOgQuest) {
+      const questOgIndicator = this.scene.add.text(
+        this.titleText.x + this.titleText.width + 4,
+        this.titleText.y,
+        'OG',
+        {
+          fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+          fontSize: '10px',
+          color: '#95262B',
+          align: 'left',
+          fontStyle: 'bold',
+        }
+      );
+      questOgIndicator.setOrigin(0, 0);
+      this.add(questOgIndicator);
+    }
 
     this.descriptionText = this.scene.add.text(
       this.titleText.x,
@@ -263,6 +280,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected declare tasksTable: SW_GridTable<SW_QuestTaskWidgetData>;
 
   protected declare questTitle: Phaser.GameObjects.Text;
+  protected declare questOgIndicator: Phaser.GameObjects.Text;
   protected declare questDescription: Phaser.GameObjects.Text;
 
   protected currentQuestWidget: SW_QuestWidget | null = null;
@@ -499,6 +517,21 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.questTitle.setOrigin(0);
     this.add(this.questTitle);
 
+    this.questOgIndicator = this.scene.add.text(
+      this.questTitle.x + this.questTitle.width,
+      this.questTitle.y - 4,
+      'OG',
+      {
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        fontSize: '11px',
+        color: '#95262B',
+        align: 'left',
+        fontStyle: 'bold',
+      }
+    );
+    this.questOgIndicator.setOrigin(0, 0);
+    this.add(this.questOgIndicator);
+
     this.sizerRightPageContent = this.scene.rexUI.add.sizer({
       x: this.questTitle.x - 6,
       y: this.questTitle.y + this.questTitle.height + 24,
@@ -703,8 +736,10 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
 
       if (questIndex >= 0 && questIndex < this.questsTable.items.length) {
         const questData = this.questsTable.items[questIndex];
-        this.questTitle.setText(
-          `${questData.name}${questData.isOgQuest ? ' [OG]' : ''}`
+        this.questTitle.setText(`${questData.name}`);
+        this.questOgIndicator.setVisible(questData.isOgQuest);
+        this.questOgIndicator.setX(
+          this.questTitle.x + this.questTitle.width + 4
         );
         this.questDescription.setText(questData.description);
         this.tasksTable?.setItems(questData.tasks);
