@@ -51,6 +51,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
   protected declare dialogTextBox: SW_DialogTextBox;
 
   protected declare choiceSizer: Sizer;
+  protected declare dialogueChoicesBackground: Phaser.GameObjects.Image;
   protected declare dialogChoices: SW_ButtonBase[];
   protected declare focusedChoice: SW_ButtonBase | undefined;
   protected declare arrowFocusedChoice: Phaser.GameObjects.Image;
@@ -205,10 +206,17 @@ export class SW_DialogQuest extends SW_BaseMenu {
   }
 
   protected createDialogChoices(): void {
+    this.dialogueChoicesBackground = this.scene.add.image(
+      0,
+      0,
+      'dialogueChoicesBackground'
+    );
+    this.add(this.dialogueChoicesBackground);
+
     this.choiceSizer = this.scene.rexUI.add.sizer({
-      x: 0,
-      y: 0,
-      width: 220,
+      x: this.dialogueChoicesBackground.x,
+      y: this.dialogueChoicesBackground.y,
+      width: 200,
       orientation: 'top-to-bottom',
       space: { item: 20 },
     });
@@ -221,11 +229,25 @@ export class SW_DialogQuest extends SW_BaseMenu {
     for (let i = 0; i < this.maxChoiceCount; ++i) {
       const choice = new SW_ButtonBase(this.scene, 0, 0, {
         width: this.choiceSizer.width,
-        height: 48,
-        backgroundObject: this.scene.rexUI.add.roundRectangle(0, 0, 1, 1, 4),
+        height: 40,
+        backgroundObject: this.scene.rexUI.add.roundRectangle(
+          0,
+          0,
+          1,
+          1,
+          6,
+          0xdacbb8
+        ),
         colorBackgroundNormal: 0xdacbb8,
+        colorBackgroundHovered: 0xe1b67e,
+        colorBackgroundPressed: 0xd4a972,
         text: '',
-        textStyle: { fontSize: '22px' },
+        textStyle: { fontSize: '20px', color: '#4D2B1D' },
+        strokeThicknessBackgroundNormal: 0,
+        strokeThicknessBackgroundHovered: 2,
+        strokeColorBackgroundHovered: 0xffffff,
+        strokeThicknessBackgroundPressed: 2,
+        strokeColorBackgroundPressed: 0xfbfbfb,
       });
       choice.onHovered(() => {
         this.focusChoice(choice);
@@ -523,6 +545,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
     this.visibleChoiceCount = 0;
 
+    this.dialogueChoicesBackground.setVisible(false);
+
     this.continueText.setVisible(true);
     this.updateBackgroundLines();
   }
@@ -531,6 +555,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
     if (!this.currentQuestion || !this.currentQuestion.options) {
       return;
     }
+
+    this.dialogueChoicesBackground.setVisible(true);
 
     const optionCount = this.currentQuestion.options.length;
     const dialogChoiceCount = this.dialogChoices.length;
