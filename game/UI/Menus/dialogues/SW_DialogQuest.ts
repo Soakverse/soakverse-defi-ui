@@ -62,6 +62,11 @@ export class SW_DialogQuest extends SW_BaseMenu {
   protected declare backgroundEntityLeft: Phaser.GameObjects.Image;
   protected declare backgroundEntityRight: Phaser.GameObjects.Image;
 
+  protected declare backgroundLineTop: Phaser.GameObjects.Line;
+  protected declare backgroundLineBottom: Phaser.GameObjects.Line;
+
+  protected declare continueText: Phaser.GameObjects.Text;
+
   /** Dialog filename in cache, so we don't need to reload the file if used several times */
   protected declare cacheDialogJson: string;
 
@@ -133,8 +138,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.dialogTextBox = new SW_DialogTextBox(this.scene, {
       x: 0,
       y: this.height * 0.5 - 24,
-      width: this.width - 200,
-      height: 86,
+      width: this.width - 160,
+      height: 100,
       page: { maxLines: 2, pageBreak: '\n' },
     });
     this.dialogTextBox.setOrigin(0.5, 1);
@@ -163,6 +168,31 @@ export class SW_DialogQuest extends SW_BaseMenu {
       );
       this.add(continueTouchZone);
     }
+
+    const linePaddingY = 20;
+    this.continueText = this.scene.add.text(
+      this.dialogTextBox.right - 12,
+      this.dialogTextBox.bottom - linePaddingY,
+      'Continue >',
+      {
+        align: 'center',
+        color: '#E1B67D',
+        fontSize: '11px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+      }
+    );
+    this.continueText.setOrigin(1, 0.5);
+    this.add(this.continueText);
+
+    this.backgroundLineTop = this.scene.add.line(0, 0, 0, 0, 0, 0);
+    this.backgroundLineTop.setStrokeStyle(10, 0x4c3d2b, 1);
+    this.backgroundLineTop.setOrigin(0, 0.5);
+    this.add(this.backgroundLineTop);
+
+    this.backgroundLineBottom = this.scene.add.line(0, 0, 0, 0, 0, 0);
+    this.backgroundLineBottom.setStrokeStyle(10, 0x4c3d2b, 1);
+    this.backgroundLineBottom.setOrigin(0, 0.5);
+    this.add(this.backgroundLineBottom);
   }
 
   protected createDialogTitle(): void {
@@ -308,6 +338,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
       const title = dialogData.title ?? this.currentQuestion.title;
 
       this.updateTitle(title, dialogData.focusSide);
+      this.updateBackgroundLines(dialogData.focusSide);
 
       this.updateEntityBackgrounds(
         dialogData.backgroundEntityLeft,
@@ -339,21 +370,73 @@ export class SW_DialogQuest extends SW_BaseMenu {
     focusSide?: SW_DialogFocusSide | undefined
   ): void {
     if (title && title.length > 0) {
+      const padding = 24;
+
       this.titleContent.setText(title);
 
       if (focusSide == SW_DialogFocusSide.Right) {
         this.titleContent.setX(
-          this.dialogTextBox.right - this.titleContent.width * 0.5 + 12
+          this.dialogTextBox.right - this.titleContent.width * 0.5 + padding
         );
       } else {
         this.titleContent.setX(
-          this.dialogTextBox.left + this.titleContent.width * 0.5 - 12
+          this.dialogTextBox.left + this.titleContent.width * 0.5 - padding
         );
       }
 
       this.titleContent.setVisible(true);
     } else {
       this.titleContent.setVisible(false);
+    }
+  }
+
+  protected updateBackgroundLines(
+    focusSide?: SW_DialogFocusSide | undefined
+  ): void {
+    const linePaddingX = 16;
+    const linePaddingY = 20;
+
+    const dialogueContentLeft = this.dialogTextBox.left + linePaddingX;
+    const dialogueContentRight = this.dialogTextBox.right - linePaddingX;
+    const lineTopY = this.dialogTextBox.top + linePaddingY;
+    const continueLeft = this.continueText.x - this.continueText.width - 12;
+
+    this.backgroundLineBottom.setTo(
+      dialogueContentLeft,
+      this.continueText.y,
+      this.continueText.visible ? continueLeft : dialogueContentRight,
+      this.continueText.y
+    );
+
+    if (!this.titleContent.visible) {
+      this.backgroundLineTop.setTo(
+        dialogueContentLeft,
+        lineTopY,
+        dialogueContentRight,
+        lineTopY
+      );
+    } else {
+      if (focusSide == SW_DialogFocusSide.Left) {
+        const titleContentRight =
+          this.titleContent.x + this.titleContent.width * 0.5;
+
+        this.backgroundLineTop.setTo(
+          titleContentRight + linePaddingX,
+          lineTopY,
+          dialogueContentRight,
+          lineTopY
+        );
+      } else {
+        const titleContentLeft =
+          this.titleContent.x - this.titleContent.width * 0.5;
+
+        this.backgroundLineTop.setTo(
+          dialogueContentLeft,
+          lineTopY,
+          titleContentLeft - linePaddingX,
+          lineTopY
+        );
+      }
     }
   }
 
@@ -439,6 +522,9 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.arrowFocusedChoice.setVisible(false);
 
     this.visibleChoiceCount = 0;
+
+    this.continueText.setVisible(true);
+    this.updateBackgroundLines();
   }
 
   protected updateAllChoices(): void {
@@ -465,6 +551,9 @@ export class SW_DialogQuest extends SW_BaseMenu {
     this.focusChoice(this.dialogChoices[0]);
     this.updateArrow();
     this.arrowFocusedChoice.setVisible(true);
+
+    this.continueText.setVisible(false);
+    this.updateBackgroundLines();
   }
 
   protected updateChoice(choice: SW_ButtonBase, option: SW_DialogOption): void {

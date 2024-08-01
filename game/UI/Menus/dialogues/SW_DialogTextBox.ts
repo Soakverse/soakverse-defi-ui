@@ -10,9 +10,9 @@ export class SW_DialogTextBox extends TextBox {
     config.width = config.width ?? 400;
     config.height = config.height ?? 80;
     config.space = {
-      left: 16,
-      right: 16,
-      top: 26,
+      left: 24,
+      right: 24,
+      top: 32,
       bottom: 16,
       icon: 16,
       text: 0,
@@ -30,7 +30,7 @@ export class SW_DialogTextBox extends TextBox {
       config.height -
         (config.space.top as number) -
         (config.space.bottom as number),
-      3,
+      8,
       SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.BLACK),
       0.86
     );
@@ -41,13 +41,11 @@ export class SW_DialogTextBox extends TextBox {
     background.setInteractive();
 
     config.background = background;
-    // config.separator = scene.rexUI.add.roundRectangle(0, 0, 10, 1, 0, SW_Utils.hexColorToNumber(CST.STYLE.COLOR.BLUE));
-    //config.title = scene.add.text(0, 0, "", { fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY, fontSize: "16px", fontStyle: "bold", color: SW_CST.STYLE.COLOR.BLUE, align: "left"});
-    // config.icon = scene.add.image(0, 0, "").setScale(1.1);
+
     config.text = scene.add
       .text(0, 0, '', {
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        fontSize: '14px',
+        fontSize: '13px',
         color: SW_CST.STYLE.COLOR.WHITE,
         align: 'left',
         wordWrap: {

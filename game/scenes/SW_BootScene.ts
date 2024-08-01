@@ -184,6 +184,10 @@ export default class SW_BootScene extends SW_BaseScene {
       '/game/assets/ui/placeNameBackground.png'
     );
     this.load.image(
+      'dialogueTitleBackground',
+      '/game/assets/ui/dialogueTitleBackground.png'
+    );
+    this.load.image(
       'notificationBackground',
       '/game/assets/ui/notificationBackground.png'
     );

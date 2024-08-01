@@ -7,27 +7,14 @@ export class SW_DialogTitle extends Phaser.GameObjects.Container {
   public declare scene: SW_BaseScene;
 
   protected textObject: Phaser.GameObjects.Text;
-  protected background: RoundRectangle;
+  protected background: Phaser.GameObjects.Image;
 
   constructor(scene: SW_BaseScene, x: number, y: number) {
     super(scene, x, y);
     this.scene.add.existing(this);
 
-    this.background = this.scene.rexUI.add.roundRectangle(
-      0,
-      0,
-      120,
-      32,
-      3,
-      0xc4b6a5,
-      1.0
-    );
+    this.background = this.scene.add.image(0, 0, 'dialogueTitleBackground');
     this.background.setOrigin(0.5);
-    this.background.setStrokeStyle(
-      2,
-      SW_Utils.hexColorToNumber(SW_CST.STYLE.COLOR.TEXT),
-      1.0
-    );
     this.add(this.background);
 
     this.width = this.background.width;
@@ -36,8 +23,8 @@ export class SW_DialogTitle extends Phaser.GameObjects.Container {
     this.textObject = this.scene.add.text(0, 0, '', {
       align: 'center',
       color: SW_CST.STYLE.COLOR.TEXT,
-      //   fontStyle: 'bold',
-      fontSize: '15px',
+      fontStyle: 'bold',
+      fontSize: '14px',
       fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
     });
     this.textObject.setOrigin(0.5);
@@ -46,7 +33,6 @@ export class SW_DialogTitle extends Phaser.GameObjects.Container {
 
   public setText(text: string): void {
     this.textObject.setText(text);
-    // this.background.resize(this.textObject.width + 16, this.background.height);
 
     this.width = this.background.width;
     this.height = this.background.height;
