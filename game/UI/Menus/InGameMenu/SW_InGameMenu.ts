@@ -63,7 +63,7 @@ export class SW_InGameMenu extends SW_BaseMenu {
         },
         {
           id: 'Quests',
-          icon: 'eggzButton',
+          icon: 'questButton',
           text: 'Quests',
           height: headerHeight,
           isSelectable: true,

@@ -31,6 +31,7 @@ import wizhingWellBackground from '@/game/assets/ui/menus/wizhingWellBackground.
 
 import backButton from '@/game/assets/ui/menus/backButton.png';
 import eggzButton from '@/game/assets/ui/menus/eggzButton.png';
+import questButton from '@/game/assets/ui/menus/questButton.png';
 import closeButtonNormal from '@/game/assets/ui/menus/closeButtonNormal.png';
 import closeButtonHovered from '@/game/assets/ui/menus/closeButtonHovered.png';
 import closeButtonPressed from '@/game/assets/ui/menus/closeButtonPressed.png';
@@ -168,6 +169,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('closeButtonPressed', closeButtonPressed);
     this.load.image('characterButton', characterButton);
     this.load.image('eggzButton', eggzButton);
+    this.load.image('questButton', questButton);
     this.load.image('settingsButton', settingsButton);
     this.load.image('settingsIconTitle', settingsIconTitle);
     this.load.image('wizhIconTitle', wizhIconTitle);
