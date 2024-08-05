@@ -323,6 +323,10 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   }
 
   public setVisible(value: boolean): this {
+    if (value) {
+      this.refreshQuestList();
+    }
+
     if (this.questsTable) {
       this.questsTable.setVisible(value);
       this.questsTable.setDepth(this.depth + this.parentContainer?.depth ?? 0);
@@ -330,14 +334,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
 
     if (this.tasksTable) {
       this.tasksTable.setDepth(this.depth + this.parentContainer?.depth ?? 0);
-
-      if (!value) {
-        this.tasksTable.setVisible(false);
-      }
-    }
-
-    if (value) {
-      this.refreshQuestList();
+      this.tasksTable.setVisible(value);
     }
 
     return super.setVisible(value);
