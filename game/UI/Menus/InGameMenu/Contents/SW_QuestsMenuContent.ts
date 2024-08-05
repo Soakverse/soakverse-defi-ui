@@ -6,6 +6,7 @@ import { SW_Quest, SW_QuestManager } from '~/game/quests/SW_QuestManager';
 import SW_GridTable from '~/game/UI/Widgets/SW_GridTable';
 import Cell from 'phaser3-rex-plugins/plugins/gameobjects/container/gridtable/table/Cell.js';
 import { SW_InGameMenuTab } from './SW_InGameMenuTab';
+import { BBCodeText } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { Checkbox } from 'phaser3-rex-plugins/templates/ui/ui-components';
 
@@ -295,6 +296,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected isShowingOGsOnly: boolean = false;
 
   protected declare ogCheckbox: Checkbox;
+  protected declare activeQuestCountText: BBCodeText;
 
   constructor(
     scene: SW_BaseScene,
@@ -335,8 +337,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     }
 
     if (value) {
-      this.questsTable.refresh();
-      this.showFirstQuest();
+      this.refreshQuestList();
     }
 
     return super.setVisible(value);
@@ -420,10 +421,15 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.add(this.ogCheckbox);
 
     const ogCheckboxText = this.scene.add.text(
-      this.ogCheckbox.x + this.ogCheckbox.width,
+      this.ogCheckbox.x + this.ogCheckbox.width * 0.5 + 4,
       this.ogCheckbox.y,
-      'Only show OG quests',
-      SW_CST.STYLE.TEXT.LABEL
+      'Show OG quests',
+      {
+        fontSize: '12px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        color: SW_CST.STYLE.COLOR.TEXT,
+        align: 'left',
+      }
     );
     ogCheckboxText.setInteractive();
     ogCheckboxText.on(
@@ -435,6 +441,20 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     );
     ogCheckboxText.setOrigin(0, 0.5);
     this.add(ogCheckboxText);
+
+    this.activeQuestCountText = this.scene.rexUI.add.BBCodeText(
+      -44,
+      ogCheckboxText.y,
+      '',
+      {
+        fontSize: '12px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        color: SW_CST.STYLE.COLOR.TEXT,
+        align: 'left',
+      }
+    );
+    this.activeQuestCountText.setOrigin(1, 0.5);
+    this.add(this.activeQuestCountText);
   }
 
   protected addQuestWidget(quest: SW_Quest): void {
@@ -575,7 +595,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     const tableHeight = 216;
 
     this.questsTable = new SW_GridTable(this.scene, {
-      x: Math.floor(worldTransformMatrix.tx + -this.width * 0.5 + 44),
+      x: Math.floor(worldTransformMatrix.tx - this.width * 0.5 + 44),
       y: Math.floor(worldTransformMatrix.ty - this.height * 0.5 + 56),
       width: tableWidth,
       height: tableHeight,
@@ -815,6 +835,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
 
   protected onQuestStarted(quest: SW_Quest) {
     this.addQuestWidget(quest);
+    this.refreshQuestList();
   }
 
   protected onQuestUpdated(quest: SW_Quest) {
@@ -833,6 +854,19 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       this.showCompletedQuestList();
     }
 
+    const activeQuestCount = this.questDatas.filter(
+      (questData: SW_QuestWidgetData) => {
+        return (
+          !questData.isCompleted &&
+          (questData.isOgQuest || !this.isShowingOGsOnly)
+        );
+      }
+    ).length;
+    this.activeQuestCountText.setText(
+      `[b]${activeQuestCount}[/b] Active Quest${
+        activeQuestCount > 1 ? 's' : ''
+      }`
+    );
     this.showFirstQuest();
   }
 
