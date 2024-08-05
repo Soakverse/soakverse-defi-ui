@@ -259,7 +259,7 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
   }
 
   public updateTask(taskData: SW_QuestTaskWidgetData): void {
-    this.descriptionText.setText(`◆ ${taskData.description}`);
+    this.descriptionText.setText(`${taskData.description}`);
     this.counterText.setText(
       `${taskData.currentCount} / ${taskData.targetCount}`
     );
@@ -281,13 +281,15 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected declare questOgIndicator: Phaser.GameObjects.Text;
   protected declare questDelimiter: Phaser.GameObjects.Line;
   protected declare questDescription: Phaser.GameObjects.Text;
+  protected declare objectivesTitle: Phaser.GameObjects.Text;
+  protected declare objectivesCounterText: Phaser.GameObjects.Text;
 
   protected currentQuestWidget: SW_QuestWidget | null = null;
 
   protected declare tabs: SW_InGameMenuTab[];
   protected declare currentTab: SW_InGameMenuTab | undefined;
   protected declare currentTabIndex: number;
-  protected declare sizerRightPageContent: Sizer;
+  protected declare rightContainer: Phaser.GameObjects.Container;
 
   protected isShowingActiveQuest: boolean = true;
   protected isShowingOGsOnly: boolean = false;
@@ -325,8 +327,11 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     }
 
     if (this.tasksTable) {
-      this.tasksTable.setVisible(value);
       this.tasksTable.setDepth(this.depth + this.parentContainer?.depth ?? 0);
+
+      if (!value) {
+        this.tasksTable.setVisible(false);
+      }
     }
 
     if (value) {
@@ -476,6 +481,9 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   }
 
   protected createRightPage(): void {
+    this.rightContainer = this.scene.add.container(0, 0);
+    this.add(this.rightContainer);
+
     this.questTitle = this.scene.add.text(
       10,
       Math.floor(-this.height * 0.5) + 64,
@@ -489,7 +497,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       }
     );
     this.questTitle.setOrigin(0);
-    this.add(this.questTitle);
+    this.rightContainer.add(this.questTitle);
 
     this.questOgIndicator = this.scene.add.text(
       this.questTitle.x + this.questTitle.width,
@@ -504,37 +512,58 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       }
     );
     this.questOgIndicator.setOrigin(0, 0);
-    this.add(this.questOgIndicator);
+    this.rightContainer.add(this.questOgIndicator);
 
     this.questDelimiter = this.scene.add.line(0, 0, 0, 0, 0, 0, 0xd9cbb8, 1);
     this.questDelimiter.width = 330;
     this.questDelimiter.height = 20;
     this.questDelimiter.lineWidth = 2;
-    this.add(this.questDelimiter);
+    this.rightContainer.add(this.questDelimiter);
 
-    this.sizerRightPageContent = this.scene.rexUI.add.sizer({
-      x: this.questTitle.x - 6,
-      y: this.questTitle.y + this.questTitle.height + 16,
-      space: { item: 4 },
-      orientation: 'top-to-bottom',
-    });
-    this.sizerRightPageContent.setOrigin(0);
-    this.add(this.sizerRightPageContent);
-
-    this.questDescription = this.scene.add.text(0, 0, 'Quest description', {
-      fontSize: '13px',
-      fontFamily: 'Poppins',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      align: 'left',
-    });
+    this.questDescription = this.scene.add.text(
+      this.questTitle.x,
+      this.questTitle.y + this.questTitle.height + 12,
+      'Quest description',
+      {
+        fontSize: '13px',
+        fontFamily: 'Poppins',
+        color: SW_CST.STYLE.COLOR.TEXT,
+        align: 'left',
+      }
+    );
     this.questDescription.setWordWrapWidth(320);
     this.questDescription.setOrigin(0);
-    this.sizerRightPageContent.add(this.questDescription);
+    this.rightContainer.add(this.questDescription);
+
+    this.objectivesTitle = this.scene.add.text(
+      this.questTitle.x,
+      -40,
+      'Objectives',
+      {
+        fontSize: '13px',
+        fontFamily: 'Poppins',
+        color: SW_CST.STYLE.COLOR.TEXT,
+        align: 'left',
+        fontStyle: 'bold',
+      }
+    );
+    this.rightContainer.add(this.objectivesTitle);
+
+    this.objectivesCounterText = this.scene.add.text(
+      this.objectivesTitle.x + this.objectivesTitle.width + 4,
+      this.objectivesTitle.y + this.objectivesTitle.height * 0.5,
+      '(0/0)',
+      {
+        fontSize: '13px',
+        fontFamily: 'Poppins',
+        color: SW_CST.STYLE.COLOR.TEXT,
+        align: 'left',
+      }
+    );
+    this.objectivesCounterText.setOrigin(0, 0.5);
+    this.rightContainer.add(this.objectivesCounterText);
 
     this.createTaskTable();
-    this.sizerRightPageContent.add(this.tasksTable);
-
-    this.sizerRightPageContent.layout();
   }
 
   private createQuestTable(): void {
@@ -625,6 +654,17 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   }
 
   protected createTaskTable(): void {
+    const scrollerBarWidth = 12;
+
+    const worldTransformMatrix = this.getWorldTransformMatrix();
+    const tableX =
+      worldTransformMatrix.tx + this.questTitle.x - scrollerBarWidth * 0.5;
+    const tableY =
+      worldTransformMatrix.ty +
+      this.objectivesTitle.y +
+      this.objectivesTitle.height +
+      0;
+
     const cellWidth = 300;
     const cellHeight = 28;
     const columns = 1;
@@ -632,14 +672,14 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     const tableHeight = 240;
 
     this.tasksTable = new SW_GridTable(this.scene, {
-      x: 0,
-      y: 0,
-      width: tableWidth,
+      x: tableX,
+      y: tableY,
+      width: tableWidth + scrollerBarWidth,
       height: tableHeight,
       space: {
-        left: -16,
-        right: -4,
-        top: 4,
+        left: 0,
+        right: 0,
+        top: 0,
         bottom: 0,
         table: { left: 0 },
       },
@@ -655,7 +695,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         position: 'left',
         track: this.scene.rexUI.add.roundRectangle(0, 0, 8, 1, 0, 0xe4dcce, 1),
         thumb: this.scene.rexUI.add
-          .roundRectangle(0, 0, 12, 20, 4, 0xdacbb8, 1)
+          .roundRectangle(0, 0, scrollerBarWidth, 20, 4, 0xdacbb8, 1)
           .setStrokeStyle(2, 0xffffff, 1),
         hideUnscrollableSlider: true,
       },
@@ -714,6 +754,15 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
           this.questTitle.y + this.questTitle.height * 0.5
         );
         this.questDescription.setText(questData.description);
+
+        const completedTaskCount = questData.tasks.filter(
+          (taskData: SW_QuestTaskWidgetData) => {
+            return taskData.isCompleted;
+          }
+        ).length;
+        this.objectivesCounterText.setText(
+          `(${completedTaskCount}/${questData.tasks.length})`
+        );
         this.tasksTable?.setItems(questData.tasks);
 
         this.currentQuestWidget = this.questsTable.getCellContainer(
@@ -721,12 +770,15 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         ) as SW_QuestWidget | null;
         this.currentQuestWidget?.select();
 
-        this.sizerRightPageContent.layout();
-        this.sizerRightPageContent.setVisible(true);
+        this.rightContainer.setVisible(true);
+        this.tasksTable.setVisible(this.visible);
       } else {
         this.questTitle.setText('');
         this.questDescription.setText('');
         this.tasksTable?.setItems([]);
+
+        this.rightContainer.setVisible(false);
+        this.tasksTable.setVisible(false);
       }
     }
   }
