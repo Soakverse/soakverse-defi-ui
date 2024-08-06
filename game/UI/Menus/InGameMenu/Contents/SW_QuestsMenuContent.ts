@@ -218,7 +218,7 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
   public declare scene: SW_BaseScene;
 
   protected descriptionText: Phaser.GameObjects.Text;
-  protected completedImage: Phaser.GameObjects.Image;
+  protected checkboxCompleted: Checkbox;
   protected counterText: Phaser.GameObjects.Text;
 
   constructor(scene: SW_BaseScene, config: SW_TaskWidgetConfig) {
@@ -228,12 +228,33 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
     this.width = config.width;
     this.height = config.height;
 
-    this.descriptionText = this.scene.add.text(0, this.height * 0.5, '', {
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      fontSize: '14px',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      align: 'left',
+    this.checkboxCompleted = this.scene.add.rexCheckbox({
+      x: 0,
+      y: this.height * 0.5,
+      width: 16,
+      height: 16,
+      animationDuration: 50,
+      boxLineWidth: 0,
+      color: 0x44a047,
+      uncheckedColor: 0xe4dcce,
+      uncheckedBoxStrokeColor: 0xe4dcce,
+      checkerColor: 0xffffff,
     });
+    this.checkboxCompleted.setOrigin(0, 0.5);
+    this.checkboxCompleted.setReadOnly(true);
+    this.add(this.checkboxCompleted);
+
+    this.descriptionText = this.scene.add.text(
+      this.checkboxCompleted.x + this.checkboxCompleted.width + 6,
+      this.height * 0.5,
+      '',
+      {
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        fontSize: '13px',
+        color: SW_CST.STYLE.COLOR.TEXT,
+        align: 'left',
+      }
+    );
     this.descriptionText.setWordWrapWidth(this.width - 44);
     this.descriptionText.setOrigin(0, 0.5);
     this.add(this.descriptionText);
@@ -248,14 +269,6 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
     this.counterText.setOrigin(1, 0.5);
     this.add(this.counterText);
 
-    this.completedImage = this.scene.add.image(
-      this.width,
-      this.height * 0.5,
-      'questTaskCheckIcon'
-    );
-    this.completedImage.setOrigin(1, 0.5);
-    this.add(this.completedImage);
-
     this.updateTask(config.taskData);
   }
 
@@ -267,7 +280,7 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
     this.counterText.setVisible(
       taskData.targetCount > 1 && !taskData.isCompleted
     );
-    this.completedImage.setVisible(taskData.isCompleted);
+    this.checkboxCompleted.setChecked(taskData.isCompleted);
   }
 }
 
@@ -406,11 +419,14 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.ogCheckbox = this.scene.add.rexCheckbox({
       x: -this.width * 0.5 + 68,
       y: this.height * 0.5 - 72,
-      width: 20,
-      height: 20,
+      width: 16,
+      height: 16,
       animationDuration: 50,
-      boxLineWidth: 3,
-      color: 0xdacbb8,
+      boxLineWidth: 2,
+      color: 0xffffff,
+      uncheckedColor: 0xf2ede6,
+      uncheckedBoxStrokeColor: 0xdacbb8,
+      checkerColor: 0xe1b77e,
     });
     this.ogCheckbox.on('valuechange', (value: boolean) => {
       this.onOgCheckboxChange(value);
@@ -680,7 +696,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       worldTransformMatrix.ty +
       this.objectivesTitle.y +
       this.objectivesTitle.height +
-      0;
+      4;
 
     const cellWidth = 300;
     const cellHeight = 28;

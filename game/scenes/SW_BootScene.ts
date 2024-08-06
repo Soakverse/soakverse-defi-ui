@@ -103,10 +103,7 @@ export default class SW_BootScene extends SW_BaseScene {
     }
 
     this.load.json('quests', `/game/assets/quests/quests.json`);
-    this.load.image(
-      'questTaskCheckIcon',
-      `/game/assets/quests/questTaskCheckIcon.png`
-    );
+    this.load.image('checkmark', `/game/assets/ui/checkmark.png`);
 
     this.load.image('objectCounterBackground', objectCounterBackground);
     this.load.image('objectCounterMinusButton', objectCounterMinusButton);
