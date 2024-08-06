@@ -7,7 +7,6 @@ import SW_GridTable from '~/game/UI/Widgets/SW_GridTable';
 import Cell from 'phaser3-rex-plugins/plugins/gameobjects/container/gridtable/table/Cell.js';
 import { SW_InGameMenuTab } from './SW_InGameMenuTab';
 import { BBCodeText } from 'phaser3-rex-plugins/templates/ui/ui-components';
-import { Sizer } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { Checkbox } from 'phaser3-rex-plugins/templates/ui/ui-components';
 
 declare type SW_QuestTaskWidgetData = {
@@ -309,6 +308,8 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected declare objectivesTitle: Phaser.GameObjects.Text;
   protected declare objectivesCounterText: Phaser.GameObjects.Text;
 
+  protected declare noCompletedQuestText: Phaser.GameObjects.Text;
+
   protected currentQuestWidget: SW_QuestWidget | null = null;
 
   protected declare tabs: SW_InGameMenuTab[];
@@ -320,6 +321,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected isShowingOGsOnly: boolean = false;
 
   protected declare ogCheckbox: Checkbox;
+  protected declare ogCheckboxText: Phaser.GameObjects.Text;
   protected declare activeQuestCountText: BBCodeText;
 
   constructor(
@@ -334,6 +336,21 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   public init(): void {
     this.createTabs();
     this.add(this.scene.add.image(0, 0, 'monstersMenuBackground'));
+
+    this.noCompletedQuestText = this.scene.add.text(
+      0,
+      0,
+      'NO COMPLETED QUEST',
+      {
+        fontSize: '44px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        color: SW_CST.STYLE.COLOR.BLUE,
+      }
+    );
+    this.noCompletedQuestText.setOrigin(0.5);
+    this.noCompletedQuestText.setVisible(false);
+    this.add(this.noCompletedQuestText);
+
     this.createMiddleDelimiter();
     this.createLeftPage();
     this.createRightPage();
@@ -444,7 +461,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     });
     this.add(this.ogCheckbox);
 
-    const ogCheckboxText = this.scene.add.text(
+    this.ogCheckboxText = this.scene.add.text(
       this.ogCheckbox.x + this.ogCheckbox.width * 0.5 + 4,
       this.ogCheckbox.y,
       'Show OG quests',
@@ -455,20 +472,20 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         align: 'left',
       }
     );
-    ogCheckboxText.setInteractive();
-    ogCheckboxText.on(
+    this.ogCheckboxText.setInteractive();
+    this.ogCheckboxText.on(
       Phaser.Input.Events.POINTER_DOWN,
       () => {
         this.ogCheckbox.setChecked(!this.ogCheckbox.checked);
       },
       this
     );
-    ogCheckboxText.setOrigin(0, 0.5);
-    this.add(ogCheckboxText);
+    this.ogCheckboxText.setOrigin(0, 0.5);
+    this.add(this.ogCheckboxText);
 
     this.activeQuestCountText = this.scene.rexUI.add.BBCodeText(
       -44,
-      ogCheckboxText.y,
+      this.ogCheckboxText.y,
       '',
       {
         fontSize: '12px',
@@ -838,21 +855,31 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.questsTable.setItems(activeQuestList);
     this.questsTable.refresh();
     this.showFirstQuest();
+    this.activeQuestCountText.setVisible(true);
+    this.ogCheckbox.setVisible(true);
+    this.ogCheckboxText.setVisible(this.ogCheckbox.visible);
+    this.noCompletedQuestText.setVisible(false);
     this.isShowingActiveQuest = true;
   }
 
   protected showCompletedQuestList(): void {
-    const completedQuestList = [] as SW_QuestWidgetData[];
-    for (const questData of this.questDatas) {
-      if (questData.isCompleted) {
-        if (!this.isShowingOGsOnly || questData.isOgQuest) {
-          completedQuestList.push(questData);
-        }
-      }
-    }
-    this.questsTable.setItems(completedQuestList);
+    const completedQuestList = this.questDatas.filter(
+      (questData: SW_QuestWidgetData) => questData.isCompleted
+    );
+
+    const filteredCompletedQuestList = this.isShowingOGsOnly
+      ? completedQuestList.filter(
+          (questData: SW_QuestWidgetData) => questData.isOgQuest
+        )
+      : completedQuestList;
+
+    this.questsTable.setItems(filteredCompletedQuestList);
     this.questsTable.refresh();
     this.showFirstQuest();
+    this.activeQuestCountText.setVisible(false);
+    this.ogCheckbox.setVisible(completedQuestList.length > 0);
+    this.ogCheckboxText.setVisible(this.ogCheckbox.visible);
+    this.noCompletedQuestText.setVisible(completedQuestList.length <= 0);
     this.isShowingActiveQuest = false;
   }
 
