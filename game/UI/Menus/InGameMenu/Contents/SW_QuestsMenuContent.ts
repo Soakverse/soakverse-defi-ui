@@ -48,7 +48,7 @@ declare type SW_QuestWidgetConfig = {
 class SW_QuestWidget extends Phaser.GameObjects.Container {
   public declare scene: SW_BaseScene;
 
-  protected background: Phaser.GameObjects.Rectangle;
+  protected background: Phaser.GameObjects.Image;
   protected titleText: Phaser.GameObjects.Text;
   protected descriptionText: Phaser.GameObjects.Text;
   protected questImage: Phaser.GameObjects.Image;
@@ -60,9 +60,13 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
   protected isSelected: boolean = false;
   protected isHovered: boolean = false;
 
-  protected normalColor: number = 0xf2ede6;
-  protected hoveredColor: number = 0xe5dbce;
-  protected selectedColor: number = 0xd9cbb8;
+  protected normalTint: number = 0xe4dcce;
+  protected hoveredTint: number = 0xe4dcce;
+  protected selectedTint: number = 0xffffff;
+
+  protected normalAlpha: number = 0.5;
+  protected hoveredAlpha: number = 1;
+  protected selectedAlpha: number = 1;
 
   constructor(scene: SW_BaseScene, config: SW_QuestWidgetConfig) {
     super(scene, config.x, config.y);
@@ -71,24 +75,24 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
     this.width = config.width;
     this.height = config.height;
 
-    this.background = this.scene.add.rectangle(
-      0,
-      0,
-      this.width,
-      this.height,
-      this.normalColor,
-      1
+    this.background = this.scene.add.image(
+      this.width * 0.5,
+      this.height * 0.5,
+      'questElementBackground'
     );
-    this.background.setOrigin(0);
+    this.background.setOrigin(0.5);
+    this.background.setTint(this.normalTint);
+    this.background.setAlpha(this.normalAlpha);
     this.add(this.background);
 
     const imagePreviewKey = config.questData.imagePreview;
     this.questImage = this.scene.add.image(
-      0,
+      8,
       this.height * 0.5,
       imagePreviewKey
     );
     this.questImage.setOrigin(0, 0.5);
+    this.questImage.setAlpha(this.normalAlpha);
     this.add(this.questImage);
 
     if (!this.scene.textures.exists(imagePreviewKey)) {
@@ -113,8 +117,8 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
     }
 
     this.titleText = this.scene.add.text(
-      this.questImage.x + this.questImage.width + 12,
-      1,
+      this.questImage.x + this.questImage.width + 10,
+      12,
       `${config.questData.name}`,
       {
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
@@ -186,32 +190,39 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
 
   public hover(): void {
     if (!this.isSelected) {
-      this.background.setFillStyle(this.hoveredColor);
+      this.background.setTint(this.hoveredTint);
+      this.background.setAlpha(this.hoveredAlpha);
+      this.questImage.setAlpha(this.background.alpha);
     }
     this.isHovered = true;
   }
 
   public unhover(): void {
     if (!this.isSelected) {
-      this.background.setFillStyle(this.normalColor);
+      this.background.setTint(this.normalTint);
+      this.background.setAlpha(this.normalAlpha);
+      this.questImage.setAlpha(this.background.alpha);
     }
     this.isHovered = false;
   }
 
   public select(): void {
     this.isSelected = true;
-    this.background.setFillStyle(this.selectedColor);
+    this.background.setTint(this.selectedTint);
+    this.background.setAlpha(this.selectedAlpha);
+    this.questImage.setAlpha(this.background.alpha);
   }
 
   public unselect(): void {
     this.isSelected = false;
-    const newColor = this.isHovered ? this.hoveredColor : this.normalColor;
-    this.background.setFillStyle(newColor);
+    const newTint = this.isHovered ? this.hoveredTint : this.normalTint;
+    const newAlpha = this.isHovered ? this.hoveredAlpha : this.normalAlpha;
+    this.background.setTint(newTint);
+    this.background.setAlpha(newAlpha);
+    this.questImage.setAlpha(this.background.alpha);
   }
 
-  public updateQuest(questData: SW_QuestWidgetData): void {
-    this.setAlpha(questData.isCompleted ? 0.6 : 1);
-  }
+  public updateQuest(questData: SW_QuestWidgetData): void {}
 }
 
 class SW_TaskWidget extends Phaser.GameObjects.Container {
@@ -602,7 +613,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   private createQuestTable(): void {
     const worldTransformMatrix = this.getWorldTransformMatrix();
     const cellWidth = 300;
-    const cellHeight = 44;
+    const cellHeight = 54;
     const columns = 1;
     const tableWidth = cellWidth;
     const tableHeight = 216;
@@ -614,10 +625,9 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       height: tableHeight,
       space: {
         left: 0,
-        right: 8,
+        right: -8,
         top: 4,
         bottom: 4,
-        table: { left: 4 },
       },
       table: {
         cellWidth: cellWidth,
