@@ -80,7 +80,7 @@ export default class SW_GameUIScene extends SW_BaseScene {
     this.wizhMenu = new SW_WizhMenu(
       this.menuManager,
       SW_CST.GAME.WIDTH * 0.5,
-      SW_CST.GAME.HEIGHT * 0.5
+      SW_CST.GAME.HEIGHT * 0.5 + 36
     );
     this.wizhMenu.on(
       'makeAWizhButtonClicked',

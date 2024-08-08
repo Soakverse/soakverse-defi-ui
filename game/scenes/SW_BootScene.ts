@@ -29,6 +29,7 @@ import menuBackground from '@/game/assets/ui/menus/menuBackground.png';
 import settingsBackground from '@/game/assets/ui/menus/settingsBackground.png';
 import magnifyingGlassBackground from '@/game/assets/ui/menus/magnifyingGlassBackground.png';
 import wizhingWellBackground from '@/game/assets/ui/menus/wizhingWellBackground.png';
+import wizhingWellImage from '@/game/assets/ui/menus/wizhingWellImage.png';
 
 import backButton from '@/game/assets/ui/menus/backButton.png';
 import eggzButton from '@/game/assets/ui/menus/eggzButton.png';
@@ -39,7 +40,6 @@ import closeButtonPressed from '@/game/assets/ui/menus/closeButtonPressed.png';
 import characterButton from '@/game/assets/ui/menus/characterButton.png';
 import settingsButton from '@/game/assets/ui/menus/settingsButton.png';
 import settingsIconTitle from '@/game/assets/ui/menus/settingsIconTitle.png';
-import wizhIconTitle from '@/game/assets/ui/menus/wizhIconTitle.png';
 
 import inGameMenuBackground from '@/game/assets/ui/menus/inGameMenuBackground.png';
 import monstersMenuBackground from '@/game/assets/ui/menus/monstersMenuBackground.png';
@@ -152,6 +152,7 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('settingsBackground', settingsBackground);
     this.load.image('magnifyingGlassBackground', magnifyingGlassBackground);
     this.load.image('wizhingWellBackground', wizhingWellBackground);
+    this.load.image('wizhingWellImage', wizhingWellImage);
 
     this.load.image('inGameMenuBackground', inGameMenuBackground);
     this.load.image('monstersMenuBackground', monstersMenuBackground);
@@ -171,7 +172,6 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image('questButton', questButton);
     this.load.image('settingsButton', settingsButton);
     this.load.image('settingsIconTitle', settingsIconTitle);
-    this.load.image('wizhIconTitle', wizhIconTitle);
 
     this.load.image('statAccuracyIcon', statAccuracyIcon);
     this.load.image('statAttackIcon', statAttackIcon);
