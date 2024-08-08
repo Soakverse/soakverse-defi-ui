@@ -229,7 +229,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
     for (let i = 0; i < this.maxChoiceCount; ++i) {
       const choice = new SW_ButtonBase(this.scene, 0, 0, {
         width: this.choiceSizer.width,
-        height: 40,
+        height: 44,
         backgroundObject: this.scene.rexUI.add.roundRectangle(
           0,
           0,
@@ -241,6 +241,9 @@ export class SW_DialogQuest extends SW_BaseMenu {
         colorBackgroundNormal: 0xdacbb8,
         colorBackgroundHovered: 0xe1b67e,
         colorBackgroundPressed: 0xd4a972,
+        colorBackgroundNormalSelected: 0xe1b67e,
+        colorBackgroundHoveredSelected: 0xe1b67e,
+        colorBackgroundPressedSelected: 0xd4a972,
         text: '',
         textStyle: {
           fontSize: '18px',
@@ -252,6 +255,8 @@ export class SW_DialogQuest extends SW_BaseMenu {
         strokeColorBackgroundHovered: 0xffffff,
         strokeThicknessBackgroundPressed: 2,
         strokeColorBackgroundPressed: 0xfbfbfb,
+        strokeThicknessBackgroundNormalSelected: 2,
+        strokeColorBackgroundNormalSelected: 0xfbfbfb,
       });
       choice.onHovered(() => {
         this.focusChoice(choice);
@@ -323,13 +328,10 @@ export class SW_DialogQuest extends SW_BaseMenu {
 
   protected focusChoice(newChoice: SW_ButtonBase) {
     if (newChoice != this.focusedChoice) {
-      if (this.focusedChoice) {
-        this.focusedChoice.setX(newChoice.x); // Bring back to its original x-position
-      }
-
-      newChoice.setX(newChoice.x + 8);
-
+      this.focusedChoice?.unselect();
       this.focusedChoice = newChoice;
+      this.focusedChoice.select();
+
       this.updateArrow();
     }
   }

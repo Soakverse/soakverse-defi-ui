@@ -34,6 +34,11 @@ export declare type SW_ButtonConfig = {
   colorBackgroundHovered?: number;
   colorBackgroundDisabled?: number;
 
+  colorBackgroundNormalSelected?: number;
+  colorBackgroundPressedSelected?: number;
+  colorBackgroundHoveredSelected?: number;
+  colorBackgroundDisabledSelected?: number;
+
   strokeThicknessBackgroundNormal?: number;
   strokeThicknessBackgroundPressed?: number;
   strokeThicknessBackgroundHovered?: number;
@@ -43,6 +48,16 @@ export declare type SW_ButtonConfig = {
   strokeColorBackgroundPressed?: number;
   strokeColorBackgroundHovered?: number;
   strokeColorBackgroundDisabled?: number;
+
+  strokeThicknessBackgroundNormalSelected?: number;
+  strokeThicknessBackgroundPressedSelected?: number;
+  strokeThicknessBackgroundHoveredSelected?: number;
+  strokeThicknessBackgroundDisabledSelected?: number;
+
+  strokeColorBackgroundNormalSelected?: number;
+  strokeColorBackgroundPressedSelected?: number;
+  strokeColorBackgroundHoveredSelected?: number;
+  strokeColorBackgroundDisabledSelected?: number;
 
   pixelPerfect?: boolean;
   backgroundObject: Phaser.GameObjects.Image | RoundRectangle;
@@ -82,6 +97,11 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
   protected colorFillBackgroundHovered: number;
   protected colorFillBackgroundDisabled: number;
 
+  protected colorFillBackgroundNormalSelected: number;
+  protected colorFillBackgroundPressedSelected: number;
+  protected colorFillBackgroundHoveredSelected: number;
+  protected colorFillBackgroundDisabledSelected: number;
+
   protected strokeThicknessBackgroundNormal: number | undefined;
   protected strokeThicknessBackgroundPressed: number | undefined;
   protected strokeThicknessBackgroundHovered: number | undefined;
@@ -91,6 +111,16 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
   protected strokeColorBackgroundPressed: number | undefined;
   protected strokeColorBackgroundHovered: number | undefined;
   protected strokeColorBackgroundDisabled: number | undefined;
+
+  protected strokeThicknessBackgroundNormalSelected: number | undefined;
+  protected strokeThicknessBackgroundPressedSelected: number | undefined;
+  protected strokeThicknessBackgroundHoveredSelected: number | undefined;
+  protected strokeThicknessBackgroundDisabledSelected: number | undefined;
+
+  protected strokeColorBackgroundNormalSelected: number | undefined;
+  protected strokeColorBackgroundPressedSelected: number | undefined;
+  protected strokeColorBackgroundHoveredSelected: number | undefined;
+  protected strokeColorBackgroundDisabledSelected: number | undefined;
 
   protected _backgroundObject: Phaser.GameObjects.Image | RoundRectangle;
   protected _textObject: Phaser.GameObjects.Text | undefined;
@@ -118,6 +148,16 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
     this.colorFillBackgroundDisabled =
       config.colorBackgroundDisabled ?? 0x222222;
 
+    this.colorFillBackgroundNormalSelected =
+      config.colorBackgroundNormalSelected ?? this.colorFillBackgroundNormal;
+    this.colorFillBackgroundPressedSelected =
+      config.colorBackgroundPressedSelected ?? this.colorFillBackgroundPressed;
+    this.colorFillBackgroundHoveredSelected =
+      config.colorBackgroundHoveredSelected ?? this.colorFillBackgroundHovered;
+    this.colorFillBackgroundDisabledSelected =
+      config.colorBackgroundDisabledSelected ??
+      this.colorFillBackgroundDisabled;
+
     this.strokeThicknessBackgroundNormal =
       config.strokeThicknessBackgroundNormal;
     this.strokeThicknessBackgroundPressed =
@@ -137,6 +177,30 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
       config.strokeColorBackgroundHovered ?? this.strokeColorBackgroundNormal;
     this.strokeColorBackgroundDisabled =
       config.strokeColorBackgroundDisabled ?? this.strokeColorBackgroundNormal;
+
+    this.strokeThicknessBackgroundNormalSelected =
+      config.strokeThicknessBackgroundNormalSelected;
+    this.strokeThicknessBackgroundPressedSelected =
+      config.strokeThicknessBackgroundPressedSelected ??
+      this.strokeThicknessBackgroundNormalSelected;
+    this.strokeThicknessBackgroundHoveredSelected =
+      config.strokeThicknessBackgroundHoveredSelected ??
+      this.strokeThicknessBackgroundNormalSelected;
+    this.strokeThicknessBackgroundDisabledSelected =
+      config.strokeThicknessBackgroundDisabledSelected ??
+      this.strokeThicknessBackgroundNormalSelected;
+
+    this.strokeColorBackgroundNormalSelected =
+      config.strokeColorBackgroundNormalSelected;
+    this.strokeColorBackgroundPressedSelected =
+      config.strokeColorBackgroundPressedSelected ??
+      this.strokeColorBackgroundNormalSelected;
+    this.strokeColorBackgroundHoveredSelected =
+      config.strokeColorBackgroundHoveredSelected ??
+      this.strokeColorBackgroundNormalSelected;
+    this.strokeColorBackgroundDisabledSelected =
+      config.strokeColorBackgroundDisabledSelected ??
+      this.strokeColorBackgroundNormalSelected;
 
     this._backgroundObject = config.backgroundObject;
     this._backgroundObject.setOrigin(0.5);
@@ -268,33 +332,33 @@ export class SW_ButtonBase extends Phaser.GameObjects.Container {
       this.setVisual(
         this.textOffsetDisabledY,
         this.textureDisabledSelected,
-        this.colorFillBackgroundDisabled,
-        this.strokeColorBackgroundDisabled,
-        this.strokeThicknessBackgroundDisabled
+        this.colorFillBackgroundDisabledSelected,
+        this.strokeColorBackgroundDisabledSelected,
+        this.strokeThicknessBackgroundDisabledSelected
       );
     } else if (this.isPressed()) {
       this.setVisual(
         this.textOffsetPressedY,
         this.texturePressedSelected,
-        this.colorFillBackgroundPressed,
-        this.strokeColorBackgroundPressed,
-        this.strokeThicknessBackgroundPressed
+        this.colorFillBackgroundPressedSelected,
+        this.strokeColorBackgroundPressedSelected,
+        this.strokeThicknessBackgroundPressedSelected
       );
     } else if (this.isHovered()) {
       this.setVisual(
         this.textOffsetHoveredY,
         this.textureHoveredSelected,
-        this.colorFillBackgroundHovered,
-        this.strokeColorBackgroundHovered,
-        this.strokeThicknessBackgroundHovered
+        this.colorFillBackgroundHoveredSelected,
+        this.strokeColorBackgroundHoveredSelected,
+        this.strokeThicknessBackgroundHoveredSelected
       );
     } else {
       this.setVisual(
         this.textOffsetNormalY,
         this.textureNormalSelected,
-        this.colorFillBackgroundNormal,
-        this.strokeColorBackgroundNormal,
-        this.strokeThicknessBackgroundNormal
+        this.colorFillBackgroundNormalSelected,
+        this.strokeColorBackgroundNormalSelected,
+        this.strokeThicknessBackgroundNormalSelected
       );
     }
   }
