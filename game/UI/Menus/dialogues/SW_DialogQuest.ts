@@ -247,7 +247,7 @@ export class SW_DialogQuest extends SW_BaseMenu {
         text: '',
         textStyle: {
           fontSize: '18px',
-          color: '#4D2B1D',
+          color: SW_CST.STYLE.COLOR.TEXT,
           fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
         },
         strokeThicknessBackgroundNormal: 0,

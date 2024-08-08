@@ -27,6 +27,7 @@ import arrowFocusDialogueOption from '@/game/assets/ui/dialogues/arrowFocusDialo
 ////// Menus
 import menuBackground from '@/game/assets/ui/menus/menuBackground.png';
 import settingsBackground from '@/game/assets/ui/menus/settingsBackground.png';
+import magnifyingGlassBackground from '@/game/assets/ui/menus/magnifyingGlassBackground.png';
 import wizhingWellBackground from '@/game/assets/ui/menus/wizhingWellBackground.png';
 
 import backButton from '@/game/assets/ui/menus/backButton.png';
@@ -72,19 +73,19 @@ export default class SW_BootScene extends SW_BaseScene {
   constructor() {
     super({
       key: SW_CST.SCENES.BOOT,
-      pack: {
-        files: [
-          {
-            type: 'rexWebFont',
-            key: SW_CST.STYLE.TEXT.FONT_FAMILY,
-            config: {
-              google: {
-                families: [SW_CST.STYLE.TEXT.FONT_FAMILY],
-              },
-            },
-          },
-        ],
-      },
+      // pack: {
+      //   files: [
+      //     {
+      //       type: 'rexWebFont',
+      //       key: SW_CST.STYLE.TEXT.FONT_FAMILY,
+      //       config: {
+      //         google: {
+      //           families: [SW_CST.STYLE.TEXT.FONT_FAMILY],
+      //         },
+      //       },
+      //     },
+      //   ],
+      // },
     });
   }
 
@@ -149,6 +150,7 @@ export default class SW_BootScene extends SW_BaseScene {
   private preloadMenuAssets(): void {
     this.load.image('menuBackground', menuBackground);
     this.load.image('settingsBackground', settingsBackground);
+    this.load.image('magnifyingGlassBackground', magnifyingGlassBackground);
     this.load.image('wizhingWellBackground', wizhingWellBackground);
 
     this.load.image('inGameMenuBackground', inGameMenuBackground);
@@ -197,6 +199,10 @@ export default class SW_BootScene extends SW_BaseScene {
     this.load.image(
       'questElementBackground',
       '/game/assets/ui/questElementBackground.png'
+    );
+    this.load.image(
+      'noCompletedQuestBackground',
+      '/game/assets/ui/noCompletedQuestBackground.png'
     );
     this.load.image('compassIcon', '/game/assets/ui/compassIcon.png');
   }

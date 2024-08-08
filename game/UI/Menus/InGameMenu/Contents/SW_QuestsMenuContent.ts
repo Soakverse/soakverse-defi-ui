@@ -311,7 +311,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
   protected declare objectivesTitle: Phaser.GameObjects.Text;
   protected declare objectivesCounterText: Phaser.GameObjects.Text;
 
-  protected declare noCompletedQuestText: Phaser.GameObjects.Text;
+  protected declare noCompletedQuestContainer: Phaser.GameObjects.Container;
 
   protected currentQuestWidget: SW_QuestWidget | null = null;
 
@@ -340,21 +340,8 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.createTabs();
     this.add(this.scene.add.image(0, 0, 'monstersMenuBackground'));
 
-    this.noCompletedQuestText = this.scene.add.text(
-      0,
-      0,
-      'NO COMPLETED QUEST',
-      {
-        fontSize: '44px',
-        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        color: SW_CST.STYLE.COLOR.BLUE,
-      }
-    );
-    this.noCompletedQuestText.setOrigin(0.5);
-    this.noCompletedQuestText.setVisible(false);
-    this.add(this.noCompletedQuestText);
-
     this.createMiddleDelimiter();
+    this.createNoCompletedQuestPage();
     this.createLeftPage();
     this.createRightPage();
 
@@ -442,6 +429,44 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       this.currentTab = tab;
       this.currentTabIndex = tabIndex;
     }
+  }
+
+  protected createNoCompletedQuestPage(): void {
+    this.noCompletedQuestContainer = this.scene.add.container();
+    this.add(this.noCompletedQuestContainer);
+
+    const pageBackground = this.scene.add.image(
+      330,
+      130,
+      'magnifyingGlassBackground'
+    );
+    pageBackground.setScale(0.74);
+    pageBackground.setOrigin(1);
+    this.noCompletedQuestContainer.add(pageBackground);
+
+    const messageBackground = this.scene.add.image(
+      0,
+      -24,
+      'noCompletedQuestBackground'
+    );
+    messageBackground.setScale(0.8);
+    messageBackground.setOrigin(0.5);
+    this.noCompletedQuestContainer.add(messageBackground);
+
+    const message = this.scene.add.text(
+      0,
+      -28,
+      'You have no completed quest...',
+      {
+        fontSize: '17px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
+        color: SW_CST.STYLE.COLOR.TEXT,
+      }
+    );
+    message.setOrigin(0.5);
+    this.noCompletedQuestContainer.add(message);
+    this.noCompletedQuestContainer.setVisible(false);
   }
 
   protected createLeftPage(): void {
@@ -865,7 +890,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.activeQuestCountText.setVisible(true);
     this.ogCheckbox.setVisible(true);
     this.ogCheckboxText.setVisible(this.ogCheckbox.visible);
-    this.noCompletedQuestText.setVisible(false);
+    this.noCompletedQuestContainer.setVisible(false);
     this.isShowingActiveQuest = true;
   }
 
@@ -886,7 +911,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.activeQuestCountText.setVisible(false);
     this.ogCheckbox.setVisible(completedQuestList.length > 0);
     this.ogCheckboxText.setVisible(this.ogCheckbox.visible);
-    this.noCompletedQuestText.setVisible(completedQuestList.length <= 0);
+    this.noCompletedQuestContainer.setVisible(completedQuestList.length <= 0);
     this.isShowingActiveQuest = false;
   }
 

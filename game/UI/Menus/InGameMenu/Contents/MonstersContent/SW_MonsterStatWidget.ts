@@ -44,7 +44,7 @@ export class SW_MonsterStatWidget extends Phaser.GameObjects.Container {
     this.add(this.statText);
 
     this.valueText = this.scene.add.text(this.width * 0.5, 0, '0', {
-      color: '#4D2B1D',
+      color: SW_CST.STYLE.COLOR.TEXT,
       fontSize: '15px',
       fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
       fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,

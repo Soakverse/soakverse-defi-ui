@@ -16,7 +16,7 @@ export class SW_InGameMenuTab extends SW_ButtonBase {
       textStyle: { fontSize: '14px', color: '#684C3C', fontStyle: '' },
       textStyleSelected: {
         fontSize: '14px',
-        color: '#4D2B1D',
+        color: SW_CST.STYLE.COLOR.TEXT,
         fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
       },
     });

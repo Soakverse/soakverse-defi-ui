@@ -111,7 +111,7 @@ export class SW_WizhMenu extends SW_BaseMenu {
         textStyle: {
           fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
           fontSize: '13px',
-          color: '#4D2B1D',
+          color: SW_CST.STYLE.COLOR.TEXT,
         },
       }
     );

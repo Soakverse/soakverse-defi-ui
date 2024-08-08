@@ -247,7 +247,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       textStyle: {
         fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
         fontSize: '13px',
-        color: '#4D2B1D',
+        color: SW_CST.STYLE.COLOR.TEXT,
       },
     });
     buttonResetSettings.onClicked(this.resetSettings, this);
