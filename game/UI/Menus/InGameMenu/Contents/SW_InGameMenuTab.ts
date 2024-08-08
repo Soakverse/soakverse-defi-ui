@@ -1,3 +1,4 @@
+import { SW_CST } from '~/game/SW_CST';
 import { SW_ButtonBase } from '~/game/UI/Widgets/SW_ButtonBase';
 import SW_BaseScene from '~/game/scenes/SW_BaseScene';
 
@@ -16,7 +17,7 @@ export class SW_InGameMenuTab extends SW_ButtonBase {
       textStyleSelected: {
         fontSize: '14px',
         color: '#4D2B1D',
-        fontStyle: 'bold',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
       },
     });
   }

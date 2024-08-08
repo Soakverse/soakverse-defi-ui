@@ -242,7 +242,11 @@ export class SW_DialogQuest extends SW_BaseMenu {
         colorBackgroundHovered: 0xe1b67e,
         colorBackgroundPressed: 0xd4a972,
         text: '',
-        textStyle: { fontSize: '20px', color: '#4D2B1D' },
+        textStyle: {
+          fontSize: '18px',
+          color: '#4D2B1D',
+          fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
+        },
         strokeThicknessBackgroundNormal: 0,
         strokeThicknessBackgroundHovered: 2,
         strokeColorBackgroundHovered: 0xffffff,

@@ -108,7 +108,11 @@ export class SW_WizhMenu extends SW_BaseMenu {
         colorBackgroundPressed: 0xc4b6a5,
         colorBackgroundHovered: 0xddd0bf,
         text: 'Make a Wizh',
-        textStyle: { fontSize: '17px' },
+        textStyle: {
+          fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
+          fontSize: '13px',
+          color: '#4D2B1D',
+        },
       }
     );
     this.add(makeAWizhButton);

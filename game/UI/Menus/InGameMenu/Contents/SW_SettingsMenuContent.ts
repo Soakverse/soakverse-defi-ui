@@ -50,7 +50,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       {
         fontSize: '20px',
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        fontStyle: 'bold',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
       }
@@ -102,7 +102,7 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
 
     this.fullscreenToggle = new SW_ToggleSwitch(
       this.scene,
-      windowedModeLabel.x + windowedModeLabel.width + 32,
+      windowedModeLabel.x + windowedModeLabel.width + 38,
       0
     );
     this.fullscreenToggle.setY(
@@ -243,7 +243,12 @@ export class SW_SettingsMenuContent extends SW_InGameMenuContent {
       colorBackgroundNormal: 0xdacbb8,
       colorBackgroundPressed: 0xc4b6a5,
       colorBackgroundHovered: 0xddd0bf,
-      text: 'Reset Settings',
+      text: ' Reset Settings ',
+      textStyle: {
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
+        fontSize: '13px',
+        color: '#4D2B1D',
+      },
     });
     buttonResetSettings.onClicked(this.resetSettings, this);
     this.add(buttonResetSettings);

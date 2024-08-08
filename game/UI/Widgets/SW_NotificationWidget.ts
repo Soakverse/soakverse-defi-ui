@@ -86,7 +86,9 @@ export class SW_NotificationWidget extends Phaser.GameObjects.Container {
       100,
       notifHeight
     );
-    newNotifElement.setText(`[b]${notificationData.text}[/b]`);
+    newNotifElement.setText(
+      `[weight=${SW_CST.STYLE.TEXT.FONT_STYLE_BOLD}]${notificationData.text}[/weight]`
+    );
     this.add(newNotifElement);
 
     for (const notifElement of this.visibleNotifications) {

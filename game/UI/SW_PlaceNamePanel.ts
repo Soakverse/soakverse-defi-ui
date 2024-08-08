@@ -26,13 +26,18 @@ export class SW_PlaceNamePanel extends Phaser.GameObjects.Container {
     compassIcon.setOrigin(0, 0.5);
     this.add(compassIcon);
 
-    this.textObject = this.scene.add.text(compassIcon.width * 0.5, 2, '', {
-      align: 'center',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      fontStyle: 'bold',
-      fontSize: '16px',
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-    });
+    this.textObject = this.scene.add.text(
+      Math.floor(compassIcon.width * 0.5),
+      2,
+      '',
+      {
+        align: 'center',
+        color: SW_CST.STYLE.COLOR.TEXT,
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
+        fontSize: '15px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+      }
+    );
     this.textObject.setOrigin(0.5);
     this.add(this.textObject);
   }

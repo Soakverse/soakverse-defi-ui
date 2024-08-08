@@ -25,17 +25,20 @@ export const SW_CST = {
   STYLE: {
     TEXT: {
       FONT_FAMILY: FONT_FAMILY,
+      FONT_STYLE_REGULAR: '400',
+      FONT_STYLE_MEDIUM: '500',
+      FONT_STYLE_BOLD: '700',
       SECTION: {
-        fontSize: '16px',
+        fontSize: '14px',
         fontFamily: FONT_FAMILY,
-        fontStyle: 'bold',
+        fontStyle: '700',
         color: COLOR_TEXT,
         align: 'left',
       },
       LABEL: {
-        fontSize: '13px',
+        fontSize: '12px',
         fontFamily: FONT_FAMILY,
-        // fontStyle: 'bold',
+        fontStyle: '500',
         color: COLOR_TEXT,
         align: 'left',
       },

@@ -23,8 +23,8 @@ export class SW_DialogTitle extends Phaser.GameObjects.Container {
     this.textObject = this.scene.add.text(0, 0, '', {
       align: 'center',
       color: SW_CST.STYLE.COLOR.TEXT,
-      fontStyle: 'bold',
-      fontSize: '14px',
+      fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
+      fontSize: '16px',
       fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
     });
     this.textObject.setOrigin(0.5);

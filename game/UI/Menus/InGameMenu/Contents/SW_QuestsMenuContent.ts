@@ -121,10 +121,10 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
       `${config.questData.name}`,
       {
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        fontSize: '13px',
+        fontSize: '14px',
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
-        fontStyle: 'bold',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
       }
     );
     this.titleText.setOrigin(0, 0);
@@ -132,15 +132,15 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
 
     if (config.questData.isOgQuest) {
       const questOgIndicator = this.scene.add.text(
-        this.titleText.x + this.titleText.width + 4,
-        this.titleText.y,
+        this.titleText.x + this.titleText.width + 3,
+        this.titleText.y - 2,
         'OG',
         {
           fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
           fontSize: '10px',
           color: '#95262B',
           align: 'left',
-          fontStyle: 'bold',
+          fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
         }
       );
       questOgIndicator.setOrigin(0, 0);
@@ -152,8 +152,8 @@ class SW_QuestWidget extends Phaser.GameObjects.Container {
       this.titleText.y + this.titleText.height * 0.5 + 10,
       config.questData.description,
       {
-        fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-        fontSize: '11px',
+        fontFamily: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
+        fontSize: '12px',
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
         maxLines: 1,
@@ -263,20 +263,20 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
         fontSize: '13px',
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
       }
     );
     this.descriptionText.setWordWrapWidth(this.width - 44);
     this.descriptionText.setOrigin(0, 0.5);
     this.add(this.descriptionText);
 
-    this.counterText = this.scene.add.text(this.width, this.height * 0.5, '', {
-      fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      fontSize: '12px',
-      color: SW_CST.STYLE.COLOR.TEXT,
-      align: 'right',
-      fontStyle: 'bold',
-    });
-    this.counterText.setOrigin(1, 0.5);
+    this.counterText = this.scene.add.text(
+      this.descriptionText.x + this.descriptionText.width + 4,
+      this.height * 0.5,
+      '',
+      this.descriptionText.style
+    );
+    this.counterText.setOrigin(0, 0.5);
     this.add(this.counterText);
 
     this.updateTask(config.taskData);
@@ -284,8 +284,11 @@ class SW_TaskWidget extends Phaser.GameObjects.Container {
 
   public updateTask(taskData: SW_QuestTaskWidgetData): void {
     this.descriptionText.setText(`${taskData.description}`);
+    this.counterText.setX(
+      this.descriptionText.x + this.descriptionText.width + 4
+    );
     this.counterText.setText(
-      `${taskData.currentCount} / ${taskData.targetCount}`
+      `(${taskData.currentCount}/${taskData.targetCount})`
     );
     this.counterText.setVisible(
       taskData.targetCount > 1 && !taskData.isCompleted
@@ -446,7 +449,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
 
     this.ogCheckbox = this.scene.add.rexCheckbox({
       x: -this.width * 0.5 + 68,
-      y: this.height * 0.5 - 72,
+      y: this.height * 0.5 - 76,
       width: 16,
       height: 16,
       animationDuration: 50,
@@ -464,14 +467,16 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
     this.ogCheckboxText = this.scene.add.text(
       this.ogCheckbox.x + this.ogCheckbox.width * 0.5 + 4,
       this.ogCheckbox.y,
-      'Show OG quests',
+      'Show OG Quests',
       {
         fontSize: '12px',
         fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
       }
     );
+
     this.ogCheckboxText.setInteractive();
     this.ogCheckboxText.on(
       Phaser.Input.Events.POINTER_DOWN,
@@ -554,7 +559,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         fontSize: '17px',
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
-        fontStyle: 'bold',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
       }
     );
     this.questTitle.setOrigin(0);
@@ -569,7 +574,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         fontSize: '11px',
         color: '#95262B',
         align: 'left',
-        fontStyle: 'bold',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
       }
     );
     this.questOgIndicator.setOrigin(0, 0);
@@ -588,6 +593,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       {
         fontSize: '13px',
         fontFamily: 'Poppins',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
       }
@@ -605,7 +611,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         fontFamily: 'Poppins',
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
-        fontStyle: 'bold',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_BOLD,
       }
     );
     this.rightContainer.add(this.objectivesTitle);
@@ -617,6 +623,7 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
       {
         fontSize: '13px',
         fontFamily: 'Poppins',
+        fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
         color: SW_CST.STYLE.COLOR.TEXT,
         align: 'left',
       }
@@ -912,10 +919,13 @@ export class SW_QuestsMenuContent extends SW_InGameMenuContent {
         );
       }
     ).length;
+
     this.activeQuestCountText.setText(
-      `[b]${activeQuestCount}[/b] Active Quest${
-        activeQuestCount > 1 ? 's' : ''
-      }`
+      `[weight=${
+        SW_CST.STYLE.TEXT.FONT_STYLE_BOLD
+      }]${activeQuestCount}[/weight][weight=${
+        SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM
+      }] Active Quest${activeQuestCount > 1 ? 's' : ''}[/weight]`
     );
     this.showFirstQuest();
   }
