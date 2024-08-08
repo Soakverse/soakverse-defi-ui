@@ -14,12 +14,31 @@ export class SW_CharacterMenuContent extends SW_InGameMenuContent {
   ) {
     super(scene, x, y, config);
 
-    const comingSoonText = this.scene.add.text(0, 0, 'COMING SOON!', {
-      fontSize: '44px',
+    const pageBackground = this.scene.add.image(
+      330,
+      130,
+      'magnifyingGlassBackground'
+    );
+    pageBackground.setScale(0.74);
+    pageBackground.setOrigin(1);
+    this.add(pageBackground);
+
+    const messageBackground = this.scene.add.image(
+      0,
+      -24,
+      'noCompletedQuestBackground'
+    );
+    messageBackground.setScale(0.8);
+    messageBackground.setOrigin(0.5);
+    this.add(messageBackground);
+
+    const message = this.scene.add.text(0, -28, 'Coming soon!', {
+      fontSize: '17px',
       fontFamily: SW_CST.STYLE.TEXT.FONT_FAMILY,
-      color: SW_CST.STYLE.COLOR.BLUE,
+      fontStyle: SW_CST.STYLE.TEXT.FONT_STYLE_MEDIUM,
+      color: SW_CST.STYLE.COLOR.TEXT,
     });
-    comingSoonText.setOrigin(0.5);
-    this.add(comingSoonText);
+    message.setOrigin(0.5);
+    this.add(message);
   }
 }
