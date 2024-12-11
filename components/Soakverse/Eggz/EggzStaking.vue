@@ -5,7 +5,6 @@
         <i class="fa-solid fa-award"></i> Eggz Pasture
         <i class="fa-solid fa-award"></i>
       </h5>
-      <h5>Pasturage Count: {{ state.stakedAmount }}</h5>
       <div v-if="state.canStake">
         <a
           v-if="state.unstakedEggz.length > 0"
@@ -24,14 +23,9 @@
       <div class="row" v-if="currentAccount && currentChain == '1'">
         <div class="col-12">
           <div class="row">
-            <div
-              v-if="state.highestOwnedStache"
-              class="col-12 col-sm-6 col-md-3 col-lg-2 py-3"
-            >
+            <div v-if="state.highestOwnedStache" class="col-12 col-sm-6 col-md-3 col-lg-2 py-3">
               <h6>{{ state.highestOwnedStache.nft.metadata.name }}</h6>
-              <a @click="comingSoon(1)" class="btn btn-success btn-sm mb-1"
-                >Change</a
-              >
+              <a @click="comingSoon(1)" class="btn btn-success btn-sm mb-1">Change</a>
               <img
                 :src="state.highestOwnedStache.nft.media[0].gateway"
                 class="img-responsive w-100"
@@ -44,15 +38,11 @@
               class="col-12 col-sm-6 col-md-3 col-lg-2 py-3"
             >
               <h6>{{ eggz.name }}</h6>
-              <a @click="comingSoon(2)" class="btn btn-success btn-sm mb-1"
-                >Add a Wizh</a
-              >
+              <a @click="comingSoon(2)" class="btn btn-success btn-sm mb-1">Add a Wizh</a>
               <img :src="eggz.webImage" class="img-responsive w-100" />
               <div v-if="state.canStake">
                 <div v-if="state.stakedEggz.includes(eggz.tokenId)">
-                  <a
-                    @click="unstakeNft(eggz.tokenId)"
-                    class="btn btn-danger btn-sm mt-1"
+                  <a @click="unstakeNft(eggz.tokenId)" class="btn btn-danger btn-sm mt-1"
                     >Release</a
                   >
                   <p class="green-text mt-1">
@@ -60,12 +50,7 @@
                     {{ Math.trunc(formatDaysSinceDate(eggz.stakedAt)) }} day(s)
                   </p>
                 </div>
-                <a
-                  v-else
-                  @click="stakeNft(eggz.tokenId)"
-                  class="btn btn-success btn-sm"
-                  >Stake</a
-                >
+                <a v-else @click="stakeNft(eggz.tokenId)" class="btn btn-success btn-sm">Stake</a>
               </div>
               <div v-else>
                 <p class="red-text">Staking not activated yet</p>
@@ -85,21 +70,14 @@
 </template>
 
 <script setup>
-import {
-  eggzSmartContract,
-  soakverseOGsSmartContract,
-} from "~~/utils/contracts";
+import { eggzSmartContract, soakverseOGsSmartContract } from "~~/utils/contracts";
 import {
   showLoader,
   hideLoader,
   filterArrayOfObjects,
-  formatDaysSinceDate,
+  formatDaysSinceDate
 } from "~~/utils/helpers";
-import {
-  prepareWriteContract,
-  writeContract,
-  waitForTransaction,
-} from "@wagmi/core";
+import { prepareWriteContract, writeContract, waitForTransaction } from "@wagmi/core";
 import { formatEther } from "viem";
 
 const { currentChain, currentAccount } = useWeb3WalletState();
@@ -109,21 +87,18 @@ const config = useRuntimeConfig();
 const { $swal } = useNuxtApp();
 
 const nftLevels = [
-  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1,
-  1, 1, 3, 2, 3, 5, 1, 3, 1, 2, 3, 1, 1, 1, 4, 3, 3, 4, 1, 1, 1, 4, 1, 3, 1, 1,
-  1, 2, 2, 4, 4, 2, 1, 5, 2, 1, 4, 1, 2, 5, 2, 3, 2, 1, 2, 5, 1, 4, 4, 1, 2, 3,
-  2, 3, 2, 2, 2, 3, 1, 1, 5, 4, 3, 2, 2, 2, 2, 1, 1, 1, 3, 1, 2, 3, 2, 1, 1, 3,
-  3, 4, 1, 1, 1, 5, 3, 3, 1, 1, 1, 2, 2, 3, 2, 2, 1, 2, 1, 3, 1, 1, 4, 2, 3, 2,
-  2, 3, 5, 3, 2, 1, 1, 1, 4, 1, 3, 2, 3, 5, 1, 3, 1, 4, 3, 3, 2, 1, 3, 3, 1, 1,
-  1, 1, 1, 2, 3, 3, 1, 1, 1, 1, 2, 3, 2, 5, 1, 1, 2, 3, 1, 1, 1, 1, 2, 5, 2, 1,
-  5, 1, 1, 1, 5, 3, 2, 3, 2, 2, 3, 2, 3, 2, 2, 3, 1, 2, 1, 1, 4, 1, 1, 1, 3, 4,
-  4, 3, 2, 1, 1, 1, 3, 1, 4, 1, 3, 4, 1, 4, 1, 1, 3, 1, 2, 1, 5, 1, 1, 4, 2, 2,
-  3, 2, 5, 3, 2, 5, 5, 1, 2, 2, 1, 1, 2, 2, 3, 3, 2, 2, 2, 4, 3, 3, 1, 2, 1, 1,
-  2, 2, 1, 3, 4, 3, 1, 2, 2, 2, 2, 2, 1, 1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 2, 3, 4,
-  4, 3, 1, 2, 3, 1, 1, 3, 1, 1, 4, 1, 3, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1,
-  1, 1, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 5, 2, 1, 1, 5, 1, 2, 2, 2, 5, 1, 3, 3, 2,
-  1, 2, 3, 3, 2, 2, 3, 3, 1, 3, 2, 1, 4, 3, 2, 4, 2, 1, 2, 3, 2, 1, 3, 3, 4, 3,
-  1,
+  5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1, 1, 1, 3, 2, 3, 5, 1,
+  3, 1, 2, 3, 1, 1, 1, 4, 3, 3, 4, 1, 1, 1, 4, 1, 3, 1, 1, 1, 2, 2, 4, 4, 2, 1, 5, 2, 1, 4, 1, 2, 5,
+  2, 3, 2, 1, 2, 5, 1, 4, 4, 1, 2, 3, 2, 3, 2, 2, 2, 3, 1, 1, 5, 4, 3, 2, 2, 2, 2, 1, 1, 1, 3, 1, 2,
+  3, 2, 1, 1, 3, 3, 4, 1, 1, 1, 5, 3, 3, 1, 1, 1, 2, 2, 3, 2, 2, 1, 2, 1, 3, 1, 1, 4, 2, 3, 2, 2, 3,
+  5, 3, 2, 1, 1, 1, 4, 1, 3, 2, 3, 5, 1, 3, 1, 4, 3, 3, 2, 1, 3, 3, 1, 1, 1, 1, 1, 2, 3, 3, 1, 1, 1,
+  1, 2, 3, 2, 5, 1, 1, 2, 3, 1, 1, 1, 1, 2, 5, 2, 1, 5, 1, 1, 1, 5, 3, 2, 3, 2, 2, 3, 2, 3, 2, 2, 3,
+  1, 2, 1, 1, 4, 1, 1, 1, 3, 4, 4, 3, 2, 1, 1, 1, 3, 1, 4, 1, 3, 4, 1, 4, 1, 1, 3, 1, 2, 1, 5, 1, 1,
+  4, 2, 2, 3, 2, 5, 3, 2, 5, 5, 1, 2, 2, 1, 1, 2, 2, 3, 3, 2, 2, 2, 4, 3, 3, 1, 2, 1, 1, 2, 2, 1, 3,
+  4, 3, 1, 2, 2, 2, 2, 2, 1, 1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 2, 3, 4, 4, 3, 1, 2, 3, 1, 1, 3, 1, 1, 4,
+  1, 3, 2, 2, 2, 2, 2, 3, 2, 2, 3, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2, 5, 2, 1, 1, 5, 1,
+  2, 2, 2, 5, 1, 3, 3, 2, 1, 2, 3, 3, 2, 2, 3, 3, 1, 3, 2, 1, 4, 3, 2, 4, 2, 1, 2, 3, 2, 1, 3, 3, 4,
+  3, 1
 ];
 
 const decimals = 18;
@@ -135,7 +110,7 @@ const state = reactive({
   unstakedEggz: [],
   highestOwnedStache: null,
   canStake: false,
-  stakedAmount: 0,
+  stakedAmount: 0
 });
 
 onMounted(async () => {
@@ -161,9 +136,6 @@ async function getEcosystemBalance() {
     state.ownedStaches = [];
     state.ownedEggz = [];
     state.highestOwnedStache = null;
-    state.stakedAmount = (
-      await $fetch(`${config.public.apiUrl}/nft/stats/eggz`)
-    ).staked;
 
     const eggzUrl = `${config.public.apiUrl}/nft/eggz/address/${currentAccount.value}`;
 
@@ -179,12 +151,10 @@ async function getEcosystemBalance() {
         staked: nft.staked,
         stakedAt: nft.stakedAt,
         webImage: nft.webImage,
-        attributes: nft.attributes,
+        attributes: nft.attributes
       });
 
-      nft.staked
-        ? state.stakedEggz.push(nft.tokenId)
-        : state.unstakedEggz.push(nft.tokenId);
+      nft.staked ? state.stakedEggz.push(nft.tokenId) : state.unstakedEggz.push(nft.tokenId);
     }
 
     const baseURL = `https://eth-mainnet.g.alchemy.com/v2/${config.public.alchemyApiKey}`;
@@ -201,14 +171,14 @@ async function getEcosystemBalance() {
       state.ownedStaches.push({
         id: nft.tokenId,
         level: nftLevel,
-        nft: nft,
+        nft: nft
       });
 
       if (nftLevel > highestOwnedStache) {
         state.highestOwnedStache = {
           id: nft.tokenId,
           level: nftLevel,
-          nft: nft,
+          nft: nft
         };
         highestOwnedStache = nftLevel;
       }
@@ -227,8 +197,8 @@ async function stakeNft(tokenId) {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
     return;
   }
@@ -239,21 +209,19 @@ async function stakeNft(tokenId) {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "stake",
-        args: [tokenId],
+        args: [tokenId]
       });
 
       const { hash } = await writeContract(request);
 
       const data = await waitForTransaction({
         confirmations: 1,
-        hash,
+        hash
       });
 
       if (data.status == "success") {
         state.stakedEggz.push(tokenId);
-        state.unstakedEggz = state.unstakedEggz.filter(
-          (item) => item !== tokenId
-        );
+        state.unstakedEggz = state.unstakedEggz.filter((item) => item !== tokenId);
         hideLoader();
         $swal.fire({
           title: "Success",
@@ -261,8 +229,8 @@ async function stakeNft(tokenId) {
           icon: "success",
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
-          },
+            confirmButton: "btn btn-success btn-fill"
+          }
         });
       }
     }
@@ -274,8 +242,8 @@ async function stakeNft(tokenId) {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
   }
 }
@@ -289,8 +257,8 @@ async function unstakeNft(tokenId) {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
     return;
   }
@@ -301,14 +269,14 @@ async function unstakeNft(tokenId) {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "unstake",
-        args: [tokenId],
+        args: [tokenId]
       });
 
       const { hash } = await writeContract(request);
 
       const data = await waitForTransaction({
         confirmations: 1,
-        hash,
+        hash
       });
 
       if (data.status == "success") {
@@ -321,8 +289,8 @@ async function unstakeNft(tokenId) {
           icon: "success",
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
-          },
+            confirmButton: "btn btn-success btn-fill"
+          }
         });
       }
     }
@@ -334,8 +302,8 @@ async function unstakeNft(tokenId) {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
   }
 }
@@ -349,8 +317,8 @@ async function stakeAllNfts() {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
     return;
   }
@@ -361,14 +329,14 @@ async function stakeAllNfts() {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "setTokensStakeStatus",
-        args: [state.unstakedEggz, true],
+        args: [state.unstakedEggz, true]
       });
 
       const { hash } = await writeContract(request);
 
       const data = await waitForTransaction({
         confirmations: 1,
-        hash,
+        hash
       });
 
       if (data.status == "success") {
@@ -381,8 +349,8 @@ async function stakeAllNfts() {
           icon: "success",
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
-          },
+            confirmButton: "btn btn-success btn-fill"
+          }
         });
       }
     }
@@ -394,8 +362,8 @@ async function stakeAllNfts() {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
   }
 }
@@ -409,8 +377,8 @@ async function unstakeAllNfts() {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
     return;
   }
@@ -421,14 +389,14 @@ async function unstakeAllNfts() {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "setTokensStakeStatus",
-        args: [state.stakedEggz, false],
+        args: [state.stakedEggz, false]
       });
 
       const { hash } = await writeContract(request);
 
       const data = await waitForTransaction({
         confirmations: 1,
-        hash,
+        hash
       });
 
       if (data.status == "success") {
@@ -441,8 +409,8 @@ async function unstakeAllNfts() {
           icon: "success",
           buttonsStyling: false,
           customClass: {
-            confirmButton: "btn btn-success btn-fill",
-          },
+            confirmButton: "btn btn-success btn-fill"
+          }
         });
       }
     }
@@ -454,8 +422,8 @@ async function unstakeAllNfts() {
       icon: "error",
       buttonsStyling: false,
       customClass: {
-        confirmButton: "btn btn-danger btn-fill",
-      },
+        confirmButton: "btn btn-danger btn-fill"
+      }
     });
   }
 }
@@ -473,8 +441,8 @@ function comingSoon(id) {
     icon: "warning",
     buttonsStyling: false,
     customClass: {
-      confirmButton: "btn btn-danger btn-fill",
-    },
+      confirmButton: "btn btn-danger btn-fill"
+    }
   });
 }
 
