@@ -1,8 +1,8 @@
 <template>
-  <div v-if="!currentAccount" class="col-12">
+  <div v-if="!currentAccount" class="col-12 text-center">
     <h4>Please connect your wallet.</h4>
   </div>
-  <div v-else-if="props.blockchain.chainId != currentChain" class="col-12">
+  <div v-else-if="props.blockchain.chainId != currentChain" class="col-12 text-center">
     <h4>You are on the wrong chain.</h4>
     <button
       class="btn btn-success ms-1"

@@ -1,10 +1,11 @@
 <template>
-  <div class="row text-left px-1 mt-4" v-if="currentChain == '56'">
-    <div class="col-12">
-      <h5>{{ farm.farmName }}</h5>
-      <hr />
-      <div class="row">
-        <h6>Pool Statistics</h6>
+  <BlockchainChecker :blockchain="bscBlockchain">
+    <div class="row text-left px-1 mt-4">
+      <div class="col-12">
+        <h5>{{ farm.farmName }}</h5>
+        <hr />
+        <div class="row">
+          <h6>Pool Statistics</h6>
         <div class="col-12 col-sm-6 mb-2">
           <label>{{ farm.ticker }} price</label>
           <input
@@ -47,7 +48,7 @@
         </div>
       </div>
       <hr class="mb-4 mt-3" />
-      <div class="row" v-if="currentAccount">
+      <div class="row">
         <div class="col-12 col-md-6 mb-4">
           <div class="h-100 my-auto card grey no-shadow">
             <h6 class="fw-bold">Stake {{ farm.ticker }}</h6>
@@ -260,23 +261,18 @@
           </div>
         </div>
       </div>
-      <div v-else>
-        <h6>Please connect your wallet</h6>
-      </div>
     </div>
   </div>
-  <div class="row" v-else>
-    <div class="col-12">
-      <h4 class="text-center m-4">Please switch to BSC</h4>
-    </div>
-  </div>
+  </BlockchainChecker>
 </template>
 
 <script setup>
+import BlockchainChecker from "@/components/Blockchain/BlockchainChecker.vue";
 import {
   soakmontTokenContract,
   soakmontStakingContract,
 } from "~~/utils/contracts";
+import { blockchainDefinitions } from "~~/utils/blockchain";
 import { showLoader, hideLoader, moneyFormatter } from "~~/utils/helpers";
 import {
   multicall,
@@ -286,6 +282,8 @@ import {
 } from "@wagmi/core";
 import { formatEther, parseEther, formatUnits, parseUnits } from "viem";
 const { currentAccount, currentChain } = useWeb3WalletState();
+
+const bscBlockchain = blockchainDefinitions["56"];
 
 const { $swal, $wagmiConfig } = useNuxtApp();
 

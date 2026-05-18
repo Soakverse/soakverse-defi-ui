@@ -1,4 +1,4 @@
-import { getAccount, watchAccount, watchChainId } from "@wagmi/core";
+import { getAccount, watchAccount } from "@wagmi/core";
 
 const state = reactive({
   currentAccount: null as string | null,
@@ -8,7 +8,7 @@ const state = reactive({
 let initialized = false;
 
 const useWeb3WalletState = () => {
-  const { $wagmiConfig } = useNuxtApp();
+  const { $wagmiConfig, $appKit } = useNuxtApp();
   const currentAccount = computed(() => state.currentAccount);
   const currentChain = computed(() => state.currentChain);
 
@@ -20,14 +20,19 @@ const useWeb3WalletState = () => {
     watchAccount($wagmiConfig, {
       onChange: (account) => {
         state.currentAccount = account.address ?? null;
-        state.currentChain = account.chainId ?? null;
+        if (account.chainId != null) state.currentChain = account.chainId;
       },
     });
-    watchChainId($wagmiConfig, {
-      onChange: (chainId) => {
-        state.currentChain = chainId ?? null;
-      },
-    });
+
+    if ($appKit) {
+      $appKit.subscribeNetwork((network: { chainId?: number | string }) => {
+        const id =
+          typeof network?.chainId === "string"
+            ? Number(network.chainId)
+            : network?.chainId ?? null;
+        state.currentChain = id;
+      });
+    }
     initialized = true;
   }
 
