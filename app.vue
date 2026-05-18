@@ -12,6 +12,7 @@
       />
     </div>
   </div>
+  <span aria-hidden="true" class="appkit-font-warmup">.</span>
 </template>
 
 <script>
@@ -33,5 +34,21 @@ if (process.client) {
 .page-leave-to {
   opacity: 0;
   filter: blur(0.2rem);
+}
+
+@font-face {
+  font-family: "KHTeka";
+  src: url("https://fonts.reown.com/KHTeka-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+.appkit-font-warmup {
+  font-family: "KHTeka", sans-serif;
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  visibility: hidden;
+  pointer-events: none;
 }
 </style>

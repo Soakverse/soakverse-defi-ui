@@ -1,7 +1,9 @@
 <template>
   <div class="row">
     <h4>Networks</h4>
-    <h6 v-if="connectedWallet">Connected to: {{ chainInformation.name }}</h6>
+    <h6 v-if="currentAccount && chainInformation">
+      Connected to: {{ chainInformation.name }}
+    </h6>
     <div class="accordion text-start" id="blockchainNetworkAccordion">
       <div
         class="accordion-item"
@@ -37,14 +39,9 @@
               }}</a>
             </p>
             <p><b>RPC:</b> {{ network.rpcUrl }}</p>
-            <div v-if="connectedWallet">
-              <a
-                class="btn btn-success"
-                @click="addNetworkToMetamask(network.chainId)"
-                >Add {{ network.name }} to Metamask</a
-              >
+            <div v-if="currentAccount">
               <hr />
-              <div v-if="chainInformation.chainId == network.chainId">
+              <div v-if="currentChain == network.chainId">
                 <h6>{{ network.name }} Tools</h6>
                 <div
                   class="my-2"
@@ -54,7 +51,7 @@
                     class="btn btn-secondary"
                     @click="addAsset(network.chainId, asset.symbol)"
                   >
-                    Add {{ asset.name }} ({{ asset.symbol }}) to Metamask
+                    Add {{ asset.name }} ({{ asset.symbol }}) to wallet
                   </a>
                 </div>
               </div>
@@ -90,14 +87,39 @@ button:active,
 
 <script setup>
 import { blockchainDefinitions, assetsDefinition } from "~/utils/blockchain";
-const { setNetwork, addNetwork, addAsset, chainInformation, connectedWallet } =
-  useWeb3WalletState();
+import { switchChain, getWalletClient } from "@wagmi/core";
 
-async function addNetworkToMetamask(chainId) {
-  addNetwork(chainId);
+const { currentAccount, currentChain } = useWeb3WalletState();
+const { $wagmiConfig } = useNuxtApp();
+
+const chainInformation = computed(() =>
+  currentChain.value ? blockchainDefinitions[String(currentChain.value)] : null
+);
+
+async function setNetwork(chainId) {
+  try {
+    await switchChain($wagmiConfig, { chainId });
+  } catch (err) {
+    console.error("[BlockchainTools] switchChain failed", err);
+  }
 }
 
-async function addAssetToMetamask(chainId, assetName) {
-  addAsset(chainId, assetName);
+async function addAsset(chainId, symbol) {
+  const asset = assetsDefinition[String(chainId)]?.[symbol];
+  if (!asset) return;
+  try {
+    const walletClient = await getWalletClient($wagmiConfig, { chainId });
+    await walletClient.watchAsset({
+      type: "ERC20",
+      options: {
+        address: asset.address,
+        symbol: asset.symbol,
+        decimals: asset.decimals,
+        image: asset.image ?? undefined,
+      },
+    });
+  } catch (err) {
+    console.error("[BlockchainTools] watchAsset failed", err);
+  }
 }
 </script>

@@ -15,19 +15,15 @@
     "@gtm-support/vue-gtm": "^2.0.0",
     "@reown/appkit": "^1.8.19",
     "@reown/appkit-adapter-wagmi": "^1.8.19",
-    "@wagmi/core": "^2.13.0",
-    "buffer": "^6.0.3",
-    "http-browserify": "^1.7.0",
-    "https-browserify": "^1.0.0",
+    "@wagmi/core": "^2.22.1",
+    "@walletconnect/logger": "3.0.2",
     "keccak256": "^1.0.6",
     "luxon": "^3.1.0",
     "merkletreejs": "^0.3.9",
-    "stream-browserify": "^3.0.0",
     "sweetalert2": "^11.4.23",
-    "util": "^0.12.4",
-    "viem": "^2.21.0"
+    "viem": "^2.45.0"
   },
   "overrides": {
-    "@wagmi/connectors": "^5.9.9"
+    "@wagmi/connectors": "^6.2.0"
   }
 }

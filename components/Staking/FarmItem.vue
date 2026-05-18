@@ -159,7 +159,7 @@
               }}
               ({{ moneyFormatter.format(state.stakingUserInfo.amountUSD) }})
             </p>
-            <label for="stake-input" class="mb-2 fw-bold"
+            <label for="unstake-input" class="mb-2 fw-bold"
               >Amount to be unstaked</label
             >
             <div class="btn-group mb-2" role="group" aria-label="Stake button">
@@ -193,7 +193,7 @@
               </button>
             </div>
             <input
-              id="stake-input"
+              id="unstake-input"
               v-model="state.toBeUnstaked"
               class="form-control"
             />

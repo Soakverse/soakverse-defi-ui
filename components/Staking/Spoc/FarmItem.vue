@@ -1,33 +1,34 @@
 <template>
-  <div class="row text-left px-1 mt-4" v-if="currentChain == '56'">
-    <div class="col-12">
-      <h5>{{ farm.farmName }}</h5>
-      <hr />
-      <div class="row">
-        <h6>Pool Statistics</h6>
-        <div class="col-12 col-sm-6 mb-2">
-          <label>{{ farm.ticker }} Staked</label>
-          <input
-            class="form-control"
-            :name="`${farm.id}_${farm.ticker}_stake_count`"
-            readonly
-            disabled
-            :value="`${state.currentStakedCount.toFixed(0)} ${farm.ticker}`"
-          />
+  <BlockchainChecker :blockchain="bscBlockchain">
+    <div class="row text-left px-1 mt-4">
+      <div class="col-12">
+        <h5>{{ farm.farmName }}</h5>
+        <hr />
+        <div class="row">
+          <h6>Pool Statistics</h6>
+          <div class="col-12 col-sm-6 mb-2">
+            <label>{{ farm.ticker }} Staked</label>
+            <input
+              class="form-control"
+              :name="`${farm.id}_${farm.ticker}_stake_count`"
+              readonly
+              disabled
+              :value="`${state.currentStakedCount.toFixed(0)} ${farm.ticker}`"
+            />
+          </div>
+          <div class="col-12 col-sm-6 mb-2">
+            <label>Current APR</label>
+            <input
+              class="form-control"
+              :name="`${farm.id}_${farm.ticker}_apr`"
+              readonly
+              disabled
+              value="No APR, based on ecosystem activity"
+            />
+          </div>
         </div>
-        <div class="col-12 col-sm-6 mb-2">
-          <label>Current APR</label>
-          <input
-            class="form-control"
-            :name="`${farm.id}_${farm.ticker}_apr`"
-            readonly
-            disabled
-            value="No APR, based on ecosystem activity"
-          />
-        </div>
-      </div>
-      <hr class="mb-4 mt-3" />
-      <div class="row" v-if="currentAccount">
+        <hr class="mb-4 mt-3" />
+        <div class="row">
         <div class="col-12 col-md-6 mb-4">
           <div class="h-100 my-auto card grey no-shadow">
             <h6 class="fw-bold">Stake {{ farm.ticker }}</h6>
@@ -129,7 +130,7 @@
                 ).toFixed(0)
               }}
             </p>
-            <label for="stake-input" class="mb-2 fw-bold"
+            <label for="unstake-input" class="mb-2 fw-bold"
               >Amount to be unstaked</label
             >
             <div class="btn-group mb-2" role="group" aria-label="Stake button">
@@ -163,7 +164,7 @@
               </button>
             </div>
             <input
-              id="stake-input"
+              id="unstake-input"
               v-model="state.toBeUnstaked"
               class="form-control"
             />
@@ -227,20 +228,15 @@
           </div>
         </div>
       </div>
-      <div v-else>
-        <h6>Please connect your wallet</h6>
       </div>
     </div>
-  </div>
-  <div class="row" v-else>
-    <div class="col-12">
-      <h4 class="text-center m-4">Please switch to BSC</h4>
-    </div>
-  </div>
+  </BlockchainChecker>
 </template>
 
 <script setup>
+import BlockchainChecker from "@/components/Blockchain/BlockchainChecker.vue";
 import { spocTokenContract, spocStakingContract } from "~~/utils/contracts";
+import { blockchainDefinitions } from "~~/utils/blockchain";
 import { showLoader, hideLoader, moneyFormatter } from "~~/utils/helpers";
 import {
   multicall,
@@ -251,9 +247,10 @@ import {
 import { formatEther, parseEther, formatUnits, parseUnits } from "viem";
 const { currentAccount, currentChain } = useWeb3WalletState();
 
+const bscBlockchain = blockchainDefinitions["56"];
+
 const { $swal, $wagmiConfig } = useNuxtApp();
 
-const { connectedWallet } = useWeb3WalletState();
 const props = defineProps({
   farm: {
     required: true,
@@ -278,7 +275,6 @@ const props = defineProps({
 });
 
 const state = reactive({
-  currentAccount: currentAccount.value,
   currentStakedCount: 0,
   currentStakedTVL: 0,
   tokenBalance: 0,
@@ -303,59 +299,62 @@ watch(currentChain, () => {
 });
 
 async function getTokenBalance() {
-  if (process.client) {
-    const soakmontEcosystemDataForAccount = await multicall($wagmiConfig, {
-      contracts: [
-        {
-          ...spocTokenContract,
-          functionName: "balanceOf",
-          args: [state.currentAccount],
-        },
-        {
-          ...spocTokenContract,
-          functionName: "allowance",
-          args: [state.currentAccount, spocStakingContract.address],
-        },
-        {
-          ...spocStakingContract,
-          functionName: "userInfo",
-          args: [state.currentAccount],
-        },
-        {
-          ...spocStakingContract,
-          functionName: "pendingRewards",
-          args: [state.currentAccount],
-        },
-        {
-          ...spocTokenContract,
-          functionName: "balanceOf",
-          args: [spocStakingContract.address],
-        },
-      ],
-    });
+  if (!process.client) return;
+  const account = currentAccount.value;
+  if (!account) return;
 
-    const weiTokenBalance = soakmontEcosystemDataForAccount[0].result;
-    const weiApprovalLimit = soakmontEcosystemDataForAccount[1].result;
-    const accountStakedTokens = soakmontEcosystemDataForAccount[2].result[0];
-    const weiCurrentPendingRewards = soakmontEcosystemDataForAccount[3].result;
-    const totalStakedAmount = soakmontEcosystemDataForAccount[4].result;
+  const soakmontEcosystemDataForAccount = await multicall($wagmiConfig, {
+    chainId: bscBlockchain.chainId,
+    contracts: [
+      {
+        ...spocTokenContract,
+        functionName: "balanceOf",
+        args: [account],
+      },
+      {
+        ...spocTokenContract,
+        functionName: "allowance",
+        args: [account, spocStakingContract.address],
+      },
+      {
+        ...spocStakingContract,
+        functionName: "userInfo",
+        args: [account],
+      },
+      {
+        ...spocStakingContract,
+        functionName: "pendingRewards",
+        args: [account],
+      },
+      {
+        ...spocTokenContract,
+        functionName: "balanceOf",
+        args: [spocStakingContract.address],
+      },
+    ],
+  });
 
-    state.tokenBalance = parseFloat(convertWeiToEther(weiTokenBalance));
+  const weiTokenBalance = soakmontEcosystemDataForAccount[0].result;
+  const weiApprovalLimit = soakmontEcosystemDataForAccount[1].result;
+  const accountStakedTokens = soakmontEcosystemDataForAccount[2].result[0];
+  const weiCurrentPendingRewards = soakmontEcosystemDataForAccount[3].result;
+  const totalStakedAmount = soakmontEcosystemDataForAccount[4].result;
 
-    state.approvalLimit = parseFloat(convertWeiToEther(weiApprovalLimit), 18);
+  state.tokenBalance = parseFloat(convertWeiToEther(weiTokenBalance));
 
-    state.stakingUserInfo.amount = accountStakedTokens;
+  state.approvalLimit = parseFloat(convertWeiToEther(weiApprovalLimit), 18);
 
-    state.pendingRewards = parseFloat(
-      convertWeiToEther(weiCurrentPendingRewards),
-      18
-    );
+  state.stakingUserInfo.amount = accountStakedTokens;
 
-    state.currentStakedCount = parseFloat(
-      convertWeiToEther(totalStakedAmount),
-      18
-    );
-  }
+  state.pendingRewards = parseFloat(
+    convertWeiToEther(weiCurrentPendingRewards),
+    18
+  );
+
+  state.currentStakedCount = parseFloat(
+    convertWeiToEther(totalStakedAmount),
+    18
+  );
 }
 
 function setToBeStakedAmount(percentage) {

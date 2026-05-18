@@ -241,9 +241,12 @@ import eggzFCFS from "~/utils/wizh/eggzFCFS";
 import premiumWhitelist from "~/utils/wizh/premiumWhitelist";
 import standardWhitelist from "~/utils/wizh/standardWhitelist";
 import waitlistWhitelist from "~/utils/wizh/waitlistWhitelist";
-const { chainInformation, connectedWallet } = useWeb3WalletState();
-
-const { $web3, $swal } = useNuxtApp();
+// NOTE: Minting UI is gated off by `mintFinished = true`. The legacy web3.js
+// flow below is dead code and will be replaced by the upcoming configurable
+// mint-event system. Composable destructure and watchers were removed because
+// the previous composable shape (connectedWallet/chainInformation) no longer
+// exists after the AppKit migration.
+const { $swal } = useNuxtApp();
 
 const mintFinished = true;
 
@@ -255,7 +258,6 @@ const state = reactive({
   standardWhitelistCount: 0,
   waitlistCount: 0,
   publicActivated: true,
-  connectedWallet,
   ogMintTime: new Date("January 25, 2023 17:00:00 UTC"),
   eggz3MintTime: new Date("January 26, 2023 18:00:00 UTC"),
   eggz1MintTime: new Date("January 26, 2023 19:00:00 UTC"),
@@ -276,58 +278,12 @@ let wizhContract = null;
 const wizhContractAddress = "0x72684a8CBb13183a8Bf407a468591B8306F61d99";
 const currentViewRequiredChainId = 1;
 
-onMounted(async () => {
+onMounted(() => {
   state.interval = setInterval(() => (state.currentTime = new Date()), 1000);
-  try {
-    const currentChainId = await $web3.eth.net.getId();
-    if (
-      process.client &&
-      connectedWallet &&
-      currentChainId == currentViewRequiredChainId
-    ) {
-      wizhContract = await new $web3.eth.Contract(
-        wizhNftAbi.abi,
-        wizhContractAddress
-      );
-      compileWhitelists();
-    }
-  } catch (e) {
-    console.log(e.message);
-  }
 });
 
 onBeforeUnmount(() => {
   clearInterval(state.interval);
-});
-
-watch(connectedWallet, async () => {
-  const currentChainId = await $web3.eth.net.getId();
-  if (
-    process.client &&
-    connectedWallet &&
-    currentChainId == currentViewRequiredChainId
-  ) {
-    wizhContract = await new $web3.eth.Contract(
-      wizhNftAbi.abi,
-      wizhContractAddress
-    );
-    compileWhitelists();
-  }
-});
-
-watch(chainInformation, async () => {
-  const currentChainId = await $web3.eth.net.getId();
-  if (
-    process.client &&
-    connectedWallet &&
-    currentChainId == currentViewRequiredChainId
-  ) {
-    wizhContract = await new $web3.eth.Contract(
-      wizhNftAbi.abi,
-      wizhContractAddress
-    );
-    compileWhitelists();
-  }
 });
 
 function compileWhitelists() {

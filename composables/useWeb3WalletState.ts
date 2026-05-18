@@ -1,3 +1,6 @@
+import type { Config } from "@wagmi/core";
+import { getAccount, getChainId, watchAccount, watchChainId } from "@wagmi/core";
+
 const state = reactive({
   currentAccount: null as string | null,
   currentChain: null as number | null,
@@ -5,46 +8,25 @@ const state = reactive({
 
 let initialized = false;
 
-const normalizeChainId = (id: number | string | undefined | null): number | null => {
-  if (id == null) return null;
-  return typeof id === "string" ? Number(id) : id;
-};
-
 const useWeb3WalletState = () => {
   if (import.meta.client && !initialized) {
-    const { $appKit } = useNuxtApp() as unknown as {
-      $appKit?: {
-        getAccount: () => { address?: string; isConnected?: boolean } | undefined;
-        getCaipNetwork: () => { id?: number | string } | undefined;
-        subscribeAccount: (cb: (a: { address?: string; isConnected?: boolean }) => void) => () => void;
-        subscribeNetwork: (cb: (n: { chainId?: number | string }) => void) => () => void;
-      };
-    };
+    const { $wagmiConfig } = useNuxtApp() as unknown as { $wagmiConfig?: Config };
 
-    if ($appKit) {
-      try {
-        const initialAccount = $appKit.getAccount();
-        state.currentAccount = initialAccount?.isConnected
-          ? initialAccount.address ?? null
-          : null;
-      } catch {
-        // activeChain may not be set yet — subscription will populate
-      }
+    if ($wagmiConfig) {
+      const account = getAccount($wagmiConfig);
+      state.currentAccount = account.isConnected ? account.address ?? null : null;
+      state.currentChain = getChainId($wagmiConfig) ?? null;
 
-      try {
-        state.currentChain = normalizeChainId($appKit.getCaipNetwork()?.id);
-      } catch {
-        // same
-      }
-
-      $appKit.subscribeAccount((account) => {
-        state.currentAccount = account?.isConnected
-          ? account.address ?? null
-          : null;
+      watchAccount($wagmiConfig, {
+        onChange(account) {
+          state.currentAccount = account.isConnected ? account.address ?? null : null;
+        },
       });
 
-      $appKit.subscribeNetwork((network) => {
-        state.currentChain = normalizeChainId(network?.chainId);
+      watchChainId($wagmiConfig, {
+        onChange(chainId) {
+          state.currentChain = chainId ?? null;
+        },
       });
 
       initialized = true;

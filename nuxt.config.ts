@@ -79,36 +79,28 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [nodePolyfills()],
     optimizeDeps: {
-      esbuildOptions: {
-        target: "es2020",
-      },
+      exclude: ['oxc-parser', '@oxc-parser/binding-darwin-arm64'],
+      include: ['@wagmi/core', 'luxon']
     },
-    build: {
-      target: "es2020",
-      commonjsOptions: {
-        transformMixedEsModules: true,
-      },
-      rollupOptions: {
-        onwarn(warning, warn) {
-          if (
-            warning.plugin === "vite-plugin-node-polyfills:inject" &&
-            warning.message.includes("failed to parse")
-          ) return;
-          warn(warning);
-        },
-      },
+    define: {
+      global: 'globalThis'
+    }
+  },
+
+  // Add Node.js compatibility for native bindings
+  nitro: {
+    experimental: {
+      wasm: true
     },
-    resolve: {
-      alias: {
-        process: "process/browser",
-        stream: "stream-browserify",
-        zlib: "browserify-zlib",
-        util: "util/",
-        http: "http-browserify",
-        https: "https-browserify",
-      },
-    },
+    // Exclude native bindings from bundling
+    externals: {
+      inline: ['oxc-parser']
+    }
+  },
+
+  // Build configuration to handle native modules
+  build: {
+    transpile: []
   },
 });
