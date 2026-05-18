@@ -1,6 +1,5 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-const production = process.env.NODE_ENV === "production";
 
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -80,10 +79,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [
-      // @ts-ignore
-      !production && nodePolyfills(),
-    ],
+    plugins: [nodePolyfills()],
     optimizeDeps: {
       esbuildOptions: {
         target: "es2020",
@@ -91,14 +87,6 @@ export default defineNuxtConfig({
     },
     build: {
       target: "es2020",
-      rollupOptions: {
-        plugins: [
-          // ↓ Needed for build
-          // @ts-ignore
-          nodePolyfills(),
-        ],
-      },
-      // ↓ Needed for build if using WalletConnect and other providers
       commonjsOptions: {
         transformMixedEsModules: true,
       },
