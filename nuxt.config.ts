@@ -1,5 +1,4 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
-import vuetify from "vite-plugin-vuetify";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 const production = process.env.NODE_ENV === "production";
 
@@ -69,30 +68,21 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: [
-    async (options, nuxt) => {
-      nuxt.hooks.hook("vite:extendConfig", (config) =>
-        // @ts-ignore
-        config.plugins.push(vuetify())
-      );
-    },
-  ],
   typescript: {
     strict: true,
   },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag: string) =>
+        tag.startsWith("appkit-") ||
+        tag.startsWith("w3m-") ||
+        tag.startsWith("wui-"),
+    },
+  },
   vite: {
     plugins: [
-      // ↓ Needed for development mode
       // @ts-ignore
-      !production &&
-        nodePolyfills({
-          include: [
-            // @ts-ignore
-            "node_modules/**/*.js",
-            // @ts-ignore
-            new RegExp("node_modules/.vite/.*js"),
-          ],
-        }),
+      !production && nodePolyfills(),
     ],
     optimizeDeps: {
       esbuildOptions: {

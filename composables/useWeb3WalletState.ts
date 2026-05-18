@@ -1,32 +1,33 @@
-const currentAccount: any = -1;
-const currentChain: any = 0;
+import { getAccount, watchAccount, watchChainId } from "@wagmi/core";
 
 const state = reactive({
-  currentAccount,
-  currentChain,
+  currentAccount: null as string | null,
+  currentChain: null as number | null,
 });
 
+let initialized = false;
+
 const useWeb3WalletState = () => {
-  const { $getAccount, $getNetwork, $watchAccount, $watchNetwork } =
-    useNuxtApp();
+  const { $wagmiConfig } = useNuxtApp();
   const currentAccount = computed(() => state.currentAccount);
   const currentChain = computed(() => state.currentChain);
-  if (typeof $getAccount == "function") {
-    const initialAccount = $getAccount();
-    const initialNetwork = $getNetwork();
 
-    state.currentAccount = initialAccount.address
-      ? initialAccount.address
-      : null;
-    state.currentChain = initialNetwork.chain ? initialNetwork.chain.id : null;
+  if (!initialized && $wagmiConfig) {
+    const initial = getAccount($wagmiConfig);
+    state.currentAccount = initial.address ?? null;
+    state.currentChain = initial.chainId ?? null;
 
-    const accountWatch = $watchAccount(
-      (account) =>
-        (state.currentAccount = account.address ? account.address : null)
-    );
-    const chainWatch = $watchNetwork((network) => {
-      state.currentChain = network.chain ? network.chain.id : null;
+    watchAccount($wagmiConfig, {
+      onChange: (account) => {
+        state.currentAccount = account.address ?? null;
+      },
     });
+    watchChainId($wagmiConfig, {
+      onChange: (chainId) => {
+        state.currentChain = chainId ?? null;
+      },
+    });
+    initialized = true;
   }
 
   return {

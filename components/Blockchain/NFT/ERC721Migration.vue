@@ -10,11 +10,7 @@
       <h4>You are on the wrong chain.</h4>
       <button
         class="btn btn-success ms-1"
-        @click="
-          switchNetwork({
-            chainId: props.newContract.chainId,
-          })
-        "
+        @click="switchToContractChain()"
       >
         Switch to Ethereum
       </button>
@@ -68,14 +64,18 @@
 import { showLoader, hideLoader } from "~~/utils/helpers";
 import {
   readContract,
-  prepareWriteContract,
+  simulateContract,
   writeContract,
-  waitForTransaction,
-  switchNetwork,
+  waitForTransactionReceipt,
+  switchChain,
 } from "@wagmi/core";
 const { currentAccount, currentChain } = useWeb3WalletState();
 
-const { $swal } = useNuxtApp();
+const { $swal, $wagmiConfig } = useNuxtApp();
+
+function switchToContractChain() {
+  return switchChain($wagmiConfig, { chainId: props.newContract.chainId });
+}
 
 const props = defineProps({
   newContract: {
@@ -149,7 +149,7 @@ watch(currentAccount, async () => {
 
 onMounted(async () => {
   try {
-    state.migratingIsActive = await readContract({
+    state.migratingIsActive = await readContract($wagmiConfig, {
       address: props.newContract.address,
       abi: props.newContract.abi,
       functionName: "claimIsActive",
@@ -165,7 +165,7 @@ onMounted(async () => {
 });
 
 async function fetchOwnerWallet() {
-  state.oldContractIds = await readContract({
+  state.oldContractIds = await readContract($wagmiConfig, {
     address: props.oldContract.address,
     abi: props.oldContract.abi,
     functionName: "walletOfOwner",
@@ -175,7 +175,7 @@ async function fetchOwnerWallet() {
 }
 
 async function checkIsApprovelForAll() {
-  state.isApprovedForAll = await readContract({
+  state.isApprovedForAll = await readContract($wagmiConfig, {
     address: props.oldContract.address,
     abi: props.oldContract.abi,
     functionName: "isApprovedForAll",
@@ -191,15 +191,15 @@ async function migrateOldNft() {
           ? state.oldContractIds.slice(0, props.migrationLimit)
           : state.oldContractIds;
       showLoader();
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: props.newContract.address,
         abi: props.newContract.abi,
         functionName: "claimAll",
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });
@@ -235,16 +235,16 @@ async function approveMigration() {
   try {
     if (state.oldContractCount > 0) {
       showLoader();
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: props.oldContract.address,
         abi: props.oldContract.abi,
         functionName: "setApprovalForAll",
         args: [props.newContract.address, true],
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });

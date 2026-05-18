@@ -280,14 +280,14 @@ import {
 import { showLoader, hideLoader, moneyFormatter } from "~~/utils/helpers";
 import {
   multicall,
-  prepareWriteContract,
+  simulateContract,
   writeContract,
-  waitForTransaction,
+  waitForTransactionReceipt,
 } from "@wagmi/core";
 import { formatEther, parseEther, formatUnits, parseUnits } from "viem";
 const { currentAccount, currentChain } = useWeb3WalletState();
 
-const { $swal } = useNuxtApp();
+const { $swal, $wagmiConfig } = useNuxtApp();
 
 const { connectedWallet } = useWeb3WalletState();
 const props = defineProps({
@@ -364,7 +364,7 @@ function calculateStakedInfos() {
 
 async function getTokenBalance() {
   if (process.client) {
-    const soakmontEcosystemDataForAccount = await multicall({
+    const soakmontEcosystemDataForAccount = await multicall($wagmiConfig, {
       contracts: [
         {
           ...soakmontTokenContract,
@@ -449,16 +449,16 @@ async function approveContract(max = false) {
         ? parseEther("100000000000")
         : parseEther(state.toBeStaked + 1);
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: soakmontTokenContract.address,
         abi: soakmontTokenContract.abi,
         functionName: "approve",
         args: [soakmontStakingContract.address, parseEther("100000000000")],
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });
@@ -501,16 +501,16 @@ async function stakeTokens() {
       showLoader();
       const amountToStake = parseUnits(state.toBeStaked.toString(), 18);
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: soakmontStakingContract.address,
         abi: soakmontStakingContract.abi,
         functionName: "stake",
         args: [amountToStake],
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });
@@ -554,16 +554,16 @@ async function unstakeTokens() {
       showLoader();
       const amountToUnstake = parseUnits(state.toBeUnstaked.toString(), 18);
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: soakmontStakingContract.address,
         abi: soakmontStakingContract.abi,
         functionName: "unstake",
         args: [amountToUnstake],
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });
@@ -606,15 +606,15 @@ async function claimRewards() {
     if (currentAccount) {
       showLoader();
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: soakmontStakingContract.address,
         abi: soakmontStakingContract.abi,
         functionName: "claimRewards",
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });

@@ -61,16 +61,16 @@ import {
 } from '~~/types/blockchain/BlockchainTypes';
 import {
   readContract,
-  prepareWriteContract,
+  simulateContract,
   writeContract,
-  waitForTransaction,
+  waitForTransactionReceipt,
 } from '@wagmi/core';
 
 const { currentAccount } = await useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
-const { $swal } = useNuxtApp();
+const { $swal, $wagmiConfig } = useNuxtApp();
 
 const props = defineProps<{
   swappingContract: SmartContractDefinition;
@@ -127,7 +127,7 @@ async function swapTokens() {
 
       const swappingFees = 0.005;
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: swappingContract.address as `0x${string}`,
         abi: swappingContract.abi,
         functionName: 'stake',
@@ -135,9 +135,9 @@ async function swapTokens() {
         value: swappingFees,
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });

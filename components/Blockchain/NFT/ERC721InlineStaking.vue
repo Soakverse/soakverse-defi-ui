@@ -62,9 +62,9 @@ import {
 } from "~~/types/blockchain/BlockchainTypes";
 import {
   readContract,
-  prepareWriteContract,
+  simulateContract,
   writeContract,
-  waitForTransaction,
+  waitForTransactionReceipt,
 } from "@wagmi/core";
 
 const nftLevels = [
@@ -91,7 +91,7 @@ const { currentAccount } = await useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
-const { $swal } = useNuxtApp();
+const { $swal, $wagmiConfig } = useNuxtApp();
 
 const props = defineProps<{
   stakingContract: SmartContractDefinition;
@@ -186,14 +186,14 @@ async function stakeNft(tokenId: number) {
     if (currentAccount) {
       showLoader();
 
-      const migrationCCIPFee: any = await readContract({
+      const migrationCCIPFee: any = await readContract($wagmiConfig, {
         address: soakverseDAOPassSmartContract.address as `0x${string}`,
         abi: soakverseDAOPassSmartContract.abi,
         functionName: "estimateStakeFee",
         args: [],
       });
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: soakverseDAOPassSmartContract.address as `0x${string}`,
         abi: soakverseDAOPassSmartContract.abi,
         functionName: "stake",
@@ -201,9 +201,9 @@ async function stakeNft(tokenId: number) {
         value: migrationCCIPFee,
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });
@@ -256,14 +256,14 @@ async function unstakeNft(tokenId: number) {
   try {
     if (currentAccount) {
       showLoader();
-      const migrationCCIPFee: any = await readContract({
+      const migrationCCIPFee: any = await readContract($wagmiConfig, {
         address: soakverseDAOPassSmartContract.address as `0x${string}`,
         abi: soakverseDAOPassSmartContract.abi,
         functionName: "estimateStakeFee",
         args: [],
       });
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: soakverseDAOPassSmartContract.address as `0x${string}`,
         abi: soakverseDAOPassSmartContract.abi,
         functionName: "unstake",
@@ -271,9 +271,9 @@ async function unstakeNft(tokenId: number) {
         value: migrationCCIPFee,
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });

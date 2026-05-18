@@ -10,11 +10,7 @@
       <h4>You are on the wrong chain.</h4>
       <button
         class="btn btn-success ms-1"
-        @click="
-          switchNetwork({
-            chainId: props.mintContract.chainId,
-          })
-        "
+        @click="switchToContractChain()"
       >
         Switch to Ethereum
       </button>
@@ -58,15 +54,19 @@
 import { showLoader, hideLoader } from "~~/utils/helpers";
 import {
   readContract,
-  prepareWriteContract,
+  simulateContract,
   writeContract,
-  waitForTransaction,
-  switchNetwork,
+  waitForTransactionReceipt,
+  switchChain,
 } from "@wagmi/core";
 import { parseEther } from "viem";
 const { currentAccount, currentChain } = useWeb3WalletState();
 
-const { $swal } = useNuxtApp();
+const { $swal, $wagmiConfig } = useNuxtApp();
+
+function switchToContractChain() {
+  return switchChain($wagmiConfig, { chainId: props.mintContract.chainId });
+}
 
 const props = defineProps({
   mintContract: {
@@ -113,7 +113,7 @@ const totalPrice = computed(() => {
 onMounted(async () => {
   try {
     if (process.client) {
-      state.mintIsActive = await readContract({
+      state.mintIsActive = await readContract($wagmiConfig, {
         address: props.mintContract.address,
         abi: props.mintContract.abi,
         functionName: "mintIsActive",
@@ -131,7 +131,7 @@ async function mintTokens(count) {
       showLoader();
       const countToMint = Math.ceil(state.count);
 
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: props.mintContract.address,
         abi: props.mintContract.abi,
         functionName: "publicMint",
@@ -139,9 +139,9 @@ async function mintTokens(count) {
         value: parseEther(totalPrice.value.toString()),
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash,
       });

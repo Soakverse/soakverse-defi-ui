@@ -104,6 +104,8 @@ import { readContract } from "@wagmi/core";
 import { formatEther } from "viem";
 const config = useRuntimeConfig();
 
+const { $wagmiConfig } = useNuxtApp();
+
 const { currentAccount, currentChain } = useWeb3WalletState();
 
 const nftLevels = [
@@ -211,7 +213,7 @@ async function getEcosystemBalance() {
     state.highestOwnedStache = null;
 
     state.stakingUserInfo = (
-      await readContract({
+      await readContract($wagmiConfig, {
         address: soakmontStakingContract.address,
         abi: soakmontStakingContract.abi,
         functionName: "userInfo",

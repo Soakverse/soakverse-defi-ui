@@ -6,11 +6,7 @@
     <h4>You are on the wrong chain.</h4>
     <button
       class="btn btn-success ms-1"
-      @click="
-        switchNetwork({
-          chainId: props.blockchain.chainId,
-        })
-      "
+      @click="switchToBlockchain()"
     >
       Switch to {{ props.blockchain.name }}
     </button>
@@ -21,9 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import { switchNetwork } from "@wagmi/core";
+import { switchChain } from "@wagmi/core";
 import { BlockchainDefinition } from "~~/types/blockchain/BlockchainTypes";
 const { currentAccount, currentChain } = useWeb3WalletState();
+
+const { $wagmiConfig } = useNuxtApp();
 
 const props = defineProps<{
   blockchain: BlockchainDefinition;
@@ -32,4 +30,8 @@ const props = defineProps<{
 const state = reactive({
   currentAccount: currentAccount.value,
 });
+
+function switchToBlockchain() {
+  return switchChain($wagmiConfig, { chainId: props.blockchain.chainId });
+}
 </script>

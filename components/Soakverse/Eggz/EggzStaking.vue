@@ -77,14 +77,14 @@ import {
   filterArrayOfObjects,
   formatDaysSinceDate
 } from "~~/utils/helpers";
-import { prepareWriteContract, writeContract, waitForTransaction } from "@wagmi/core";
+import { simulateContract, writeContract, waitForTransactionReceipt } from "@wagmi/core";
 import { formatEther } from "viem";
 
 const { currentChain, currentAccount } = useWeb3WalletState();
 
 const config = useRuntimeConfig();
 
-const { $swal } = useNuxtApp();
+const { $swal, $wagmiConfig } = useNuxtApp();
 
 const nftLevels = [
   5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1, 4, 1, 2, 2, 1, 3, 3, 2, 1, 1, 5, 1, 2, 4, 1, 1, 1, 3, 2, 3, 5, 1,
@@ -205,16 +205,16 @@ async function stakeNft(tokenId) {
   try {
     if (currentAccount) {
       showLoader();
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "stake",
         args: [tokenId]
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash
       });
@@ -265,16 +265,16 @@ async function unstakeNft(tokenId) {
   try {
     if (currentAccount) {
       showLoader();
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "unstake",
         args: [tokenId]
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash
       });
@@ -325,16 +325,16 @@ async function stakeAllNfts() {
   try {
     if (currentAccount) {
       showLoader();
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "setTokensStakeStatus",
         args: [state.unstakedEggz, true]
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash
       });
@@ -385,16 +385,16 @@ async function unstakeAllNfts() {
   try {
     if (currentAccount) {
       showLoader();
-      const { request } = await prepareWriteContract({
+      const { request } = await simulateContract($wagmiConfig, {
         address: eggzSmartContract.address,
         abi: eggzSmartContract.abi,
         functionName: "setTokensStakeStatus",
         args: [state.stakedEggz, false]
       });
 
-      const { hash } = await writeContract(request);
+      const hash = await writeContract($wagmiConfig, request);
 
-      const data = await waitForTransaction({
+      const data = await waitForTransactionReceipt($wagmiConfig, {
         confirmations: 1,
         hash
       });

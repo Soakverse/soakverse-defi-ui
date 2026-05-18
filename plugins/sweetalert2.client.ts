@@ -1,7 +1,7 @@
-import Swal, { SweetAlertOptions } from "sweetalert2";
+import Swal from "sweetalert2";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const options: SweetAlertOptions = {
+  const options = {
     buttonsStyling: true,
     showLoaderOnConfirm: true,
     showCancelButton: false,
