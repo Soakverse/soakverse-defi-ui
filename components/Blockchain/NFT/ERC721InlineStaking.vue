@@ -127,7 +127,8 @@ const potentialDaoShare = computed(() => {
 });
 
 watch(currentAccount, async () => {
-  if (process.client && currentAccount.value) {
+  if (currentAccount.value) {
+    console.log('Account value', currentAccount.value);
     state.ownedAssets = [];
     state.stakedAssets = [];
     state.unstakedAssets = [];
