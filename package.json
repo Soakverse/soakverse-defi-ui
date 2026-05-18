@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@gtm-support/vue-gtm": "^2.0.0",
-    "@reown/appkit": "^1.6.0",
-    "@reown/appkit-adapter-wagmi": "^1.6.0",
+    "@reown/appkit": "^1.8.19",
+    "@reown/appkit-adapter-wagmi": "^1.8.19",
     "@wagmi/core": "^2.13.0",
     "buffer": "^6.0.3",
     "http-browserify": "^1.7.0",

@@ -1,4 +1,4 @@
-@import "colors.scss";
+@use "colors.scss";
 $headerHeight: 64px;
 
 a {
@@ -11,13 +11,13 @@ h3,
 h4,
 h5,
 h6 {
-  color: $dark-grey;
+  color: colors.$dark-grey;
 }
 
 #main-sidebar {
   transition: 0.4s all;
   display: block;
-  background-color: $dark-grey;
+  background-color: colors.$dark-grey;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -60,7 +60,7 @@ h6 {
   }
   .sidebar-header {
     height: $headerHeight;
-    background-color: $medium-grey;
+    background-color: colors.$medium-grey;
     padding: 12px;
     display: flex;
     position: relative;
@@ -77,20 +77,20 @@ h6 {
       right: -16px;
       margin: auto;
       border-radius: 50%;
-      background-color: $white;
+      background-color: colors.$white;
       box-shadow: 0px 4px 8px #00000029;
       text-align: center;
       transition: 0.4s all;
       i {
-        color: $gold;
+        color: colors.$gold;
         font-size: 24px;
         line-height: 32px;
       }
       @media all and (max-width: 576px) {
         right: -40px;
-        background-color: $gold;
+        background-color: colors.$gold;
         i {
-          color: $white;
+          color: colors.$white;
         }
       }
     }
@@ -104,16 +104,16 @@ h6 {
     }
     li {
       a {
-        color: $text-grey;
+        color: colors.$text-grey;
         padding: 8px;
         transition: 0.4s all;
         i {
-          color: $icon-grey;
+          color: colors.$icon-grey;
           width: 24px;
         }
         &.router-link-exact-active {
           border-radius: 8px;
-          background-color: $medium-grey;
+          background-color: colors.$medium-grey;
           color: white;
           i {
             color: white;
@@ -126,7 +126,7 @@ h6 {
 
 #header {
   height: $headerHeight;
-  background-color: $medium-grey;
+  background-color: colors.$medium-grey;
   padding: 12px 12px 12px 28px;
   display: flex;
 }
@@ -137,7 +137,7 @@ h6 {
   border-radius: 16px;
   padding: 16px;
   &.grey {
-    background: $light-grey 0% 0% no-repeat padding-box;
+    background: colors.$light-grey 0% 0% no-repeat padding-box;
   }
   &.no-shadow {
     box-shadow: none;
@@ -146,15 +146,15 @@ h6 {
 }
 
 .btn-primary {
-  background-color: $dark-grey;
-  border-color: 2px solid $light-blue-rgba;
+  background-color: colors.$dark-grey;
+  border-color: 2px solid colors.$light-blue-rgba;
   color: white;
   &:hover,
   &:active,
   &:focus {
-    background-color: $light-blue;
-    border-color: $light-blue;
-    box-shadow: 0 0 0 2px $light-blue-rgba;
+    background-color: colors.$light-blue;
+    border-color: colors.$light-blue;
+    box-shadow: 0 0 0 2px colors.$light-blue-rgba;
   }
 }
 
@@ -163,7 +163,7 @@ h6 {
 }
 
 .breadcrumb-holder {
-  background-color: $text-grey;
+  background-color: colors.$text-grey;
   padding: 4px;
 }
 
@@ -184,7 +184,7 @@ h6 {
     border-radius: 20px;
     width: 24%;
     height: auto;
-    color: $dark-grey;
+    color: colors.$dark-grey;
     font: {
       size: 48px;
       weight: 500;
@@ -192,7 +192,7 @@ h6 {
     span {
       display: block;
       margin-top: -4px;
-      color: $dark-gold;
+      color: colors.$dark-gold;
       font-size: 15px;
     }
     &:not(:last-child):after {

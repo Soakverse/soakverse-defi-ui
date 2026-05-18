@@ -90,6 +90,15 @@ export default defineNuxtConfig({
       commonjsOptions: {
         transformMixedEsModules: true,
       },
+      rollupOptions: {
+        onwarn(warning, warn) {
+          if (
+            warning.plugin === "vite-plugin-node-polyfills:inject" &&
+            warning.message.includes("failed to parse")
+          ) return;
+          warn(warning);
+        },
+      },
     },
     resolve: {
       alias: {

@@ -1,40 +1,18 @@
-import { getAccount, watchAccount } from "@wagmi/core";
-
-const state = reactive({
-  currentAccount: null as string | null,
-  currentChain: null as number | null,
-});
-
-let initialized = false;
+import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/vue";
 
 const useWeb3WalletState = () => {
-  const { $wagmiConfig, $appKit } = useNuxtApp();
-  const currentAccount = computed(() => state.currentAccount);
-  const currentChain = computed(() => state.currentChain);
+  const account = useAppKitAccount();
+  const network = useAppKitNetwork();
 
-  if (!initialized && $wagmiConfig) {
-    const initial = getAccount($wagmiConfig);
-    state.currentAccount = initial.address ?? null;
-    state.currentChain = initial.chainId ?? null;
+  const currentAccount = computed<string | null>(() =>
+    account.value?.isConnected ? account.value.address ?? null : null
+  );
 
-    watchAccount($wagmiConfig, {
-      onChange: (account) => {
-        state.currentAccount = account.address ?? null;
-        if (account.chainId != null) state.currentChain = account.chainId;
-      },
-    });
-
-    if ($appKit) {
-      $appKit.subscribeNetwork((network: { chainId?: number | string }) => {
-        const id =
-          typeof network?.chainId === "string"
-            ? Number(network.chainId)
-            : network?.chainId ?? null;
-        state.currentChain = id;
-      });
-    }
-    initialized = true;
-  }
+  const currentChain = computed<number | null>(() => {
+    const id = network.value?.chainId;
+    if (id == null) return null;
+    return typeof id === "string" ? Number(id) : id;
+  });
 
   return {
     currentAccount,

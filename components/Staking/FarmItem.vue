@@ -287,7 +287,6 @@ const bscBlockchain = blockchainDefinitions["56"];
 
 const { $swal, $wagmiConfig } = useNuxtApp();
 
-const { connectedWallet } = useWeb3WalletState();
 const props = defineProps({
   farm: {
     required: true,
@@ -312,7 +311,6 @@ const props = defineProps({
 });
 
 const state = reactive({
-  currentAccount: currentAccount.value,
   currentStakedCount: 0,
   currentStakedTVL: 0,
   currentTokenPrice: 0,
@@ -361,68 +359,71 @@ function calculateStakedInfos() {
 }
 
 async function getTokenBalance() {
-  if (process.client) {
-    const soakmontEcosystemDataForAccount = await multicall($wagmiConfig, {
-      contracts: [
-        {
-          ...soakmontTokenContract,
-          functionName: "balanceOf",
-          args: [state.currentAccount],
-        },
-        {
-          ...soakmontTokenContract,
-          functionName: "allowance",
-          args: [state.currentAccount, soakmontStakingContract.address],
-        },
-        {
-          ...soakmontStakingContract,
-          functionName: "userInfo",
-          args: [state.currentAccount],
-        },
-        {
-          ...soakmontStakingContract,
-          functionName: "pendingRewards",
-          args: [state.currentAccount],
-        },
-        {
-          ...soakmontTokenContract,
-          functionName: "balanceOf",
-          args: [soakmontStakingContract.address],
-        },
-      ],
-    });
+  if (!process.client) return;
+  const account = currentAccount.value;
+  if (!account) return;
 
-    const weiTokenBalance = soakmontEcosystemDataForAccount[0].result;
-    const weiApprovalLimit = soakmontEcosystemDataForAccount[1].result;
-    const accountStakedTokens = soakmontEcosystemDataForAccount[2].result[0];
-    const weiCurrentPendingRewards = soakmontEcosystemDataForAccount[3].result;
-    const totalStakedAmount = soakmontEcosystemDataForAccount[4].result;
+  const soakmontEcosystemDataForAccount = await multicall($wagmiConfig, {
+    chainId: bscBlockchain.chainId,
+    contracts: [
+      {
+        ...soakmontTokenContract,
+        functionName: "balanceOf",
+        args: [account],
+      },
+      {
+        ...soakmontTokenContract,
+        functionName: "allowance",
+        args: [account, soakmontStakingContract.address],
+      },
+      {
+        ...soakmontStakingContract,
+        functionName: "userInfo",
+        args: [account],
+      },
+      {
+        ...soakmontStakingContract,
+        functionName: "pendingRewards",
+        args: [account],
+      },
+      {
+        ...soakmontTokenContract,
+        functionName: "balanceOf",
+        args: [soakmontStakingContract.address],
+      },
+    ],
+  });
 
-    state.tokenBalance = parseFloat(convertWeiToEther(weiTokenBalance));
-    state.tokenBalanceUSD =
-      Math.round(state.tokenBalance * state.currentTokenPrice * 100) / 100;
+  const weiTokenBalance = soakmontEcosystemDataForAccount[0].result;
+  const weiApprovalLimit = soakmontEcosystemDataForAccount[1].result;
+  const accountStakedTokens = soakmontEcosystemDataForAccount[2].result[0];
+  const weiCurrentPendingRewards = soakmontEcosystemDataForAccount[3].result;
+  const totalStakedAmount = soakmontEcosystemDataForAccount[4].result;
 
-    state.approvalLimit = parseFloat(convertWeiToEther(weiApprovalLimit), 18);
+  state.tokenBalance = parseFloat(convertWeiToEther(weiTokenBalance));
+  state.tokenBalanceUSD =
+    Math.round(state.tokenBalance * state.currentTokenPrice * 100) / 100;
 
-    state.stakingUserInfo.amount = accountStakedTokens;
+  state.approvalLimit = parseFloat(convertWeiToEther(weiApprovalLimit), 18);
 
-    state.stakingUserInfo.amountUSD =
-      Math.round(
-        convertWeiToEther(accountStakedTokens) * state.currentTokenPrice * 100
-      ) / 100;
+  state.stakingUserInfo.amount = accountStakedTokens;
 
-    state.pendingRewards = parseFloat(
-      convertWeiToEther(weiCurrentPendingRewards),
-      18
-    );
+  state.stakingUserInfo.amountUSD =
+    Math.round(
+      convertWeiToEther(accountStakedTokens) * state.currentTokenPrice * 100
+    ) / 100;
 
-    state.currentStakedCount = parseFloat(
-      convertWeiToEther(totalStakedAmount),
-      18
-    );
+  state.pendingRewards = parseFloat(
+    convertWeiToEther(weiCurrentPendingRewards),
+    18
+  );
 
-    calculateStakedInfos();
-  }
+  state.currentStakedCount = parseFloat(
+    convertWeiToEther(totalStakedAmount),
+    18
+  );
+
+  calculateStakedInfos();
 }
 
 function setToBeStakedAmount(percentage) {
