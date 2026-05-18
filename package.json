@@ -24,6 +24,11 @@
     "viem": "^2.45.0"
   },
   "overrides": {
-    "@wagmi/connectors": "^6.2.0"
+    "@wagmi/connectors": "^6.2.0",
+    "@reown/appkit": "$@reown/appkit",
+    "@walletconnect/core": "2.23.7",
+    "@walletconnect/sign-client": "2.23.7",
+    "@walletconnect/universal-provider": "2.23.7",
+    "@walletconnect/ethereum-provider": "2.23.7"
   }
 }
