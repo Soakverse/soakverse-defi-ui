@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { switchChain } from "@wagmi/core";
-import { BlockchainDefinition } from "~~/types/blockchain/BlockchainTypes";
+import type { BlockchainDefinition } from "~~/types/blockchain/BlockchainTypes";
 const { currentAccount, currentChain } = useWeb3WalletState();
 
 const { $wagmiConfig } = useNuxtApp();
@@ -31,7 +31,11 @@ const state = reactive({
   currentAccount: currentAccount.value,
 });
 
-function switchToBlockchain() {
-  return switchChain($wagmiConfig, { chainId: props.blockchain.chainId });
+async function switchToBlockchain() {
+  try {
+    await switchChain($wagmiConfig, { chainId: props.blockchain.chainId });
+  } catch (err) {
+    console.error("[BlockchainChecker] switchChain failed", err);
+  }
 }
 </script>

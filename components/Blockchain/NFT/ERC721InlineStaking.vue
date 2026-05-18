@@ -56,7 +56,7 @@
 import BlockchainChecker from "@/components/Blockchain/BlockchainChecker.vue";
 import { showLoader, hideLoader, filterArrayOfObjects } from "~~/utils/helpers";
 import { soakverseDAOPassSmartContract } from "~~/utils/contracts";
-import {
+import type {
   BlockchainDefinition,
   SmartContractDefinition,
 } from "~~/types/blockchain/BlockchainTypes";

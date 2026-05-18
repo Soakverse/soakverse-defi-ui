@@ -20,6 +20,7 @@ const useWeb3WalletState = () => {
     watchAccount($wagmiConfig, {
       onChange: (account) => {
         state.currentAccount = account.address ?? null;
+        state.currentChain = account.chainId ?? null;
       },
     });
     watchChainId($wagmiConfig, {

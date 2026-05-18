@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import BlockchainChecker from '@/components/Blockchain/BlockchainChecker.vue';
 import { showLoader, hideLoader, filterArrayOfObjects } from '~~/utils/helpers';
-import {
+import type {
   BlockchainDefinition,
   SmartContractDefinition,
 } from '~~/types/blockchain/BlockchainTypes';
