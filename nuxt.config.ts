@@ -1,6 +1,4 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
-import { nodePolyfills } from "vite-plugin-node-polyfills";
-
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {

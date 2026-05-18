@@ -8,8 +8,7 @@
   },
   "devDependencies": {
     "nuxt": "^3.15.*",
-    "sass": "^1.79.0",
-    "vite-plugin-node-polyfills": "^0.27.0"
+    "sass": "^1.79.0"
   },
   "dependencies": {
     "@gtm-support/vue-gtm": "^2.0.0",
