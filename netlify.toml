@@ -1,9 +1,12 @@
+[build.environment]
+  NODE_VERSION = "22"
+
 [[redirects]]
   from = "https://app.soakmont.com/*"
   to = "https://app.soakverse.io/:splat"
   status = 301
   force = true
-  
+
 [[redirects]]
   from = "https://app.soakmont.com"
   to = "https://app.soakverse.io"
